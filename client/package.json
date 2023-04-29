@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "vercel-deploy": "next build && next export"
+    "vercel-deploy": "next build && vercel --prod"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^8.3.0",

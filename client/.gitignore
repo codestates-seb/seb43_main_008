@@ -36,5 +36,6 @@ next-env.d.ts
 
 # PWA
 public/sw.js
+public/sw.*.*
 public/workbox-*.*
 public/fallback*.js
