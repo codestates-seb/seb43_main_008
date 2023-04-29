@@ -1,3 +1,31 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/babel", "next/core-web-vitals"],
+  "plugins": ["eslint-plugin-simple-import-sort"],
+  "rules": {
+    "react/self-closing-comp": [
+      "error",
+      {
+        "component": true,
+        "html": true
+      }
+    ],
+    "react/jsx-first-prop-new-line": "error",
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "never",
+        "exports": "never",
+        "functions": "never"
+      }
+    ],
+    "indent": ["error", 2],
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
+    "comma-spacing": ["error", { "before": false, "after": true }]
+  }
 }
