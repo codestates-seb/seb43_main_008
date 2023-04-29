@@ -1,6 +1,6 @@
 {
-  "extends": ["next/babel", "next/core-web-vitals"],
-  "plugins": ["eslint-plugin-simple-import-sort"],
+  "extends": ["next/babel"],
+  "plugins": ["eslint-config-prettier", "eslint-plugin-prettier", "eslint-plugin-simple-import-sort"],
   "rules": {
     "react/self-closing-comp": [
       "error",
@@ -20,9 +20,6 @@
         "functions": "never"
       }
     ],
-    "indent": ["error", 2],
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
