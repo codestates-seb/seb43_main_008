@@ -1,6 +1,6 @@
 {
-  "extends": ["next/babel"],
-  "plugins": ["eslint-config-prettier", "eslint-plugin-prettier", "eslint-plugin-simple-import-sort"],
+  "extends": ["next", "prettier"],
+  "plugins": ["eslint-plugin-prettier", "eslint-plugin-simple-import-sort"],
   "rules": {
     "react/self-closing-comp": [
       "error",
