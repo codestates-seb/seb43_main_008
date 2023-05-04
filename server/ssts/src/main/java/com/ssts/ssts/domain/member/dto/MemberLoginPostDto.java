@@ -1,15 +1,11 @@
 package com.ssts.ssts.domain.member.dto;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class MemberPostDto {
-
-    String nickName;
+@Setter
+public class MemberLoginPostDto {
     String email;
     String password;
-
 }

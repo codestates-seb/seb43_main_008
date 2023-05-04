@@ -1,7 +1,8 @@
 package com.ssts.ssts.domain.member.controller;
 
 
-import com.ssts.ssts.domain.member.dto.MemberPostDto;
+import com.ssts.ssts.domain.member.dto.MemberLoginPostDto;
+import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.utils.UriCreator;
@@ -24,12 +25,20 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity createMember(@RequestBody MemberPostDto memberPostDto) {
+    public ResponseEntity createMember(@RequestBody MemberSignUpPostDto memberSignUpPostDto) {
 
 
-        Member member=memberService.saveMember(memberPostDto);
+        Member member = memberService.saveMember(memberSignUpPostDto);
         URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, member.getId());
 
         return ResponseEntity.created(location).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity loginMember(@RequestBody MemberLoginPostDto memberLoginPostDto) {
+
+        //Member member = memberService.findMember(memberLoginPostDto);
+
+        return ResponseEntity.ok().build();
     }
 }
