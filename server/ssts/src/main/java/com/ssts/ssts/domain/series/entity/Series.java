@@ -2,6 +2,8 @@ package com.ssts.ssts.domain.series.entity;
 
 
 
+import com.ssts.ssts.domain.member.entity.Member;
+import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +15,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Series {
 
     @Id
@@ -67,9 +66,9 @@ public class Series {
     @Column
     private Boolean isEditable = true;
 
-//    @ManyToOne
-//    @JoinColumn(name = "member_id")
-//    private Member member;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Column
     private Boolean isActive = true;
@@ -134,12 +133,21 @@ public class Series {
 
 
 
-//    public void addMember(Member member) {
-//        this.member = member;
-//        if (!this.member.getQuestions().contains(this)) {
-//            this.member.getQuestions().add(this);
-//        }
-//    }
+    public static Series of(String title){
+        Series series = new Series();
+
+        series.setTitle(title);
+
+        return series;
+
+    }
+
+    public void addMember(Member member) {
+        this.member = member;
+        if (!this.member.getSeries.contains(this)) {
+            this.member.getSeries().add(this);
+        }
+    }
     public enum SeriesStatus {
         SERIES_ACTIVE("투표 미완료"),
         SERIES_SLEEP("투표 중"),

@@ -50,4 +50,40 @@ public class SeriesResponseDto {
 
     private Boolean isActive;
 
+
+    public static SeriesResponseDto of(Long id,
+                                       String title,
+                                       int daylogCount,
+                                       LocalDateTime createdAt,
+                                       LocalDateTime modifiedAt,
+                                       int voteCount, Boolean voteResult,
+                                       int voteAgree, int voteDisagree,
+                                       Boolean revoteResult,
+                                       int revoteAgree,
+                                       int revoteDisagree,
+                                       Series.SeriesStatus seriesStatus,
+                                       Boolean isPublic,
+                                       Boolean isEditable,
+                                       Boolean isActive) {
+        SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
+
+        seriesResponseDto.setId(id);
+        seriesResponseDto.setTitle(title);
+        seriesResponseDto.setDaylogCount(daylogCount);
+        seriesResponseDto.setCreatedAt(createdAt);
+        seriesResponseDto.setModifiedAt(modifiedAt);
+        seriesResponseDto.setVoteCount(voteCount);
+        seriesResponseDto.setVoteResult(voteResult);
+        seriesResponseDto.setVoteAgree(voteAgree);
+        seriesResponseDto.setVoteDisagree(voteDisagree);
+        seriesResponseDto.setVoteResult(revoteResult);
+        seriesResponseDto.setRevoteAgree(revoteAgree);
+        seriesResponseDto.setRevoteDisagree(revoteDisagree);
+        seriesResponseDto.setSeriesStatus(seriesStatus);
+        seriesResponseDto.setIsPublic(isPublic);
+        seriesResponseDto.setIsEditable(isEditable);
+        seriesResponseDto.setIsActive(isActive);
+
+        return seriesResponseDto;
+    }
 }
