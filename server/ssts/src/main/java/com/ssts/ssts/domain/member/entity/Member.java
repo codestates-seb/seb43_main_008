@@ -52,7 +52,7 @@ public class Member {
     String image;
     //---------------------------------------
 
-    // of 정적 팩토리 메서드
+    // of 정적 팩토리 메서드 - 임시 회원가입
     public static Member of(String nickName, String email, String password) {
         Member member=new Member();
 
@@ -62,6 +62,8 @@ public class Member {
 
         return member;
     }
+
+
 
     // enum
     public enum Status{

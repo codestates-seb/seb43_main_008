@@ -1,11 +1,15 @@
 package com.ssts.ssts.domain.member.service;
 
+import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
+import com.ssts.ssts.domain.member.dto.MemberEditInfoResponseDto;
+import com.ssts.ssts.domain.member.dto.MemberMyPageResponseDto;
 import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
 import com.ssts.ssts.domain.member.entity.Member;
+import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
-import com.ssts.ssts.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,13 +52,50 @@ public class MemberService {
         return savedMember;
     }
 
+    public MemberMyPageResponseDto findMember(long memberId) {
+
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        MemberMyPageResponseDto responseDto=MemberMyPageResponseDto.of(member.getNickName(),
+                member.getImage(),
+                member.getIntroduce(),
+                List.of(1L, 2L, 3L)); // 임시로 값 넣기
+
+        return responseDto;
+    }
+
+    @Transactional
+    public Member changeMemberStatusWithdraw(long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        member.setStatus(Member.Status.WITHDRAW);
+        //탈퇴 로그 출력
+
+        return member;
+    }
+
+    @Transactional
+    public MemberEditInfoResponseDto editMemberInfo(long memberId, MemberEditInfoPatchDto memberEditInfoPatchDto) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        member.setImage(memberEditInfoPatchDto.getImage());
+        member.setNickName(memberEditInfoPatchDto.getNickName());
+        //member.setPassword(memberEditInfoPatchDto.getPassword()); //oauth로그인이라서 필요없다.
+        member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
+
+        MemberEditInfoResponseDto responseDto = MemberEditInfoResponseDto.of(member.getImage(), member.getNickName(), member.getIntroduce());
+        return responseDto;
+    }
+
     public void verifyExistsEmail(String email) {
-        //Member member = memberRepository.findByEmail(email).orElseThrow(NoSuchElementException::new);
+
+        //내가 만든 Exception을 던지려면 supplier 타입으로 던져야한다.
         Optional<Member> member=memberRepository.findByEmail(email);
-        if(member.isPresent()){
+        //멤버가 증명됬다는 의미로 로그를 띄워줘야할까?
+        if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATE);
         }
+
     }
+
+
 
     private boolean isAdmin(String email){
         if(email.contains("@ssts.com")){

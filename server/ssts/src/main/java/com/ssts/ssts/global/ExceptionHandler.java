@@ -14,7 +14,9 @@ public class ExceptionHandler {
         ResponseEntity<String> response=ResponseEntity.badRequest().body("Occurred BusinessLoginException.");
 
         if (ex.getExceptionCode()== ExceptionCode.EMAIL_DUPLICATE) {
-            response=ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate emails.");
+            response=ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate email.");
+        } else if (ex.getExceptionCode() == ExceptionCode.MEMBER_EXISTS) {
+            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member Not found.");
         }
 
         return response;
