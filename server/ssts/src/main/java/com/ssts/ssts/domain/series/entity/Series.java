@@ -1,13 +1,8 @@
 package com.ssts.ssts.domain.series.entity;
 
 
-
 import com.ssts.ssts.domain.member.entity.Member;
-import com.ssts.ssts.domain.series.dto.SeriesPostDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -144,7 +139,7 @@ public class Series {
 
     public void addMember(Member member) {
         this.member = member;
-        if (!this.member.getSeries.contains(this)) {
+        if (!this.member.getSeries().contains(this)) {
             this.member.getSeries().add(this);
         }
     }

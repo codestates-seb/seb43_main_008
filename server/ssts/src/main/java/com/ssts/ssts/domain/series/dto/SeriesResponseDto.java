@@ -2,20 +2,15 @@ package com.ssts.ssts.domain.series.dto;
 
 
 import com.ssts.ssts.domain.series.entity.Series;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+@Getter
 public class SeriesResponseDto {
 
     private Long id;

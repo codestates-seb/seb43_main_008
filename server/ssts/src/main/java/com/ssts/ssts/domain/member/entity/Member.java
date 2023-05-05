@@ -1,5 +1,6 @@
 package com.ssts.ssts.domain.member.entity;
 
+import com.ssts.ssts.domain.series.entity.Series;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,6 +52,11 @@ public class Member {
     @Column
     String image;
     //---------------------------------------
+
+    //FetchType.EAGER 전략 : 항상 목록 가져오기 (불필요한 조회를 막으려면 FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="member_id")
+    private List<Series> series;
 
     // of 정적 팩토리 메서드 - 임시 회원가입
     public static Member of(String nickName, String email, String password) {
