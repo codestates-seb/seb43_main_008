@@ -1,7 +1,7 @@
 import "./global.css";
 
 import StyledComponentsRegistry from "./registry";
-
+import Navbar from "./Navbar";
 export default function RootLayout({
   children,
 }: {
@@ -22,6 +22,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#D4E8D8" />
       </head>
       <body>
+        <Navbar />
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
