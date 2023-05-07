@@ -5,7 +5,11 @@ import { useState } from "react";
 import Card from "./Card";
 import list from "./list";
 
-export default function Main() {
+type MainProps = {
+  className?: string;
+  // ...
+};
+const Main: React.FC<MainProps> = ({ className }) => {
   const [isSelected, setIsSelected] = useState(false);
   return (
     <StyledMain>
@@ -26,42 +30,48 @@ export default function Main() {
       </div>
       <section className="list">
         {list.map((data) => (
-          <Card key={data.id} {...data} />
+          <div className="item">
+            <Card key={data.id} {...data} />
+          </div>
         ))}
       </section>
     </StyledMain>
   );
-}
+};
 
 const StyledMain = styled.main`
-  width: 390px;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 1.6rem;
+  padding: 1.6rem 0.5rem 1.6rem 0.5rem;
+  color: #222;
 
   .title {
-    margin-left: 0.3rem;
-    font-size: 1.4rem;
+    margin-left: 1.5rem;
+    font-size: 1.65rem;
     font-weight: 900;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.8rem;
   }
 
   .filter {
     display: flex;
     flex-direction: row;
     align-items: baseline;
+    margin-left: 0.8rem;
     margin-bottom: 0.6rem;
 
     .tag {
       padding: 0.5rem 0.8rem 0.5rem 0.8rem;
       margin-right: 0.4rem;
-      border-radius: 16px;
+
+      font-size: 0.75rem;
       color: #85858e;
       background-color: #f5f2f0;
+
+      border-radius: 16px;
       border: solid 1px #85858e;
-      font-size: 0.75rem;
       cursor: pointer;
     }
     .selected {
@@ -74,6 +84,45 @@ const StyledMain = styled.main`
   .list {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    /* margin: 0;
+    padding: 0; */
+  }
+
+  .item {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    /* margin: 0;
+    padding: 0; */
+  }
+
+  @media screen and (min-width: 768px) {
+    .list {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+    .item {
+      width: 50%;
+    }
+    .title {
+      font-size: 2.64rem;
+      margin-bottom: 1.75rem;
+    }
+    .filter {
+      margin-bottom: 1.5rem;
+      .tag {
+        padding: 0.8rem 1.28rem;
+        margin-right: 0.64rem;
+
+        font-size: 1.15rem;
+        border-radius: 21px;
+      }
+    }
   }
 `;
+
+export default Main;

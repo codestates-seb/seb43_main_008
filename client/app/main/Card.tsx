@@ -47,7 +47,7 @@ const StyledCard = styled.div`
     display: flex;
     flex-direction: row;
     font-size: 0.75rem;
-    color: #676767;
+    color: #757575;
     margin-bottom: 0.6rem;
     .nickName {
       margin-right: 0.1rem;
@@ -58,7 +58,7 @@ const StyledCard = styled.div`
   만약 사용자가 지정한다면 저장은 어떻게하지? 
   */
   .image {
-    height: 100px;
+    height: 35vw;
     width: 100%;
     margin-bottom: 0.6rem;
 
@@ -69,12 +69,18 @@ const StyledCard = styled.div`
 
   .status {
     font-size: 0.75rem;
-    color: #676767;
+    color: #757575;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     .comment {
       margin-right: 0.8rem;
+    }
+  }
+  @media screen and (min-width: 768px) {
+    .info,
+    .status {
+      font-size: 1.15rem;
     }
   }
 `;

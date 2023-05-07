@@ -21,9 +21,9 @@ export default function Navbar() {
           onClick={() => handleMenuClick("홈")}
         >
           {selected === "홈" ? (
-            <AiFillHome className="icon" />
+            <AiFillHome className="home icon" />
           ) : (
-            <AiOutlineHome className="icon" />
+            <AiOutlineHome className="home icon" />
           )}
           <div className="text">홈</div>
         </div>
@@ -58,7 +58,7 @@ export default function Navbar() {
             <BsBookmarkFill className="icon" />
           ) : (
             <BsBookmark className="icon" />
-          )}{" "}
+          )}
           <div className="text">북마크</div>
         </div>
         <div
@@ -68,10 +68,10 @@ export default function Navbar() {
           onClick={() => handleMenuClick("마이일지")}
         >
           {selected === "마이일지" ? (
-            <BsPersonFill className="icon" />
+            <BsPersonFill className="my-page icon" />
           ) : (
-            <BsPerson className="icon" />
-          )}{" "}
+            <BsPerson className="my-page icon" />
+          )}
           <div className="text">마이일지</div>
         </div>
       </div>
@@ -82,7 +82,7 @@ export default function Navbar() {
 const StyledNavbar = styled.nav`
   z-index: 1;
   height: 5.125rem;
-  width: 390px;
+  width: 100%;
 
   position: fixed;
   bottom: 0;
@@ -90,6 +90,8 @@ const StyledNavbar = styled.nav`
   background-color: white;
   border-radius: 25px 25px 0 0;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+  color: #222;
   .container {
     display: flex;
     flex-direction: row;
@@ -104,15 +106,18 @@ const StyledNavbar = styled.nav`
       align-items: center;
       padding: 0.5rem;
       margin-top: 0.7rem;
-      width: 60px;
+      width: calc(100% / 5);
       text-align: center;
       .icon {
         font-size: 1.2rem;
         margin-bottom: 0.7rem;
         height: 60%;
       }
-      .selected {
-        fill: #3f910c;
+      .home {
+        font-size: 1.4rem;
+      }
+      .my-page {
+        font-size: 1.55rem;
       }
       .text {
       }
@@ -120,8 +125,9 @@ const StyledNavbar = styled.nav`
     .plus-button {
       z-index: 1000;
       position: fixed;
-      bottom: 3.125rem;
-      right: 10.65625rem;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      bottom: 0;
 
       width: 3.0625rem;
       height: 3.0625rem;
@@ -137,6 +143,17 @@ const StyledNavbar = styled.nav`
 
       font-size: 3.0625rem;
       font-weight: 300;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .container {
+      font-size: 1.15rem;
+      .menu {
+        .text {
+          margin-bottom: 0.5rem;
+        }
+      }
     }
   }
 `;
