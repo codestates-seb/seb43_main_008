@@ -1,0 +1,8 @@
+.mainContainer {
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: brown;
+    @media (max-width: 800px) {
+        background-color: blue;
+      }
+}
