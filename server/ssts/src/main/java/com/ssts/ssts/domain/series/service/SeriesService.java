@@ -1,6 +1,8 @@
 package com.ssts.ssts.domain.series.service;
 
 
+import com.ssts.ssts.domain.member.entity.Member;
+import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesUpdateDto;
@@ -18,6 +20,8 @@ import java.util.Optional;
 public class SeriesService {
 
     private final SeriesRepository seriesRepository;
+
+    private final MemberRepository memberRepository;
 
 
 
@@ -37,18 +41,24 @@ public class SeriesService {
                 series.getRevoteResult(),
                 series.getRevoteAgree(),
                 series.getRevoteDisagree(),
-                series.getSeriesStatus(),
+                series.getVoteStatus(),
                 series.getIsPublic(),
                 series.getIsEditable(),
-                series.getIsActive());
+                series.getIsActive(),
+                series.getMember());
 
     }
 
 
-    public SeriesResponseDto saveSeries(SeriesPostDto seriesPostDto){
+    public SeriesResponseDto saveSeries(Long memberId, SeriesPostDto seriesPostDto){
 
         Series series = Series.of(seriesPostDto.getTitle());
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
 
+        Member findMember =
+                optionalMember.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        series.addMember(findMember);
         seriesRepository.save(series);
 
         return SeriesResponseDto.of(series.getId(),
@@ -63,10 +73,11 @@ public class SeriesService {
                 series.getRevoteResult(),
                 series.getRevoteAgree(),
                 series.getRevoteDisagree(),
-                series.getSeriesStatus(),
+                series.getVoteStatus(),
                 series.getIsPublic(),
                 series.getIsEditable(),
-                series.getIsActive());
+                series.getIsActive(),
+                series.getMember());
     }
 
 
@@ -87,10 +98,11 @@ public class SeriesService {
                 series.getRevoteResult(),
                 series.getRevoteAgree(),
                 series.getRevoteDisagree(),
-                series.getSeriesStatus(),
+                series.getVoteStatus(),
                 series.getIsPublic(),
                 series.getIsEditable(),
-                series.getIsActive());
+                series.getIsActive(),
+                series.getMember());
 
     }
 

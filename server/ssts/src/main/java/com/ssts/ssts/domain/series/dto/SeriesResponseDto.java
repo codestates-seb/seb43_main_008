@@ -1,6 +1,7 @@
 package com.ssts.ssts.domain.series.dto;
 
 
+import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.series.entity.Series;
 import lombok.*;
 
@@ -37,13 +38,15 @@ public class SeriesResponseDto {
 
     private int revoteDisagree;
 
-    private Series.SeriesStatus seriesStatus;
+    private Series.VoteStatus seriesStatus;
 
     private Boolean isPublic;
 
     private Boolean isEditable;
 
     private Boolean isActive;
+
+    private Member member;
 
 
     public static SeriesResponseDto of(Long id,
@@ -56,10 +59,11 @@ public class SeriesResponseDto {
                                        Boolean revoteResult,
                                        int revoteAgree,
                                        int revoteDisagree,
-                                       Series.SeriesStatus seriesStatus,
+                                       Series.VoteStatus voteStatus,
                                        Boolean isPublic,
                                        Boolean isEditable,
-                                       Boolean isActive) {
+                                       Boolean isActive,
+                                       Member member) {
         SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
 
         seriesResponseDto.setId(id);
@@ -74,10 +78,11 @@ public class SeriesResponseDto {
         seriesResponseDto.setVoteResult(revoteResult);
         seriesResponseDto.setRevoteAgree(revoteAgree);
         seriesResponseDto.setRevoteDisagree(revoteDisagree);
-        seriesResponseDto.setSeriesStatus(seriesStatus);
+        seriesResponseDto.setSeriesStatus(voteStatus);
         seriesResponseDto.setIsPublic(isPublic);
         seriesResponseDto.setIsEditable(isEditable);
         seriesResponseDto.setIsActive(isActive);
+        seriesResponseDto.setMember(member);
 
         return seriesResponseDto;
     }
