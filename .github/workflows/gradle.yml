@@ -18,6 +18,8 @@ permissions:
   
 env:
   S3_BUCKET_NAME: team008ssts
+  DATASOURCE_USERNAME: ${{ secrets.DATASOURCE_USERNAME }}
+  DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
 
 jobs:
   build:
