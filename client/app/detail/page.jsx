@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 import { StyledCard } from "./Card";
-import { Slider } from "./Slider";
+import { Slider } from "./Slider.tsx";
 import { AiOutlineLeft } from "react-icons/ai";
 import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
 

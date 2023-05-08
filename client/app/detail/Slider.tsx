@@ -1,45 +1,49 @@
 "use client";
 
 import styled from "styled-components";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 import slides from "../main/list";
 import { Slide } from "./Slide";
 
-// interface SlideProps {
-//   index: number;
-//   id: number;
-//   nickName: string;
-//   image: string;
-//   usageCount: number;
-//   currentSlide: number;
-// }
+interface SlideProps {
+  id: number;
+  nickName: string;
+  image: string;
+  usageCount: number;
+  currentSlide: number;
+}
 
-export const Slider = () => {
+export const Slider = (): JSX.Element => {
   // 마우스 스크롤로 슬라이드 이동을 위해 DOM에 접근한다.
-  const scrollRef = useRef(null);
-  const [isDrag, setIsDrag] = useState(false);
-  const [startX, setStartX] = useState();
+  const scrollRef = useRef<HTMLUListElement>(null);
+  const [isDrag, setIsDrag] = useState<boolean>(false);
+  const [startX, setStartX] = useState<number>();
 
-  const onDragStart = (e) => {
+  const onDragStart = (e: React.MouseEvent<HTMLUListElement>) => {
     e.preventDefault();
     setIsDrag(true);
-    setStartX(e.pageX + scrollRef.current.scrollLeft);
+    setStartX(e.pageX + scrollRef.current?.scrollLeft);
   };
 
   const onDragEnd = () => {
     setIsDrag(false);
   };
 
-  const onDragMove = (e) => {
+  const onDragMove = (e: React.MouseEvent<HTMLUListElement>) => {
     if (isDrag) {
       scrollRef.current.scrollLeft = startX - e.pageX;
     }
   };
 
-  const throttle = (func, ms) => {
+  // 함수 일반화 및 재사용을 위해 unknown 키워드로 타입 선언
+  // 타입 매개변수 이름으로 T 사용함
+  const throttle = <T extends unknown[]>(
+    func: (...args: T) => void,
+    ms: number
+  ) => {
     let throttled = false;
-    return (...args) => {
+    return (...args: T) => {
       if (!throttled) {
         throttled = true;
         setTimeout(() => {
@@ -66,7 +70,7 @@ export const Slider = () => {
         >
           {slides.map((data) => (
             <li key={data.id}>
-              <Slide key={data.id} {...data} />
+              <Slide {...data} />
             </li>
           ))}
         </ul>

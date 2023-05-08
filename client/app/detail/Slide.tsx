@@ -3,7 +3,6 @@
 import styled from "styled-components";
 
 interface SlideProps {
-  index: number;
   id: number;
   nickName: string;
   image: string;
