@@ -1,19 +1,15 @@
 "use client";
 
 import styled from "styled-components";
+import { Header } from "./Header";
 import { StyledCard } from "./Card";
-import { Slider } from "./Slider.tsx";
-import { AiOutlineLeft } from "react-icons/ai";
+import { Slider } from "./Slider";
 import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
 
 export default function Detail() {
   return (
     <StyledDetail>
-      <Header>
-        <AiOutlineLeft size="21" className="icon" />
-        <div className="title">봉다리 세바스찬</div>
-        <div className=""></div>
-      </Header>
+      <Header />
       <Slider />
       <h3 className="sub-title">그만 써도 될까요?</h3>
       <StyledCard className="vote-box">
@@ -34,20 +30,6 @@ export default function Detail() {
     </StyledDetail>
   );
 }
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  height: 67.227px;
-  margin: 0 12px;
-
-  font-size: 18px;
-  .title {
-    margin-right: 21px;
-  }
-`;
 
 const StyledDetail = styled.div`
   .sub-title {
