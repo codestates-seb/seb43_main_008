@@ -1,7 +1,8 @@
 "use client";
 
-import styled from "styled-components";
 import { useState } from "react";
+import styled from "styled-components";
+
 import Card from "./Card";
 import list from "./list";
 
@@ -30,7 +31,7 @@ const Main: React.FC<MainProps> = ({ className }) => {
       </div>
       <section className="list">
         {list.map((data) => (
-          <div className="item">
+          <div className="item" key={data.id}>
             <Card key={data.id} {...data} />
           </div>
         ))}
@@ -41,6 +42,7 @@ const Main: React.FC<MainProps> = ({ className }) => {
 
 const StyledMain = styled.main`
   width: 100%;
+  min-width: 390px;
 
   display: flex;
   flex-direction: column;

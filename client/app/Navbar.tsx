@@ -1,10 +1,10 @@
 "use client";
 
-import styled from "styled-components";
 import { useState } from "react";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
-import { BsHeartFill, BsBookmarkFill, BsPersonFill } from "react-icons/bs";
-import { BsHeart, BsBookmark, BsPerson } from "react-icons/bs";
+import { BsBookmarkFill, BsHeartFill, BsPersonFill } from "react-icons/bs";
+import { BsBookmark, BsHeart, BsPerson } from "react-icons/bs";
+import styled from "styled-components";
 
 export default function Navbar() {
   const [selected, setSelected] = useState("홈");
@@ -45,7 +45,7 @@ export default function Navbar() {
           }`}
           onClick={() => handleMenuClick("시리즈 작성")}
         >
-          <div className="icon"></div>
+          <div className="icon" />
           <div className="text">새글쓰기</div>
         </div>
         <div

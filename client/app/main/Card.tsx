@@ -1,7 +1,8 @@
 "use client";
 
+import { FaRegCommentDots } from "react-icons/fa";
+import { MdOutlineHowToVote } from "react-icons/md";
 import styled from "styled-components";
-import { FaSortDown } from "react-icons/fa";
 
 // 📌 매번 타입 지정하는게 맞나?
 interface CardProps {
@@ -12,31 +13,37 @@ interface CardProps {
 
 export default function Card({ nickName, image, usageCount }: CardProps) {
   return (
-    <StyledCard>
+    <StyledCard direction="column">
       <div className="info">
         <div className="nickName">{nickName} | </div>
         <div className="usageCount">{usageCount}번 사용</div>
       </div>
       {/* img 태그는  background 속성 적용 안됨 -> div 태그로 변경*/}
-      <div className="image" style={{ backgroundImage: `url(${image})` }}></div>
+      <div className="image" style={{ backgroundImage: `url(${image})` }} />
       <div className="status">
         <div className="comment">
-          <FaSortDown />
-          댓글+2
+          <div className="text">댓글달기</div>
+          <FaRegCommentDots className="icon" />
         </div>
-        <div className="vote">투표하기 &gt; </div>
+        <div className="vote">
+          <div className="text">투표하기</div>
+          <MdOutlineHowToVote className="icon vote" />
+        </div>
       </div>
     </StyledCard>
   );
 }
 
-const StyledCard = styled.div`
+type FlexContainerProps = {
+  direction?: "row" | "column";
+};
+export const StyledCard = styled.div<FlexContainerProps>`
   width: 100%;
-  padding: 1.3rem;
+  padding: 1rem 1.3rem;
   margin: 0.6rem;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: ${(props) => props.direction};
   justify-content: center;
 
   background-color: white;
@@ -60,7 +67,7 @@ const StyledCard = styled.div`
   .image {
     height: 35vw;
     width: 100%;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.73rem;
 
     background-position: center;
     background-size: cover;
@@ -73,14 +80,35 @@ const StyledCard = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    .comment {
-      margin-right: 0.8rem;
+    .comment,
+    .vote {
+      display: flex;
+      flex-direction: row;
+      margin-left: 0.8rem;
+      .icon {
+        font-size: 0.8rem;
+        margin-left: 0.3rem;
+      }
+      .vote {
+        font-size: 0.834rem;
+        margin-left: 0.2rem;
+      }
     }
   }
   @media screen and (min-width: 768px) {
     .info,
     .status {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
+      .comment .icon {
+        font-size: 1.05rem;
+      }
+      .vote .icon {
+        font-size: 1.15rem;
+      }
+    }
+    .info,
+    .image {
+      margin-bottom: 1.25rem;
     }
   }
 `;
