@@ -6,10 +6,6 @@ import styled from "styled-components";
 import Card from "./Card";
 import list from "./list";
 
-type MainProps = {
-  className?: string;
-  // ...
-};
 export default function Main() {
   const [isSelected, setIsSelected] = useState(false);
   return (
