@@ -1,5 +1,6 @@
 package com.ssts.ssts.domain.member.entity;
 
+import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.series.entity.Series;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name="members")
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,11 +39,12 @@ public class Member {
     @Column(length = 20, nullable = false)
     private Status status=Status.ACTIVE;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt = LocalDateTime.now();
+//
+//    @Column(nullable = false)
+//    private LocalDateTime createdAt = LocalDateTime.now();
+//
+//    @Column(nullable = false)
+//    private LocalDateTime modifiedAt = LocalDateTime.now();
     //---------------------------------------
 
     // null 가능------------------------------
