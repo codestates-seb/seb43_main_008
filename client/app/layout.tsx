@@ -22,8 +22,10 @@ export default function RootLayout({
         <meta name="theme-color" content="#D4E8D8" />
       </head>
       <body>
-        <Navbar />
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          {children}
+          <Navbar />
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
