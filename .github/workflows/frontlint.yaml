@@ -18,6 +18,8 @@ jobs:
         run: |
           npm install -g yarn
           yarn install
+          cd client
+          yarn add next
       - name: Run lint check
         run: |
           cd client
