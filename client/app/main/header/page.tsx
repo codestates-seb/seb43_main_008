@@ -3,7 +3,7 @@
 import React from "react";
 import "./header.module.css";
 import styled from "styled-components";
-import { AiFillCaretLeft } from "react-icons/Ai";
+import { AiFillCaretLeft } from "react-icons/ai";
 
 const LayoutContainer = styled.div`
   /* max-width: 1024px; */
