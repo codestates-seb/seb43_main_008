@@ -1,12 +1,15 @@
 package com.ssts.ssts.domain.series.entity;
 
 
+import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.member.entity.Member;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -61,12 +64,18 @@ public class Series {
     @Column
     private Boolean isEditable = true;
 
+
+    @Column
+    private Boolean isActive = true;
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column
-    private Boolean isActive = true;
+    @OneToMany(mappedBy = "series", cascade = CascadeType.PERSIST)
+    private List<Daylog> daylogs = new ArrayList<>();
+
+
+
 
 
     public void setModifiedAt(LocalDateTime modifiedAt) {

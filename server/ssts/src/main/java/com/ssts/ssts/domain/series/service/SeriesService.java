@@ -10,6 +10,7 @@ import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
+import com.ssts.ssts.utils.UpdateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,15 @@ public class SeriesService {
 
     private final MemberRepository memberRepository;
 
+    private final UpdateUtils<Series> updateUtils;
+
 
 
     public SeriesResponseDto getSeries(Long id){
 
         Series series = this.findVerifiedSeries(id);
 
-        return SeriesResponseDto.of(series.getId(),
+        SeriesResponseDto responseDto = SeriesResponseDto.of(series.getId(),
                 series.getTitle(),
                 series.getDaylogCount(),
                 series.getCreatedAt(),
@@ -47,6 +50,8 @@ public class SeriesService {
                 series.getIsActive(),
                 series.getMember());
 
+        return responseDto;
+
     }
 
 
@@ -58,6 +63,7 @@ public class SeriesService {
         Member findMember =
                 optionalMember.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
         series.addMember(findMember);
         seriesRepository.save(series);
 
@@ -83,26 +89,28 @@ public class SeriesService {
 
     public SeriesResponseDto updateSeries(Long id, SeriesUpdateDto seriesUpdateDto){
 
-        Series series = this.findVerifiedSeries(id);
+        Series DescSeries = this.findVerifiedSeries(id);
+        Series series = Series.of(seriesUpdateDto.getTitle());
 
+        Series updateSeries = updateUtils.copyNonNullProperties(series,DescSeries);
 
-        return SeriesResponseDto.of(series.getId(),
-                series.getTitle(),
-                series.getDaylogCount(),
-                series.getCreatedAt(),
-                series.getModifiedAt(),
-                series.getVoteCount(),
-                series.getVoteResult(),
-                series.getVoteAgree(),
-                series.getVoteDisagree(),
-                series.getRevoteResult(),
-                series.getRevoteAgree(),
-                series.getRevoteDisagree(),
-                series.getVoteStatus(),
-                series.getIsPublic(),
-                series.getIsEditable(),
-                series.getIsActive(),
-                series.getMember());
+        return SeriesResponseDto.of(updateSeries.getId(),
+                updateSeries.getTitle(),
+                updateSeries.getDaylogCount(),
+                updateSeries.getCreatedAt(),
+                updateSeries.getModifiedAt(),
+                updateSeries.getVoteCount(),
+                updateSeries.getVoteResult(),
+                updateSeries.getVoteAgree(),
+                updateSeries.getVoteDisagree(),
+                updateSeries.getRevoteResult(),
+                updateSeries.getRevoteAgree(),
+                updateSeries.getRevoteDisagree(),
+                updateSeries.getVoteStatus(),
+                updateSeries.getIsPublic(),
+                updateSeries.getIsEditable(),
+                updateSeries.getIsActive(),
+                updateSeries.getMember());
 
     }
 

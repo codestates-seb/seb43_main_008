@@ -32,7 +32,7 @@ public class SeriesController {
     @PostMapping
     public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto){
 
-        SeriesResponseDto response = seriesService.saveSeries(1L,seriesPostDto);
+        SeriesResponseDto response = seriesService.saveSeries(1L, seriesPostDto);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
