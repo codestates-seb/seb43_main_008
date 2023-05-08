@@ -37,12 +37,12 @@ jobs:
 
       - name: Set up Gradle Wrapper
         run: |
-          cd server
+          cd server/ssts
           chmod +x gradlew
 
       - name: Build with Gradle
         run: |
-          cd server
+          cd server/ssts
           ./gradlew bootJar
       
       # build한 후 프로젝트를 압축합니다.
