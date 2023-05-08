@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { useRef, useState } from "react";
 import slides from "../main/list";
 import { Slide } from "./Slide";
+import { StyledCard } from "./Card";
+import { AiOutlineLeft } from "react-icons/ai";
+import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
 
 // interface SlideProps {
 //   index: number;
@@ -15,7 +18,7 @@ import { Slide } from "./Slide";
 // }
 
 export default function Detail() {
-  // 마우스 스크롤로 슬라이드 이동을 위해 DOM에 접근한다.1
+  // 마우스 스크롤로 슬라이드 이동을 위해 DOM에 접근한다.
   const scrollRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
   const [startX, setStartX] = useState();
@@ -49,13 +52,18 @@ export default function Detail() {
     };
   };
 
-  const delay = 100;
+  const delay = 10;
   const onThrottleDragMove = throttle(onDragMove, delay);
 
   return (
-    <>
-      <TopNavBar />
-      <StyledDetail>
+    <StyledDetail>
+      <Header>
+        <AiOutlineLeft size="21" className="icon" />
+        <div className="title">봉다리 세바스찬</div>
+        <div className=""></div>
+      </Header>
+
+      <StyledSlider>
         <section className="container">
           <ul
             className="slider-container"
@@ -65,37 +73,52 @@ export default function Detail() {
             onMouseUp={onDragEnd}
             onMouseLeave={onDragEnd}
           >
-            {slides.map((data, index) => (
+            {slides.map((data) => (
               <li key={data.id}>
-                <Slide key={data.id} {...data} index={index} />
+                <Slide key={data.id} {...data} />
               </li>
             ))}
           </ul>
         </section>
+      </StyledSlider>
 
-        {/* <section className="vote">
-          <h3 className="sub-title">그만 써도 될까요?</h3>
-        </section>
-        <section className="comment">
-          <h3 className="sub-title">댓글</h3>
-        </section> */}
-      </StyledDetail>
-    </>
+      <h3 className="sub-title">그만 써도 될까요?</h3>
+      <StyledCard className="vote-box">
+        <div className="vote">
+          <div className="text">네!</div>
+          <FaRegThumbsUp className="icon" />
+        </div>
+        <div className="vote">
+          <FaRegThumbsDown className="icon" />
+          <div className="text">안돼요</div>
+        </div>
+      </StyledCard>
+
+      <h3 className="sub-title">댓글 달기</h3>
+      <StyledCard className="comment">
+        <h3 className="sub-title">댓글 달기</h3>
+      </StyledCard>
+    </StyledDetail>
   );
 }
 
-const TopNavBar = styled.div`
-  top: 0;
-  width: 100%;
-  height: 65px;
-  border: solid;
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 67.227px;
+  margin: 0 12px;
+
+  font-size: 18px;
+  .title {
+    margin-right: 21px;
+  }
 `;
 
-const StyledDetail = styled.div`
+const StyledSlider = styled.div`
   width: 100%;
   min-width: 390px;
-  height: 100vh;
-  /* padding: 24px; */
 
   display: flex;
   flex-direction: column;
@@ -106,19 +129,42 @@ const StyledDetail = styled.div`
     position: relative;
     width: 100%;
     overflow-x: hidden;
-    height: 1000px;
   }
 
   .slider-container {
     display: flex;
     flex-direction: row;
     overflow-x: scroll;
-    /* position: absolute; */
     width: 100%;
+    padding-bottom: 24px;
+    transition: 0.3s ease-in;
   }
 
-  .slider-container.animated {
-    -webkit-transition: left 0.3s ease-in;
-    transition: left 0.3s ease-in;
+  .slider-container::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const StyledDetail = styled.div`
+  .sub-title {
+    margin: 0 24px;
+  }
+  .vote-box {
+    display: flex;
+    flex-direction: row;
+    .vote {
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      margin: 0 12px;
+      .text {
+        margin: 0 8px;
+      }
+      .icon {
+        border: 50%;
+        /* padding: 12px; */
+        /* border: solid; */
+      }
+    }
   }
 `;

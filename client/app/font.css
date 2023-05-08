@@ -1,13 +1,4 @@
 /* 스위트 */
-/* @font-face {
-  font-family: 'SUITE-Regular';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-} */
-
-
-/* 강원교육모두체 */
 @font-face {
   font-family: 'SUITE-Regular';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
@@ -15,7 +6,7 @@
   font-style: normal;
 }
 
-
 * {
   font-family: 'SUITE-Regular', sans-serif;
+  line-height: 1.2;
 }

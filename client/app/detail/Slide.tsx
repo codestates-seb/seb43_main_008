@@ -10,8 +10,6 @@ interface SlideProps {
   usageCount: number;
 }
 const Slide: React.FC<SlideProps> = ({
-  id,
-  index,
   image,
   nickName,
   usageCount,
@@ -26,18 +24,12 @@ const Slide: React.FC<SlideProps> = ({
 
         <div className="image" style={{ backgroundImage: `url(${image})` }} />
         <p>
-          여기에 글을 보여줄거양
-          <br />
-          여기에 글을 보여줄거양
-          <br />
-          여기에 글을 보여줄거양
-          <br />
-          여기에 글을 보여줄거양
-          <br />
-          여기에 글을 보여줄거양
-          <br />
-          여기에 글을 보여줄거양
-          <br />
+          이 새로운 함수는 내부 함수 func를 호출하는 역할을 하며, 함수를 호출할
+          때 인자를 받습니다. (...args)는 인자를 받는 매개변수입니다. <br />
+          따라서, throttle 함수가 반환하는 함수를 호출할 때, 인자를 전달하면
+          해당 인자가 내부 함수 func로 전달되며, 이 인자를 이용하여 원래 함수의
+          실행 결과를 반환합니다. 예를 들어, 다음과 같이 throttle 함수를
+          사용한다고 가정해봅시다.
         </p>
       </div>
     </StyledSlide>
@@ -47,7 +39,7 @@ const Slide: React.FC<SlideProps> = ({
 const StyledSlide = styled.div`
   width: 80vw;
   padding: 24px 21px;
-  margin: 24px 0px 24px 12px;
+  margin: 10px -10px 10px 24px;
 
   display: flex;
   flex-direction: column;
@@ -55,7 +47,7 @@ const StyledSlide = styled.div`
 
   background-color: white;
   border-radius: 8px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 3px 24px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
   .info {
     display: flex;
