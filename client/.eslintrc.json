@@ -15,7 +15,7 @@
       {
         "arrays": "always-multiline",
         "objects": "always-multiline",
-        "imports": "never",
+        "imports": "never", 
         "exports": "never",
         "functions": "never"
       }
