@@ -10,7 +10,7 @@ type MainProps = {
   className?: string;
   // ...
 };
-const Main: React.FC<MainProps> = ({ className }) => {
+export default function Main() {
   const [isSelected, setIsSelected] = useState(false);
   return (
     <StyledMain>
@@ -38,7 +38,7 @@ const Main: React.FC<MainProps> = ({ className }) => {
       </section>
     </StyledMain>
   );
-};
+}
 
 const StyledMain = styled.main`
   width: 100%;
@@ -126,5 +126,3 @@ const StyledMain = styled.main`
     }
   }
 `;
-
-export default Main;
