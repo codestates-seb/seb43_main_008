@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
 import "./header.module.css";
-import styled from "styled-components";
+
+import React from "react";
 import { AiFillCaretLeft } from "react-icons/ai";
+import styled from "styled-components";
 
 const LayoutContainer = styled.div`
   /* max-width: 1024px; */

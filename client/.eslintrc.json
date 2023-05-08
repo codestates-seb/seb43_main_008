@@ -15,12 +15,12 @@
       {
         "arrays": "always-multiline",
         "objects": "always-multiline",
-        "imports": "never",
+        "imports": "never", 
         "exports": "never",
         "functions": "never"
       }
     ],
-    // "simple-import-sort/imports": "error",
+    "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
     "comma-spacing": ["error", { "before": false, "after": true }]
