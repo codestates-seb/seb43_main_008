@@ -5,7 +5,6 @@ import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { BsBookmarkFill, BsHeartFill, BsPersonFill } from "react-icons/bs";
 import { BsBookmark, BsHeart, BsPerson } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
-
 import styled from "styled-components";
 
 export default function Navbar() {

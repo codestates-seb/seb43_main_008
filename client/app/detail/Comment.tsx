@@ -1,6 +1,7 @@
 "use client";
 
 import styled from "styled-components";
+
 import { StyledCard } from "./Card";
 
 export const Comment = () => {

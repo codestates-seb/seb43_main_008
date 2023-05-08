@@ -1,18 +1,10 @@
 "use client";
 
-import styled from "styled-components";
 import React, { useRef, useState } from "react";
+import styled from "styled-components";
 
 import slides from "../main/list";
 import { Slide } from "./Slide";
-
-interface SlideProps {
-  id: number;
-  nickName: string;
-  image: string;
-  usageCount: number;
-  currentSlide: number;
-}
 
 export const Slider = (): JSX.Element => {
   // 마우스 스크롤로 슬라이드 이동을 위해 DOM에 접근한다.

@@ -1,8 +1,9 @@
 "use client";
 
+import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import styled from "styled-components";
+
 import { StyledCard } from "./Card";
-import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
 
 export const Vote = () => {
   return (

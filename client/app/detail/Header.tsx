@@ -1,14 +1,14 @@
 "use client";
 
-import styled from "styled-components";
 import { AiOutlineLeft } from "react-icons/ai";
+import styled from "styled-components";
 
 export const Header = () => {
   return (
     <StyledHeader>
       <AiOutlineLeft size="21" className="icon" />
       <div className="title">봉다리 세바스찬</div>
-      <div className=""></div>
+      <div className="" />
     </StyledHeader>
   );
 };

@@ -1,5 +1,6 @@
 import "./global.css";
 import "./font.css";
+
 import Navbar from "./Navbar";
 import StyledComponentsRegistry from "./registry";
 
