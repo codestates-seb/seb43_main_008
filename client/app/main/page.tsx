@@ -5,12 +5,13 @@ import styled from "styled-components";
 
 import Card from "./Card";
 import list from "./list";
+import { Header } from "./Header";
 
 export default function Main() {
   const [isSelected, setIsSelected] = useState(false);
   return (
     <StyledMain>
-      <h1 className="title">홈</h1>
+      <Header />
       <div className="filter">
         <div
           className={isSelected ? "tag" : "selected tag"}
@@ -42,16 +43,11 @@ const StyledMain = styled.main`
 
   display: flex;
   flex-direction: column;
-  position: relative;
-  padding: 1.6rem 0.5rem 1.6rem 0.5rem;
-  color: #222;
 
-  .title {
-    margin-left: 1.5rem;
-    font-size: 1.65rem;
-    font-weight: 900;
-    margin-bottom: 0.8rem;
-  }
+  position: relative;
+  /* top: 67.227px; */
+  padding: 0 0.5rem 1.6rem 0.5rem;
+  color: #222;
 
   .filter {
     display: flex;
