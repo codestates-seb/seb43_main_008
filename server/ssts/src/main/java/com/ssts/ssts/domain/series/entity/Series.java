@@ -53,7 +53,7 @@ public class Series {
 
     @Enumerated(value = EnumType.STRING)
     @Column
-    private SeriesStatus seriesStatus = SeriesStatus.SERIES_ACTIVE;
+    private VoteStatus voteStatus = VoteStatus.SERIES_ACTIVE;
 
     @Column
     private Boolean isPublic = false;
@@ -101,8 +101,8 @@ public class Series {
         this.revoteDisagree = revoteDisagree;
     }
 
-    public void setSeriesStatus(SeriesStatus seriesStatus) {
-        this.seriesStatus = seriesStatus;
+    public void setSeriesStatus(VoteStatus seriesStatus) {
+        this.voteStatus = seriesStatus;
     }
 
     public void setPublic(Boolean aPublic) {
@@ -143,7 +143,7 @@ public class Series {
             this.member.getSeries().add(this);
         }
     }
-    public enum SeriesStatus {
+    public enum VoteStatus {
         SERIES_ACTIVE("투표 미완료"),
         SERIES_SLEEP("투표 중"),
         SERIES_QUIT("투표 완료");
@@ -151,7 +151,7 @@ public class Series {
         @Getter
         private String status;
 
-        SeriesStatus(String status) {
+        VoteStatus(String status) {
             this.status = status;
         }
     }
