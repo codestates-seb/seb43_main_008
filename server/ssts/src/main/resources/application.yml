@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://ssts-database.cvrfezvt4mni.ap-northeast-2.rds.amazonaws.com:3306/sstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
-    username: admin22
-    password: ssts1234
+    url: jdbc:mysql://db-ssts-project.cnjwssed8xco.ap-northeast-2.rds.amazonaws.com:3306/sstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -14,14 +14,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL5Dialect  # ★★★
-    defer-datasource-initialization: true # ★★★
 
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:data-init.sql
-      #schema-locations: classpath:schema-init.sql
 #spring:
 #  h2:
 #    console:
