@@ -1,16 +1,24 @@
 name: Lint check
 
-on: pull_request
+on:
+  pull_request:
 
 jobs:
   build-test:
-    name: Next Lint test
+    name: Next.js Lint Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
         with:
           node-version: "18"
-      - run: npm i -g yarn
-      - run: yarn
-      - run: cd client && yarn lint
+      - name: Install dependencies
+        run: |
+          npm install -g yarn
+          yarn install
+      - name: Run lint check
+        run: |
+          cd client
+          yarn lint
