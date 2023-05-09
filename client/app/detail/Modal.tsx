@@ -50,14 +50,18 @@ const StyledModal = styled.div`
     height: 150px;
 
     margin: 32px 12px;
-    padding: 6px 12px;
+    padding: 6px 12px 12px 12px;
 
     border-radius: 12px;
     background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
   }
 
   .title {
-    margin: 8px 6px;
+    /* margin: 12px 6px; */
 
     display: flex;
     flex-direction: row;
@@ -76,7 +80,7 @@ const StyledModal = styled.div`
   .edit,
   .delete {
     cursor: pointer;
-    margin: 21px 0;
+    /* margin: 21px 0; */
     display: flex;
     flex-direction: row;
   }

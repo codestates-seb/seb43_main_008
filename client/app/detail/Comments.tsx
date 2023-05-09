@@ -98,7 +98,7 @@ const StyledComments = styled.div`
   .input {
     height: 28px;
     width: 90%;
-    margin: 0 14px;
+    margin-left: 10px;
     padding: 6px 12px;
 
     background-color: #f2f2f2;
@@ -122,11 +122,10 @@ const StyledComments = styled.div`
   }
 
   .submit {
-    min-width: 40px;
-    height: 28px;
-    border-radius: 16px;
+    margin-top: 6px;
     border: none;
     background-color: white;
+    font-size: 1rem;
 
     cursor: pointer;
   }
