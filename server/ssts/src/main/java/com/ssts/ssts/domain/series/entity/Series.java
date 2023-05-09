@@ -1,6 +1,7 @@
 package com.ssts.ssts.domain.series.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.domain.member.entity.Member;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
@@ -61,6 +62,7 @@ public class Series {
     @Column
     private Boolean isEditable = true;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
