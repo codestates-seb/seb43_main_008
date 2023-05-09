@@ -5,10 +5,7 @@ import { useState, useCallback } from "react";
 import { MdMoreVert } from "react-icons/md";
 import { Modal } from "./Modal";
 
-interface Props {
-  onClickModal: () => void;
-}
-export const Comment: React.FC<Props> = ({ onClickModal }) => {
+export const Comment: React.FC = () => {
   // 사용자 Id === 댓글 작성자 Id : edit-delete-button 활성화 하기
 
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
