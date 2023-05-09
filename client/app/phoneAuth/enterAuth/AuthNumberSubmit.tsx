@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 export default function Header() {
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [authNumber, setAuthNumber] = useState("");
   const [regexPass, setRegexPass] = useState(false);
 
   const handleExtractNumberFromValue = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setPhoneNumber(e.target.value.replace(/[^0-9]/g, ""));
+    setAuthNumber(e.target.value.replace(/[^0-9]/g, ""));
   };
 
   const submitHandler = () => {
@@ -18,22 +18,23 @@ export default function Header() {
   };
 
   useEffect(() => {
-    const regPhone = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
-    if (regPhone.test(phoneNumber)) {
+    // 일단 인증번호 6자리라고 가정하고 만들었습니다.
+    const regPhone = /^([0-9]{6})$/;
+    if (regPhone.test(authNumber)) {
       setRegexPass(true);
     } else {
       setRegexPass(false);
     }
-  }, [phoneNumber]);
+  }, [authNumber]);
 
   return (
     <>
       <InputContainer>
         <PhoneAuthInput
           type="tel"
-          value={phoneNumber}
-          maxLength={11}
-          placeholder="휴대폰 번호를 -없이 숫자만 입력해주세요."
+          value={authNumber}
+          maxLength={6}
+          placeholder="인증번호 6자리를 입력해주세요."
           onChange={handleExtractNumberFromValue}
         />
       </InputContainer>
@@ -41,13 +42,13 @@ export default function Header() {
         <RegexErrorSpan> 형식이 일치하지 않습니다.</RegexErrorSpan>
       )}
       <ButtonContainer>
-        <AuthNumberSubmitButton
+        <PhoneNumberSubmitButton
           onClick={submitHandler}
           disabled={!regexPass}
           regexPass={regexPass}
         >
           인증하기
-        </AuthNumberSubmitButton>
+        </PhoneNumberSubmitButton>
       </ButtonContainer>
     </>
   );
@@ -90,7 +91,7 @@ interface AuthNumberSubmitButtonProps {
   regexPass: boolean;
 }
 
-const AuthNumberSubmitButton = styled.button<AuthNumberSubmitButtonProps>`
+const PhoneNumberSubmitButton = styled.button<AuthNumberSubmitButtonProps>`
   height: 100%;
   width: 100%;
   border: none;

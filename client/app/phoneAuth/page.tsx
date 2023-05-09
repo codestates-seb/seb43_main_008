@@ -1,5 +1,5 @@
 import Header from "../Header";
-import PhoneAuthSubmit from "./PhoneAuthSubmit";
+import PhoneNumberSubmit from "./PhoneNumberSubmit";
 
 export default function PhoneAuthPage() {
   return (
@@ -9,7 +9,7 @@ export default function PhoneAuthPage() {
         textContent={"휴대폰 인증"}
         saveButton={false}
       />
-      <PhoneAuthSubmit />
+      <PhoneNumberSubmit />
     </div>
   );
 }
