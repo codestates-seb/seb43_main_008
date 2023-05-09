@@ -1,10 +1,32 @@
 "use client";
 
 import styled from "styled-components";
-
+import React, { useState } from "react";
 import { StyledCard } from "./Card";
 
-export const Comment = () => {
+export const Comment: React.FC = () => {
+  const [comment, setComment] = useState<string>("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value);
+  };
+
+  const handleSubmit = (
+    e: React.FormEvent<HTMLFormElement | HTMLTextAreaElement>
+  ) => {
+    e.preventDefault();
+    if (comment.length !== 0) {
+      setComment("");
+      console.log("서버에 데이터 보내고 & 댓글 리스트 새로 가져와야함");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      handleSubmit(e);
+    }
+  };
+
   return (
     <StyledComment>
       <div className="title">
@@ -14,10 +36,20 @@ export const Comment = () => {
 
       <StyledCard>
         <div className="content">
-          <label className="add-comment">
+          <form className="add-comment" onSubmit={handleSubmit}>
             <div className="profile" />
-            <textarea className="input" placeholder="댓글 추가" />
-          </label>
+            <textarea
+              className="input"
+              placeholder="댓글 추가"
+              value={comment}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+            />
+            <button className="submit" type="submit">
+              확인
+            </button>
+          </form>
+
           <ul className="comment-box">
             <li className="comment">
               <div className="profile" />
@@ -93,7 +125,7 @@ const StyledComment = styled.div`
     align-items: flex-start;
   }
   .profile {
-    width: 26px;
+    min-width: 26px;
     height: 26px;
 
     border-radius: 50%;
@@ -101,8 +133,8 @@ const StyledComment = styled.div`
   }
   .input {
     height: 28px;
-    width: 100%;
-    margin-left: 16px;
+    width: 90%;
+    margin: 0 14px;
     padding: 6px 12px;
 
     background-color: #f2f2f2;
@@ -123,5 +155,13 @@ const StyledComment = styled.div`
       outline: none;
       height: auto;
     }
+  }
+  .submit {
+    min-width: 40px;
+    height: 28px;
+    border-radius: 16px;
+    border: none;
+
+    cursor: pointer;
   }
 `;
