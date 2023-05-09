@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { BsBookmarkFill, BsHeartFill, BsPersonFill } from "react-icons/bs";
 import { BsBookmark, BsHeart, BsPerson } from "react-icons/bs";
+import { BsPlusLg } from "react-icons/bs";
 import styled from "styled-components";
 
 export default function Navbar() {
@@ -38,7 +39,9 @@ export default function Navbar() {
           )}
           <div className="text">팔로우</div>
         </div>
-        <div className="plus-button">+</div>
+        <div className="plus-button">
+          <BsPlusLg />
+        </div>
         <div
           className={`add-series menu ${
             selected === "시리즈 작성" ? "selected" : ""
@@ -123,6 +126,8 @@ const StyledNavbar = styled.nav`
       }
     }
     .plus-button {
+      font-size: 35px;
+
       z-index: 1000;
       position: fixed;
       left: 50%;
@@ -134,15 +139,12 @@ const StyledNavbar = styled.nav`
 
       display: flex;
       justify-content: center;
-      align-items: baseline;
+      align-items: center;
 
       border-radius: 50%;
       background-color: #3f910c;
       color: white;
       box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-
-      font-size: 3.0625rem;
-      font-weight: 300;
     }
   }
 
