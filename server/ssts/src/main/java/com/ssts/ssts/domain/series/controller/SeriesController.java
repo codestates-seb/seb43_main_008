@@ -29,6 +29,7 @@ public class SeriesController {
         return ResponseEntity.ok(response);
     }
 
+
     @PostMapping
     public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto){
 
@@ -37,6 +38,13 @@ public class SeriesController {
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
 
+//    @PostMapping("/{member-id}")
+//    public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto, @PathVariable Long memberId){
+//
+//        SeriesResponseDto response = seriesService.saveSeries(memberId,seriesPostDto);
+//
+//        return new ResponseEntity(response, HttpStatus.CREATED);
+//    }
 
     @PatchMapping("/{series-id}")
     public ResponseEntity updateSeries(@PathVariable("series-id") Long id, @RequestBody

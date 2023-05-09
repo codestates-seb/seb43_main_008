@@ -1,6 +1,7 @@
 package com.ssts.ssts.domain.series.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.domain.member.entity.Member;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
@@ -69,6 +70,15 @@ public class Series {
     private Boolean isActive = true;
 
 
+    //투표 개설 시간
+    @Column
+    private LocalDateTime voteCreatedAt;
+
+    //투표 마감 시간(임시)
+    @Column
+    private LocalDateTime voteEndAt;
+
+
     public void setModifiedAt(LocalDateTime modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
@@ -125,6 +135,15 @@ public class Series {
         isActive = active;
     }
 
+
+    //투표 시간 관련 setMethod
+    public void setVoteCreatedAt(LocalDateTime voteCreaateAt){
+        this.voteCreatedAt = voteCreaateAt;
+    }
+
+    public void setVoteEndAt(LocalDateTime voteEndAt){
+        this.voteEndAt = voteEndAt;
+    }
 
 
 
