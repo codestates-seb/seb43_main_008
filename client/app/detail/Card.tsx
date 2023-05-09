@@ -8,15 +8,13 @@ export const StyledCard = styled.section`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
 
   background-color: white;
   border-radius: 8px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
   .sub-text {
-    margin-top: 12px;
+    margin: 12px 0;
     font-size: 0.8rem;
     color: #757575;
   }

@@ -33,7 +33,7 @@ export const Vote: React.FC = () => {
   return (
     <StyledVote>
       <h3 className="sub-title">그만 써도 될까요?</h3>
-      <StyledCard>
+      <StyledCard style={{ alignItems: "center" }}>
         <div className="vote-box">
           <div className="vote" onClick={() => yesHandler()}>
             {voted ? <div className="sub-text yes">200표</div> : null}
@@ -47,7 +47,7 @@ export const Vote: React.FC = () => {
           </div>
         </div>
         {!voted ? (
-          <div className="sub-text">
+          <div className="sub-text message">
             투표에 참여하면 결과를 확인할 수 있습니다
           </div>
         ) : null}
@@ -75,9 +75,6 @@ const StyledVote = styled.div`
 
       .text {
         margin: 0 8px;
-      }
-      .sub-text {
-        text-align: center;
       }
     }
   }
