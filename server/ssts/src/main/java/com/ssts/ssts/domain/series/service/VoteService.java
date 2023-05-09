@@ -2,8 +2,6 @@ package com.ssts.ssts.domain.series.service;
 
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
-//import com.ssts.ssts.domain.series.response.vote.FirstVoteResponse;
-//import com.ssts.ssts.domain.series.response.vote.RevoteResponse;
 import com.ssts.ssts.domain.series.response.vote.VoteResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,7 @@ public class VoteService {
         targetSeries.setEditable(false); //타이틀 수정 불가
         targetSeries.setActive(true); //활성 상태
         targetSeries.setSeriesStatus(Series.VoteStatus.SERIES_SLEEP); //투표중 할당
-        targetSeries.setVoteCount(+1); //최초투표이든, 아니든 +1
+        targetSeries.setVoteCount(targetSeries.getVoteCount()+1); //최초투표이든, 아니든 +1
 
             //투표 생성시간 할당
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
@@ -41,25 +39,24 @@ public class VoteService {
 
        seriesRepo.save(targetSeries);
 
-
         return voteCountResponse(seriesId, targetSeries);
-
-
-
-
-        //FirstVoteResponse response = (FirstVoteResponse) voteCountResponse(seriesId, targetSeries);
-
 
 
 
 
     }
 
-    private VoteResponse voteCountResponse(Long seriesId, Series targetSeries) {
+
+
+
+
+
+    //내부 로직: 첫투표, 재투표 생성에 따라 응답하는 값이 달라집니다
+    private Object voteCountResponse(Long seriesId, Series targetSeries) {
         //이제 voteCount++ 된 상태이기 때문에 여기서부터 최초투표인지 재투표인지 알 수 있음
 
         if(targetSeries.getVoteCount() == 1){
-            VoteResponse.FirstVoteResponse.of(
+            return VoteResponse.FirstVoteResponse.of(
                     seriesId,
                     targetSeries.getVoteCount(),
                     targetSeries.getVoteResult(),

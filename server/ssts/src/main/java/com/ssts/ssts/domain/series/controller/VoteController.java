@@ -1,5 +1,6 @@
 package com.ssts.ssts.domain.series.controller;
 
+import com.ssts.ssts.domain.series.response.vote.VoteResponse;
 import com.ssts.ssts.domain.series.service.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,19 @@ public class VoteController {
     @PostMapping("/{series_id}")
     public ResponseEntity postVote(@PathVariable("series_id") Long seriesId){
 
-        Object response = voteService.createVote(seriesId);
+        //Object response = voteService.createVote(seriesId);
+
+
+//
+//        if(targetSeries.getVoteCount() == 1){
+//            VoteResponse.FirstVoteResponse response = (VoteResponse.FirstVoteResponse) voteCountResponse(seriesId, targetSeries);
+//            return response;
+//        }
+//        else if (targetSeries.getVoteCount() == 2) {
+//            VoteResponse.RevoteResponse response = (VoteResponse.RevoteResponse) voteCountResponse(seriesId, targetSeries);
+//        }
+
+        VoteResponse response = (VoteResponse) voteService.createVote(seriesId);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
 

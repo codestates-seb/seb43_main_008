@@ -64,6 +64,7 @@ public class Series {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @JsonIgnore //jackson //스택오버플로우 순환참조, Series에서 member를 포함하고 서로가 서로를 계속 포함해서 한 번만 수행할 수 있도록 해줌
     private Member member;
 
     @Column

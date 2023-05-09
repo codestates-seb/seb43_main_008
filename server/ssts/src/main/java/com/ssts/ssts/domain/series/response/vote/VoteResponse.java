@@ -13,9 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VoteResponse<T> {
+public class VoteResponse {
 
-    //public static FirstVoteResponse ReVoteResponse;
     Long seriesId;
     Series.VoteStatus voteStatus;
     LocalDateTime voteCreatedAt;
@@ -33,7 +32,7 @@ public class VoteResponse<T> {
         Boolean voteResult;
         int voteAgree;
         int voteDisagree;
-
+        //강제 형변환을 진행하면 완전히 잃어버림 (상속받은 상위클래스)
 
         public static FirstVoteResponse of(Long seriesId, int voteCount, Boolean voteResult, int voteAgree,
                                            int voteDisagree, Series.VoteStatus voteStatus, LocalDateTime voteCreatedAt, LocalDateTime voteEndAt) {
@@ -84,52 +83,3 @@ public class VoteResponse<T> {
 
         }
     }
-
-//
-//    @Getter
-//    @AllArgsConstructor
-//    public static class ReVoteResponse{
-//        Long id;
-//        int voteCount;
-//        Boolean voteResult;
-//        int reVoteAgree;
-//        int reVoteDisagree;
-//        Series.VoteStatus voteStatus;
-//        LocalDateTime voteCreatedAt;
-//        LocalDateTime voteEndAt;
-//    }
-
-
-
-
-
-
-
-//responseDto를 3개 만들기
-//voteCount =1 이면 최초투표 (voteResult)
-//voteCount = 2이면 재투표 (revoteResult), voteCreateAt과 voteEntAt은 초기화하여 사용합니다
-//else 투표가 불가능합니다 예와
-
-//이거 회원가입 ? ur클래스에 dto 하나에 몰아서 넣는 깃허브 참고해서 짜기
-
-//    private Long id;
-//    private int voteCount;
-//
-//    private Boolean voteResult;
-//    private int voteAgree;
-//    private int voteDisagree;
-//
-//
-//    private Boolean revoteResult;
-//    private int revoteAgree;
-//    private int revoteDisagree;
-//
-//    private Series.VoteStatus seriesStatus;
-//
-//    private Boolean isPublic;
-//    private Boolean isEditable;
-//    private Boolean isActive;
-//
-//
-//    private LocalDateTime voteCreatedAt;
-//    private LocalDateTime voteEndAt;
