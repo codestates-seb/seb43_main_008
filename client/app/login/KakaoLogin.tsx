@@ -26,7 +26,6 @@ const KakaoLoginButton = styled.button`
   border: none;
   box-shadow: 0 0 0.25em rgba(67, 71, 85, 0.27),
     2px 0.25em 24px 0 rgba(90, 125, 188, 0.05);
-  cursor: pointer;
 `;
 
 const KakaoLogoBox = styled.div`

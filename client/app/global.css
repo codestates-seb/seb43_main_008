@@ -11,6 +11,10 @@ table {border-collapse:collapse;border-spacing:0}
 td, th {padding:0}
 
 /* global layout style */
+button {
+    cursor: pointer;
+}
+
 .mainContainer {
     max-width: 1024px;
     margin: 0 auto;

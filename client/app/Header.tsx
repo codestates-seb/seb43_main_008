@@ -3,15 +3,30 @@
 import { AiOutlineLeft } from "react-icons/ai";
 import styled from "styled-components";
 
-export default function Header() {
+export default function Header({
+  backButton,
+  textContent,
+  saveButton,
+}: {
+  backButton: boolean;
+  textContent: string | null;
+  saveButton: boolean;
+}) {
   return (
     <HeaderContainer>
-      <BackArrowContainer>
-        <AiOutlineLeft size="24" />
-      </BackArrowContainer>
-      <SaveButtonContainer>
-        <SaveButton type="submit">저장</SaveButton>
-      </SaveButtonContainer>
+      {backButton ? (
+        <BackArrowContainer>
+          <AiOutlineLeft size="24" />
+        </BackArrowContainer>
+      ) : null}
+      {textContent ? <HeaderText>{textContent}</HeaderText> : null}
+      {saveButton ? (
+        <SaveButtonContainer>
+          <SaveButton type="submit">저장</SaveButton>
+        </SaveButtonContainer>
+      ) : (
+        <SaveButtonContainer />
+      )}
     </HeaderContainer>
   );
 }
@@ -28,6 +43,14 @@ const BackArrowContainer = styled.div`
   height: 44px;
   width: 44px;
   padding: 10px;
+`;
+
+const HeaderText = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 16px;
 `;
 
 const SaveButtonContainer = styled.div`
@@ -47,5 +70,4 @@ const SaveButton = styled.button`
   border: none;
   border-radius: 0;
   padding: 0;
-  cursor: pointer;
 `;
