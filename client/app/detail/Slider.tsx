@@ -89,7 +89,7 @@ const StyledSlider = styled.div`
   .slider-container {
     display: flex;
     flex-direction: row;
-    overflow-x: scroll;
+    overflow: scroll;
     width: 100%;
     padding-bottom: 24px;
     transition: 0.3s ease-in;
