@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { BsBookmarkFill, BsHeartFill, BsPersonFill } from "react-icons/bs";
 import { BsBookmark, BsHeart, BsPerson } from "react-icons/bs";
@@ -10,13 +10,59 @@ import styled from "styled-components";
 // import Bookmark from "../public/icons/Bookmark.svg"; // ?
 
 export default function Navbar() {
+  // 클릭 메뉴 관리 함수
   const [selected, setSelected] = useState("홈");
 
   const handleMenuClick = (menuName: string) => {
     setSelected(menuName);
   };
 
+  // 스크롤 이벤트 감지 함수
+  /* 
+  const [isNavOn, setIsNavOn] = useState<boolean>(true);
+
+  const throttle = <T extends unknown[]>(
+    func: (...args: T) => void,
+    ms: number
+  ) => {
+    let throttled = false;
+    return (...args: T) => {
+      if (!throttled) {
+        throttled = true;
+        setTimeout(() => {
+          func(...args);
+          throttled = false;
+        }, ms);
+      }
+    };
+  };
+
+  const scrollDirection = () => {
+    const beforeScrollY = useRef<number>(window.pageYOffset);
+
+    if (window.pageYOffset > beforeScrollY.current) {
+      setIsNavOn(false);
+      console.log("켜기");
+    } else {
+      setIsNavOn(true);
+      console.log("끄기");
+    }
+
+    beforeScrollY.current = window.pageYOffset;
+  };
+
+  const scrollEvent: any = useMemo(throttle(scrollDirection, 100), [isNavOn]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", scrollEvent);
+    return () => {
+      window.removeEventListener("scroll", scrollEvent);
+    };
+  }, [scrollEvent]);
+  */
+
   return (
+    // <StyledNavbar style={{ display: isNavOn ? "block" : "none" }}>
     <StyledNavbar>
       <div className="container">
         <div
@@ -90,7 +136,7 @@ const StyledNavbar = styled.nav`
   width: 100%;
   max-width: 1024px;
 
-  position: fixed;
+  position: sticky;
   bottom: 0;
 
   background-color: white;
