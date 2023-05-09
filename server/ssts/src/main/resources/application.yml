@@ -15,7 +15,30 @@ spring:
         show_sql: true
         format_sql: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${OAUTH_CI}
+            client-secret: ${OAUTH_CS}
+            scope:
+              - email # resource owner의 이메일 정보
+              - profile # resource owner의 프로필 정보
+# spring.security.oauth2.client.registration.google.client-id
 
+server:
+  servlet:
+    encoding:
+      force-response: true
+mail:
+  address:
+    admin: '@ssts.com'
+jwt:
+  key:
+    secret: ${JWT_SECRET_KEY}               # 민감한 정보는 시스템 환경 변수에서 로드한다.
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420
 #spring:
 #  h2:
 #    console:
