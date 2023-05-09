@@ -7,8 +7,11 @@ import com.ssts.ssts.domain.member.service.MemberOAuthService;
 import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.util.LinkedMultiValueMap;
@@ -25,13 +28,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
 @RequiredArgsConstructor
 @Slf4j
 public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final MemberOAuthService memberOAuthService;
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -45,13 +50,12 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
 
         // 지금은 로그인 구현중인 거니까
         // 존재하는 멤버인지 확인 작업 필요하다.
-        Member member = memberOAuthService.findMemberByEmail(email);
-        List<String> authorities = member.getRoles();
+        // Member member = memberOAuthService.findMemberByEmail(email);
+        List<String> authorities = List.of("USER");
         // DB -> member 객체에서 권한정보 가져오기
         log.info("authorities="+authorities.toString());
 
         redirect(request, response, email, authorities); // 권한 정보 받아서 새 요청 만들기
-        // 리다이렉트 메서드 : 하단에 선언
     }
 
 
@@ -67,13 +71,11 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
         // 클라이언트는 이후에 request할때마다 request header에 해당 토큰을 추가해서 클라이언트 측의 자격을 증명한다.
         response.addHeader("Refresh", refreshToken);
 
-        String uri = createURI().toString();   // : 최하단에 선언
         response.setStatus(HttpServletResponse.SC_OK);
-        //sendRedirect(request, response, uri);   // -> URL 만들어서 요청(리다이렉트)
     }
 
     private String delegateAccessToken(String email, List<String> authorities) {
-        //email과 USER 받아옴
+        //email과 권한 받아옴
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", email);
         //id로 다뤄야할까 email로 다뤄야할까? email도 중복저장안되긴해서 식별자 가능하긴 한데.
@@ -83,6 +85,7 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
         //JWT에 넣을 클레임 생성하기 -> 암호화되나? 안된다.
         //id넣을 거면 claims 암호화하기.
         //email넣을 거면 그냥 넣고~
+
 
         String subject = email;
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
