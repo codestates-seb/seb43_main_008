@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+
 import { StyledCard } from "./Card";
 
 // React.FC는 props가 없음을 명시해준다.

@@ -4,8 +4,8 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import Card from "./Card";
-import list from "./list";
 import { Header } from "./Header";
+import list from "./list";
 
 export default function Main() {
   const [isSelected, setIsSelected] = useState(false);

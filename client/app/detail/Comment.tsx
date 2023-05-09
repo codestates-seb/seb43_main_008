@@ -15,12 +15,12 @@ export const Comment = () => {
       <StyledCard>
         <div className="content">
           <label className="add-comment">
-            <div className="profile"></div>
-            <textarea className="input" placeholder="댓글 추가"></textarea>
+            <div className="profile" />
+            <textarea className="input" placeholder="댓글 추가" />
           </label>
           <ul className="comment-box">
             <li className="comment">
-              <div className="profile"></div>
+              <div className="profile" />
               <div className="text-box">
                 <div className="user-name">봉다리</div>
                 <div className="text">비닐봉다리 백번 써볼까요</div>
@@ -28,7 +28,7 @@ export const Comment = () => {
               <div>...</div>
             </li>
             <li className="comment">
-              <div className="profile"></div>
+              <div className="profile" />
               <div className="text-box">
                 <div className="user-name ">봉다리</div>
                 <div className="text">비닐봉다리 백번 써볼까요</div>
@@ -36,7 +36,7 @@ export const Comment = () => {
               <div>...</div>
             </li>
             <li className="comment">
-              <div className="profile"></div>
+              <div className="profile" />
               <div className="text-box">
                 <div className="user-name ">봉다리</div>
                 <div className="text">비닐봉다리 백번 써볼까요</div>
