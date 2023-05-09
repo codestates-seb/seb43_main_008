@@ -5,7 +5,21 @@ import { useState, useCallback } from "react";
 import { MdMoreVert } from "react-icons/md";
 import { Modal } from "./Modal";
 
-export const Comment: React.FC = () => {
+interface CommentProps {
+  id: number;
+  member_id: number;
+  series_id: number;
+  comment: string;
+  created_at: string;
+  handleEditComment: (id: number) => void;
+}
+export const Comment: React.FC<CommentProps> = ({
+  member_id,
+  comment,
+  id,
+  handleEditComment,
+}) => {
+  // 댓글 날짜 추가하기
   // 사용자 Id === 댓글 작성자 Id : edit-delete-button 활성화 하기
 
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
@@ -19,8 +33,8 @@ export const Comment: React.FC = () => {
         <li className="comment">
           <div className="profile" />
           <div className="text-box">
-            <div className="user-name">봉다리</div>
-            <div className="text">비닐봉다리 백번 써볼까요</div>
+            <div className="user-name">{member_id}</div>
+            <div className="text">{comment}</div>
           </div>
           <MdMoreVert
             className="edit-delete-button"
@@ -28,7 +42,13 @@ export const Comment: React.FC = () => {
           />
         </li>
       </StyledComment>
-      {isOpenModal && <Modal onClickModal={HandleOpenModal} />}
+      {isOpenModal && (
+        <Modal
+          onClickModal={HandleOpenModal}
+          commentid={id}
+          handleEditComment={handleEditComment}
+        />
+      )}
     </>
   );
 };

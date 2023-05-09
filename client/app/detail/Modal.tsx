@@ -6,8 +6,33 @@ import { AiOutlineMinus } from "react-icons/ai";
 
 interface Props {
   onClickModal: () => void;
+  handleEditComment: (id: number) => void;
+  commentid: number;
 }
-export const Modal: React.FC<Props> = ({ onClickModal }) => {
+
+export const Modal: React.FC<Props> = ({
+  onClickModal,
+  handleEditComment,
+  commentid,
+}) => {
+  // const HandleEdit = () => {
+  //   /*
+  //   리덕스
+  //   수정 버튼 누르면 -> 스토어에서 수정 상태 true로 변경 & 수정할 댓글
+  //   Comments: 스토어에서 가져온 수정 상태가 true라면 value를 업데이트 타겟 데이터로 주기
+  //   */
+  // };
+
+  const HandleDelete = () => {
+    onClickModal();
+    console.log("서버에 삭제 요청 보내기");
+  };
+
+  const HandleEdit = () => {
+    onClickModal();
+    handleEditComment(commentid);
+  };
+
   return (
     <StyledModal onClick={onClickModal}>
       <div className="box" onClick={(e) => e.stopPropagation()}>
@@ -17,9 +42,11 @@ export const Modal: React.FC<Props> = ({ onClickModal }) => {
         </div>
         <div className="edit">
           <RiEdit2Line className="icon" />
-          <div className="text">수정하기</div>
+          <div className="text" onClick={HandleEdit}>
+            수정하기
+          </div>
         </div>
-        <div className="delete">
+        <div className="delete" onClick={HandleDelete}>
           <RiDeleteBinLine className="icon" />
           <div className="text">삭제하기</div>
         </div>
@@ -61,8 +88,6 @@ const StyledModal = styled.div`
   }
 
   .title {
-    /* margin: 12px 6px; */
-
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -80,7 +105,6 @@ const StyledModal = styled.div`
   .edit,
   .delete {
     cursor: pointer;
-    /* margin: 21px 0; */
     display: flex;
     flex-direction: row;
   }

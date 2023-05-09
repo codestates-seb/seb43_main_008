@@ -1,12 +1,13 @@
 "use client";
 
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyledCard } from "./Card";
 import { Comment } from "./Comment";
 import { BsSend } from "react-icons/bs";
-
+import { comments } from "./commentData";
 export const Comments: React.FC = () => {
+  // 댓글 입력 및 서버 전달을 위한 상태 & 함수
   const [comment, setComment] = useState<string>("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -28,6 +29,21 @@ export const Comments: React.FC = () => {
       handleSubmit(e);
     }
   };
+
+  // 댓글 수정을 위한 함수
+  const [editCommentId, setEditCommentId] = useState<number | undefined>(
+    undefined
+  );
+
+  const handleEditComment = (id: number) => {
+    setEditCommentId(id);
+  };
+
+  const editCommentData = comments.find((data) => data.id === editCommentId);
+
+  useEffect(() => {
+    setComment(editCommentData?.comment);
+  }, [editCommentData]);
 
   return (
     <StyledComments>
@@ -53,7 +69,15 @@ export const Comments: React.FC = () => {
           </form>
 
           <ul className="comment-box">
-            <Comment />
+            {comments.map((data) => {
+              return (
+                <Comment
+                  key={data.id}
+                  {...data}
+                  handleEditComment={handleEditComment}
+                />
+              );
+            })}
           </ul>
         </div>
       </StyledCard>
