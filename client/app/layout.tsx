@@ -25,8 +25,10 @@ export default function RootLayout({
       </head>
       <body>
         <StyledComponentsRegistry>
-          {children}
-          <Navbar />
+          <div className="mainContainer">
+            {children}
+            <Navbar />
+          </div>
         </StyledComponentsRegistry>
       </body>
     </html>
