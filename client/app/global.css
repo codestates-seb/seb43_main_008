@@ -9,3 +9,9 @@ img, video {height:auto;max-width:100%}
 iframe {border:0}
 table {border-collapse:collapse;border-spacing:0}
 td, th {padding:0}
+
+/* global layout style */
+.mainContainer {
+    max-width: 1024px;
+    margin: 0 auto;
+}
