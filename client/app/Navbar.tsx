@@ -7,6 +7,8 @@ import { BsBookmark, BsHeart, BsPerson } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
 import styled from "styled-components";
 
+// import Bookmark from "../public/icons/Bookmark.svg"; // ?
+
 export default function Navbar() {
   const [selected, setSelected] = useState("홈");
 
@@ -86,6 +88,7 @@ const StyledNavbar = styled.nav`
   z-index: 1;
   height: 5.125rem;
   width: 100%;
+  max-width: 1024px;
 
   position: fixed;
   bottom: 0;
