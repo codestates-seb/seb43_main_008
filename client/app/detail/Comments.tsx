@@ -4,6 +4,7 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { StyledCard } from "./Card";
 import { Comment } from "./Comment";
+import { BsSend } from "react-icons/bs";
 
 export const Comments: React.FC = () => {
   const [comment, setComment] = useState<string>("");
@@ -47,7 +48,7 @@ export const Comments: React.FC = () => {
               onKeyDown={handleKeyDown}
             />
             <button className="submit" type="submit">
-              확인
+              <BsSend />
             </button>
           </form>
 
@@ -125,6 +126,7 @@ const StyledComments = styled.div`
     height: 28px;
     border-radius: 16px;
     border: none;
+    background-color: white;
 
     cursor: pointer;
   }

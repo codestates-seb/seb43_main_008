@@ -1,20 +1,38 @@
 "use client";
 
 import styled from "styled-components";
+import { useState, useCallback } from "react";
+import { MdMoreVert } from "react-icons/md";
+import { Modal } from "./Modal";
 
-export const Comment: React.FC = () => {
+interface Props {
+  onClickModal: () => void;
+}
+export const Comment: React.FC<Props> = ({ onClickModal }) => {
   // 사용자 Id === 댓글 작성자 Id : edit-delete-button 활성화 하기
+
+  const [isOpenModal, setOpenModal] = useState<boolean>(false);
+  const HandleOpenModal = useCallback(() => {
+    setOpenModal(!isOpenModal);
+  }, [isOpenModal]);
+
   return (
-    <StyledComment>
-      <li className="comment">
-        <div className="profile" />
-        <div className="text-box">
-          <div className="user-name">봉다리</div>
-          <div className="text">비닐봉다리 백번 써볼까요</div>
-        </div>
-        <div className="edit-delete-button">...</div>
-      </li>
-    </StyledComment>
+    <>
+      <StyledComment>
+        <li className="comment">
+          <div className="profile" />
+          <div className="text-box">
+            <div className="user-name">봉다리</div>
+            <div className="text">비닐봉다리 백번 써볼까요</div>
+          </div>
+          <MdMoreVert
+            className="edit-delete-button"
+            onClick={HandleOpenModal}
+          />
+        </li>
+      </StyledComment>
+      {isOpenModal && <Modal onClickModal={HandleOpenModal} />}
+    </>
   );
 };
 
@@ -43,5 +61,9 @@ const StyledComment = styled.div`
   .text-box {
     width: 100%;
     margin-left: 16px;
+  }
+  .edit-delete-button {
+    font-size: 1.3rem;
+    cursor: pointer;
   }
 `;
