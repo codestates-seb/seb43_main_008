@@ -4,13 +4,14 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import Card from "./Card";
+import { Header } from "./Header";
 import list from "./list";
 
 export default function Main() {
   const [isSelected, setIsSelected] = useState(false);
   return (
     <StyledMain>
-      <h1 className="title">홈</h1>
+      <Header />
       <div className="filter">
         <div
           className={isSelected ? "tag" : "selected tag"}
@@ -27,9 +28,9 @@ export default function Main() {
       </div>
       <section className="list">
         {list.map((data) => (
-          <div className="item" key={data.id}>
+          <li className="item" key={data.id}>
             <Card key={data.id} {...data} />
-          </div>
+          </li>
         ))}
       </section>
     </StyledMain>
@@ -42,16 +43,11 @@ const StyledMain = styled.main`
 
   display: flex;
   flex-direction: column;
-  position: relative;
-  padding: 1.6rem 0.5rem 1.6rem 0.5rem;
-  color: #222;
 
-  .title {
-    margin-left: 1.5rem;
-    font-size: 1.65rem;
-    font-weight: 900;
-    margin-bottom: 0.8rem;
-  }
+  position: relative;
+  /* top: 67.227px; */
+  padding: 0 0.5rem 1.6rem 0.5rem;
+  color: #222;
 
   .filter {
     display: flex;
