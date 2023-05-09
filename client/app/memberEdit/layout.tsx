@@ -7,11 +7,7 @@ export default function MemberEditLayout({
 }) {
   return (
     <>
-      <Header
-        backButton={true}
-        textContent={"내 정보 변경"}
-        saveButton={false}
-      />
+      <Header backButton={true} textContent={null} saveButton={true} />
       {children}
     </>
   );

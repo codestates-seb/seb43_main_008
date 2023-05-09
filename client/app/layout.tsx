@@ -22,6 +22,10 @@ export default function RootLayout({
         />
         <meta name="msapplication-TileColor" content="#D4E8D8" />
         <meta name="theme-color" content="#D4E8D8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no"
+        />
       </head>
       <body>
         <StyledComponentsRegistry>

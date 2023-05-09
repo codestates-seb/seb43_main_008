@@ -18,7 +18,9 @@ export default function Header({
         <BackArrowContainer>
           <AiOutlineLeft size="24" />
         </BackArrowContainer>
-      ) : null}
+      ) : (
+        <BackArrowContainer />
+      )}
       {textContent ? <HeaderText>{textContent}</HeaderText> : null}
       {saveButton ? (
         <SaveButtonContainer>
@@ -32,9 +34,13 @@ export default function Header({
 }
 
 const HeaderContainer = styled.header`
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: space-between;
   height: 44px;
+  background-color: #ffffff;
+  z-index: 1;
 `;
 
 const BackArrowContainer = styled.div`
