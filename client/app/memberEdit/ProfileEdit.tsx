@@ -45,7 +45,6 @@ const NicknameInput = styled.input`
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 3px 15px;
-  outline: none;
 `;
 
 const MemberDescriptionTextarea = styled.textarea`
@@ -56,7 +55,6 @@ const MemberDescriptionTextarea = styled.textarea`
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 10px 15px;
-  outline: none;
   resize: none;
 
   @media (min-width: 800px) {

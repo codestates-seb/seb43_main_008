@@ -63,8 +63,8 @@ const SaveButtonContainer = styled.div`
   display: flex;
   align-items: center;
   height: 44px;
-  width: 60px;
-  padding: 10px;
+  width: 44px;
+  padding: 10px 10px 10px 0;
 `;
 
 const SaveButton = styled.button`
