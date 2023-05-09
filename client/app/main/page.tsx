@@ -28,9 +28,9 @@ export default function Main() {
       </div>
       <section className="list">
         {list.map((data) => (
-          <div className="item" key={data.id}>
+          <li className="item" key={data.id}>
             <Card key={data.id} {...data} />
-          </div>
+          </li>
         ))}
       </section>
     </StyledMain>
