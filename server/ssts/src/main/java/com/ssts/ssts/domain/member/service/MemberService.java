@@ -6,8 +6,11 @@ import com.ssts.ssts.domain.member.dto.MemberMyPageResponseDto;
 import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,16 +18,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
     //세큐리티 추가시 동작가능
     //private final PasswordEncoder passwordEncoder;
-
-
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+    private final SeriesRepository seriesRepository;
 
     public Member saveMember(MemberSignUpPostDto memberSignUpPostDto) {
         //ouath 로만 로그인 구현하면.. password 필요없는거 아냐..? 나중에 구현 후 생각해보기.
@@ -54,13 +55,19 @@ public class MemberService {
 
     public MemberMyPageResponseDto findMember(long memberId) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = findMemberById(memberId);
         MemberMyPageResponseDto responseDto=MemberMyPageResponseDto.of(member.getNickName(),
                 member.getImage(),
                 member.getIntroduce(),
-                List.of(1L, 2L, 3L)); // 임시로 값 넣기
+                seriesRepository.findAllByMemberId(member.getId())); // 데이터 가져오기
 
         return responseDto;
+    }
+
+    public Member findMemberById(long memberId){
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        return member;
     }
 
     @Transactional
@@ -68,6 +75,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         member.setStatus(Member.Status.WITHDRAW);
         //탈퇴 로그 출력
+        log.debug("memberid="+member.getId()+" 탈퇴처리");
 
         return member;
     }

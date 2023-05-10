@@ -1,5 +1,7 @@
 package com.ssts.ssts.domain.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.series.entity.Series;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name="members")
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,11 +40,12 @@ public class Member {
     @Column(length = 20, nullable = false)
     private Status status=Status.ACTIVE;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt = LocalDateTime.now();
+//
+//    @Column(nullable = false)
+//    private LocalDateTime createdAt = LocalDateTime.now();
+//
+//    @Column(nullable = false)
+//    private LocalDateTime modifiedAt = LocalDateTime.now();
     //---------------------------------------
 
     // null 가능------------------------------
@@ -53,7 +56,9 @@ public class Member {
     String image;
     //---------------------------------------
 
+
     //FetchType.EAGER 전략 : 항상 목록 가져오기 (불필요한 조회를 막으려면 FetchType.LAZY)
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="member_id")
     private List<Series> series;
