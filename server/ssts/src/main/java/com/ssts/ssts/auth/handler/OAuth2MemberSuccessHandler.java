@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtTokenizer jwtTokenizer;
-    private final CustomAuthorityUtils authorityUtils;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -49,8 +48,8 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
         //Authentication -> CustomOAuth2User객체 가져오기
 
         // CustomOAuth2User객체에서 데이터(email, id) 뽑기
-        String email = String.valueOf(customOAuth2User.getAttributes().get("email"));
-        long id=customOAuth2User.getMemberId();
+        String email = customOAuth2User.getEmail();
+        long id = customOAuth2User.getMemberId();
         log.info("하늘/security : email="+email+", id="+id);
 
         // 권한 정보 가져오기
