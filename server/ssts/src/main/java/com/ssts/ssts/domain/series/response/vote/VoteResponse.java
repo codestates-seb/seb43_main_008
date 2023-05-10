@@ -17,22 +17,21 @@ public class VoteResponse {
 
     Long seriesId;
     Series.VoteStatus voteStatus;
-    LocalDateTime voteCreatedAt;
-    LocalDateTime voteEndAt;
-
+    LocalDateTime voteEndAt; //투표가 언제 시작했는지는 그닥 중요하지 않음, 언제 마감됐느냐가 로직에서 제일 필요한 존재가 될 거임 (아마)
 
 
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class FirstVoteResponse extends VoteResponse {
+    public static class FirstVoteResponse extends VoteResponse { //첫 투표 Response
 
         int voteCount;
         Boolean voteResult;
         int voteAgree;
         int voteDisagree;
-        //강제 형변환을 진행하면 완전히 잃어버림 (상속받은 상위클래스)
+        LocalDateTime voteCreatedAt;
+
 
         public static FirstVoteResponse of(Long seriesId, int voteCount, Boolean voteResult, int voteAgree,
                                            int voteDisagree, Series.VoteStatus voteStatus, LocalDateTime voteCreatedAt, LocalDateTime voteEndAt) {
@@ -51,35 +50,34 @@ public class VoteResponse {
     }
 
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RevoteResponse extends VoteResponse { //재투표 Response
+
+        int revoteCount;
+        Boolean reVoteResult;
+        int reVoteAgree;
+        int reVoteDisagree;
+        LocalDateTime voteCreatedAt;
+
+        public static RevoteResponse of(Long seriesId, int revoteCount, Boolean revoteResult, int revoteAgree,
+                                        int revoteDisagree, Series.VoteStatus voteStatus, LocalDateTime voteCreatedAt, LocalDateTime voteEndAt) {
+            VoteResponse.RevoteResponse revote = new RevoteResponse();
 
 
-        @Getter
-        @Setter
-        @AllArgsConstructor
-        @NoArgsConstructor
-        public static class RevoteResponse extends VoteResponse{
-
-            int revoteCount;
-            Boolean reVoteResult;
-            int reVoteAgree;
-            int reVoteDisagree;
-
-            public static RevoteResponse of(Long seriesId, int revoteCount, Boolean revoteResult, int revoteAgree,
-                                            int revoteDisagree, Series.VoteStatus voteStatus, LocalDateTime voteCreatedAt, LocalDateTime voteEndAt){
-                VoteResponse.RevoteResponse revote = new RevoteResponse();
-
-
-                revote. setSeriesId(seriesId);
-                revote.setRevoteCount(revoteCount);
-                revote.setReVoteResult(revoteResult);
-                revote.setReVoteAgree(revoteAgree);
-                revote.setReVoteDisagree(revoteDisagree);
-                revote.setVoteStatus(voteStatus);
-                revote.setVoteCreatedAt(voteCreatedAt);
-                revote.setVoteEndAt(voteEndAt);
-                return revote;
-            }
-
-
+            revote.getSeriesId();
+            revote.setRevoteCount(revoteCount);
+            revote.setReVoteResult(revoteResult);
+            revote.setReVoteAgree(revoteAgree);
+            revote.setReVoteDisagree(revoteDisagree);
+            revote.setVoteStatus(voteStatus);
+            revote.setVoteCreatedAt(voteCreatedAt);
+            revote.setVoteEndAt(voteEndAt);
+            return revote;
         }
     }
+
+
+}

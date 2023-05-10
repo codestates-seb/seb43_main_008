@@ -4,6 +4,7 @@ import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.domain.series.response.vote.VoteResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,16 +19,14 @@ public class VoteService {
     //투표 생성
     public Object createVote(Long seriesId){
 
-        //투표를 생성할 Series Entity 찾기
-        Optional<Series> findSeries = seriesRepo.findById(seriesId);
-        Series targetSeries = findSeries.get();
+        Series targetSeries = findSeriesById(seriesId); //투표를 생성할 Series Entity 찾기
 
         //투표에 따른 상태값 변경
         targetSeries.setPublic(true); //시리즈 공개
         targetSeries.setEditable(false); //타이틀 수정 불가
         targetSeries.setActive(true); //활성 상태
         targetSeries.setSeriesStatus(Series.VoteStatus.SERIES_SLEEP); //투표중 할당
-        targetSeries.setVoteCount(targetSeries.getVoteCount()+1); //최초투표이든, 아니든 +1
+        targetSeries.setVoteCount(targetSeries.getVoteCount()+1); //최초투표이든, 아니든 +1 //투표함을 만들 때, voteCount가 증가
 
             //투표 생성시간 할당
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
@@ -51,8 +50,18 @@ public class VoteService {
 
 
 
-    //내부 로직: 첫투표, 재투표 생성에 따라 응답하는 값이 달라집니다
-    private Object voteCountResponse(Long seriesId, Series targetSeries) {
+
+    @NotNull //내부 로직: 시리즈 Id를 통해 Series 객체 꺼내기
+    private Series findSeriesById(Long seriesId) {
+        Optional<Series> findSeries = seriesRepo.findById(seriesId);
+        Series targetSeries = findSeries.get();
+        return targetSeries;
+    }
+
+
+
+    //내부 로직: 투표 횟수별 검증 메소드 (투표 전체 정보)
+    public Object voteCountResponse(Long seriesId, Series targetSeries) {
         //이제 voteCount++ 된 상태이기 때문에 여기서부터 최초투표인지 재투표인지 알 수 있음
 
         if(targetSeries.getVoteCount() == 1){
@@ -70,7 +79,7 @@ public class VoteService {
         }
 
         else if(targetSeries.getVoteCount() == 2){
-            return VoteResponse.FirstVoteResponse.RevoteResponse.of(
+            return VoteResponse.RevoteResponse.of(
                     seriesId,
                     targetSeries.getVoteCount(),
                     targetSeries.getRevoteResult(),
