@@ -2,6 +2,7 @@ package com.ssts.ssts.auth.service;
 
 import com.ssts.ssts.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.auth.utils.CustomOAuth2User;
+import com.ssts.ssts.auth.utils.OAuthAttributes;
 import com.ssts.ssts.auth.utils.SocialType;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
@@ -83,22 +84,30 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             [email_verified]=true
             [locale]=ko
          */
+        /* 카카오 정보
+            [id]=2784542083
+            [connected_at]=2023-05-10T18:59:47Z
+            [kakao_account]={has_email=true, email_needs_agreement=false, is_email_valid=true, is_email_verified=true, email=yunide2@naver.com}
+         */
         //////////////////////////////////////////////////////////
 
+        OAuthAttributes exAttr=OAuthAttributes.of(socialType, userNameAttributeName, attributes);
 
         // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
         // 각 소셜마다 유저 정보 객체를 만든다.
         //OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributeName, attributes);
 
+        String email=getEmailBySocialType(socialType, attributes);
         // 멤버 만든다아...
-        Optional<Member> member = memberRepository.findByEmail((String)attributes.get("email")); // getUser() 메소드로 User 객체 생성 후 반환
+        Optional<Member> member = memberRepository.findByEmail(email); // getUser() 메소드로 User 객체 생성 후 반환
 
 
         if(!member.isPresent()){
             return new CustomOAuth2User(
                     authorityUtils.createAuthorities(List.of("GUEST")),
                     attributes,
-                    userNameAttributeName
+                    userNameAttributeName,
+                    email
             );
         }
         // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
@@ -106,7 +115,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 authorityUtils.createAuthorities(member.get().getRoles()),
                 attributes,
                 userNameAttributeName,
-                member.get().getId()
+                member.get().getId(),
+                email
         );
     }
 
@@ -118,6 +128,19 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             return SocialType.KAKAO;
         }
         return SocialType.GOOGLE;
+    }
+
+    private String getEmailBySocialType(SocialType socialType,Map<String, Object> attributes ) {
+        if(socialType==SocialType.KAKAO){
+            Map<String, Object> map=(Map<String, Object>) attributes.get("kakao_account");
+            String str=(String) map.get("email");
+            log.info("하늘/security kakao="+str);
+            return str;
+        }
+        if(socialType==SocialType.NAVER){
+            return "sample@ssts.com";
+        }
+        return (String) attributes.get("email");
     }
 
     /**

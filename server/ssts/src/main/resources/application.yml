@@ -20,11 +20,25 @@ spring:
       client:
         registration:
           google:
-            client-id: ${OAUTH_CI}
-            client-secret: ${OAUTH_CS}
+            client-id: ${OAUTH_GOOGLE_CI}
+            client-secret: ${OAUTH_GOOGLE_CS}
             scope:
               - email # resource owner의 이메일 정보
               - profile # resource owner의 프로필 정보
+          kakao:
+            client-id: ${OAUTH_KAKAO_CI}
+            client-secret: ${OAUTH_KAKAO_CS}
+            client-authentication-method: POST
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            authorization-grant-type: authorization_code
+            scope:
+              - account_email
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 # spring.security.oauth2.client.registration.google.client-id
 
 #logging:

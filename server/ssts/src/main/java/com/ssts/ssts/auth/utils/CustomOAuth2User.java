@@ -9,6 +9,7 @@ import java.util.Map;
 public class CustomOAuth2User extends DefaultOAuth2User {
 
     private long memberId;
+    private String email;
 
     /**
      * Constructs a {@code DefaultOAuth2User} using the provided parameters.
@@ -19,17 +20,25 @@ public class CustomOAuth2User extends DefaultOAuth2User {
      *                         {@link #getAttributes()}
      */
     public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes, String nameAttributeKey,
-                            long memberId) {
+                            long memberId, String email) {
         super(authorities, attributes, nameAttributeKey);
         this.memberId=memberId;
+        this.email=email;
     }
 
-    public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes, String nameAttributeKey) {
+    public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes, String nameAttributeKey,
+                            String email) {
         super(authorities, attributes, nameAttributeKey);
         this.memberId=-1;
+        this.email=email;
     }
 
     public long getMemberId(){
         return this.memberId;
     }
+
+    public String getEmail(){
+        return this.email;
+    }
+
 }

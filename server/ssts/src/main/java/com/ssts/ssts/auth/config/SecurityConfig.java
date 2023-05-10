@@ -35,14 +35,8 @@ public class SecurityConfig {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final CustomOAuth2UserService customOAuth2UserService;
     private final MemberRepository memberRepository;
 
-    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private String clientId;
-
-    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-    private String clientSecret;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -56,18 +50,15 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .addFilterBefore(new JwtVerificationFilter(jwtTokenizer, authorityUtils), UsernamePasswordAuthenticationFilter.class) // https://yunb2.tistory.com/3
-                .authorizeHttpRequests(authorize -> authorize
+                .authorizeRequests(authorize -> authorize
                         .antMatchers(HttpMethod.PATCH,"/**/members/edit/**").hasRole("USER")
-                        //회원정보수정만 보안 걸어두기.
-                        .anyRequest().permitAll()
-                )
+                        .antMatchers("/login/**").permitAll()
+                        .antMatchers(HttpMethod.POST,"/members/signup").permitAll()
+                        .anyRequest().authenticated())
                 .oauth2Login()
-                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils))
+                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer))
                 .failureHandler(new OAuth2MemberFailureHandler())
-                //.userInfoEndpoint().userService(withDefaults());
                 .userInfoEndpoint().userService(new CustomOAuth2UserService(memberRepository, authorityUtils));
-
-
 
 
         return http.build();
