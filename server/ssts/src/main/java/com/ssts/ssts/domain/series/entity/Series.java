@@ -2,8 +2,11 @@ package com.ssts.ssts.domain.series.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.daylog.entity.Daylog;
+
 import com.ssts.ssts.domain.member.entity.Member;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
@@ -67,6 +70,7 @@ public class Series extends BaseTimeEntity {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @JsonIgnore //jackson //스택오버플로우 순환참조, Series에서 member를 포함하고 서로가 서로를 계속 포함해서 한 번만 수행할 수 있도록 해줌
     private Member member;
 
     @OneToMany(mappedBy = "series", cascade = CascadeType.PERSIST)
@@ -74,6 +78,20 @@ public class Series extends BaseTimeEntity {
 
 
 
+
+
+    //투표 개설 시간
+    @Column
+    private LocalDateTime voteCreatedAt;
+
+    //투표 마감 시간(임시)
+    @Column
+    private LocalDateTime voteEndAt;
+
+
+    public void setModifiedAt(LocalDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
 
 
     public void setVoteCount(int voteCount) {
@@ -128,6 +146,15 @@ public class Series extends BaseTimeEntity {
         isActive = active;
     }
 
+
+    //투표 시간 관련 setMethod
+    public void setVoteCreatedAt(LocalDateTime voteCreaateAt){
+        this.voteCreatedAt = voteCreaateAt;
+    }
+
+    public void setVoteEndAt(LocalDateTime voteEndAt){
+        this.voteEndAt = voteEndAt;
+    }
 
 
 
