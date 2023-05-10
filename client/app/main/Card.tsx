@@ -13,7 +13,7 @@ interface CardProps {
 
 export default function Card({ nickName, image, usageCount }: CardProps) {
   return (
-    <StyledCard direction="column">
+    <StyledCard>
       <div className="info">
         <div className="nickName">{nickName} | </div>
         <div className="usageCount">{usageCount}번 사용</div>
@@ -21,29 +21,26 @@ export default function Card({ nickName, image, usageCount }: CardProps) {
       {/* img 태그는  background 속성 적용 안됨 -> div 태그로 변경*/}
       <div className="image" style={{ backgroundImage: `url(${image})` }} />
       <div className="status">
-        <div className="comment">
-          <div className="text">댓글달기</div>
-          <FaRegCommentDots className="icon" />
-        </div>
         <div className="vote">
           <div className="text">투표하기</div>
           <MdOutlineHowToVote className="icon vote" />
+        </div>
+        <div className="comment">
+          <div className="text">댓글달기</div>
+          <FaRegCommentDots className="icon" />
         </div>
       </div>
     </StyledCard>
   );
 }
 
-type FlexContainerProps = {
-  direction?: "row" | "column";
-};
-export const StyledCard = styled.div<FlexContainerProps>`
+export const StyledCard = styled.ul`
   width: 100%;
   padding: 1rem 1.3rem;
   margin: 0.6rem;
 
   display: flex;
-  flex-direction: ${(props) => props.direction};
+  flex-direction: column;
   justify-content: center;
 
   background-color: white;

@@ -18,6 +18,8 @@ permissions:
   
 env:
   S3_BUCKET_NAME: team008ssts
+  DATASOURCE_USERNAME: ${{ secrets.DATASOURCE_USERNAME }}
+  DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
 
 jobs:
   build:
@@ -41,7 +43,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd server/ssts
-          ./gradlew build
+          ./gradlew bootJar
       
       # build한 후 프로젝트를 압축합니다.
       - name: Make zip file
@@ -62,4 +64,9 @@ jobs:
         run: aws s3 cp --region ap-northeast-2 ./practice-deploy.zip s3://$S3_BUCKET_NAME/practice-deploy.zip
           
           
-          
+      - name: Code Deploy
+        run: >
+          aws deploy create-deployment --application-name SSTS_Deploy
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name SSTS_deploy
+          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=practice-deploy.zip    

@@ -1,16 +1,22 @@
 package com.ssts.ssts.domain.series.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssts.ssts.domain.common.BaseTimeEntity;
+import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.member.entity.Member;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
-public class Series {
+public class Series extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +28,6 @@ public class Series {
     @ColumnDefault("0")
     @Column
     private int daylogCount;
-
-    @Column
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column
-    private LocalDateTime modifiedAt;
 
     @ColumnDefault("0")
     @Column
@@ -53,7 +53,7 @@ public class Series {
 
     @Enumerated(value = EnumType.STRING)
     @Column
-    private SeriesStatus seriesStatus = SeriesStatus.SERIES_ACTIVE;
+    private VoteStatus voteStatus = VoteStatus.SERIES_ACTIVE;
 
     @Column
     private Boolean isPublic = false;
@@ -61,17 +61,31 @@ public class Series {
     @Column
     private Boolean isEditable = true;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
 
     @Column
     private Boolean isActive = true;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    public void setModifiedAt(LocalDateTime modifiedAt) {
-        this.modifiedAt = modifiedAt;
-    }
+    @OneToMany(mappedBy = "series", cascade = CascadeType.PERSIST)
+    private List<Daylog> daylogs = new ArrayList<>();
+
+
+
+
+
+    //투표 개설 시간
+    @Column
+    private LocalDateTime voteCreatedAt;
+
+    //투표 마감 시간(임시)
+    @Column
+    private LocalDateTime voteEndAt;
+
+
 
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
@@ -101,8 +115,8 @@ public class Series {
         this.revoteDisagree = revoteDisagree;
     }
 
-    public void setSeriesStatus(SeriesStatus seriesStatus) {
-        this.seriesStatus = seriesStatus;
+    public void setSeriesStatus(VoteStatus seriesStatus) {
+        this.voteStatus = seriesStatus;
     }
 
     public void setPublic(Boolean aPublic) {
@@ -126,6 +140,15 @@ public class Series {
     }
 
 
+    //투표 시간 관련 setMethod
+    public void setVoteCreatedAt(LocalDateTime voteCreaateAt){
+        this.voteCreatedAt = voteCreaateAt;
+    }
+
+    public void setVoteEndAt(LocalDateTime voteEndAt){
+        this.voteEndAt = voteEndAt;
+    }
+
 
 
     public static Series of(String title){
@@ -143,7 +166,7 @@ public class Series {
             this.member.getSeries().add(this);
         }
     }
-    public enum SeriesStatus {
+    public enum VoteStatus {
         SERIES_ACTIVE("투표 미완료"),
         SERIES_SLEEP("투표 중"),
         SERIES_QUIT("투표 완료");
@@ -151,7 +174,7 @@ public class Series {
         @Getter
         private String status;
 
-        SeriesStatus(String status) {
+        VoteStatus(String status) {
             this.status = status;
         }
     }

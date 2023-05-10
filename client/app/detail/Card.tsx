@@ -2,38 +2,20 @@
 
 import styled from "styled-components";
 
-import { StyledCard } from "../main/Card";
+export const StyledCard = styled.section`
+  padding: 24px 21px;
+  margin: 16px 24px;
 
-interface SlideProps {
-  index: number;
-  id: number;
-  nickName: string;
-  image: string;
-  usageCount: number;
-  currentSlide: number;
-}
-const Slide: React.FC<SlideProps> = ({
-  id,
-  index,
-  image,
-  nickName,
-  usageCount,
-  currentSlide,
-}: SlideProps) => {
-  return (
-    <div className={index === currentSlide ? "slice active" : "slide"}>
-      <div className="nickName">{nickName} | </div>
-      <div className="usageCount">{usageCount}번 사용</div>
-      <div className="image" style={{ backgroundImage: `url(${image})` }} />
-    </div>
-  );
-};
+  display: flex;
+  flex-direction: column;
 
-const StyledSeries = styled(StyledCard)`
-  /* width: 80%;  */
-  width: 310px;
-  padding: 1rem 1.3rem;
-  margin: 0.6rem 0.2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  .sub-text {
+    margin: 12px 0;
+    font-size: 0.8rem;
+    color: #757575;
+  }
 `;
-
-export { Slide, StyledSeries };

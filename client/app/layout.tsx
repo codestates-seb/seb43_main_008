@@ -1,7 +1,9 @@
 import "./global.css";
+import "./font.css";
 
 import Navbar from "./Navbar";
 import StyledComponentsRegistry from "./registry";
+
 export default function RootLayout({
   children,
 }: {
@@ -20,10 +22,18 @@ export default function RootLayout({
         />
         <meta name="msapplication-TileColor" content="#D4E8D8" />
         <meta name="theme-color" content="#D4E8D8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no"
+        />
       </head>
       <body>
-        <Navbar />
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          <div className="mainContainer">
+            {children}
+            <Navbar />
+          </div>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
