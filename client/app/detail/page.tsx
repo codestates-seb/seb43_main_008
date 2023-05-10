@@ -1,6 +1,6 @@
 "use client";
 
-import { Comment } from "./Comment";
+import { Comments } from "./Comments";
 import { Header } from "./Header";
 import { Slider } from "./Slider";
 import { Vote } from "./Vote";
@@ -11,7 +11,7 @@ export default function Detail() {
       <Header />
       <Slider />
       <Vote />
-      <Comment />
+      <Comments />
     </>
   );
 }

@@ -1,68 +1,60 @@
 "use client";
 
+import { useCallback, useState } from "react";
+import { MdMoreVert } from "react-icons/md";
 import styled from "styled-components";
 
-import { StyledCard } from "./Card";
+import { Modal } from "./Modal";
 
-export const Comment = () => {
+interface CommentProps {
+  id: number;
+  member_id: number;
+  series_id: number;
+  comment: string;
+  created_at: string;
+  handleEditComment: (id: number) => void;
+}
+export const Comment: React.FC<CommentProps> = ({
+  member_id,
+  comment,
+  id,
+  handleEditComment,
+}) => {
+  // 댓글 날짜 추가하기
+  // 사용자 Id === 댓글 작성자 Id : edit-delete-button 활성화 하기
+
+  const [isOpenModal, setOpenModal] = useState<boolean>(false);
+  const HandleOpenModal = useCallback(() => {
+    setOpenModal(!isOpenModal);
+  }, [isOpenModal]);
+
   return (
-    <StyledComment>
-      <div className="title">
-        <h3 className="sub-title">댓글</h3>
-        <div className="sub-text"> 30개</div>
-      </div>
-
-      <StyledCard>
-        <div className="content">
-          <label className="add-comment">
-            <div className="profile" />
-            <textarea className="input" placeholder="댓글 추가" />
-          </label>
-          <ul className="comment-box">
-            <li className="comment">
-              <div className="profile" />
-              <div className="text-box">
-                <div className="user-name">봉다리</div>
-                <div className="text">비닐봉다리 백번 써볼까요</div>
-              </div>
-              <div>...</div>
-            </li>
-            <li className="comment">
-              <div className="profile" />
-              <div className="text-box">
-                <div className="user-name ">봉다리</div>
-                <div className="text">비닐봉다리 백번 써볼까요</div>
-              </div>
-              <div>...</div>
-            </li>
-            <li className="comment">
-              <div className="profile" />
-              <div className="text-box">
-                <div className="user-name ">봉다리</div>
-                <div className="text">비닐봉다리 백번 써볼까요</div>
-              </div>
-              <div>...</div>
-            </li>
-          </ul>
-        </div>
-      </StyledCard>
-    </StyledComment>
+    <>
+      <StyledComment>
+        <li className="comment">
+          <div className="profile" />
+          <div className="text-box">
+            <div className="user-name">{member_id}</div>
+            <div className="text">{comment}</div>
+          </div>
+          <MdMoreVert
+            className="edit-delete-button"
+            onClick={HandleOpenModal}
+          />
+        </li>
+      </StyledComment>
+      {isOpenModal && (
+        <Modal
+          onClickModal={HandleOpenModal}
+          commentid={id}
+          handleEditComment={handleEditComment}
+        />
+      )}
+    </>
   );
 };
 
 const StyledComment = styled.div`
-  .title {
-    margin: 0 24px;
-
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    .sub-text {
-      margin-left: 6px;
-      font-size: 0.8rem;
-      color: #757575;
-    }
-  }
   .comment {
     width: 100%;
     padding: 24px 0;
@@ -71,6 +63,13 @@ const StyledComment = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
+  }
+  .profile {
+    min-width: 26px;
+    height: 26px;
+
+    border-radius: 50%;
+    background-color: #757575;
   }
   .user-name {
     font-size: 0.8rem;
@@ -81,47 +80,8 @@ const StyledComment = styled.div`
     width: 100%;
     margin-left: 16px;
   }
-  .add-comment {
-    width: 100%;
-    padding-bottom: 21px;
-    margin-bottom: 12px;
-    border-bottom: solid 0.1px #757575;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  .profile {
-    width: 26px;
-    height: 26px;
-
-    border-radius: 50%;
-    background-color: #757575;
-  }
-  .input {
-    height: 28px;
-    width: 100%;
-    margin-left: 16px;
-    padding: 6px 12px;
-
-    background-color: #f2f2f2;
-    resize: none;
-    border: none;
-    border-radius: 16px;
-
-    ::-webkit-scrollbar {
-      display: none;
-    }
-
-    &::placeholder {
-      font-size: 0.8rem;
-      font-weight: 900;
-      color: #757575;
-    }
-    &:focus {
-      outline: none;
-      height: auto;
-    }
+  .edit-delete-button {
+    font-size: 1.3rem;
+    cursor: pointer;
   }
 `;
