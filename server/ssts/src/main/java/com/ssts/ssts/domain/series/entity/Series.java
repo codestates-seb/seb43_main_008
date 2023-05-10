@@ -2,16 +2,23 @@ package com.ssts.ssts.domain.series.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
+import com.ssts.ssts.domain.common.BaseTimeEntity;
+import com.ssts.ssts.domain.daylog.entity.Daylog;
+
 import com.ssts.ssts.domain.member.entity.Member;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
-public class Series {
+public class Series extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +30,6 @@ public class Series {
     @ColumnDefault("0")
     @Column
     private int daylogCount;
-
-    @Column
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column
-    private LocalDateTime modifiedAt;
 
     @ColumnDefault("0")
     @Column
@@ -62,13 +63,21 @@ public class Series {
     @Column
     private Boolean isEditable = true;
 
+
+    @Column
+    private Boolean isActive = true;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member_id")
     @JsonIgnore //jackson //스택오버플로우 순환참조, Series에서 member를 포함하고 서로가 서로를 계속 포함해서 한 번만 수행할 수 있도록 해줌
     private Member member;
 
-    @Column
-    private Boolean isActive = true;
+    @OneToMany(mappedBy = "series", cascade = CascadeType.PERSIST)
+    private List<Daylog> daylogs = new ArrayList<>();
+
+
+
 
 
     //투표 개설 시간
@@ -83,6 +92,7 @@ public class Series {
     public void setModifiedAt(LocalDateTime modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
+
 
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;

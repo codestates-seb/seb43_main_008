@@ -22,9 +22,11 @@ public class SeriesController {
 
 
     @GetMapping("/{series-id}")
-    public ResponseEntity getSeries(@PathVariable("series-id") Long id){
+    public ResponseEntity getSeries(@PathVariable("series-id") Long id,
+                                    @RequestParam(value = "page", defaultValue = "1") int page,
+                                    @RequestParam(value = "size", defaultValue = "7") int size){
 
-        SeriesResponseDto response = seriesService.getSeries(id);
+        SeriesResponseDto response = seriesService.getSeries(id, page-1, size);
 
         return ResponseEntity.ok(response);
     }
@@ -33,7 +35,7 @@ public class SeriesController {
     @PostMapping
     public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto){
 
-        SeriesResponseDto response = seriesService.saveSeries(1L,seriesPostDto);
+        SeriesResponseDto response = seriesService.saveSeries(1L, seriesPostDto);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
@@ -50,7 +52,7 @@ public class SeriesController {
     public ResponseEntity updateSeries(@PathVariable("series-id") Long id, @RequestBody
     SeriesUpdateDto seriesUpdateDto){
 
-        SeriesResponseDto response = seriesService.updateSeries(id, seriesUpdateDto);
+        SeriesResponseDto response = seriesService.updateSeries(1L, id, seriesUpdateDto);
 
         return ResponseEntity.ok(response);
     }
