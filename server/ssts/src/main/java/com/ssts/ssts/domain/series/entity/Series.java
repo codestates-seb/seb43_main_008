@@ -6,6 +6,7 @@ import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.member.entity.Member;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -71,7 +72,6 @@ public class Series extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "series", cascade = CascadeType.PERSIST)
     private List<Daylog> daylogs = new ArrayList<>();
-
 
 
 
