@@ -1,8 +1,8 @@
 "use client";
 
-import styled from "styled-components";
-import { RiEdit2Line, RiDeleteBinLine } from "react-icons/ri";
 import { AiOutlineMinus } from "react-icons/ai";
+import { RiDeleteBinLine, RiEdit2Line } from "react-icons/ri";
+import styled from "styled-components";
 
 interface Props {
   onClickModal: () => void;

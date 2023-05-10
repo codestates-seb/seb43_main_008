@@ -1,8 +1,9 @@
 "use client";
 
-import styled from "styled-components";
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { MdMoreVert } from "react-icons/md";
+import styled from "styled-components";
+
 import { Modal } from "./Modal";
 
 interface CommentProps {

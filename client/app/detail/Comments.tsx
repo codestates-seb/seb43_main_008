@@ -1,10 +1,11 @@
 "use client";
 
-import styled from "styled-components";
 import React, { useEffect, useState } from "react";
+import { BsSend } from "react-icons/bs";
+import styled from "styled-components";
+
 import { StyledCard } from "./Card";
 import { Comment } from "./Comment";
-import { BsSend } from "react-icons/bs";
 import { comments } from "./commentData";
 export const Comments: React.FC = () => {
   // 댓글 입력 및 서버 전달을 위한 상태 & 함수
