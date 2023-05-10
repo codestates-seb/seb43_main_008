@@ -41,6 +41,7 @@ export const Slider = (): JSX.Element => {
         setTimeout(() => {
           func(...args);
           throttled = false;
+          console.log("함수 실행중")
         }, ms);
       }
     };

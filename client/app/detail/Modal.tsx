@@ -8,12 +8,15 @@ interface Props {
   onClickModal: () => void;
   handleEditComment: (id: number) => void;
   commentid: number;
+  setComment: React.Dispatch<React.SetStateAction<string>>
+
 }
 
 export const Modal: React.FC<Props> = ({
   onClickModal,
   handleEditComment,
   commentid,
+  setComment,
 }) => {
   // const HandleEdit = () => {
   //   /*
@@ -25,6 +28,7 @@ export const Modal: React.FC<Props> = ({
 
   const HandleDelete = () => {
     onClickModal();
+    setComment("")
     console.log("서버에 삭제 요청 보내기");
   };
 
