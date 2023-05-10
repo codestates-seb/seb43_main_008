@@ -86,10 +86,6 @@ public class Series extends BaseTimeEntity {
     private LocalDateTime voteEndAt;
 
 
-    public void setModifiedAt(LocalDateTime modifiedAt) {
-        this.modifiedAt = modifiedAt;
-    }
-
 
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
@@ -143,6 +139,15 @@ public class Series extends BaseTimeEntity {
         isActive = active;
     }
 
+
+    //투표 시간 관련 setMethod
+    public void setVoteCreatedAt(LocalDateTime voteCreaateAt){
+        this.voteCreatedAt = voteCreaateAt;
+    }
+
+    public void setVoteEndAt(LocalDateTime voteEndAt){
+        this.voteEndAt = voteEndAt;
+    }
 
 
 
