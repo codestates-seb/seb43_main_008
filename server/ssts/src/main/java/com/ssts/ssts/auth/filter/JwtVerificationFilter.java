@@ -67,11 +67,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     //Authentication 객체를 SecurityContext에 저장하기 위한 private 메서드이다.
     private void setAuthenticationToContext(Map<String, Object> claims) {
-        String username = (String) claims.get("username");   // (4-1) claims에서 username 얻고
-        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));  // (4-2) claims에서 얻은 roles을 이용해서 권한생성
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-        // (4-3) username과 크레덴셜(민감한정보?), 권한으로 Authentication객체 생성하고
-        SecurityContextHolder.getContext().setAuthentication(authentication); // (4-4) SecurityContext에 Authentication객체 저장한다.
+        String email = (String) claims.get("email");   // claims에서 username 얻고
+        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));  // claims에서 얻은 roles을 이용해서 권한생성
+        Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+        // username과 크레덴셜(민감한정보?), 권한으로 Authentication객체 생성하고
+        SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContext에 Authentication객체 저장한다.
         // 그후에 어떻게 사용하는데? 언제 사용하는데? 왜 저장하는데? >> 이유: 나중에 filter작업하려고
         // 이후 세션의 상태는? Spring Security의 세션 정책에 따라서 세션을 생성할 수도 있고 그렇지 않을 수 있다.
 

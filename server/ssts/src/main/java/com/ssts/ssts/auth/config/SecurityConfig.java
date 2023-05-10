@@ -4,6 +4,7 @@ import com.ssts.ssts.auth.filter.JwtVerificationFilter;
 import com.ssts.ssts.auth.handler.OAuth2MemberFailureHandler;
 import com.ssts.ssts.auth.handler.OAuth2MemberSuccessHandler;
 import com.ssts.ssts.auth.jwt.JwtTokenizer;
+import com.ssts.ssts.auth.service.CustomOAuth2UserService;
 import com.ssts.ssts.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.service.MemberOAuthService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class SecurityConfig {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final MemberOAuthService memberOAuthService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
@@ -59,9 +60,10 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .oauth2Login()
-                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberOAuthService))
-                ;
-                //.failureHandler(new OAuth2MemberFailureHandler());
+                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils))
+                .failureHandler(new OAuth2MemberFailureHandler())
+                .userInfoEndpoint().userService(customOAuth2UserService);
+
 
 
 

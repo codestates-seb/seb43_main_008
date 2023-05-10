@@ -27,6 +27,10 @@ spring:
               - profile # resource owner의 프로필 정보
 # spring.security.oauth2.client.registration.google.client-id
 
+#logging:
+#  level:
+#    root: DEBUG
+
 server:
   servlet:
     encoding:
