@@ -76,6 +76,21 @@ public class Series extends BaseTimeEntity {
 
 
 
+
+    //투표 개설 시간
+    @Column
+    private LocalDateTime voteCreatedAt;
+
+    //투표 마감 시간(임시)
+    @Column
+    private LocalDateTime voteEndAt;
+
+
+    public void setModifiedAt(LocalDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
+
+
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
     }
