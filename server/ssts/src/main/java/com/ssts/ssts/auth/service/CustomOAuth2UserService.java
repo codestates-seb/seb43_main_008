@@ -1,6 +1,7 @@
 package com.ssts.ssts.auth.service;
 
 import com.ssts.ssts.auth.utils.CustomAuthorityUtils;
+import com.ssts.ssts.auth.utils.CustomOAuth2User;
 import com.ssts.ssts.auth.utils.SocialType;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
@@ -15,10 +16,14 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Map;
+import javax.swing.text.html.Option;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -26,61 +31,82 @@ import java.util.Map;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
-    private final CustomAuthorityUtils createAuthorities;
+    private final CustomAuthorityUtils authorityUtils;
 
     private static final String NAVER = "naver";
     private static final String KAKAO = "kakao";
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("CustomOAuth2UserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
-
-        /**
-         * DefaultOAuth2UserService 객체를 생성하여, loadUser(userRequest)를 통해 DefaultOAuth2User 객체를 생성 후 반환
-         * DefaultOAuth2UserService의 loadUser()는 소셜 로그인 API의 사용자 정보 제공 URI로 요청을 보내서
-         * 사용자 정보를 얻은 후, 이를 통해 DefaultOAuth2User 객체를 생성 후 반환한다.
-         * 결과적으로, OAuth2User는 OAuth 서비스에서 가져온 유저 정보를 담고 있는 유저
-         */
+        log.info("하늘/security CustomOAuth2UserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
+        //결과적으로, OAuth2User는 OAuth 서비스에서 가져온 유저 정보를 담고 있는 유저
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
+        // DefaultOAuth2UserService가 OAuth2UserRequest를 받고, 재가공해서 OAuth2User 객체로 만든다.
 
         /**
          * userRequest에서 registrationId 추출 후 registrationId으로 SocialType 저장
          * http://localhost:8080/oauth2/authorization/kakao에서 kakao가 registrationId
          * userNameAttributeName은 이후에 nameAttributeKey로 설정된다.
          */
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        // OAuth2UserRequest객체 -> ClientRegistration객체(OAuth2 클라이언트 정보) -> (String)registrationId 필드값 가져오기.
+        String providerId = userRequest.getClientRegistration().getRegistrationId();
         // 구글인지? 카카오인지? 네이버인지? OAuth 이름 확인
-        SocialType socialType = getSocialType(registrationId);
+        log.info("하늘/security : provider="+providerId);
+
+        SocialType socialType = getSocialType(providerId);
         //provider id -> 각 소셜마다 response 타입이 따로 있는데, 각 OAUTH response를 찾아봐야한다.
+
+        // OAuth2UserRequest객체 -> ClientRegistration객체(OAuth2 클라이언트 정보)
+        // -> ProviderDetails객체 -> UserInfoEndpoint객체 -> (String)userNameAttributeName 필드값 가져오기
         String userNameAttributeName = userRequest.getClientRegistration()
-                .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName(); // OAuth2 로그인 시 키(PK)가 되는 값
+                .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName(); // OAuth2 로그인 시 키(PK)가 되는 값 ???????????
+        log.info("하늘/security : userNameAttributeName="+userNameAttributeName);
+
         Map<String, Object> attributes = oAuth2User.getAttributes(); // 소셜 로그인에서 API가 제공하는 userInfo의 Json 값(유저 정보들) >> response
-        /*// userRequest.getAttributes()
-{
-sub=147490145755120067183,
-name=이정수,
-given_name=정수,
-family_name=이,
-picture=https://lh3.googleusercontent.com/DmcxfJD7pfJ2-cxl6=s96-c,
-email=1996dododog@gmail.com,
-email_verified=true,
-locale=ko
-}*/
+        //////////////* 속성값 보는 작업 *//////////////////////////
+        String attributesStr="";
+        Iterator<String> keys=attributes.keySet().iterator();
+        while(keys.hasNext()){
+            String key=keys.next();
+            attributesStr+="["+key+"]="+attributes.get(key).toString()+"\n";
+        }
+        log.info("하늘/security : attributes=\n"+ attributesStr);
+        /* 구글 정보
+            attributes=
+            [sub]=114237756963603122548
+            [name]=neul ha
+            [given_name]=neul
+            [family_name]=ha
+            [picture]=https://lh3.googleusercontent.com/a/AGNmyxZhQDP6NP7dtNMc6dCTTW-p5LNko31zD_aXPtXgGA=s96-c
+            [email]=yunide073@gmail.com
+            [email_verified]=true
+            [locale]=ko
+         */
+        //////////////////////////////////////////////////////////
+
 
         // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
         // 각 소셜마다 유저 정보 객체를 만든다.
         //OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributeName, attributes);
 
-
         // 멤버 만든다아...
-        Member createdUser = memberRepository.findByEmail((String)attributes.get("name")).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND)); // getUser() 메소드로 User 객체 생성 후 반환
+        Optional<Member> member = memberRepository.findByEmail((String)attributes.get("email")); // getUser() 메소드로 User 객체 생성 후 반환
 
+
+        if(!member.isPresent()){
+            return new CustomOAuth2User(
+                    authorityUtils.createAuthorities(List.of("GUEST")),
+                    attributes,
+                    userNameAttributeName
+            );
+        }
         // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
-        return new DefaultOAuth2User(
-                createAuthorities.createAuthorities(createdUser.getRoles()),
+        return new CustomOAuth2User(
+                authorityUtils.createAuthorities(member.get().getRoles()),
                 attributes,
-                userNameAttributeName
+                userNameAttributeName,
+                member.get().getId()
         );
     }
 
