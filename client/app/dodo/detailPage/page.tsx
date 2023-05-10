@@ -9,14 +9,10 @@ const MainSeriesContainer = styled.div`
   margin: 0 auto;
   background-color: #fafafa;
   min-height: 100vh;
+  min-width: 390px;
 
-  /* @media screen and (min-width: 768px) {
-  .list {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  } */
+  @media screen and (min-width: 768px) {
+  }
 `;
 
 const SeriesWrapper = styled.div`
@@ -28,8 +24,6 @@ const SeriesWrapper = styled.div`
 const SeriesList = styled(SeriesWrapper)`
   width: 729px;
 `;
-
-// const PlasticList = styled.div``;
 
 const InputContainer = styled.div`
   flex: 1;
