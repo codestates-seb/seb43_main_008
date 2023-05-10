@@ -1,6 +1,8 @@
 package com.ssts.ssts.domain.series.service;
 
 
+import com.ssts.ssts.domain.daylog.entity.Daylog;
+import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
@@ -12,8 +14,12 @@ import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
 import com.ssts.ssts.utils.UpdateUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,13 +30,19 @@ public class SeriesService {
 
     private final MemberRepository memberRepository;
 
+    private final DaylogRepository daylogRepository;
     private final UpdateUtils<Series> updateUtils;
 
 
 
-    public SeriesResponseDto getSeries(Long id){
+    public SeriesResponseDto getSeries(Long id, int page, int size){
 
         Series series = this.findVerifiedSeries(id);
+
+        Page<Daylog> daylogInfo = seriesRepository.findAllDaylogsById(id, PageRequest.of(page, size,
+                Sort.by("daylogId").descending()));
+
+        List<Daylog> daylogs = daylogInfo.getContent();
 
         SeriesResponseDto responseDto = SeriesResponseDto.of(series.getId(),
                 series.getTitle(),
@@ -51,7 +63,6 @@ public class SeriesService {
                 series.getMember());
 
         return responseDto;
-
     }
 
 
@@ -87,7 +98,7 @@ public class SeriesService {
     }
 
 
-    public SeriesResponseDto updateSeries(Long id, SeriesUpdateDto seriesUpdateDto){
+    public SeriesResponseDto updateSeries(Long memeberId, Long id, SeriesUpdateDto seriesUpdateDto){
 
         Series DescSeries = this.findVerifiedSeries(id);
         Series series = Series.of(seriesUpdateDto.getTitle());
@@ -124,8 +135,8 @@ public class SeriesService {
 
 
 
-    public Series findVerifiedSeries(Long questionId){
-        Optional<Series> optionalQuestion = seriesRepository.findById(questionId);
+    public Series findVerifiedSeries(Long seriesId){
+        Optional<Series> optionalQuestion = seriesRepository.findById(seriesId);
 
         Series findSeries =
                 optionalQuestion.orElseThrow(() ->

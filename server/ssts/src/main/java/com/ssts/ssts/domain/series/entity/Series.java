@@ -1,6 +1,8 @@
 package com.ssts.ssts.domain.series.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.member.entity.Member;
 import lombok.Getter;
@@ -13,7 +15,7 @@ import java.util.List;
 
 @Getter
 @Entity
-public class Series {
+public class Series extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +27,6 @@ public class Series {
     @ColumnDefault("0")
     @Column
     private int daylogCount;
-
-    @Column
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column
-    private LocalDateTime modifiedAt;
 
     @ColumnDefault("0")
     @Column
@@ -67,6 +63,8 @@ public class Series {
 
     @Column
     private Boolean isActive = true;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -77,10 +75,6 @@ public class Series {
 
 
 
-
-    public void setModifiedAt(LocalDateTime modifiedAt) {
-        this.modifiedAt = modifiedAt;
-    }
 
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
