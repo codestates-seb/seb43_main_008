@@ -174,7 +174,7 @@ export default function Navbar() {
 
 const StyledNavbar = styled.nav`
   z-index: 10;
-  height: 4.5rem;
+  height: 70px;
   width: 100vw;
   max-width: 1024px;
 
@@ -194,6 +194,7 @@ const StyledNavbar = styled.nav`
     padding: auto;
     font-size: 0.75rem;
     .menu {
+      cursor: pointer;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -217,10 +218,11 @@ const StyledNavbar = styled.nav`
       }
     }
     .plus-button {
+      cursor: pointer;
       font-size: 35px;
 
       z-index: 1000;
-      position: fixed;
+      position: absolute;
       left: 50%;
       transform: translate(-50%, -75%);
       bottom: 0;
