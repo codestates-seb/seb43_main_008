@@ -1,101 +1,57 @@
 "use client";
 
-import React from "react";
 import styled from "styled-components";
 
+import Header from "./Header";
+import UploadImg from "./UploadImg";
 import WriteInput from "./WriteInput";
 
-//////////////////
-function PictureLabel() {
-  return (
-    <label htmlFor="picture" style={{ display: "flex", alignItems: "center" }}>
-      <img
-        src="/add-pic.svg"
-        alt="사진 추가 아이콘"
-        style={{
-          width: "1200px",
-          height: "500px",
-          color: "#757575",
-          cursor: "pointer",
-        }}
-      />
-    </label>
-  );
-}
-//////////////////
-
+// 페이지 기본 레이아웃
 const MainSeriesContainer = styled.div`
-  padding-top: 54px;
+  padding-top: 1px;
   max-width: 1024px;
   margin: 0 auto;
   background-color: #fafafa;
   min-height: 100vh;
   min-width: 390px;
 
-  @media screen and (min-width: 768px) {
+  /* @media screen and (min-width: 768px) { */
+  @media screen and (max-width: 768px) {
   }
 `;
 
+// 사진+글 업로드 레이아웃
 const SeriesWrapper = styled.div`
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 30px;
+  margin: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `;
 
-const InputContainer = styled.div`
+// 사진 + 글 업로드 디테일 레이아웃
+const WrapperDetailContainer = styled.div`
   flex: 1;
   color: #222;
   background-color: white;
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 20px 24px;
-  /* border: 1px solid #9b9ba0; */
+  padding: 30px 24px;
   border-radius: 10px;
-`;
-
-const SubmitButton = styled.button`
-  background-color: #fcfcfd;
-  color: #36395a;
-  border: 1px solid rgba(34, 36, 38, 0.5);
-  padding: 0.6rem 1.5rem;
-  margin-left: 15px;
-  border-radius: 3px;
-  cursor: pointer;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
-`;
-
-const UploadImageContainer = styled.div`
-  background-color: white;
-  margin-top: 25px;
-  margin-bottom: 25px;
-  display: flex;
-  align-items: center;
-  padding: 20px 24px;
-  flex-direction: column;
-  border-radius: 10px;
-  border: 1px solid #9b9ba0;
 `;
 
 export default function page() {
   return (
     <>
+      <Header backButton={true} textContent={"시리즈 작성"} saveButton={true} />
       <MainSeriesContainer>
-        <h1>시리즈를 작성해주세요</h1>
         <SeriesWrapper>
-          <InputContainer>
-            <UploadImageContainer>
-              {/* ///////////////////// */}
-              <PictureLabel />
-              <input type="file" id="picture" style={{ display: "none" }} />
-              {/* ///////////////////// */}
-            </UploadImageContainer>
+          <WrapperDetailContainer>
+            <UploadImg />
             <WriteInput />
-            <SubmitButton type="submit">ok</SubmitButton>
-          </InputContainer>
+          </WrapperDetailContainer>
         </SeriesWrapper>
       </MainSeriesContainer>
     </>
