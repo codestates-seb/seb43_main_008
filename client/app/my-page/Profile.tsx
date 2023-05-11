@@ -16,7 +16,7 @@ export const Profile = () => {
       />
       <div className='info-box'>
         <div className='nick-name'>닉네임</div>
-        <div className='user-info'>한줄 소개</div>
+        <div className='user-info'>한줄 소개<br /> 두줄 소개</div>
       </div>
       <div className='button-box'>
         <div className='badge'>

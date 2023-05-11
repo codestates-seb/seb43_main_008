@@ -1,12 +1,13 @@
 "use client";
 
-
 import styled from 'styled-components';
 export const Feed = () => {
+  // map 돌려서 게시글 불러오기 
+
   return (
     <StyledFeed className='feed'>
       <StyleSeries className='feed-item active' />
-      <StyleSeries className='feed-item' />
+      <StyleSeries className='feed-item done' />
       <StyleSeries className='feed-item' />
       <StyleSeries className='feed-item' />
     </StyledFeed>
@@ -31,15 +32,6 @@ const StyledFeed = styled.div`
         box-shadow: #eff8e0 6px 8px 10px;
       }
   }
-
-  /* 내용물을 부모 요소에 맞춰서 위치시킴 */
-  /* .feed-item > * {
-    position: absolute; 
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-  } */
 `
 
 const StyleSeries = styled.div`
@@ -47,3 +39,4 @@ const StyleSeries = styled.div`
   border-radius: 8px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `
+
