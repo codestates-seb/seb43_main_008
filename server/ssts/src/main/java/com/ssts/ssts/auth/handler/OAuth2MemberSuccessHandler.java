@@ -3,19 +3,14 @@ package com.ssts.ssts.auth.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.ssts.ssts.auth.jwt.JwtTokenizer;
-import com.ssts.ssts.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.auth.utils.CustomOAuth2User;
 import com.ssts.ssts.auth.utils.GuestObject;
 import com.ssts.ssts.auth.utils.GuestObjectSerializer;
-import com.ssts.ssts.domain.member.entity.Member;
-import com.ssts.ssts.domain.member.service.MemberOAuthService;
-import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -26,10 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -106,6 +98,7 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
+    //FIXME
     private String delegateAccessToken(long id, String email, List<String> authorities) {
         //email과 권한 받아옴
         Map<String, Object> claims = new HashMap<>();
@@ -113,6 +106,13 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
         claims.put("roles", authorities);
         claims.put("id", id);
 
+        String claimsStr="";
+        Iterator<String> keys=claims.keySet().iterator();
+        while(keys.hasNext()){
+            String key=keys.next();
+            claimsStr+="["+key+"]="+claims.get(key).toString()+"\n";
+        }
+        log.info("하늘/jwt : claims=\n"+ claimsStr);
 
         String subject = email;
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());

@@ -54,10 +54,10 @@ public class MemberController {
      * 멤버 탈퇴 기능
      *
      * */
-    @DeleteMapping("/{memberId}")
-    public ResponseEntity withdrawMember(@PathVariable long memberId) {
+    @DeleteMapping()
+    public ResponseEntity withdrawMember() {
 
-        Member member=memberService.changeMemberStatusWithdraw(memberId);
+        Member member=memberService.changeMemberStatusWithdraw();
 
         //로그 출력 : 어떤 아이디가 탈퇴했다
         return ResponseEntity.status(HttpStatus.OK).body("You have been successfully withdrawn.");
