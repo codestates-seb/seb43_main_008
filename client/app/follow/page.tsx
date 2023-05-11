@@ -1,5 +1,4 @@
 "use client"
-
 import styled from 'styled-components'
 
 import { Follows } from './Follow';
@@ -22,14 +21,8 @@ export default function Follow() {
       <Follows />
       <Follows />
     </StylePage>
-
   )
 }
-
 const StylePage = styled.div`
-  height: calc(100vh - 110px);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-
+  min-height: calc(100vh - 110px); 
 `

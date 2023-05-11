@@ -48,5 +48,5 @@ export default function MyPage() {
 }
 
 const StylePage = styled.div`
-  height: calc(100vh - 110px);
+  min-height: calc(100vh - 110px); 
 `
