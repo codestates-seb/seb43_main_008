@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,19 +29,16 @@ public class MemberService {
     //private final PasswordEncoder passwordEncoder;
     private final SeriesRepository seriesRepository;
 
+    /*
+    * 회원가입 용 api
+    * 권한 : ADMIN, USER
+    * */
     public Member saveMember(MemberSignUpPostDto memberSignUpPostDto) {
         //ouath 로만 로그인 구현하면.. password 필요없는거 아냐..? 나중에 구현 후 생각해보기.
-        Member member=Member.of(memberSignUpPostDto.getNickName(),
-                memberSignUpPostDto.getEmail(),
-                memberSignUpPostDto.getPassword());
+        Member member=Member.of(memberSignUpPostDto.getEmail());
 
         verifyExistsEmail(member.getEmail());
-        // 중복되지 않는 이메일이라면 그때 비밀번호 암호화하기
-        //member.setPassword(passwordEncoder.encode(member.getPassword());
 
-        //세큐리티 추가시 동작가능
-        //List<String> roles = authorityUtils.createRoles(member.getEmail());
-        //임시 동작 : admin 권한은 이메일에 @ssts.com이 포함되어있으면 관리자!
         List<String> roles;
         if(isAdmin(member.getEmail())){
             roles=List.of("ADMIN","USER");
@@ -54,19 +52,26 @@ public class MemberService {
         return savedMember;
     }
 
-    public MemberMyPageResponseDto findMember(long memberId) {
+    /*
+    * 마이페이지 정보
+    * 권한 : ADMIN, USER
+    * 응답 : 유저정보(nickName, image, introduce)
+    *  */
+    public MemberMyPageResponseDto getMyPageMemberInfo() {
 
+        long memberId= SecurityUtil.getMemberId();
         Member member = findMemberById(memberId);
         MemberMyPageResponseDto responseDto=MemberMyPageResponseDto.of(member.getNickName(),
                 member.getImage(),
-                member.getIntroduce(),
-                seriesRepository.findAllByMemberId(member.getId())); // 데이터 가져오기
+                member.getIntroduce());
 
         return responseDto;
     }
 
     public Member findMemberById(long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        log.info("하늘 member service : member nickName="+member.getNickName()+" 조회");
 
         return member;
     }
@@ -75,20 +80,29 @@ public class MemberService {
     public Member changeMemberStatusWithdraw() {
         long memberId= SecurityUtil.getMemberId();
         Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        member.setDeletedAt(LocalDateTime.now());
         member.setStatus(Member.Status.WITHDRAW);
-        //탈퇴 로그 출력
-        log.info("하늘 security : memberid="+memberId+" 탈퇴처리");
+
+        log.info("하늘 member service : memberid="+memberId+", "+member.getDeletedAt()+"에 탈퇴처리");
 
         return member;
     }
 
     @Transactional
-    public MemberEditInfoResponseDto editMemberInfo(long memberId, MemberEditInfoPatchDto memberEditInfoPatchDto) {
+    public MemberEditInfoResponseDto updateMemberInfo(MemberEditInfoPatchDto memberEditInfoPatchDto) {
+        long memberId=SecurityUtil.getMemberId();
         Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        //if문을 왜 쓰느냐? --> 입력안한 값에는 null이 들어가고, DB에 저장되어 버린다. 쌈바?..??훔..
+
         member.setImage(memberEditInfoPatchDto.getImage());
         member.setNickName(memberEditInfoPatchDto.getNickName());
-        //member.setPassword(memberEditInfoPatchDto.getPassword()); //oauth로그인이라서 필요없다.
         member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
+
+        log.info("하늘 member service : 수정 후 [" +
+                " nickName="+member.getNickName()+
+                " image="+member.getImage()+
+                " introduce="+member.getIntroduce()+"]");
 
         MemberEditInfoResponseDto responseDto = MemberEditInfoResponseDto.of(member.getImage(), member.getNickName(), member.getIntroduce());
         return responseDto;

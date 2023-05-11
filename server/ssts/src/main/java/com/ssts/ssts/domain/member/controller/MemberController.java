@@ -45,8 +45,8 @@ public class MemberController {
     * */
     @GetMapping
     public ResponseEntity<MemberMyPageResponseDto> findMember() {
-        long memberId= SecurityUtil.getMemberId();
-        MemberMyPageResponseDto response = memberService.findMember(memberId);
+
+        MemberMyPageResponseDto response = memberService.getMyPageMemberInfo();
 
         return ResponseEntity.ok(response);
     }
@@ -60,20 +60,19 @@ public class MemberController {
 
         Member member=memberService.changeMemberStatusWithdraw();
 
-        //로그 출력 : 어떤 아이디가 탈퇴했다
-        return ResponseEntity.status(HttpStatus.OK).body("You have been successfully withdrawn.");
+        return ResponseEntity.status(HttpStatus.OK).body(member.getDeletedAt()+"에 탈퇴처리되셨습니다. 6개월 보관할 예정:)");
     }
 
     /*
     * 멤버 정보 수정
-    *
+    * 권한 : USER, ADMIN
     * */
-    @PatchMapping("/edit/{memberId}")
-    public ResponseEntity<MemberEditInfoResponseDto> updateMemberInfo(@PathVariable long memberId, @RequestBody MemberEditInfoPatchDto memberEditInfoPatchDto) {
+    @PatchMapping("/edit")
+    public ResponseEntity<MemberEditInfoResponseDto> updateMemberInfo(@RequestBody MemberEditInfoPatchDto memberEditInfoPatchDto) {
 
-        MemberEditInfoResponseDto response = memberService.editMemberInfo(memberId, memberEditInfoPatchDto);
+        MemberEditInfoResponseDto response = memberService.updateMemberInfo(memberEditInfoPatchDto);
         // 요청 body값이 nickname은 반드시 들어가야한다,image랑 introduce는 nullable이라서 선택적.
-        //
+
 
         //로그 출력 : 어떤 아이디가 수정했다
         return ResponseEntity.ok(response);
