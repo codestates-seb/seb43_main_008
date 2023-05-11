@@ -173,9 +173,9 @@ export default function Navbar() {
 }
 
 const StyledNavbar = styled.nav`
-  z-index: 1;
+  z-index: 10;
   height: 4.5rem;
-  width: 100%;
+  width: 100vw;
   max-width: 1024px;
 
   position: sticky;
