@@ -9,7 +9,8 @@ public enum ExceptionCode {
     EMAIL_DUPLICATE(2002, "Email duplicate"),
     NOT_IMPLEMENTATION(2003, "Not Implementation"),
     INVALID_MEMBER_STATUS(2004, "Invalid member status"),
-    SERIES_NOT_EXISTS(409, "Series Not Exists");
+    SERIES_NOT_EXISTS(2005, "Series Not Exists"),
+    SECURITY_GUEST_OBJECT_SERIALIZE_ERROR(2006, "GUEST object information json serialization error");
 
 
     @Getter

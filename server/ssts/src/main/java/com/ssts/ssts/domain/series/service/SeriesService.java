@@ -5,6 +5,7 @@ import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+import com.ssts.ssts.domain.series.dto.SeriesPageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesUpdateDto;
@@ -14,11 +15,14 @@ import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
 import com.ssts.ssts.utils.UpdateUtils;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,40 +34,30 @@ public class SeriesService {
 
     private final MemberRepository memberRepository;
 
-    private final DaylogRepository daylogRepository;
     private final UpdateUtils<Series> updateUtils;
 
 
 
-    public SeriesResponseDto getSeries(Long id, int page, int size){
+    public SeriesPageResponseDto getSeriesList(Long memberid, int page, int size){
+
+        Page<Series> seriesInfo = seriesRepository.findByMember_id(memberid, PageRequest.of(page, size,
+                Sort.by("id").descending()));
+
+        List<Series> seriesList = seriesInfo.getContent();
+
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+
+        return new SeriesPageResponseDto(list, seriesInfo);
+    }
+
+    public SeriesResponseDto getSeries(Long id){
 
         Series series = this.findVerifiedSeries(id);
 
-        Page<Daylog> daylogInfo = seriesRepository.findAllDaylogsById(id, PageRequest.of(page, size,
-                Sort.by("daylogId").descending()));
-
-        List<Daylog> daylogs = daylogInfo.getContent();
-
-        SeriesResponseDto responseDto = SeriesResponseDto.of(series.getId(),
-                series.getTitle(),
-                series.getDaylogCount(),
-                series.getCreatedAt(),
-                series.getModifiedAt(),
-                series.getVoteCount(),
-                series.getVoteResult(),
-                series.getVoteAgree(),
-                series.getVoteDisagree(),
-                series.getRevoteResult(),
-                series.getRevoteAgree(),
-                series.getRevoteDisagree(),
-                series.getVoteStatus(),
-                series.getIsPublic(),
-                series.getIsEditable(),
-                series.getIsActive(),
-                series.getMember());
-
-        return responseDto;
+        return this.seriesToSeriesResponseDto(series);
     }
+
+
 
 
     public SeriesResponseDto saveSeries(Long memberId, SeriesPostDto seriesPostDto){
@@ -78,23 +72,7 @@ public class SeriesService {
         series.addMember(findMember);
         seriesRepository.save(series);
 
-        return SeriesResponseDto.of(series.getId(),
-                series.getTitle(),
-                series.getDaylogCount(),
-                series.getCreatedAt(),
-                series.getModifiedAt(),
-                series.getVoteCount(),
-                series.getVoteResult(),
-                series.getVoteAgree(),
-                series.getVoteDisagree(),
-                series.getRevoteResult(),
-                series.getRevoteAgree(),
-                series.getRevoteDisagree(),
-                series.getVoteStatus(),
-                series.getIsPublic(),
-                series.getIsEditable(),
-                series.getIsActive(),
-                series.getMember());
+        return this.seriesToSeriesResponseDto(series);
     }
 
 
@@ -105,23 +83,7 @@ public class SeriesService {
 
         Series updateSeries = updateUtils.copyNonNullProperties(series,DescSeries);
 
-        return SeriesResponseDto.of(updateSeries.getId(),
-                updateSeries.getTitle(),
-                updateSeries.getDaylogCount(),
-                updateSeries.getCreatedAt(),
-                updateSeries.getModifiedAt(),
-                updateSeries.getVoteCount(),
-                updateSeries.getVoteResult(),
-                updateSeries.getVoteAgree(),
-                updateSeries.getVoteDisagree(),
-                updateSeries.getRevoteResult(),
-                updateSeries.getRevoteAgree(),
-                updateSeries.getRevoteDisagree(),
-                updateSeries.getVoteStatus(),
-                updateSeries.getIsPublic(),
-                updateSeries.getIsEditable(),
-                updateSeries.getIsActive(),
-                updateSeries.getMember());
+        return this.seriesToSeriesResponseDto(series);
 
     }
 
@@ -145,5 +107,43 @@ public class SeriesService {
         return findSeries;
 
     }
+
+    @NotNull
+    private SeriesResponseDto seriesToSeriesResponseDto(Series series) {
+
+
+        return SeriesResponseDto.of(series.getId(),
+                series.getTitle(),
+                series.getDaylogCount(),
+                series.getCreatedAt(),
+                series.getModifiedAt(),
+                series.getVoteCount(),
+                series.getVoteResult(),
+                series.getVoteAgree(),
+                series.getVoteDisagree(),
+                series.getRevoteResult(),
+                series.getRevoteAgree(),
+                series.getRevoteDisagree(),
+                series.getVoteStatus(),
+                series.getIsPublic(),
+                series.getIsEditable(),
+                series.getIsActive());
+    }
+
+    public List<SeriesResponseDto> seriesToSeriesListResponseDtos(List<Series> seriesList){
+        if (seriesList ==null){
+            return null;
+        }
+        List<SeriesResponseDto> list = new ArrayList<>(seriesList.size());
+        Iterator iterator = seriesList.iterator();
+
+        while (iterator.hasNext()){
+            Series series = (Series) iterator.next();
+            list.add(this.seriesToSeriesResponseDto(series));
+        }
+
+        return list;
+    }
+
 
 }

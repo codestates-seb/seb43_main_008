@@ -1,11 +1,11 @@
 package com.ssts.ssts.domain.series.controller;
 
 
+import com.ssts.ssts.domain.series.dto.SeriesPageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesUpdateDto;
 import com.ssts.ssts.domain.series.service.SeriesService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +21,29 @@ public class SeriesController {
 
 
 
-    @GetMapping("/{series-id}")
-    public ResponseEntity getSeries(@PathVariable("series-id") Long id,
+    @GetMapping("members/{member-id}")
+    public ResponseEntity getSeriesList(@PathVariable("member-id") Long id,
                                     @RequestParam(value = "page", defaultValue = "1") int page,
-                                    @RequestParam(value = "size", defaultValue = "7") int size){
+                                    @RequestParam(value = "size", defaultValue = "12") int size){
 
-        SeriesResponseDto response = seriesService.getSeries(id, page-1, size);
+        SeriesPageResponseDto response = seriesService.getSeriesList(id, page-1, size);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{series-id}")
+    public ResponseEntity getSeries(@PathVariable("series-id") Long id){
+
+        SeriesResponseDto response = seriesService.getSeries(id);
 
         return ResponseEntity.ok(response);
     }
 
 
-    @PostMapping
-    public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto){
+    @PostMapping("/{member-id}")  //추후 member-id url삭제
+    public ResponseEntity createSeries(@PathVariable("member-id") Long memberid, @RequestBody SeriesPostDto seriesPostDto){
 
-        SeriesResponseDto response = seriesService.saveSeries(1L, seriesPostDto);
+        SeriesResponseDto response = seriesService.saveSeries(memberid, seriesPostDto);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
     }

@@ -17,6 +17,8 @@ public class ExceptionHandler {
             response=ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate email.");
         } else if (ex.getExceptionCode() == ExceptionCode.MEMBER_EXISTS) {
             response=ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member Not found.");
+        } else if(ex.getExceptionCode()==ExceptionCode.SECURITY_GUEST_OBJECT_SERIALIZE_ERROR){
+            response=ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("GUEST object information json serialization error.");
         }
 
         return response;

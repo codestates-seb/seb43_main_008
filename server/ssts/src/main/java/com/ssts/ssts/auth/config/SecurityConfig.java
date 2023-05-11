@@ -6,6 +6,7 @@ import com.ssts.ssts.auth.handler.OAuth2MemberSuccessHandler;
 import com.ssts.ssts.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.auth.service.CustomOAuth2UserService;
 import com.ssts.ssts.auth.utils.CustomAuthorityUtils;
+import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberOAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,13 +35,8 @@ public class SecurityConfig {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final MemberRepository memberRepository;
 
-    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private String clientId;
-
-    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-    private String clientSecret;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,17 +50,15 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .addFilterBefore(new JwtVerificationFilter(jwtTokenizer, authorityUtils), UsernamePasswordAuthenticationFilter.class) // https://yunb2.tistory.com/3
-                .authorizeHttpRequests(authorize -> authorize
+                .authorizeRequests(authorize -> authorize
                         .antMatchers(HttpMethod.PATCH,"/**/members/edit/**").hasRole("USER")
-                        //회원정보수정만 보안 걸어두기.
-                        .anyRequest().permitAll()
-                )
+                        .antMatchers("/login/**").permitAll()
+                        .antMatchers(HttpMethod.POST,"/members/signup").permitAll()
+                        .anyRequest().authenticated())
                 .oauth2Login()
-                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils))
+                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer))
                 .failureHandler(new OAuth2MemberFailureHandler())
-                .userInfoEndpoint().userService(customOAuth2UserService);
-
-
+                .userInfoEndpoint().userService(new CustomOAuth2UserService(memberRepository, authorityUtils));
 
 
         return http.build();
@@ -83,26 +77,5 @@ public class SecurityConfig {
         return source;
     }
 
-    // Client Registration 을 저장하기 위한 repository
-    // 이렇게 지정안하면 스프링이 자동으로 구성함. 이건 그걸 이걸로 지정해버림.
-    // 클라이언트 등록.
-    @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        var clientRegistration = clientRegistration(); // 밑에 선언한 함수로 인스턴스를 생성한다.
-        // client registration 인스턴스
-        return new InMemoryClientRegistrationRepository(clientRegistration);
-        //
-    }
-
-
-    private ClientRegistration clientRegistration() {
-        // spring security에서 제공하는 enum (CommonOAuth2Provider) -> builder 패턴을 이용해 ClientRegistration 인스턴스를 제공
-        return CommonOAuth2Provider
-                .GOOGLE
-                .getBuilder("google")
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .build();
-    }
 
 }
