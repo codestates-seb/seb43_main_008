@@ -1,14 +1,12 @@
-"use client";
-
+import Header from "../Header";
 import { Comments } from "./Comments";
-import { Header } from "./Header";
 import { Slider } from "./Slider";
 import { Vote } from "./Vote";
 
 export default function Detail() {
   return (
     <>
-      <Header />
+      <Header backButton={true} textContent={"이름 어떻게 불러오지..?"} saveButton={true} />
       <Slider />
       <Vote />
       <Comments />

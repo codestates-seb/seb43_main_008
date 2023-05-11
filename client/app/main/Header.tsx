@@ -17,11 +17,6 @@ const StyledHeader = styled.header`
   display: flex;
   align-items: center;
 
-  /* position: fixed;
-  top: 0;
-
-  background-color: white;
-  width: 100vw; */
   .title {
     margin-left: 1rem;
     font-size: 1.65rem;
