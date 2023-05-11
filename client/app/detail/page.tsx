@@ -1,5 +1,3 @@
-"use client";
-
 import { Comments } from "./Comments";
 import { Header } from "./Header";
 import { Slider } from "./Slider";
