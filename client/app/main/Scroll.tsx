@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Options {
   root: Element | null;
@@ -15,6 +15,7 @@ const options: Options = {
 }
 
 export const Scroll = () => {
+  const [page, setPage] = useState<number>(0)
   const target = useRef<HTMLDivElement>(null);
 
   const callback: IntersectionObserverCallback = (entries, observer) => {
@@ -22,6 +23,7 @@ export const Scroll = () => {
       if (entry.isIntersecting) {
         console.log('서버에 다음 페이지 요청 보내기');
         observer.unobserve(entry.target); // 타겟 요소 관측 중지
+        setPage((prev) => prev + 1)
       }
     });
   };
@@ -34,7 +36,7 @@ export const Scroll = () => {
     return () => {
       observer.disconnect(); // 관찰 중지
     };
-  }, []);
+  }, [page]);
 
 
   return (
