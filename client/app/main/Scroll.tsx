@@ -29,12 +29,12 @@ export const Scroll = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(callback, options);
     if (target.current) {
-      observer.observe(target.current); // 타겟 등록 & 관측 시작
+      observer.observe(target.current); // 타겟 요소 관측 시작
     }
     return () => {
       observer.disconnect(); // 관찰 중지
     };
-  }, [target]);
+  }, []);
 
 
   return (
