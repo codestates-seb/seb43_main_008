@@ -19,6 +19,7 @@ public class BaseTimeEntity {
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+    //FIXME S3에 올라가면 timeZone이 바뀐다. 이부분 로컬 타임을 서울로 바꿔줘야한다.
 
     @LastModifiedDate
     @Column(name = "modified_at")

@@ -21,10 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -101,6 +98,7 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
+    //FIXME
     private String delegateAccessToken(long id, String email, List<String> authorities) {
         //email과 권한 받아옴
         Map<String, Object> claims = new HashMap<>();
@@ -108,6 +106,13 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
         claims.put("roles", authorities);
         claims.put("id", id);
 
+        String claimsStr="";
+        Iterator<String> keys=claims.keySet().iterator();
+        while(keys.hasNext()){
+            String key=keys.next();
+            claimsStr+="["+key+"]="+claims.get(key).toString()+"\n";
+        }
+        log.info("하늘/jwt : claims=\n"+ claimsStr);
 
         String subject = email;
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());

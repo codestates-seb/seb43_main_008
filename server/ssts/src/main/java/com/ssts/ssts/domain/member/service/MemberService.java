@@ -73,11 +73,11 @@ public class MemberService {
 
     @Transactional
     public Member changeMemberStatusWithdraw() {
-        Long memberId= SecurityUtil.getMemberId();
+        long memberId= SecurityUtil.getMemberId();
         Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         member.setStatus(Member.Status.WITHDRAW);
         //탈퇴 로그 출력
-        log.debug("하늘 security : memberid="+memberId+" 탈퇴처리");
+        log.info("하늘 security : memberid="+memberId+" 탈퇴처리");
 
         return member;
     }

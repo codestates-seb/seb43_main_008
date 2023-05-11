@@ -10,7 +10,8 @@ public enum ExceptionCode {
     NOT_IMPLEMENTATION(2003, "Not Implementation"),
     INVALID_MEMBER_STATUS(2004, "Invalid member status"),
     SERIES_NOT_EXISTS(2005, "Series Not Exists"),
-    SECURITY_GUEST_OBJECT_SERIALIZE_ERROR(2006, "GUEST object information json serialization error");
+    SECURITY_GUEST_OBJECT_SERIALIZE_ERROR(2006, "GUEST object information json serialization error"),
+    SECURITY_NO_CREDENTIALS(2007,"No credentials");
 
 
     @Getter
