@@ -23,11 +23,11 @@ export const Vote: React.FC = () => {
 
   // 투표 아예 취소 가능한가?
   const yesHandler = () => {
-    setVoted(1);
+    if (voted === 0 || voted === undefined) setVoted(1);
     if (voted === 1) setVoted(undefined);
   };
   const noHandler = () => {
-    setVoted(0);
+    if (voted === 1 || voted === undefined) setVoted(0);
     if (voted === 0) setVoted(undefined);
   };
 
@@ -37,17 +37,17 @@ export const Vote: React.FC = () => {
       <StyledCard style={{ alignItems: "center" }}>
         <div className="vote-box">
           <div className="vote" onClick={() => yesHandler()}>
-            {voted ? <div className="sub-text yes">200표</div> : null}
+            {voted !== undefined ? <div className="sub-text yes">200표</div> : null}
             <div className="text">네!</div>
             <FaRegThumbsUp className="icon" />
           </div>
           <div className="vote" onClick={() => noHandler()}>
             <FaRegThumbsDown className="icon" />
             <div className="text">안돼요</div>
-            {voted ? <div className="sub-text no">100표</div> : null}
+            {voted !== undefined ? <div className="sub-text no">100표</div> : null}
           </div>
         </div>
-        {!voted ? (
+        {voted === undefined ? (
           <div className="sub-text message">
             투표에 참여하면 결과를 확인할 수 있습니다
           </div>

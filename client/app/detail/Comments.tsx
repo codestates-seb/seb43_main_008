@@ -76,6 +76,7 @@ export const Comments: React.FC = () => {
                   key={data.id}
                   {...data}
                   handleEditComment={handleEditComment}
+                  setComment={setComment}
                 />
               );
             })}
