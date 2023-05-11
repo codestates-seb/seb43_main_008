@@ -8,6 +8,7 @@ import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.utils.UriCreator;
+import com.ssts.ssts.utils.security.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class MemberController {
 
     /*
     * 멤버 회원가입 기능
-    *
+    * 권한 : ADMIN
     * */
     @PostMapping("/signup")
     public ResponseEntity createMember(@RequestBody MemberSignUpPostDto memberSignUpPostDto) {
@@ -40,11 +41,11 @@ public class MemberController {
 
     /*
     * 멤버 조회 기능
-    *
+    * 권한 : USER, ADMIN
     * */
-    @GetMapping("/{memberId}")
-    public ResponseEntity<MemberMyPageResponseDto> findMember(@PathVariable long memberId) {
-
+    @GetMapping
+    public ResponseEntity<MemberMyPageResponseDto> findMember() {
+        long memberId= SecurityUtil.getMemberId();
         MemberMyPageResponseDto response = memberService.findMember(memberId);
 
         return ResponseEntity.ok(response);
@@ -52,7 +53,7 @@ public class MemberController {
 
     /*
      * 멤버 탈퇴 기능
-     *
+     * 권한 : USER, ADMIN
      * */
     @DeleteMapping()
     public ResponseEntity withdrawMember() {

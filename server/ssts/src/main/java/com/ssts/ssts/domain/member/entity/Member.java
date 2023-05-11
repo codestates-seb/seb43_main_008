@@ -26,9 +26,6 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String email;
-
-    @Column(nullable = false)
-    private String password; //encoder 작업
     //---------------------------------------
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -69,7 +66,6 @@ public class Member extends BaseTimeEntity {
 
         member.setNickName(nickName);
         member.setEmail(email);
-        member.setPassword(password);
 
         return member;
     }
