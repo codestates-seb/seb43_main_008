@@ -1,7 +1,6 @@
 import "./global.css";
 import "./font.css";
 
-import Navbar from "./Navbar";
 import StyledComponentsRegistry from "./registry";
 
 export default function RootLayout({
@@ -31,7 +30,6 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <div className="mainContainer">
             {children}
-            <Navbar />
           </div>
         </StyledComponentsRegistry>
       </body>

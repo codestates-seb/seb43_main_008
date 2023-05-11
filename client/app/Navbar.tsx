@@ -1,13 +1,9 @@
 "use client";
 
+import Image from 'next/image';
 import { useState } from "react";
-import { AiFillHome, AiOutlineHome } from "react-icons/ai";
-import { BsBookmarkFill, BsHeartFill, BsPersonFill } from "react-icons/bs";
-import { BsBookmark, BsHeart, BsPerson } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
 import styled from "styled-components";
-
-// import Bookmark from "../public/icons/Bookmark.svg"; // ?
 
 export default function Navbar() {
   // 클릭 메뉴 관리 함수
@@ -64,15 +60,28 @@ export default function Navbar() {
   return (
     // <StyledNavbar style={{ display: isNavOn ? "block" : "none" }}>
     <StyledNavbar>
+
       <div className="container">
         <div
           className={`home menu ${selected === "홈" ? "selected" : ""}`}
           onClick={() => handleMenuClick("홈")}
         >
           {selected === "홈" ? (
-            <AiFillHome className="home icon" />
+            <Image
+              className='icon'
+              src="/icons/HomeFill.svg"
+              width={26}
+              height={26}
+              alt="홈"
+            />
           ) : (
-            <AiOutlineHome className="home icon" />
+            <Image
+              className='icon'
+              src="/icons/Home.svg"
+              width={26}
+              height={26}
+              alt="홈"
+            />
           )}
           <div className="text">홈</div>
         </div>
@@ -81,9 +90,21 @@ export default function Navbar() {
           onClick={() => handleMenuClick("팔로우")}
         >
           {selected === "팔로우" ? (
-            <BsHeartFill className="icon" />
+            <Image
+              className='icon'
+              src="/icons/HeartFill.svg"
+              width={26}
+              height={26}
+              alt="팔로우"
+            />
           ) : (
-            <BsHeart className="icon" />
+            <Image
+              className='icon'
+              src="/icons/Heart.svg"
+              width={26}
+              height={26}
+              alt="팔로우"
+            />
           )}
           <div className="text">팔로우</div>
         </div>
@@ -91,37 +112,58 @@ export default function Navbar() {
           <BsPlusLg />
         </div>
         <div
-          className={`add-series menu ${
-            selected === "시리즈 작성" ? "selected" : ""
-          }`}
+          className={`add-series menu ${selected === "시리즈 작성" ? "selected" : ""
+            }`}
           onClick={() => handleMenuClick("시리즈 작성")}
         >
           <div className="icon" />
           <div className="text">새글쓰기</div>
         </div>
         <div
-          className={`book-mark menu ${
-            selected === "북마크" ? "selected" : ""
-          }`}
+          className={`book-mark menu ${selected === "북마크" ? "selected" : ""
+            }`}
           onClick={() => handleMenuClick("북마크")}
         >
           {selected === "북마크" ? (
-            <BsBookmarkFill className="icon" />
+            <Image
+              className='icon'
+              src="/icons/BookmarkFill.svg"
+              width={26}
+              height={26}
+              alt="북마크"
+            />
           ) : (
-            <BsBookmark className="icon" />
+            <Image
+              className='icon'
+              src="/icons/Bookmark.svg"
+              width={26}
+              height={26}
+              alt="북마크"
+            />
           )}
           <div className="text">북마크</div>
         </div>
         <div
-          className={`my-page menu ${
-            selected === "마이일지" ? "selected" : ""
-          }`}
+          className={`my-page menu ${selected === "마이일지" ? "selected" : ""
+            }`}
           onClick={() => handleMenuClick("마이일지")}
         >
           {selected === "마이일지" ? (
-            <BsPersonFill className="my-page icon" />
+            <Image
+              className='icon'
+              src="/icons/MyFill.svg"
+              width={26}
+              height={26}
+              alt="마이페이지"
+            />
           ) : (
-            <BsPerson className="my-page icon" />
+            <Image
+              className='icon'
+              src="/icons/My.svg"
+              width={26}
+              height={26}
+              alt="마이페이지"
+            />
           )}
           <div className="text">마이일지</div>
         </div>
@@ -131,9 +173,9 @@ export default function Navbar() {
 }
 
 const StyledNavbar = styled.nav`
-  z-index: 1;
-  height: 5.125rem;
-  width: 100%;
+  z-index: 10;
+  height: 70px;
+  width: 100vw;
   max-width: 1024px;
 
   position: sticky;
@@ -141,28 +183,29 @@ const StyledNavbar = styled.nav`
 
   background-color: white;
   border-radius: 25px 25px 0 0;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px -10px 15px;
 
   color: #222;
   .container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0 1.5rem 0 1.5rem;
+    padding: 0 1rem;
     padding: auto;
     font-size: 0.75rem;
     .menu {
+      cursor: pointer;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       padding: 0.5rem;
-      margin-top: 0.7rem;
+      margin-top: 0.4rem;
       width: calc(100% / 5);
       text-align: center;
       .icon {
         font-size: 1.2rem;
-        margin-bottom: 0.7rem;
+        margin-bottom: 0.5rem;
         height: 60%;
       }
       .home {
@@ -175,12 +218,13 @@ const StyledNavbar = styled.nav`
       }
     }
     .plus-button {
+      cursor: pointer;
       font-size: 35px;
 
       z-index: 1000;
-      position: fixed;
+      position: absolute;
       left: 50%;
-      transform: translate(-50%, -100%);
+      transform: translate(-50%, -75%);
       bottom: 0;
 
       width: 3.0625rem;
