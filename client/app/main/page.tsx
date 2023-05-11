@@ -1,8 +1,9 @@
-
 import { Filter } from "./Filter"
 import { Header } from "./Header";
 import { Lists } from "./Lists"
 import styles from "./page.module.css";
+import { Scroll } from "./Scroll"
+
 
 export default function Main() {
   return (
@@ -10,6 +11,7 @@ export default function Main() {
       <Header />
       <Filter />
       <Lists />
+      <Scroll />
     </main>
   );
 }
