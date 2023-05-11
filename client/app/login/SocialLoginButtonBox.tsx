@@ -21,5 +21,6 @@ const SocialLoginButtonContainer = styled.div`
   flex-direction: column;
   justify-content: space-around;
   height: 180px;
-  margin: 60px 0;
+  margin-top: 60px;
+  margin-bottom: 120px;
 `;

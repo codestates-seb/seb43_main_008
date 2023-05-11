@@ -28,9 +28,7 @@ export default function RootLayout({
       </head>
       <body>
         <StyledComponentsRegistry>
-          <div className="mainContainer">
-            {children}
-          </div>
+          <div className="mainContainer">{children}</div>
         </StyledComponentsRegistry>
       </body>
     </html>
