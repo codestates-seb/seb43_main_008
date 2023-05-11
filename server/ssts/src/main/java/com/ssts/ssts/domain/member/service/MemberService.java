@@ -9,6 +9,7 @@ import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
+import com.ssts.ssts.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -71,11 +72,12 @@ public class MemberService {
     }
 
     @Transactional
-    public Member changeMemberStatusWithdraw(long memberId) {
+    public Member changeMemberStatusWithdraw() {
+        Long memberId= SecurityUtil.getMemberId();
         Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         member.setStatus(Member.Status.WITHDRAW);
         //탈퇴 로그 출력
-        log.debug("memberid="+member.getId()+" 탈퇴처리");
+        log.debug("하늘 security : memberid="+memberId+" 탈퇴처리");
 
         return member;
     }
@@ -102,8 +104,6 @@ public class MemberService {
         }
 
     }
-
-
 
     private boolean isAdmin(String email){
         if(email.contains("@ssts.com")){
