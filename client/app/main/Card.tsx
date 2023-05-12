@@ -37,7 +37,7 @@ export default function Card({ nickName, image, usageCount }: CardProps) {
 export const StyledCard = styled.ul`
   width: 100%;
   padding: 1rem 1.3rem;
-  margin: 0.6rem;
+  margin: 0.6rem 0;
 
   display: flex;
   flex-direction: column;

@@ -32,7 +32,6 @@ const StyledFilter = styled.div`
     display: flex;
     flex-direction: row;
     align-items: baseline;
-    margin-left: 0.8rem;
     margin-bottom: 0.6rem;
     }
     .tag {
