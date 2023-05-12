@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { ActivePost } from './ActivePost';
 import { DonePost } from "./DonePost"
+import { VotingPost } from './VotingPost';
 
 export const Feed = () => {
   // map 돌려서 게시글 불러오기 
@@ -13,12 +14,12 @@ export const Feed = () => {
     <StyledFeed >
       <div className='feed'>
         <ActivePost />
-        <DonePost voting={true} />
-        <DonePost levle={1} />
+        <ActivePost />
+        <VotingPost voting={true} />
         <DonePost />
-        <DonePost />
-        <DonePost />
-        <DonePost />
+        <DonePost level={1} />
+        <DonePost level={1} />
+        <DonePost level={1} />
       </div>
 
     </StyledFeed>
