@@ -9,22 +9,15 @@ import com.ssts.ssts.auth.handler.TestAuthenticationSuccessHandler;
 import com.ssts.ssts.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.auth.service.CustomOAuth2UserService;
 import com.ssts.ssts.auth.utils.CustomAuthorityUtils;
-import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,7 +30,6 @@ public class SecurityConfig {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final MemberRepository memberRepository;
     private final MemberService memberService;
 
 
@@ -57,13 +49,13 @@ public class SecurityConfig {
 //                .addFilterBefore(new JwtTestAuthenticationFilter(jwtTokenizer, authorityUtils,memberService), UsernamePasswordAuthenticationFilter.class)
 //                .addFilterBefore(new JwtVerificationFilter(jwtTokenizer, authorityUtils), JwtTestAuthenticationFilter.class)
                 .authorizeRequests(authorize -> authorize
-                        //.antMatchers(HttpMethod.PATCH,"/**/members/edit/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/**/members/edit/**").hasRole("USER")
                         .antMatchers("/login/**").permitAll()
-                        .antMatchers("/test/**").permitAll()
+                        .antMatchers("/test/login").permitAll()
                         .antMatchers("/test/**").permitAll()
                         .antMatchers("/test/signup").permitAll()
-                        .anyRequest().authenticated()) //FIXME 인증 끌때 여기 주석처리하세요
-                        //.anyRequest().permitAll())
+                        //.anyRequest().authenticated()) //FIXME 인증 끌때 여기 주석처리하세요
+                        .anyRequest().permitAll())
                 .oauth2Login()
                 .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer))
                 .failureHandler(new OAuth2MemberFailureHandler())

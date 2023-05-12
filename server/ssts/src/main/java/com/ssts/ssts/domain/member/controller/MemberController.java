@@ -41,9 +41,10 @@ public class MemberController {
 
 
     /*
-     * 멤버 핸드폰 번호 입력(인증과정 API가 되어야한다)
+     * 회원가입 절차-멤버 핸드폰 번호 입력(인증과정 API가 되어야한다)
      * 권한 : USER, ADMIN
      * */
+    //FIXME 핸드폰번호,이메일,닉네임이.. 다 넘어와야 하는데..어..
     //FIXME [보안문제] 이거 휴대폰 인증 API안쓰면 그냥 번호가 노출되서 나중에 무조건 고쳐야한다.
     @PostMapping("/signup/phone")
     public ResponseEntity inputMemberPhone(@RequestBody MemberPhoneInfoPostDto memberPhoneInfoPostDto){
@@ -54,6 +55,8 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(member.getPhone()+" 휴대폰 번호가 정상적으로 입력되셨습니다.");
 
     }
+
+
 
     /*
     * 멤버 본인 피드 조회 기능
@@ -83,7 +86,7 @@ public class MemberController {
      * 멤버 탈퇴 기능
      * 권한 : USER, ADMIN
      * */
-    @DeleteMapping()
+    @DeleteMapping("/members")
     public ResponseEntity withdrawMember() {
 
         Member member=memberService.changeMemberStatusWithdraw();
@@ -96,7 +99,7 @@ public class MemberController {
     * 멤버 정보 수정
     * 권한 : USER, ADMIN
     * */
-    @PatchMapping("/edit")
+    @PatchMapping("/feed")
     public ResponseEntity updateMemberInfo(@RequestBody MemberEditInfoPatchDto memberEditInfoPatchDto) {
 
         MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto);
