@@ -1,6 +1,6 @@
 "use client";
-
 import Image from 'next/image';
+import Link from 'next/link';
 import { AiOutlineSetting } from "react-icons/ai";
 import { BsAward } from "react-icons/bs";
 import styled from 'styled-components';
@@ -21,14 +21,14 @@ export const Profile = () => {
         <div className='user-info'>한줄 소개<br /> 두줄 소개</div>
       </div>
       <div className='button-box'>
-        <div className='badge'>
+        <Link href="/dodo/badge" className='badge'>
           <BsAward className="icon" />
           <div className='text'>뱃지 보러가기</div>
-        </div>
-        <div className='setting'>
+        </Link>
+        <Link href="/memberEdit" className='setting'>
           <AiOutlineSetting className="icon" />
           <div className='text'>정보 수정하기</div>
-        </div>
+        </Link>
       </div>
     </div>
     <FollowButton type={"팔로워"} />
@@ -42,6 +42,11 @@ const StyledProfile = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  a {
+  color: inherit;
+  text-decoration: none;
+}
 
   .profile-box{
     display: flex;
@@ -64,11 +69,11 @@ const StyledProfile = styled.div`
   }
 
   .button-box{
-    cursor: pointer;
     display: flex;
     flex-direction:column;
 
     .badge, .setting {
+      cursor: pointer;
       margin-left: 10px;
       margin-bottom: 8px;
       display: flex;

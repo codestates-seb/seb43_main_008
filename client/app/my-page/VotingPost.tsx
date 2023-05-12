@@ -32,10 +32,10 @@ const StyledVoting = styled.div`
   }
   .box{
     border-radius: 8px;
-    border: solid 2px rgb(10, 149, 255);
-    box-shadow: 6px 6px rgb(209, 235, 253), -6px 6px rgb(202, 235, 253), -6px -6px rgb(202, 235, 253), 6px -6px rgb(202, 235, 253);
     border: solid 2px #A9907E;
     box-shadow: 6px 6px #FFEAD2, -6px 6px #FFEAD2, -6px -6px #FFEAD2, 6px -6px #FFEAD2;
+    border: solid 2px rgb(10, 149, 255);
+    box-shadow: 6px 6px rgb(209, 235, 253), -6px 6px rgb(202, 235, 253), -6px -6px rgb(202, 235, 253), 6px -6px rgb(202, 235, 253);
     margin-bottom: 4px;
     padding: 0;
   }
