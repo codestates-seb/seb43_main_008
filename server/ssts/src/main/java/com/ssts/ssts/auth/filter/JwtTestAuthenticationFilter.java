@@ -107,7 +107,7 @@ public class JwtTestAuthenticationFilter extends UsernamePasswordAuthenticationF
             String key=keys.next();
             claimsStr+="["+key+"]="+claims.get(key).toString()+"\n";
         }
-        log.info("하늘/jwt(userpassword) : claims=\n"+ claimsStr);
+        log.info("하늘/jwt(username password) : claims=\n"+ claimsStr);
 
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());

@@ -132,11 +132,24 @@ public class MemberService {
     public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto) {
 
         Member member = findMemberByToken();
+        String nickName=memberEditInfoPatchDto.getNickName();
+        String image=memberEditInfoPatchDto.getImage();
+        String introduce= memberEditInfoPatchDto.getIntroduce();
 
         //if문을 왜 쓰느냐? --> 입력안한 값에는 null이 들어가고, DB에 저장되어 버린다. 쌈바?..??훔..
-        member.setImage(memberEditInfoPatchDto.getImage());
-        member.setNickName(memberEditInfoPatchDto.getNickName());
-        member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
+        if (!(nickName == null)) {
+
+            verifyExistsNickName(nickName);
+            member.setNickName(memberEditInfoPatchDto.getNickName());
+        }
+        if (!(image == null)) {
+
+            member.setImage(memberEditInfoPatchDto.getImage());
+        }
+        if (!(introduce == null)) {
+
+            member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
+        }
 
         log.info("하늘 member service : 수정 후 [" +
                 " nickName=" + member.getNickName() +
@@ -144,8 +157,8 @@ public class MemberService {
                 " introduce=" + member.getIntroduce() + "]");
 
         MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
-                member.getImage(),
                 member.getNickName(),
+                member.getImage(),
                 member.getIntroduce());
         return responseDto;
     }

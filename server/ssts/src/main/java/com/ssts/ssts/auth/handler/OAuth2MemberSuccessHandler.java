@@ -51,6 +51,9 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
                 .collect(Collectors.toList());
 
         log.info("하늘/security : authorities="+authorities.toString());
+
+        // 비회원일 경우 (role_guest) -> json_body 에 email 담아서 응답
+        // FIXME token을 암호화해서 쿠키로 발급해야한다.
         if (authorities.toString().equals("[ROLE_GUEST]")) {
 
             GuestObject object = new GuestObject(email);
@@ -77,6 +80,7 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
             }
 
         }else{
+            // 회원일 경우 (role_user/admin) -> 토큰 발급
             redirect(request, response, id, email, authorities); // 권한 정보 받아서 새 요청 만들기
         }
 
