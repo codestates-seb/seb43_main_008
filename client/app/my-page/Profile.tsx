@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { AiOutlineSetting } from "react-icons/ai";
 import { BsAward } from "react-icons/bs";
 import styled from 'styled-components';
+
+import { FollowButton } from './FollowButton';
 export const Profile = () => {
   return <StyledProfile className='box'>
     <div className='profile-box'>
@@ -29,13 +31,12 @@ export const Profile = () => {
         </div>
       </div>
     </div>
-    <button className='follow'>팔로워</button>
+    <FollowButton type={"팔로워"} />
   </StyledProfile>
 }
 
 const StyledProfile = styled.div`
   background-color: #F0F0F0;
-  /* width: 100vw; */
   height: 150px;
   padding:  24px;
   display: flex;
@@ -84,13 +85,5 @@ const StyledProfile = styled.div`
   .image {
     border-radius: 50%;
     margin-right: 18px;
-  }
-  .follow {
-    cursor: pointer;
-    height: 2rem;
-    border-radius: 16px;
-    border: solid 1px #3f910c;
-    background-color: #eff4e7;
-    color: #3f910c;
   }
 `

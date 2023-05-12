@@ -10,7 +10,7 @@ export default function MemberEditLayout({
 }) {
   return (
     <>
-      <Header backButton={true} textContent={"팔로워"} saveButton={false} />
+      <Header backButton={true} textContent={"팔로우"} saveButton={false} />
       {children}
       <Navbar />
     </>
