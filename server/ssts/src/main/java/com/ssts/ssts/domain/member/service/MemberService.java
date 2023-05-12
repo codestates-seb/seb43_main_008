@@ -22,7 +22,10 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member findMember() {
+    /*
+    * 토큰에서 id 가져와서 Member 반환
+    * */
+    public Member findMemberByToken() {
 
         long memberId = SecurityUtil.getMemberId();
         Member member = memberRepository.findById(memberId).
@@ -33,11 +36,37 @@ public class MemberService {
         return member;
     }
 
+    public Member findMemberById(long memberId){
+
+        long findId = SecurityUtil.getMemberId();
+        Member member = memberRepository.findById(findId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        log.info("하늘 member service : member id=" + member.getId() + " 조회");
+
+        return member;
+    }
+
+    public Member findMemberByEmail(String email){
+
+        Member member = memberRepository.findByEmail(email).
+                orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        log.info("하늘 member service : member email=" + member.getEmail() + " 조회");
+
+        return member;
+    }
+
+    /*
+    * 테스트용 회원가입
+    * */
     public Member saveMember(MemberSignUpPostDto memberSignUpPostDto) {
 
-        Member member = Member.of(memberSignUpPostDto.getEmail());
+        Member member = Member.of(memberSignUpPostDto.getEmail(), memberSignUpPostDto.getNickName(), memberSignUpPostDto.getPhone());
 
         verifyExistsEmail(member.getEmail());
+        verifyExistsNickName(member.getNickName());
+        verifyExistsPhoneNumber(member.getPhone());
 
         List<String> roles;
         if (isAdmin(member.getEmail())) {
@@ -52,16 +81,15 @@ public class MemberService {
         return savedMember;
     }
 
-    public MemberFeedResponseDto getMyFeedInfo() {
+    /*
+    * 테스트용 멤버 삭제
+    * */
+    public void deleteMember(long memberId){
 
-        Member member = findMember();
-        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
-                member.getNickName(),
-                member.getImage(),
-                member.getIntroduce());
-
-        return responseDto;
+        memberRepository.deleteById(memberId);
+        log.info("하늘 member service test delete : memberId="+memberId);
     }
+
 
     public MemberFeedResponseDto getFeedInfo(String nickName){
 
@@ -76,10 +104,21 @@ public class MemberService {
     }
 
 
+    public MemberFeedResponseDto getMyFeedInfo() {
+
+        Member member = findMemberByToken();
+        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+                member.getNickName(),
+                member.getImage(),
+                member.getIntroduce());
+
+        return responseDto;
+    }
+
     @Transactional
     public Member changeMemberStatusWithdraw() {
 
-        Member member = findMember();
+        Member member = findMemberByToken();
         member.setDeletedAt(LocalDateTime.now());
         member.setStatus(Member.Status.WITHDRAW);
 
@@ -92,7 +131,7 @@ public class MemberService {
     @Transactional
     public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto) {
 
-        Member member = findMember();
+        Member member = findMemberByToken();
 
         //if문을 왜 쓰느냐? --> 입력안한 값에는 null이 들어가고, DB에 저장되어 버린다. 쌈바?..??훔..
         member.setImage(memberEditInfoPatchDto.getImage());
@@ -114,8 +153,8 @@ public class MemberService {
     @Transactional
     public Member updatePhoneInfo(MemberPhoneInfoPostDto memberPhoneInfoPostDto) {
 
-        Member member = findMember();
-
+        Member member = findMemberByToken();
+        verifyExistsPhoneNumber(memberPhoneInfoPostDto.getPhone());
         member.setPhone(memberPhoneInfoPostDto.getPhone());
 
         log.info("하늘 member service : phone="+member.getPhone()+" 입력");
@@ -125,9 +164,8 @@ public class MemberService {
 
     public void verifyExistsEmail(String email) {
 
-        //내가 만든 Exception을 던지려면 supplier 타입으로 던져야한다.
         Optional<Member> member = memberRepository.findByEmail(email);
-        //멤버가 증명됬다는 의미로 로그를 띄워줘야할까?
+
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATE);
         }
@@ -135,10 +173,19 @@ public class MemberService {
     }
 
     public void verifyExistsPhoneNumber(String phone){
-        Optional<Member> member = memberRepository.findByEmail(phone);
-        //멤버가 증명됬다는 의미로 로그를 띄워줘야할까?
+
+        Optional<Member> member = memberRepository.findByPhone(phone);
+
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.PHONENUMBER_DUPLICATE);
+        }
+    }
+
+    public void verifyExistsNickName(String nickName){
+        Optional<Member> member = memberRepository.findByNickName(nickName);
+
+        if (member.isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_DUPLICATE);
         }
     }
 

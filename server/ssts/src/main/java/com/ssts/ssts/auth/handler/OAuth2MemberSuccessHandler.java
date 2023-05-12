@@ -100,44 +100,37 @@ public class OAuth2MemberSuccessHandler implements AuthenticationSuccessHandler 
 
     //FIXME
     private String delegateAccessToken(long id, String email, List<String> authorities) {
-        //email과 권한 받아옴
+
+        // 1.subject = email (principal)
+        String subject = email;
+
+        // 2.claim = id, roles
+        // FIXME 나중에 스트림으로 처리하기
         Map<String, Object> claims = new HashMap<>();
-        claims.put("email", email);
         claims.put("roles", authorities);
         claims.put("id", id);
 
+        // claims 구성 확인
         String claimsStr="";
         Iterator<String> keys=claims.keySet().iterator();
         while(keys.hasNext()){
             String key=keys.next();
             claimsStr+="["+key+"]="+claims.get(key).toString()+"\n";
         }
-        log.info("하늘/jwt : claims=\n"+ claimsStr);
+        log.info("하늘/jwt(oauth) : claims=\n"+ claimsStr);
 
-        String subject = email;
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-        //JWT에 넣을 만기시간 만들기
-
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        //(string->base64) key
-
         String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-        //access token만들기
-        //질문) subject는 어디에 쓰는 건데?
-        // -> subject은 정보의 주체를 나타내는 속성이다. id나 email, 즉 식별자를 넣으면 된다. 반드시 필요
-        // 그런데 보통 문자열 타입을 넣는다네, 그럼 email넣자.
 
         return accessToken;
     }
 
-    private String delegateRefreshToken(String username) {
+    private String delegateRefreshToken(String email) {
 
-        //access token과는 다르게 claims를 넣지 않는다.
-
-        String subject = username;
+        String subject = email;
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
         String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
 
         return refreshToken;

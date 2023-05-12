@@ -58,10 +58,12 @@ public class Member extends BaseTimeEntity {
     private List<Series> series;
 
     // of 정적 팩토리 메서드 - 임시 회원가입
-    public static Member of(String email) {
+    public static Member of(String email,String nickName, String phone) {
         Member member=new Member();
 
         member.setEmail(email);
+        member.setNickName(nickName);
+        member.setPhone(phone);
 
         return member;
     }

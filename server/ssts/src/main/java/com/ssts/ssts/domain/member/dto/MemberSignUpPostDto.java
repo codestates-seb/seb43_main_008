@@ -9,5 +9,7 @@ import lombok.Setter;
 public class MemberSignUpPostDto {
     //테스트 용
     String email;
+    String nickName;
+    String phone;
 
 }

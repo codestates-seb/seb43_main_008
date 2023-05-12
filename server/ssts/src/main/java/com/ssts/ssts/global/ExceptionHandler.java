@@ -27,6 +27,15 @@ public class ExceptionHandler {
 
         } else if(ex.getExceptionCode()==ExceptionCode.SECURITY_NO_CREDENTIALS){
             response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.SECURITY_NO_CREDENTIALS.getMessage());
+
+        } else if (ex.getExceptionCode() == ExceptionCode.NICKNAME_DUPLICATE) {
+            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.NICKNAME_DUPLICATE.getMessage());
+
+        } else if (ex.getExceptionCode() == ExceptionCode.PHONENUMBER_DUPLICATE) {
+            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.PHONENUMBER_DUPLICATE.getMessage());
+
+        } else if (ex.getExceptionCode() == ExceptionCode.SECURITY_TEST_LOGIN_NO_MEMBER) {
+            response = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionCode.PHONENUMBER_DUPLICATE.getMessage());
         }
 
         return response;
