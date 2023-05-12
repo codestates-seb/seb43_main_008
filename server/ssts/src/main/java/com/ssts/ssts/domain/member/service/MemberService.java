@@ -1,12 +1,8 @@
 package com.ssts.ssts.domain.member.service;
 
-import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
-import com.ssts.ssts.domain.member.dto.MemberEditInfoResponseDto;
-import com.ssts.ssts.domain.member.dto.MemberMyPageResponseDto;
-import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
+import com.ssts.ssts.domain.member.dto.*;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
-import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
 import com.ssts.ssts.utils.security.SecurityUtil;
@@ -25,93 +21,112 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    //세큐리티 추가시 동작가능
-    //private final PasswordEncoder passwordEncoder;
-    private final SeriesRepository seriesRepository;
 
-    /*
-    * 회원가입 용 api
-    * 권한 : ADMIN, USER
-    * */
+    public Member findMember() {
+
+        long memberId = SecurityUtil.getMemberId();
+        Member member = memberRepository.findById(memberId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        log.info("하늘 member service : memberid=" + member.getId() + " 조회");
+
+        return member;
+    }
+
     public Member saveMember(MemberSignUpPostDto memberSignUpPostDto) {
-        //ouath 로만 로그인 구현하면.. password 필요없는거 아냐..? 나중에 구현 후 생각해보기.
-        Member member=Member.of(memberSignUpPostDto.getEmail());
+
+        Member member = Member.of(memberSignUpPostDto.getEmail());
 
         verifyExistsEmail(member.getEmail());
 
         List<String> roles;
-        if(isAdmin(member.getEmail())){
-            roles=List.of("ADMIN","USER");
-        }else{
-            roles=List.of("USER");
+        if (isAdmin(member.getEmail())) {
+            roles = List.of("ADMIN", "USER");
+        } else {
+            roles = List.of("USER");
         }
         member.setRoles(roles);
 
-        Member savedMember=memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
 
         return savedMember;
     }
 
-    /*
-    * 마이페이지 정보
-    * 권한 : ADMIN, USER
-    * 응답 : 유저정보(nickName, image, introduce)
-    *  */
-    public MemberMyPageResponseDto getMyPageMemberInfo() {
+    public MemberFeedResponseDto getMyFeedInfo() {
 
-        long memberId= SecurityUtil.getMemberId();
-        Member member = findMemberById(memberId);
-        MemberMyPageResponseDto responseDto=MemberMyPageResponseDto.of(member.getNickName(),
+        Member member = findMember();
+        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+                member.getNickName(),
                 member.getImage(),
                 member.getIntroduce());
 
         return responseDto;
     }
 
-    public Member findMemberById(long memberId){
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    public MemberFeedResponseDto getFeedInfo(String nickName){
 
-        log.info("하늘 member service : member nickName="+member.getNickName()+" 조회");
+        Member member = memberRepository.findByNickName(nickName).
+                orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+                member.getNickName(),
+                member.getImage(),
+                member.getIntroduce());
 
-        return member;
+        return responseDto;
     }
+
 
     @Transactional
     public Member changeMemberStatusWithdraw() {
-        long memberId= SecurityUtil.getMemberId();
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        Member member = findMember();
         member.setDeletedAt(LocalDateTime.now());
         member.setStatus(Member.Status.WITHDRAW);
 
-        log.info("하늘 member service : memberid="+memberId+", "+member.getDeletedAt()+"에 탈퇴처리");
+        log.info("하늘 member service : memberid=" + member.getId() +
+                ", " + member.getDeletedAt() + "에 탈퇴처리");
 
         return member;
     }
 
     @Transactional
-    public MemberEditInfoResponseDto updateMemberInfo(MemberEditInfoPatchDto memberEditInfoPatchDto) {
-        long memberId=SecurityUtil.getMemberId();
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto) {
+
+        Member member = findMember();
 
         //if문을 왜 쓰느냐? --> 입력안한 값에는 null이 들어가고, DB에 저장되어 버린다. 쌈바?..??훔..
-
         member.setImage(memberEditInfoPatchDto.getImage());
         member.setNickName(memberEditInfoPatchDto.getNickName());
         member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
 
         log.info("하늘 member service : 수정 후 [" +
-                " nickName="+member.getNickName()+
-                " image="+member.getImage()+
-                " introduce="+member.getIntroduce()+"]");
+                " nickName=" + member.getNickName() +
+                " image=" + member.getImage() +
+                " introduce=" + member.getIntroduce() + "]");
 
-        MemberEditInfoResponseDto responseDto = MemberEditInfoResponseDto.of(member.getImage(), member.getNickName(), member.getIntroduce());
+        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+                member.getImage(),
+                member.getNickName(),
+                member.getIntroduce());
         return responseDto;
+    }
+
+    @Transactional
+    public Member updatePhoneInfo(MemberPhoneInfoPostDto memberPhoneInfoPostDto) {
+
+        Member member = findMember();
+
+        member.setPhone(memberPhoneInfoPostDto.getPhone());
+
+        log.info("하늘 member service : phone="+member.getPhone()+" 입력");
+
+        return member;
     }
 
     public void verifyExistsEmail(String email) {
 
         //내가 만든 Exception을 던지려면 supplier 타입으로 던져야한다.
-        Optional<Member> member=memberRepository.findByEmail(email);
+        Optional<Member> member = memberRepository.findByEmail(email);
         //멤버가 증명됬다는 의미로 로그를 띄워줘야할까?
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATE);
@@ -119,10 +134,18 @@ public class MemberService {
 
     }
 
-    private boolean isAdmin(String email){
-        if(email.contains("@ssts.com")){
+    public void verifyExistsPhoneNumber(String phone){
+        Optional<Member> member = memberRepository.findByEmail(phone);
+        //멤버가 증명됬다는 의미로 로그를 띄워줘야할까?
+        if (member.isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.PHONENUMBER_DUPLICATE);
+        }
+    }
+
+    private boolean isAdmin(String email) {
+        if (email.contains("@ssts.com")) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

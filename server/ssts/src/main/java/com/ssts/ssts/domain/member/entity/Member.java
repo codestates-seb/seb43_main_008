@@ -20,12 +20,15 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //signup test시 post 입력받음---------------------------
+    // null 불가능 ---------------------------
     @Column(nullable = false)
     private String nickName;
 
     @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private String phone;
     //---------------------------------------
 
     @ElementCollection(fetch = FetchType.EAGER)

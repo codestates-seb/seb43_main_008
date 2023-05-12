@@ -46,7 +46,8 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.PATCH,"/**/members/edit/**").hasRole("USER")
                         .antMatchers("/login/**").permitAll()
                         .antMatchers(HttpMethod.POST,"/members/signup").permitAll()
-                        .anyRequest().authenticated())
+                        //.anyRequest().authenticated()) //FIXME 인증 끌때 여기 주석처리하세요
+                        .anyRequest().permitAll())
                 .oauth2Login()
                 .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer))
                 .failureHandler(new OAuth2MemberFailureHandler())
