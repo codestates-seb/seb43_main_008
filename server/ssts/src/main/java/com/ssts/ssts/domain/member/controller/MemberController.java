@@ -19,9 +19,8 @@ public class MemberController {
     * 테스트용 멤버 회원가입 기능
     * 권한 : ADMIN
     * */
-    @PostMapping("/signup")
+    @PostMapping("/test/signup")
     public ResponseEntity createMember(@RequestBody MemberSignUpPostDto memberSignUpPostDto) {
-
 
         Member member = memberService.saveMember(memberSignUpPostDto);
 
@@ -29,11 +28,24 @@ public class MemberController {
     }
 
     /*
+     * 테스트용 멤버 회원 삭제 기능
+     * 권한 : ADMIN
+     * */
+    @DeleteMapping("/test/{memberId}")
+    public ResponseEntity deleteMember(@PathVariable long memberId) {
+
+        memberService.deleteMember(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+
+
+    /*
      * 멤버 핸드폰 번호 입력(인증과정 API가 되어야한다)
      * 권한 : USER, ADMIN
      * */
     //FIXME [보안문제] 이거 휴대폰 인증 API안쓰면 그냥 번호가 노출되서 나중에 무조건 고쳐야한다.
-    @PostMapping("signup/phone")
+    @PostMapping("/signup/phone")
     public ResponseEntity inputMemberPhone(@RequestBody MemberPhoneInfoPostDto memberPhoneInfoPostDto){
 
         Member member=memberService.updatePhoneInfo(memberPhoneInfoPostDto);
@@ -47,7 +59,7 @@ public class MemberController {
     * 멤버 본인 피드 조회 기능
     * 권한 : USER, ADMIN
     * */
-    @GetMapping("/mypage")
+    @GetMapping("/feed")
     public ResponseEntity<MemberFeedResponseDto> getMyFeed() {
 
         MemberFeedResponseDto response = memberService.getMyFeedInfo();
@@ -59,7 +71,7 @@ public class MemberController {
      * 상대 멤버 피드 조회 기능
      * 권한 : USER, ADMIN
      * */
-    @GetMapping("/mypage/{nickName}")
+    @GetMapping("/feed/{nickName}")
     public ResponseEntity<MemberFeedResponseDto> getFeed(@PathVariable String nickName) {
 
         MemberFeedResponseDto response = memberService.getFeedInfo(nickName);

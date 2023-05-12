@@ -5,6 +5,7 @@ import com.ssts.ssts.auth.utils.CustomOAuth2User;
 import com.ssts.ssts.auth.utils.SocialType;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -21,7 +22,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final CustomAuthorityUtils authorityUtils;
 
     private static final String NAVER = "naver";
@@ -29,7 +30,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("하늘/security CustomOAuth2UserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
+        log.info("하늘/security : CustomOAuth2UserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
         //결과적으로, OAuth2User는 OAuth 서비스에서 가져온 유저 정보를 담고 있는 유저
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
@@ -83,10 +84,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         String email=getEmailBySocialType(socialType, attributes);
         // 멤버 만든다아...
-        Optional<Member> member = memberRepository.findByEmail(email); // getUser() 메소드로 User 객체 생성 후 반환
+        Member member = memberService.findMemberByEmail(email); // getUser() 메소드로 User 객체 생성 후 반환
 
 
-        if(!member.isPresent()){
+        if(member ==null){
             return new CustomOAuth2User(
                     authorityUtils.createAuthorities(List.of("GUEST")),
                     attributes,
@@ -96,10 +97,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
         // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
         return new CustomOAuth2User(
-                authorityUtils.createAuthorities(member.get().getRoles()),
+                authorityUtils.createAuthorities(member.getRoles()),
                 attributes,
                 userNameAttributeName,
-                member.get().getId(),
+                member.getId(),
                 email
         );
     }
