@@ -35,6 +35,7 @@ export const Profile = () => {
 
 const StyledProfile = styled.div`
   background-color: #F0F0F0;
+  width: 100vw;
   height: 150px;
   padding:  24px;
   display: flex;

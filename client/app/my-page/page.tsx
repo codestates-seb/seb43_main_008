@@ -16,7 +16,7 @@ export default function MyPage() {
   <Series/>
     id
     (memberId)
-    isPublic : 투표중 여부
+    isPublic : 시리즈 비밀글 여부
     isActive : 졸업 여부
     
     1️⃣ 아직 쓰고 있어서 투표를 안한 상태
