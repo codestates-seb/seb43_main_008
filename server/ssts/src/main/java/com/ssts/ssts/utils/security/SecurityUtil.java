@@ -19,9 +19,6 @@ public class SecurityUtil {
 
     public static Long getMemberId() {
 
-        //CustomOAuth2User OAuth2User = (CustomOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        CustomOAuth2User oAuth2User = null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 
