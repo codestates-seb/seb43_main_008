@@ -82,7 +82,6 @@ export const Slider = (): JSX.Element => {
 
 const StyledSlider = styled.div`
   width: 100%;
-  /* min-width: 390px; */
 
   display: flex;
   flex-direction: column;
@@ -101,6 +100,7 @@ const StyledSlider = styled.div`
     overflow: scroll;
     width: 100%;
     padding-bottom: 24px;
+    margin-top: 10px;
     transition: 0.3s ease-in;
   }
 

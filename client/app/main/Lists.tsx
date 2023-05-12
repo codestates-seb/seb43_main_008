@@ -1,5 +1,6 @@
 "use client";
 
+import Link from 'next/link';
 import styled from "styled-components";
 
 import Card from "./Card";
@@ -9,16 +10,20 @@ export const Lists = () => {
   return (
     <StyledLists className="list">
       {list.map((data) => (
-        <li className="item" key={data.id}>
+        <Link href="/detail" className="item" key={data.id}>
           <Card key={data.id} {...data} />
-        </li>
+        </Link>
       ))}
     </StyledLists>
   )
 }
 
 const StyledLists = styled.section`
-    .list {
+  a {
+  color: inherit;
+  text-decoration: none;
+  }
+  .list {
     display: flex;
     flex-direction: column;
     justify-content: center;
