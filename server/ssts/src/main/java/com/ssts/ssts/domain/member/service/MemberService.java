@@ -36,6 +36,14 @@ public class MemberService {
         return member;
     }
 
+    public Member findMemberByNickName(String nickName) {
+        Member member = memberRepository.findByNickName(nickName).
+                orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        log.info("하늘 member service : member nickName="+member.getNickName());
+        return member;
+    }
+
     public Member findMemberById(long memberId){
 
         long findId = SecurityUtil.getMemberId();
