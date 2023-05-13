@@ -37,14 +37,16 @@ public class ExceptionHandler {
         } else if (ex.getExceptionCode() == ExceptionCode.SECURITY_TEST_LOGIN_NO_MEMBER) {
             response = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionCode.PHONENUMBER_DUPLICATE.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.VOTE_NOT_FOUND) {
-            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vote Not found.");
+            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.VOTE_NOT_FOUND.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.CAN_NOT_MAKE_VOTE) {
-            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can Not Make Vote.");
+            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.CAN_NOT_MAKE_VOTE.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.DEADLINE_FALL_SHORT) {
-            response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Deadline Fall Short.");
+            response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.DEADLINE_FALL_SHORT.getMessage());
+        }else if (ex.getExceptionCode()==ExceptionCode.MEMBER_ALREADY_VOTE) {
+            response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.MEMBER_ALREADY_VOTE.getMessage());
         }
         else if (ex.getExceptionCode()==ExceptionCode.SERIES_NOT_EXISTS) {
-            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body("Series Not Exist");
+            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.SERIES_NOT_EXISTS.getMessage());
         }
 
         return response;

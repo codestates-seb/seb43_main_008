@@ -13,6 +13,7 @@ package com.ssts.ssts.domain.series.service;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.entity.MemberVote;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
@@ -20,6 +21,7 @@ import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.domain.series.response.vote.VoteResponse;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
+import com.ssts.ssts.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -177,8 +179,11 @@ public class VoteService {
 
     //투표 하기----------------------------------------------------------------------------------------
     @Transactional
-    //public Series attendVote(Long seriesId, int isAgree){
-    public Object attendVote(Long seriesId, int isAgree, Long memberId) {
+    //public VoteResponse attendVote(Long seriesId, int isAgree){ //TODO 토큰 테스트시에 주석 풀기
+    public Object attendVote(Long seriesId, int isAgree, Long memberId) { //@@토큰 로직@@
+
+
+
         //[투표하기: 예외 처리]
         //이거 근데 응답값 안주는거면 반환값 필요없잖아 <<<<<< !!!!! 고민해보기 !!!!!!
 
@@ -201,9 +206,16 @@ public class VoteService {
         //예외 코드 만들어서 글로 빼고 시작화기
         //위에서부터 쭉 내리니까 if() => Exception 형식으로 진행하기
 
+        //TODO *-토큰Id적용--* TODO토큰시에 주석풀기
+        //long memberId = SecurityUtil.getMemberId();
+        //memberRepo.findById(memberId).
+        //        orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+
         //[1. 시리즈가 존재하지 않습니다.]-----------------------------------
         //Series targetSeries = findSeriesById(seriesId).orElseThrow(); //시리즈 Id를 통해 Series 객체 꺼내기
         Series targetSeries = seriesRepo.findById(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+
         //ㄴ> 응답값을 만들기 위해 존재
         int voteCount = targetSeries.getVoteCount();
 
@@ -245,7 +257,7 @@ public class VoteService {
         //있으면 예외 !
         //ㄴ> jpa 다중 조건 걸 수 잇음 ????????? => [Spring] JPA Specification~~~~!!!!!1
         //ㄴ>repository 메소드 보기
-        Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(memberId, seriesId);
+        Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(memberId, seriesId); //true => false
         //ㄴ> 존재하지 않을 때 예외처리: .orElseThrow(IllegalArgumentException::new);
         //IllegalArgumentException : 잘못된 매개변수가 옴
         //ㄴ>existsBy: 찾아서 boolean 값 반환해줌
@@ -274,7 +286,7 @@ public class VoteService {
             } else if (isAgree == 0) {
                 targetSeries.setVoteDisagree(targetSeries.getVoteDisagree() + 1);
             } else {
-                return targetSeries;
+                return voteCountResponse(targetSeries.getId(),targetSeries);
             }
 
             //set vote Result
@@ -361,10 +373,17 @@ public class VoteService {
     @Transactional //[모든 예외를 거치고 남은 걸려져서 들어오는 값이 종료하기의 조건이 되도록]
     //public Series attendVote(Long seriesId, int isAgree){ [Boolean isQuit: 투표를 더 할지 말지 결정하는 값 (더 안한다:1) / (더 한다:0)]
     public Object quitVote(Long seriesId, Boolean isQuit, Long memberId){ //[마감 1개 하고 재투표 없이 종료하는 경우] => 새 페이지 처리
+    //public Object quitVote(Long seriesId, Boolean isQuit, Long memberId){ //TODO 토큰 적용시에 풀기
+
+        //TODO *-토큰Id적용--* TODO토큰시에 주석풀기
+        //long memberId = SecurityUtil.getMemberId();
+        //memberRepo.findById(memberId).
+        //        orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
         Series targetSeries = seriesRepo.findById(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
         //투표 재시도의 선택권이 없는 예외 거르기
-        //예외: 투표를 개설한 본인이 아닙니다
+        //예외: 투표를 개설한 본인이 아닙니다 //TODO 토큰
         if(targetSeries.getMember().getId() != memberId){
             //투표를 개설한 본인이 아닙니다
             //throw new BusinessLogicException(ExceptionCode.)
