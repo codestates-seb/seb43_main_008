@@ -67,18 +67,21 @@ public class SeriesService {
 
         //[마감 기한이 지난 경우 + 투표 2회를 전부 진행한 경우 상태 변경]
         if (series.getVoteCount()==2 && currentTime.isAfter(series.getVoteEndAt())) {
-            series.setEditable(true); //타이틀 수정 가능
+            series.setEditable(false); //타이틀 수정 불가능
             series.setActive(false); //활성 상태 끄기능 (프론트 세피아처리)
             series.setSeriesStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
             seriesRepository.save(series);
         }
 
+        //사용자가 재투표 연다는 선택을 하기 전, 자동으로 바뀌는 값임
         //[마감기한이 지났지만, 재투표의 기회가 있는 경우의 상태 변경] => 활성 상태는 변경하지 않고, 수정이 자동으로 가능하도록 합니다. //리팩토링 부분: vote는 voteCount==1이기 때문에 voteCount를 꼭 써야 하는가? ㅇㅇㅇㅇ api 진입점때문에
         else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==false){
-            series.setEditable(true); //수정 가능
+            series.setEditable(false); //수정 불가능
+            series.setActive(false);
             series.setSeriesStatus(Series.VoteStatus.SERIES_QUIT);
             //ㄴ> 재시도의 기회가 있고, 재시도를 하지 않는 사용자의 경우는 투표 종료 버튼을 누른다
             //ㄴ> 투표를 재시도 한다고 선택하지 않는 이상, serise의 상태는 SERIES_QUIT가 됨
+            //ㄴ> 사용자가 확인하기 전 -> 사용자가
             seriesRepository.save(series);
         }
         //ㄴ> 활성 상태를 그대로 켜는 이유는, 재투표를 할지 말지에 대한 선택을 따로 진행하기 때문

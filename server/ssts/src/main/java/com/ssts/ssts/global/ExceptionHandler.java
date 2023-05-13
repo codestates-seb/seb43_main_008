@@ -42,11 +42,16 @@ public class ExceptionHandler {
             response=ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.CAN_NOT_MAKE_VOTE.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.DEADLINE_FALL_SHORT) {
             response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.DEADLINE_FALL_SHORT.getMessage());
-        }else if (ex.getExceptionCode()==ExceptionCode.MEMBER_ALREADY_VOTE) {
+        } else if (ex.getExceptionCode()==ExceptionCode.MEMBER_ALREADY_VOTE) {
             response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.MEMBER_ALREADY_VOTE.getMessage());
-        }
-        else if (ex.getExceptionCode()==ExceptionCode.SERIES_NOT_EXISTS) {
+        } else if (ex.getExceptionCode()==ExceptionCode.SERIES_NOT_EXISTS) {
             response=ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.SERIES_NOT_EXISTS.getMessage());
+        } else if (ex.getExceptionCode()==ExceptionCode.NOT_HAVE_VOTE_AUTHORITY) {
+            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY.getMessage());
+        } else if (ex.getExceptionCode()==ExceptionCode.VOTE_RESULT_IS_NOT_EXSIST) {
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.VOTE_RESULT_IS_NOT_EXSIST.getMessage());
+        } else if (ex.getExceptionCode()==ExceptionCode.THIS_VOTE_RESULT_IS_TRUE) {
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE.getMessage());
         }
 
         return response;

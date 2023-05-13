@@ -369,11 +369,21 @@ public class VoteService {
     //마감 1개 하고 재투표 없이 종료하는 경우
     //투표 도중에 강제중단 => 없는걸로 해
 
+    //<비정상 종료>
+    //비정상 종료의 기본값은 사용자가 종료할 때의 값하고 동일함
+    //그렇기 때문에 1차투표를 한다고 골랐을 때,
+
+    //(1차 투표 재시도 가능할 때)
+    //수정가능 꺼짐 -> 강제종료시에 나 투표할게 ㅇㅇㅇ 하는 순간 열려야 함
+    //isActive꺼짐 -> 위와동일
+
+    //의 수정값이 들어감
+    //비정상 졸업시에는 지금 시간 지난후의 마감값 그대로 가면 되어서 뭐 건들 게 없음
 
     @Transactional //[모든 예외를 거치고 남은 걸려져서 들어오는 값이 종료하기의 조건이 되도록]
     //public Series attendVote(Long seriesId, int isAgree){ [Boolean isQuit: 투표를 더 할지 말지 결정하는 값 (더 안한다:1) / (더 한다:0)]
-    public Object quitVote(Long seriesId, Boolean isQuit, Long memberId){ //[마감 1개 하고 재투표 없이 종료하는 경우] => 새 페이지 처리
-    //public Object quitVote(Long seriesId, Boolean isQuit, Long memberId){ //TODO 토큰 적용시에 풀기
+    public Object quitVote(Long seriesId,  Long memberId, Boolean isQuit){ //[마감 1개 하고 재투표 없이 종료하는 경우] => 새 페이지 처리
+    //public Object quitVote(Long seriesId, Boolean isQuit){ //TODO 토큰 적용시에 풀기
 
         //TODO *-토큰Id적용--* TODO토큰시에 주석풀기
         //long memberId = SecurityUtil.getMemberId();
@@ -387,50 +397,57 @@ public class VoteService {
         if(targetSeries.getMember().getId() != memberId){
             //투표를 개설한 본인이 아닙니다
             //throw new BusinessLogicException(ExceptionCode.)
-            return null;
+            throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
         }
 
         //예외: 투표를 개설하지 않았습니다
         if (targetSeries.getVoteCount()==0) {
-            return null;
+            throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
         }
 
         //예외: 투표의 총 횟수를 다 씀
         if(targetSeries.getVoteCount()!=1){
             //투표 종료에 대한 권한이 없습니다
-            return null;
+            throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
         }
 
 
         //[리팩토링 진입점: voteCount는 2부터 걸러지기 때문에, 1밖에 안들어옴. 조건에 1이 달릴 이유가 있나?]
         //if(targetSeries.getVoteCount()==1 && targetSeries.getVoteResult()){
+        if(targetSeries.getVoteResult()==null){
+            //투표 결과가 존재하지 않습니다
+            throw new BusinessLogicException(ExceptionCode.VOTE_RESULT_IS_NOT_EXSIST);
+        }
 
 
         //예외: 최초투표를 진행함, 최초투표에서 찬성 결과가 나옴 (voteCount==1 && voteResult==true)
         if(targetSeries.getVoteResult()){
-            //투표 종료에 대한 권한이 없습니다
-            return null;
+            //이 투표는 이미 졸업했어요!
+            throw new BusinessLogicException(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE);
         }
 
         //예외: 최초투표를 진행햤는데, 마감기한이 지나지 않은 상태 (voteCount==1 && 마감기간이 지나지 않은 경우)
         if(isVotedNotEntAt(targetSeries)){
             //투표 종료에 대한 권한이 없습니다
-            return null;
+            throw new BusinessLogicException(ExceptionCode.DEADLINE_FALL_SHORT);
         }
 
         //걸려지는 경우 (1) 투표를 더 한다고 선택 ( && voteCount==1)
-        if(!isQuit){
+        if(!isQuit){ //(isQuit==false)
             //voteCount가 1인 상태에서, 자동 마감 시간이 지나면, VoteStatus는 SERIES_QUIT 상태가 됨
             //voteService => quitVote에서 투표를 더 한다고 선택하지 않으면, 상태는 계속 SERISE_QUIT
             //quitVote에서 투표를 더 한다고 선택하면, VoteStatus: SERISE_ACTIVE 변경
+            targetSeries.setEditable(true);
+            targetSeries.setActive(true);
             targetSeries.setSeriesStatus(Series.VoteStatus.SERIES_ACTIVE);
         }
 
-        //걸러지는 경우 (2) / 최종: 투표를 더 안할게요 voteCount==1&&voteResult==false => 로직이 도는 대상
-        targetSeries.setEditable(true); //타이틀 수정 가능
+        //걸러지는 경우 (2) / 최종: 투표를 더 안할게요 voteCount==1&&voteResult==false => 로직이 도는 대상 (isQuit==1)
+        else {
+        targetSeries.setEditable(false); //타이틀 수정 가능
         targetSeries.setActive(false); //활성 상태
         targetSeries.setSeriesStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
-
+        }
 
         return voteCountResponse(targetSeries.getId(), targetSeries);
     }
@@ -482,7 +499,8 @@ public class VoteService {
                     targetSeries.getVoteEndAt()
             );
         }else {
-            throw new IllegalArgumentException("ㅇㅓ쩌구 ..");
+            //throw new IllegalArgumentException("ㅇㅓ쩌구 ..");
+            throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND);
         }
 
     }

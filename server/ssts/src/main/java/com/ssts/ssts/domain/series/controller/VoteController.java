@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
+import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/series/votes")
@@ -43,10 +44,10 @@ public class VoteController {
 
 
     //투표 종료
-    @PatchMapping("/{series_id}/{member_id}")
-    public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, Boolean isQuit){ //프론트가 boolean으로 보내야
+    @PatchMapping("/quit/{series_id}/{member_id}") //이제 500에러 디버깅 돌리기
+    public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathVariable("member_id") Long memberId, @PathParam("isQuit") Boolean isQuit){ //프론트가 boolean으로 보내야
 
-        VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, isQuit, 1L);
+        VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
