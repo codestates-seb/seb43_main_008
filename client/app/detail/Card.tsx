@@ -5,7 +5,6 @@ import styled from "styled-components";
 export const StyledCard = styled.section`
   padding: 24px 21px;
   margin: 16px 24px;
-
   display: flex;
   flex-direction: column;
 

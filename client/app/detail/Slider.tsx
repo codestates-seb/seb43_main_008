@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 import slides from "../main/list";
 import { Slide } from "./Slide";
-
 export const Slider = (): JSX.Element => {
   // 🚨 렌더되기 전에 슬라이더 조작하면 에러남. 
   // 마우스 스크롤로 슬라이드 이동을 위해 DOM에 접근한다.
@@ -30,7 +29,7 @@ export const Slider = (): JSX.Element => {
       scrollRef.current.scrollLeft = startX - e.pageX;
       console.log("함수 실행중")
 
-      if (scrollWidth <= Math.floor(clientWidth + scrollLeft)) {
+      if (scrollWidth <= Math.ceil(clientWidth + scrollLeft)) {
         console.log("서버에 다음 페이지 요청하기 & 요청중이라면 재요청 안보내기")
       }
 
