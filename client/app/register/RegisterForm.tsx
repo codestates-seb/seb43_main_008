@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -19,7 +20,19 @@ export default function RegisterForm() {
     mode: "onChange", // This is needed to make `isValid` work properly
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+  const submitRegister: SubmitHandler<FormValues> = async (data) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/test/signup`,
+        data
+      );
+      console.log(response);
+      // handle the response as per your needs
+    } catch (error) {
+      console.log(error);
+      // handle the error as per your needs
+    }
+  };
 
   // Mocked email from Google
   const googleEmail = "user@gmail.com";
@@ -28,7 +41,7 @@ export default function RegisterForm() {
   const watchedPhoneNumber = watch("phoneNumber");
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(submitRegister)}>
       <InputContainer>
         <Label htmlFor="email">이메일</Label>
         <Input
