@@ -13,7 +13,7 @@ export const VotingPost: React.FC<Props> = ({ level, voting }) => {
   return (
     <StyledVoting>
       <div className='box'>
-        <div className="image" style={{ backgroundImage: `url(${data.image})` }}> {voting ? <div className='voting'>투표중</div> : null}</div>
+        <div className="image" style={{ backgroundImage: `url(${data.image})` }}> {voting ? <div className='voting'>투표중</div> : <div className='voting'>투표완료</div>}</div>
       </div>
       <div className='text'> 세바스찬 </div>
       {level ? <Medal /> : null}
@@ -42,7 +42,7 @@ const StyledVoting = styled.div`
   .image {
     filter: grayscale(80%);
 
-    width: calc(75vw / 3);
+    width: calc(74vw / 3);
     max-width: 256px;
     height: calc(74vw / 3);
 

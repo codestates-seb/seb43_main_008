@@ -14,8 +14,8 @@ export const Feed = () => {
     <StyledFeed >
       <div className='feed'>
         <ActivePost />
-        <ActivePost />
         <VotingPost voting={true} />
+        <VotingPost voting={false} />
         <DonePost level={1} />
         <DonePost level={1} />
         <DonePost level={1} />

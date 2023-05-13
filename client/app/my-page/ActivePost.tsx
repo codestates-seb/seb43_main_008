@@ -8,7 +8,7 @@ export const ActivePost = () => {
   return (
     <StyledActive>
       <div className="image" style={{ backgroundImage: `url(${data.image})` }} />
-      <div className='text'> 세바스찬 </div>
+      <div className='text'> 공백포함여덟글자 </div>
     </StyledActive>
   )
 }
