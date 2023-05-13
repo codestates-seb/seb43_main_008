@@ -36,7 +36,7 @@ const StyledVoting = styled.div`
     box-shadow: 6px 6px #FFEAD2, -6px 6px #FFEAD2, -6px -6px #FFEAD2, 6px -6px #FFEAD2;
     /* border: solid 2px rgb(10, 149, 255);
     box-shadow: 6px 6px rgb(209, 235, 253), -6px 6px rgb(202, 235, 253), -6px -6px rgb(202, 235, 253), 6px -6px rgb(202, 235, 253); */
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     padding: 0;
   }
   .image {

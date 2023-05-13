@@ -9,6 +9,7 @@ export const ActivePost = () => {
     <StyledActive>
       <div className="image" style={{ backgroundImage: `url(${data.image})` }} />
       <div className='text'> 공백포함여덟글자 </div>
+
     </StyledActive>
   )
 }
@@ -38,8 +39,5 @@ const StyledActive = styled.div`
     background-size: cover;
     border-radius: 5px;
   }
-  @media screen and (min-width: 1024px) {
-      width: 270px;
-      height: 270px;
-  }
+
 `
