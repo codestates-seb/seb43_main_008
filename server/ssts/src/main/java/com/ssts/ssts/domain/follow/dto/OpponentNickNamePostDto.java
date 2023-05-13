@@ -2,10 +2,9 @@ package com.ssts.ssts.domain.follow.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
 
 @Getter
 @Setter
-public class FollowingPostDto {
+public class OpponentNickNamePostDto {
     String nickName;
 }
