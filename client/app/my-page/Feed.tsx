@@ -11,7 +11,7 @@ export const Feed = () => {
 
   return (
 
-    <StyledFeed >
+    <StyledFeed className='container'>
       <div className='feed'>
         <ActivePost />
         <VotingPost voting={true} />
@@ -28,8 +28,8 @@ export const Feed = () => {
 
 const StyledFeed = styled.div`
   width: 100%;
-
   padding: 24px;
+
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -37,12 +37,9 @@ const StyledFeed = styled.div`
 
 
   .feed {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    /* justify-content: flex-start; */
-    flex-wrap: wrap;
-    gap: 12px 4%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 4vw;
   }
 `
 
