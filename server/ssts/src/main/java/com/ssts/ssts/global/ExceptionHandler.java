@@ -36,6 +36,15 @@ public class ExceptionHandler {
 
         } else if (ex.getExceptionCode() == ExceptionCode.SECURITY_TEST_LOGIN_NO_MEMBER) {
             response = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionCode.PHONENUMBER_DUPLICATE.getMessage());
+        } else if (ex.getExceptionCode()==ExceptionCode.VOTE_NOT_FOUND) {
+            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vote Not found.");
+        } else if (ex.getExceptionCode()==ExceptionCode.CAN_NOT_MAKE_VOTE) {
+            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can Not Make Vote.");
+        } else if (ex.getExceptionCode()==ExceptionCode.DEADLINE_FALL_SHORT) {
+            response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Deadline Fall Short.");
+        }
+        else if (ex.getExceptionCode()==ExceptionCode.SERIES_NOT_EXISTS) {
+            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body("Series Not Exist");
         }
 
         return response;

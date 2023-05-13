@@ -5,6 +5,7 @@ import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
 import com.ssts.ssts.domain.series.dto.SeriesPageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -36,7 +38,8 @@ public class SeriesService {
 
     private final UpdateUtils<Series> updateUtils;
 
-
+    //vote
+    private final MemberVoteRepository voteMemberRepo;
 
     public SeriesPageResponseDto getSeriesList(Long memberid, int page, int size){
 
@@ -54,7 +57,33 @@ public class SeriesService {
 
         Series series = this.findVerifiedSeries(id);
 
-        return this.seriesToSeriesResponseDto(series);
+        //vote: 사용자의 vote 여부를 받기 위함
+        Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(1L, id);
+
+        //vote를 만들지 않으면 시리즈 조회가 안됨
+
+        //vote: 사용자가 조회할 때마다 마감 기간 계산하고, 그에 따른 투표 상태값 변경 (마감시 자동 상태값 변경)
+        LocalDateTime currentTime = LocalDateTime.now(); //한국 기준으로 현재 시간 얻기 (LocalDateTIme 객체 반환)
+
+        //[마감 기한이 지난 경우 + 투표 2회를 전부 진행한 경우 상태 변경]
+        if (series.getVoteCount()==2 && currentTime.isAfter(series.getVoteEndAt())) {
+            series.setEditable(true); //타이틀 수정 가능
+            series.setActive(false); //활성 상태 끄기능 (프론트 세피아처리)
+            series.setSeriesStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
+            seriesRepository.save(series);
+        }
+
+        //[마감기한이 지났지만, 재투표의 기회가 있는 경우의 상태 변경] => 활성 상태는 변경하지 않고, 수정이 자동으로 가능하도록 합니다. //리팩토링 부분: vote는 voteCount==1이기 때문에 voteCount를 꼭 써야 하는가? ㅇㅇㅇㅇ api 진입점때문에
+        else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==false){
+            series.setEditable(true); //수정 가능
+            series.setSeriesStatus(Series.VoteStatus.SERIES_QUIT);
+            //ㄴ> 재시도의 기회가 있고, 재시도를 하지 않는 사용자의 경우는 투표 종료 버튼을 누른다
+            //ㄴ> 투표를 재시도 한다고 선택하지 않는 이상, serise의 상태는 SERIES_QUIT가 됨
+            seriesRepository.save(series);
+        }
+        //ㄴ> 활성 상태를 그대로 켜는 이유는, 재투표를 할지 말지에 대한 선택을 따로 진행하기 때문
+
+        return this.seriesToSeriesResponseDto(series, isVotedMember);
     }
 
 
@@ -128,6 +157,34 @@ public class SeriesService {
                 series.getIsPublic(),
                 series.getIsEditable(),
                 series.getIsActive());
+    }
+
+    //getSerise
+    @NotNull
+    private SeriesResponseDto seriesToSeriesResponseDto(Series series, Boolean isVotedMember) {
+        //선언부(메서드 시그니처)가 메소드 오버로드에 중심
+        //메소드의 이름이 같아도, 파라미터와 반환값이 다르면 얘가 알아서 분리해서 적용햅줌
+        //이걸로 오버로드를 사용해서 여러개의 파라미터를 받는 같은 메소드를 구현 가능
+
+
+        return SeriesResponseDto.of(series.getId(),
+                series.getTitle(),
+                series.getDaylogCount(),
+                series.getCreatedAt(),
+                series.getModifiedAt(),
+                series.getVoteCount(),
+                series.getVoteResult(),
+                series.getVoteAgree(),
+                series.getVoteDisagree(),
+                series.getRevoteResult(),
+                series.getRevoteAgree(),
+                series.getRevoteDisagree(),
+                series.getVoteStatus(),
+                series.getIsPublic(),
+                series.getIsEditable(),
+                series.getIsActive(),
+                isVotedMember
+        );
     }
 
     public List<SeriesResponseDto> seriesToSeriesListResponseDtos(List<Series> seriesList){

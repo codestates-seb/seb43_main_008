@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+
 @RestController
 @RequestMapping("/series/votes")
 @RequiredArgsConstructor //생성자 주입 해주는 public VoteController(Series Repo ... 이거해줌)
@@ -23,6 +25,30 @@ public class VoteController {
 
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
+
+    //@PatchMapping("/{series_id}/{votes}")
+    //투표 하기 (사용자가 투표한 이후의 찬반 표수를 응답값으로 넘기면 좋을 것 같음)
+    @PatchMapping("/{series_id}/{votes}/{member_id}")
+    public ResponseEntity patchVote(@PathVariable("series_id") Long seriesId, @PathVariable("votes") @Max(1)int isAgree, @PathVariable("member_id")Long memberId){
+        //Excetption: isAgree의 값이 0과 1이 아닌 경우 Exception
+
+        //Series response = voteService.attendVote(seriesId, isAgree);
+        VoteResponse response = (VoteResponse) voteService.attendVote(seriesId, isAgree, memberId);
+
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+
+    //투표 종료
+    @PatchMapping("/{series_id}/{member_id}")
+    public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, Boolean isQuit){ //프론트가 boolean으로 보내야
+
+        VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, isQuit, 1L);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
 
 
 

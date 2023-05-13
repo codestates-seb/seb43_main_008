@@ -16,7 +16,12 @@ public enum ExceptionCode {
     SECURITY_GUEST_OBJECT_SERIALIZE_ERROR(2006, "GUEST object information json serialization error"),
     SECURITY_NO_CREDENTIALS(2007,"사용자 정보가 없습니다"),
     NICKNAME_DUPLICATE(2008, "닉네임이 중복되었어요."),
-    SECURITY_TEST_LOGIN_NO_MEMBER(2009, "Test용 로그인 에러: 멤버 없어요");
+    SECURITY_TEST_LOGIN_NO_MEMBER(2009, "Test용 로그인 에러: 멤버 없어요"),
+
+    MEMBER_ALREADY_VOTE(1001, "더이상의 투표는 불가능해요."),
+    VOTE_NOT_FOUND(1002, "존재하지 않는 투표예요."),
+    CAN_NOT_MAKE_VOTE(1003, "더이상 투표를 개성할 수 없어요."),
+    DEADLINE_FALL_SHORT(1004, "이미 투표가 진행중이예요.");
 
 
     @Getter
