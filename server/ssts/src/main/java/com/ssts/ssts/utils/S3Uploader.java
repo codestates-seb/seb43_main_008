@@ -1,4 +1,4 @@
-package com.ssts.ssts.domain.daylog.service;
+package com.ssts.ssts.utils;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -35,6 +35,7 @@ public class S3Uploader {
 
     private String upload(File uploadFile, String daylongName) {
         String fileName = daylongName + "/" + uploadFile.getName();
+        log.info(fileName);
         String uploadImageUrl = putS3(uploadFile, fileName);
 
         removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
@@ -47,6 +48,10 @@ public class S3Uploader {
                 new PutObjectRequest(bucket, fileName, uploadFile)
                         .withCannedAcl(CannedAccessControlList.PublicRead)	// PublicRead 권한으로 업로드 됨
         );
+        return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+    public String getS3(String bucket, String fileName) {
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 

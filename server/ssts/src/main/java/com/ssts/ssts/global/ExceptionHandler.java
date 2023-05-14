@@ -1,4 +1,4 @@
-package com.global;
+package com.ssts.ssts.global;
 
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
