@@ -29,7 +29,6 @@ spring:
   #      hibernate:
   #        show_sql: true
   #        format_sql: true
-
   security:
     oauth2:
       client:
@@ -40,6 +39,10 @@ spring:
             scope:
               - email # resource owner의 이메일 정보
               - profile # resource owner의 프로필 정보
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB  #이미지 파일 업로드 최대 용량제한
 # spring.security.oauth2.client.registration.google.client-id
 #logging:
 #  level:

@@ -10,6 +10,7 @@ import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
+import com.ssts.ssts.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;

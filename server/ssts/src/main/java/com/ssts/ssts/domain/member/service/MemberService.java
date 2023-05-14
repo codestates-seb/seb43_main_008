@@ -9,6 +9,7 @@ import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
+import com.ssts.ssts.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,15 +28,19 @@ public class MemberService {
     //private final PasswordEncoder passwordEncoder;
     private final SeriesRepository seriesRepository;
 
+    private final S3Uploader s3Uploader;
+
     public Member saveMember(MemberSignUpPostDto memberSignUpPostDto) {
         //ouath 로만 로그인 구현하면.. password 필요없는거 아냐..? 나중에 구현 후 생각해보기.
         Member member=Member.of(memberSignUpPostDto.getNickName(),
                 memberSignUpPostDto.getEmail(),
                 memberSignUpPostDto.getPassword());
+        member.setImage(s3Uploader.getS3("ssts-img", "member/default.png"));
 
         verifyExistsEmail(member.getEmail());
         // 중복되지 않는 이메일이라면 그때 비밀번호 암호화하기
         //member.setPassword(passwordEncoder.encode(member.getPassword());
+        //
 
         //세큐리티 추가시 동작가능
         //List<String> roles = authorityUtils.createRoles(member.getEmail());
@@ -83,7 +88,7 @@ public class MemberService {
     @Transactional
     public MemberEditInfoResponseDto editMemberInfo(long memberId, MemberEditInfoPatchDto memberEditInfoPatchDto) {
         Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        member.setImage(memberEditInfoPatchDto.getImage());
+        // member.setImage(memberEditInfoPatchDto.getImage()); 이미지 로직 추가 후 수정
         member.setNickName(memberEditInfoPatchDto.getNickName());
         //member.setPassword(memberEditInfoPatchDto.getPassword()); //oauth로그인이라서 필요없다.
         member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
