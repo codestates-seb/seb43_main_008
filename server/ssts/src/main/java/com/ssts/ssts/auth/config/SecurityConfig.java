@@ -46,11 +46,8 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .apply(new CustomFilterConfigurer())
                 .and()
-//                .addFilterBefore(new JwtTestAuthenticationFilter(jwtTokenizer, authorityUtils,memberService), UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(new JwtVerificationFilter(jwtTokenizer, authorityUtils), JwtTestAuthenticationFilter.class)
                 .authorizeRequests(authorize -> authorize
                         .antMatchers(HttpMethod.PATCH,"/**/members/edit/**").hasRole("USER")
-                        .antMatchers("/login/**").permitAll()
                         .antMatchers("/test/login").permitAll()
                         .antMatchers("/test/**").permitAll()
                         .antMatchers("/test/signup").permitAll()
@@ -95,5 +92,7 @@ public class SecurityConfig {
 
         }
     }
+
+
 
 }

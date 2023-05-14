@@ -18,12 +18,13 @@ import java.io.IOException;
 @Slf4j
 public class OAuthLoginController {
 
-    private String googleUrl="/oauth2/authorization/google";
+    private String googleUrl="https://accounts.google.com";
     private String kakaoUrl="/oauth2/authorization/kakao";
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+
+    //@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String kakaoClientId;
 
     private String googleScope="email profile";
@@ -59,14 +60,15 @@ public class OAuthLoginController {
         log.info("하늘/oauth login : kakao");
 
         UriComponents uri = UriComponentsBuilder.fromUriString(kakaoUrl)
-                .pathSegment("o", "oauth2", "v2", "auth")
+                .pathSegment("oauth", "authorize")
                 .queryParam("response_type", responseType)
                 .queryParam("client_id", kakaoClientId)
                 .queryParam("redirect_uri", redirectUrl+"kakao")
-                .queryParam("scope", kakaoScope)
                 .build();
 
 
         response.sendRedirect(uri.toString());
     }
+
+
 }
