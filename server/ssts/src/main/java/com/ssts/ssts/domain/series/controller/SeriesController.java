@@ -9,6 +9,7 @@ import com.ssts.ssts.domain.series.service.SeriesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,9 +23,9 @@ public class SeriesController {
 
 
     @GetMapping("members/{member-id}")
-    public ResponseEntity getSeriesList(@PathVariable("member-id") Long id,
-                                    @RequestParam(value = "page", defaultValue = "1") int page,
-                                    @RequestParam(value = "size", defaultValue = "12") int size){
+    public ResponseEntity getSeriesList(@AuthenticationPrincipal String authId, @PathVariable("member-id") Long id,
+                                        @RequestParam(value = "page", defaultValue = "1") int page,
+                                        @RequestParam(value = "size", defaultValue = "12") int size){
 
         SeriesPageResponseDto response = seriesService.getSeriesList(id, page-1, size);
 

@@ -41,11 +41,9 @@ spring:
               - email # resource owner의 이메일 정보
               - profile # resource owner의 프로필 정보
 # spring.security.oauth2.client.registration.google.client-id
-
 #logging:
 #  level:
 #    root: DEBUG
-
 server:
   servlet:
     encoding:
@@ -68,4 +66,28 @@ jwt:
 #  jpa:
 #    hibernate:
 #      ddl-auto: create
+#cloud:
+#  aws:
+#    credentials:
+#      access-key: ${S3Img_AK}
+#      secret-key: ${S3Img_SK}
+#
+#
+#    region:
+#      static: ap-northeast-2
+#    stack:
+#      auto: false
 #    show-sql: true
+
+cloud:
+  aws:
+    s3:
+      bucket: ssts-img
+    credentials:
+      accessKey: ${S3Img_AK}       # AWS IAM AccessKey 적기
+      secretKey: ${S3Img_SK}   # AWS IAM SecretKey 적기
+       # ex) marryting-gyunny # ex) /gyunny
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
