@@ -84,23 +84,24 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         String email=getEmailBySocialType(socialType, attributes);
         // 멤버 만든다아...
-        Member member = memberService.findMemberByEmail(email); // getUser() 메소드로 User 객체 생성 후 반환
+        Optional<Member> member = memberService.findMemberByEmail(email); // getUser() 메소드로 User 객체 생성 후 반환
 
 
-        if(member ==null){
+        if(member.isPresent()){
+            // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
             return new CustomOAuth2User(
-                    authorityUtils.createAuthorities(List.of("GUEST")),
+                    authorityUtils.createAuthorities(member.get().getRoles()),
                     attributes,
                     userNameAttributeName,
+                    member.get().getId(),
                     email
             );
+
         }
-        // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
         return new CustomOAuth2User(
-                authorityUtils.createAuthorities(member.getRoles()),
+                authorityUtils.createAuthorities(List.of("GUEST")),
                 attributes,
                 userNameAttributeName,
-                member.getId(),
                 email
         );
     }

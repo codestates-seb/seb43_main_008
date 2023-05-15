@@ -6,6 +6,8 @@ import com.ssts.ssts.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.exception.BusinessLogicException;
+import com.ssts.ssts.exception.ExceptionCode;
 import com.ssts.ssts.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -43,17 +45,22 @@ public class JwtTestAuthenticationFilter extends UsernamePasswordAuthenticationF
         TestLoginDto testLoginDto = objectMapper.readValue(request.getInputStream(), TestLoginDto.class);
         // ServletInputStream -> TestLoginDto(역직렬화)
         log.info("하늘 security : 입력 email="+testLoginDto.getEmail());
-        Member member = memberService.findMemberByEmail(testLoginDto.getEmail());
+        Optional<Member> member = memberService.findMemberByEmail(testLoginDto.getEmail());
 
-        Map<String, Object> credentials=new HashMap<>();
-        credentials.put("id",member.getId());
+        if(member.isPresent()){
 
-        List<GrantedAuthority> authorityList=authorityUtils.createAuthorities(member.getRoles());
+            Map<String, Object> credentials=new HashMap<>();
+            credentials.put("id",member.get().getId());
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(member.getEmail(),credentials, authorityList);
+            List<GrantedAuthority> authorityList=authorityUtils.createAuthorities(member.get().getRoles());
 
-        return authenticationToken;
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(member.get().getEmail(),credentials, authorityList);
+
+            return authenticationToken;
+        }else{
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
     }
 
     // 인증에 성공할 경우 호출된다.
