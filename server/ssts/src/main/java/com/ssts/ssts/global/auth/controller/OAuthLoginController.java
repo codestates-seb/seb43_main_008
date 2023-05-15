@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -64,9 +65,24 @@ public class OAuthLoginController {
             response.addHeader("email", tokenResponse.getEmail());
             response.setStatus(HttpServletResponse.SC_OK);
 
+            Cookie cookie = new Cookie("email", tokenResponse.getEmail());
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+
+
             response.sendRedirect("http://localhost:3000/register");
 
+
+
         }else{
+
+            Cookie cookie = new Cookie("accessToken", tokenResponse.getAccessToken());
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
 
             response.addHeader("Authorization", "Bearer " + tokenResponse.getAccessToken());
             response.addHeader("Refresh", tokenResponse.getRefreshToken());
