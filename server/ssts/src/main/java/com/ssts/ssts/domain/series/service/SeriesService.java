@@ -15,6 +15,7 @@ import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
 import com.ssts.ssts.utils.UpdateUtils;
+import com.ssts.ssts.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,7 @@ public class SeriesService {
 
     //vote
     private final MemberVoteRepository voteMemberRepo;
+    private final MemberRepository memberRepo;
 
     public SeriesPageResponseDto getSeriesList(Long memberid, int page, int size){
 
@@ -57,8 +59,14 @@ public class SeriesService {
 
         Series series = this.findVerifiedSeries(id);
 
+        //사용자 Id받기
+        long memberId = SecurityUtil.getMemberId();
+        memberRepo.findById(memberId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+
         //vote: 사용자의 vote 여부를 받기 위함
-        Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(1L, id);
+        Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(memberId, id);
 
         //vote를 만들지 않으면 시리즈 조회가 안됨
 

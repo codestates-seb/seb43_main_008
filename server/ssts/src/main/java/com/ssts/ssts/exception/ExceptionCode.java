@@ -23,8 +23,9 @@ public enum ExceptionCode {
     CAN_NOT_MAKE_VOTE(1003, "더이상 투표를 개설할 수 없어요."),
     DEADLINE_FALL_SHORT(1004, "이미 투표가 진행중이예요."),
     NOT_HAVE_VOTE_AUTHORITY(1005, "투표를 종료할 수 없는 사용자예요."),
-    VOTE_RESULT_IS_NOT_EXSIST(1006, "투표 결과가 존재하지 않아요"),
-    THIS_VOTE_RESULT_IS_TRUE(1007, "이 투표는 이미 졸업했어요!");
+    VOTE_RESULT_IS_NOT_EXSIST(1006, "투표 결과가 존재하지 않아요."),
+    THIS_VOTE_RESULT_IS_TRUE(1007, "이 투표는 이미 졸업했어요!"),
+    CAN_NOT_VOTE_VALUE(1008, "투표할 수 없는 값이예요.");
 
 
     @Getter

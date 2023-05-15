@@ -29,15 +29,15 @@ public class VoteController {
 
     //@PatchMapping("/{series_id}/{votes}")
     //투표 하기 (사용자가 투표한 이후의 찬반 표수를 응답값으로 넘기면 좋을 것 같음)
-    @PutMapping("/{series_id}/{votes}/{member_id}")
-    //@PutMapping("/{series_id}/{votes}") //TODO 토큰시에 켜기
-    public ResponseEntity patchVote(@PathVariable("series_id") Long seriesId, @PathVariable("votes") @Max(1)int isAgree, @PathVariable("member_id")Long memberId){
-    //public ResponseEntity patchVote(@PathVariable("series_id") Long seriesId, @PathVariable("votes") @Max(1)int isAgree){ //TODO 토큰 테스트시에 주석 풀기
+    //@PutMapping("/{series_id}/{votes}/{member_id}")
+    @PutMapping("/{series_id}/{votes}") //TODO 토큰시에 켜기
+    //public ResponseEntity patchVote(@PathVariable("series_id") Long seriesId, @PathVariable("votes") @Max(1)int isAgree, @PathVariable("member_id")Long memberId){
+    public ResponseEntity patchVote(@PathVariable("series_id") Long seriesId, @PathVariable("votes") @Max(1)int isAgree){ //TODO 토큰 테스트시에 주석 풀기
         //Excetption: isAgree의 값이 0과 1이 아닌 경우 Exception
 
         //Series response = voteService.attendVote(seriesId, isAgree);
-        VoteResponse response = (VoteResponse) voteService.attendVote(seriesId, isAgree, memberId);
-        //VoteResponse response = voteService.attendVote(seriesId, isAgree); //TODO 토큰시에 주석풀기
+        //VoteResponse response = (VoteResponse) voteService.attendVote(seriesId, isAgree, memberId);
+        VoteResponse response = voteService.attendVote(seriesId, isAgree); //TODO 토큰시에 주석풀기
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -47,7 +47,8 @@ public class VoteController {
     @PatchMapping("/quit/{series_id}/{member_id}") //이제 500에러 디버깅 돌리기
     public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathVariable("member_id") Long memberId, @PathParam("isQuit") Boolean isQuit){ //프론트가 boolean으로 보내야
 
-        VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
+        //VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
+        VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, isQuit);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }

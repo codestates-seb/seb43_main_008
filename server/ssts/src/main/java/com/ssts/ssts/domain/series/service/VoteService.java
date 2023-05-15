@@ -179,10 +179,10 @@ public class VoteService {
 
     //투표 하기----------------------------------------------------------------------------------------
     @Transactional
-    //public VoteResponse attendVote(Long seriesId, int isAgree){ //TODO 토큰 테스트시에 주석 풀기
-    public Object attendVote(Long seriesId, int isAgree, Long memberId) { //@@토큰 로직@@
+    public VoteResponse attendVote(Long seriesId, int isAgree){ //TODO 토큰 테스트시에 주석 풀기
+    //public Object attendVote(Long seriesId, int isAgree, Long memberId) { //@@토큰 로직@@
 
-
+        if(isAgree < 0 || isAgree > 1){throw new BusinessLogicException(ExceptionCode.CAN_NOT_VOTE_VALUE);}
 
         //[투표하기: 예외 처리]
         //이거 근데 응답값 안주는거면 반환값 필요없잖아 <<<<<< !!!!! 고민해보기 !!!!!!
@@ -207,9 +207,9 @@ public class VoteService {
         //위에서부터 쭉 내리니까 if() => Exception 형식으로 진행하기
 
         //TODO *-토큰Id적용--* TODO토큰시에 주석풀기
-        //long memberId = SecurityUtil.getMemberId();
-        //memberRepo.findById(memberId).
-        //        orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        long memberId = SecurityUtil.getMemberId();
+        memberRepo.findById(memberId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
 
         //[1. 시리즈가 존재하지 않습니다.]-----------------------------------
@@ -227,7 +227,6 @@ public class VoteService {
 
         //Series targetSeries = seriesRepo.findById(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
         // Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
 
 
         //[2. 동일 시리즈에, 2번 투표하면 투표 중복 에러]-----------------------------------
@@ -267,7 +266,6 @@ public class VoteService {
         }
         //ㄴ> 이게 성립하려면 같은 사용자가 다른 시리즈 2개에 투표할 수 있어야 하고, 같은 시리즈에 투표했을 때 예외 걸려야 함
         //ㄴ> db에 존재하지 않는 값이면 null 반환됨 ㅇㅇㅇㅇㅇ
-
         //----------------------------------------------------------------------------------------------------------------------
 
 
@@ -382,13 +380,13 @@ public class VoteService {
 
     @Transactional //[모든 예외를 거치고 남은 걸려져서 들어오는 값이 종료하기의 조건이 되도록]
     //public Series attendVote(Long seriesId, int isAgree){ [Boolean isQuit: 투표를 더 할지 말지 결정하는 값 (더 안한다:1) / (더 한다:0)]
-    public Object quitVote(Long seriesId,  Long memberId, Boolean isQuit){ //[마감 1개 하고 재투표 없이 종료하는 경우] => 새 페이지 처리
-    //public Object quitVote(Long seriesId, Boolean isQuit){ //TODO 토큰 적용시에 풀기
+    //public Object quitVote(Long seriesId,  Long memberId, Boolean isQuit){ //[마감 1개 하고 재투표 없이 종료하는 경우] => 새 페이지 처리
+    public Object quitVote(Long seriesId, Boolean isQuit){ //TODO 토큰 적용시에 풀기
 
         //TODO *-토큰Id적용--* TODO토큰시에 주석풀기
-        //long memberId = SecurityUtil.getMemberId();
-        //memberRepo.findById(memberId).
-        //        orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        long memberId = SecurityUtil.getMemberId();
+        memberRepo.findById(memberId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         Series targetSeries = seriesRepo.findById(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
@@ -402,7 +400,7 @@ public class VoteService {
 
         //예외: 투표를 개설하지 않았습니다
         if (targetSeries.getVoteCount()==0) {
-            throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
+            throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND);
         }
 
         //예외: 투표의 총 횟수를 다 씀

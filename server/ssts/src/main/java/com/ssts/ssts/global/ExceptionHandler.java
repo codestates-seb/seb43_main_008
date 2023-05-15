@@ -52,7 +52,11 @@ public class ExceptionHandler {
             response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.VOTE_RESULT_IS_NOT_EXSIST.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.THIS_VOTE_RESULT_IS_TRUE) {
             response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE.getMessage());
+        } else if (ex.getExceptionCode()==ExceptionCode.CAN_NOT_VOTE_VALUE) {
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.CAN_NOT_VOTE_VALUE.getMessage());
         }
+
+
 
         return response;
     }
