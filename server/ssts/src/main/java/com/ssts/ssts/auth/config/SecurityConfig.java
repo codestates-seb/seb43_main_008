@@ -1,28 +1,23 @@
 package com.ssts.ssts.auth.config;
 
+import com.ssts.ssts.auth.filter.JwtTestAuthenticationFilter;
 import com.ssts.ssts.auth.filter.JwtVerificationFilter;
 import com.ssts.ssts.auth.handler.OAuth2MemberFailureHandler;
 import com.ssts.ssts.auth.handler.OAuth2MemberSuccessHandler;
+import com.ssts.ssts.auth.handler.TestAuthenticationFailureHandler;
+import com.ssts.ssts.auth.handler.TestAuthenticationSuccessHandler;
 import com.ssts.ssts.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.auth.service.CustomOAuth2UserService;
 import com.ssts.ssts.auth.utils.CustomAuthorityUtils;
-import com.ssts.ssts.domain.member.repository.MemberRepository;
-import com.ssts.ssts.domain.member.service.MemberOAuthService;
+import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,7 +30,7 @@ public class SecurityConfig {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
 
     @Bean
@@ -49,16 +44,22 @@ public class SecurityConfig {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .addFilterBefore(new JwtVerificationFilter(jwtTokenizer, authorityUtils), UsernamePasswordAuthenticationFilter.class) // https://yunb2.tistory.com/3
+                .apply(new CustomFilterConfigurer())
+                .and()
+//                .addFilterBefore(new JwtTestAuthenticationFilter(jwtTokenizer, authorityUtils,memberService), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new JwtVerificationFilter(jwtTokenizer, authorityUtils), JwtTestAuthenticationFilter.class)
                 .authorizeRequests(authorize -> authorize
                         .antMatchers(HttpMethod.PATCH,"/**/members/edit/**").hasRole("USER")
                         .antMatchers("/login/**").permitAll()
-                        .antMatchers(HttpMethod.POST,"/members/signup").permitAll()
-                        .anyRequest().authenticated())
-                .oauth2Login()
-                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer))
-                .failureHandler(new OAuth2MemberFailureHandler())
-                .userInfoEndpoint().userService(new CustomOAuth2UserService(memberRepository, authorityUtils));
+                        .antMatchers("/test/login").permitAll()
+                        .antMatchers("/test/**").permitAll()
+                        .antMatchers("/test/signup").permitAll()
+                        //.anyRequest().authenticated()) //FIXME 인증 끌때 여기 주석처리하세요
+                        .anyRequest().permitAll());
+//                .oauth2Login()
+//                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer))
+//                .failureHandler(new OAuth2MemberFailureHandler())
+//                .userInfoEndpoint().userService(new CustomOAuth2UserService(memberService, authorityUtils));
 
 
         return http.build();
@@ -77,5 +78,22 @@ public class SecurityConfig {
         return source;
     }
 
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+        @Override
+        public void configure(HttpSecurity builder) throws Exception {
+
+            JwtTestAuthenticationFilter jwtAuthenticationFilter = new JwtTestAuthenticationFilter(jwtTokenizer, authorityUtils, memberService);
+            jwtAuthenticationFilter.setFilterProcessesUrl("/test/login");
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new TestAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new TestAuthenticationFailureHandler());
+
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+
+            builder
+                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtTestAuthenticationFilter.class);
+
+        }
+    }
 
 }

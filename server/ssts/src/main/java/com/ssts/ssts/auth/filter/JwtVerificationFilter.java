@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,27 +40,36 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
-
+        log.info("하늘/security : jwt verification filter");
         return authorization == null || !authorization.startsWith("Bearer");
     }
 
-    //JWT 검증
+    //JWT 검증 1. 서명 검증
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        // jws 토큰 가져오기
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+        // key 생성하기
 
         Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
-        // 파싱 -> 검증
+        // 토큰에서 클레임즈 파싱 -> (검증)
 
         return claims;
     }
 
-    //Authentication 객체를 SecurityContext에 저장
+    //Authentication 객체를 SecurityContext에 저장 2. Authentication 저장 -> SecurityUtil에서 접근할 수 있음.
     private void setAuthenticationToContext(Map<String, Object> claims) {
-        String email = (String) claims.get("email");
-        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+        String principal = (String) claims.get("email");
+        Map<String, Object> credentials=new HashMap<>();
+        credentials.put("id",claims.get("id"));
+
+        List<String> fixRoles=authorityUtils.grantedAuthorityStringToRoleString((List)claims.get("roles"));
+        //FIXME
+        List<GrantedAuthority> authorities = authorityUtils.createAuthorities(fixRoles);
+
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principal, credentials, authorities);
 
         SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContext에 Authentication객체 저장한다.
 

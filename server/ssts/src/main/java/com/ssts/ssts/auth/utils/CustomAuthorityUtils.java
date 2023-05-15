@@ -25,13 +25,15 @@ public class CustomAuthorityUtils {
         return authorities;
     }
 
-    public List<String> grantAuthorityToString(List<GrantedAuthority> authorities){
-        List<String> list=new ArrayList<>();
-        for (int i = 0; i < authorities.size(); i++) {
-            list.add(authorities.get(i).toString());
-            log.info("하늘/security :"+authorities.get(i).toString());
+
+    public List<String> grantedAuthorityStringToRoleString(List<String> grantedAuthorityStringList){
+        List<String> roles=new ArrayList<>();
+        for (int i = 0; i < grantedAuthorityStringList.size(); i++) {
+            String role = grantedAuthorityStringList.get(i).replaceFirst("\\[ROLE_(.*?)\\]", "$1").replaceFirst("ROLE_", "");;
+            log.info("하늘/security : role="+role);
+            roles.add(role);
         }
-        return list;
+        return roles;
     }
 
     public List<String> createRoles(String email) {

@@ -2,36 +2,27 @@ package com.ssts.ssts.auth.service;
 
 import com.ssts.ssts.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.auth.utils.CustomOAuth2User;
-import com.ssts.ssts.auth.utils.OAuthAttributes;
 import com.ssts.ssts.auth.utils.SocialType;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
-import com.ssts.ssts.exception.BusinessLogicException;
-import com.ssts.ssts.exception.ExceptionCode;
+import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.*;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final CustomAuthorityUtils authorityUtils;
 
     private static final String NAVER = "naver";
@@ -39,7 +30,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("하늘/security CustomOAuth2UserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
+        log.info("하늘/security : CustomOAuth2UserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
         //결과적으로, OAuth2User는 OAuth 서비스에서 가져온 유저 정보를 담고 있는 유저
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
@@ -65,7 +56,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.info("하늘/security : userNameAttributeName="+userNameAttributeName);
 
         Map<String, Object> attributes = oAuth2User.getAttributes(); // 소셜 로그인에서 API가 제공하는 userInfo의 Json 값(유저 정보들) >> response
-        //////////////* 속성값 보는 작업 *//////////////////////////
+        //////////////* 속성값 보는 작업 / 로직 무관 *//////////////////////////
         String attributesStr="";
         Iterator<String> keys=attributes.keySet().iterator();
         while(keys.hasNext()){
@@ -91,31 +82,26 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
          */
         //////////////////////////////////////////////////////////
 
-        OAuthAttributes exAttr=OAuthAttributes.of(socialType, userNameAttributeName, attributes);
-
-        // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
-        // 각 소셜마다 유저 정보 객체를 만든다.
-        //OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributeName, attributes);
-
         String email=getEmailBySocialType(socialType, attributes);
         // 멤버 만든다아...
-        Optional<Member> member = memberRepository.findByEmail(email); // getUser() 메소드로 User 객체 생성 후 반환
+        Optional<Member> member = memberService.findMemberByEmail(email); // getUser() 메소드로 User 객체 생성 후 반환
 
 
-        if(!member.isPresent()){
+        if(member.isPresent()){
+            // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
             return new CustomOAuth2User(
-                    authorityUtils.createAuthorities(List.of("GUEST")),
+                    authorityUtils.createAuthorities(member.get().getRoles()),
                     attributes,
                     userNameAttributeName,
+                    member.get().getId(),
                     email
             );
+
         }
-        // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
         return new CustomOAuth2User(
-                authorityUtils.createAuthorities(member.get().getRoles()),
+                authorityUtils.createAuthorities(List.of("GUEST")),
                 attributes,
                 userNameAttributeName,
-                member.get().getId(),
                 email
         );
     }
