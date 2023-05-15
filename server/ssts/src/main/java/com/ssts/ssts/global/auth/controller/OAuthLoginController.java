@@ -29,8 +29,7 @@ public class OAuthLoginController {
 
     private String googleScope="email%20profile";
     private String kakaoScope="account_email";
-
-    private String redirectUrl="http://localhost:8080/login/oauth2/code/";
+    private String redirectUrl="http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/";
 
     private final String responseType = "code";
     //private String authRequestUrl;

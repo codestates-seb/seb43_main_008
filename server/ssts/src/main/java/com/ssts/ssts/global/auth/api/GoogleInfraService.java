@@ -18,7 +18,7 @@ public class GoogleInfraService {
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
 
-    private String redirectUrl="http://localhost:8080/login/oauth2/code/google";
+    private String redirectUrl="http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google";
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
