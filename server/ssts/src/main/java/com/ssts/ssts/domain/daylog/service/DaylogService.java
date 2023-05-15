@@ -67,9 +67,11 @@ public class DaylogService {
         Series findSeries =
                 optionalQuestion.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+
         if(!image.isEmpty()){
             String saveFileName = s3ImageUploader.upload(image,"daylog");
             daylog.setContentImg(saveFileName);
+            findSeries.setImage(saveFileName);
         }
 
         daylog.addSeries(findSeries);

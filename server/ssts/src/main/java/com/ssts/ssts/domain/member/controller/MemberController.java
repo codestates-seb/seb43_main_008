@@ -108,7 +108,7 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @PatchMapping("/feed")
-    public ResponseEntity updateMemberInfo(@RequestBody MemberEditInfoPatchDto memberEditInfoPatchDto,
+    public ResponseEntity updateMemberInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
                                            @RequestPart("image")MultipartFile image) throws IOException{
 
 

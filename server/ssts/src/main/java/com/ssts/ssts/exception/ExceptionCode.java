@@ -12,7 +12,7 @@ public enum ExceptionCode {
     PHONENUMBER_DUPLICATE(2002, "휴대폰 번호가 중복되었습니다"),
     NOT_IMPLEMENTATION(2003, "Not Implementation"),
     INVALID_MEMBER_STATUS(2004, "Invalid member status"),
-    SERIES_NOT_EXISTS(2005, "Series Not Exists"),
+    SERIES_NOT_EXISTS(2005, "시리즈를 찾을 수 없습니다"),
     SECURITY_GUEST_OBJECT_SERIALIZE_ERROR(2006, "GUEST object information json serialization error"),
     SECURITY_NO_CREDENTIALS(2007,"사용자 정보가 없습니다"),
     NICKNAME_DUPLICATE(2008, "닉네임이 중복되었어요."),
