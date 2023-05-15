@@ -6,17 +6,17 @@ import styled from "styled-components";
 
 // 📌 매번 타입 지정하는게 맞나?
 interface CardProps {
-  nickName: string;
+  title: string;
   image: string;
-  usageCount: number;
+  daylogCount: number;
 }
 
-export default function Card({ nickName, image, usageCount }: CardProps) {
+export default function Card({ title, image, daylogCount }: CardProps) {
   return (
     <StyledCard>
       <div className="info">
-        <div className="nickName">{nickName} | </div>
-        <div className="usageCount">{usageCount}번 사용</div>
+        <div className="nickName">{title} | </div>
+        <div className="usageCount">{daylogCount}번 사용</div>
       </div>
       {/* img 태그는  background 속성 적용 안됨 -> div 태그로 변경*/}
       <div className="image" style={{ backgroundImage: `url(${image})` }} />
