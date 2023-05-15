@@ -58,12 +58,15 @@ const SubmitButton = styled.button`
   color: #222;
   border: 1px solid rgba(34, 36, 38, 0.5);
   padding: 0.6rem 0.6rem;
-  margin-left: 10px;
   border-radius: 3px;
-  margin-top: 20px;
+  margin-top: 10px;
+  min-width: 325px;
   cursor: pointer;
 
   &:active {
     transform: translateY(-2px);
   }
 `;
+
+// 플레이스 홀더 좀 다시 정리하고 싶음
+// 랜덤이름 100만가지 양산 하기
