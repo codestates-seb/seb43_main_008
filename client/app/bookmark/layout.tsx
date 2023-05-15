@@ -1,4 +1,4 @@
-import Header from '../Header';
+import Header from "../errorPage/Header";
 import Navbar from "../Navbar";
 
 export default function MemberEditLayout({

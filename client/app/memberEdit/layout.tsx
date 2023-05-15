@@ -1,4 +1,4 @@
-import Header from "../Header";
+import Header from "../errorPage/Header";
 
 export default function MemberEditLayout({
   children,

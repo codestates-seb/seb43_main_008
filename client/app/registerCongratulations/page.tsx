@@ -1,4 +1,4 @@
-import Header from "../Header";
+import Header from "../errorPage/Header";
 import HomeButton from "./HomeButton";
 import RegisterContext from "./RegisterContext";
 

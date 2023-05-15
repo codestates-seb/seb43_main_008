@@ -1,4 +1,4 @@
-import Header from "../Header";
+import Header from "../errorPage/Header";
 import RegisterForm from "./RegisterForm";
 
 export default function PhoneAuthPage() {

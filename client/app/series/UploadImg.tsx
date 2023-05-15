@@ -25,20 +25,6 @@ function PictureLabel() {
   );
 }
 
-const UploadImageContainer = styled.div`
-  background-color: white;
-  margin-top: 10px;
-  margin-bottom: 40px;
-  width: 100%;
-  height: 60vw;
-  display: flex;
-  align-items: center;
-  padding: 5px;
-  flex-direction: column;
-  border-radius: 10px;
-  border: 1px solid #9b9ba0;
-`;
-
 export default function UploadImg() {
   return (
     <>
@@ -55,3 +41,17 @@ export default function UploadImg() {
     </>
   );
 }
+
+const UploadImageContainer = styled.div`
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  width: 100%;
+  height: 60vw;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 1px solid #9b9ba0;
+`;

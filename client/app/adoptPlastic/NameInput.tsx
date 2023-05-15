@@ -5,6 +5,28 @@ import styled from "styled-components";
 
 import names from "./Names";
 
+export default function NameInput() {
+  const [placeholder, setPlaceholder] = useState(
+    "❤️를 누르면 랜덤으로 이름을 정할수 있어요"
+  );
+
+  const generateRandomName = () => {
+    const randomIndex = Math.floor(Math.random() * names.length);
+    setPlaceholder(names[randomIndex]);
+  };
+
+  return (
+    <InputContainer>
+      <StyleInput type="text" placeholder={placeholder} />
+      <RandomNameButton
+        onClick={generateRandomName}
+        style={{ fontSize: "14px", color: "#222" }}
+      >
+        ❤️
+      </RandomNameButton>
+    </InputContainer>
+  );
+}
 // 인풋창
 const InputContainer = styled.div`
   display: flex;
@@ -41,26 +63,3 @@ const RandomNameButton = styled.button`
     transform: translateY(-2px);
   }
 `;
-
-export default function NameInput() {
-  const [placeholder, setPlaceholder] = useState(
-    "❤️를 누르면 랜덤으로 이름을 정할수 있어요"
-  );
-
-  const generateRandomName = () => {
-    const randomIndex = Math.floor(Math.random() * names.length);
-    setPlaceholder(names[randomIndex]);
-  };
-
-  return (
-    <InputContainer>
-      <StyleInput type="text" placeholder={placeholder} />
-      <RandomNameButton
-        onClick={generateRandomName}
-        style={{ fontSize: "14px", color: "#222" }}
-      >
-        ❤️
-      </RandomNameButton>
-    </InputContainer>
-  );
-}

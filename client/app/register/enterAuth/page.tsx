@@ -1,4 +1,4 @@
-import Header from "../../Header";
+import Header from "../../errorPage/Header";
 import AuthNumberSubmit from "./AuthNumberSubmit";
 
 export default function PhoneAuthPage() {

@@ -1,4 +1,5 @@
-import Header from "../errorPage/Header";
+"use client";
+import Header from "../Header";
 import Navbar from "../Navbar";
 
 export default function MemberEditLayout({
@@ -8,7 +9,11 @@ export default function MemberEditLayout({
 }) {
   return (
     <>
-      <Header backButton={true} textContent={"팔로워"} saveButton={false} />
+      <Header
+        backButton={true}
+        textContent={"시리즈 작성"}
+        secretButton={true}
+      />
       {children}
       <Navbar />
     </>

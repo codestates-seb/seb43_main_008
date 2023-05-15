@@ -3,20 +3,19 @@
 import React from "react";
 import styled from "styled-components";
 
-import Navbar from "../../Navbar";
 import BadgeDetail from "./BadgeDetail";
 import GetBadge from "./GetBadge";
-import Header from "./Header";
+// import styles from "./page.module.css";
 
 // 페이지 기본 레이아웃
 const MainSeriesContainer = styled.div`
+  box-sizing: border-box;
   padding: 1px 24px;
   max-width: 1024px;
   margin: 0 auto;
   background-color: #fafafa;
-  min-height: 90vh;
-  min-width: 368px;
-
+  min-height: 550px;
+  min-width: 320px;
   @media screen and (max-width: 768px) {
   }
 `;
@@ -54,11 +53,6 @@ const SubText = styled.p`
 export default function page() {
   return (
     <>
-      <Header
-        backButton={true}
-        textContent={"획득한 뱃지 관람"}
-        // mainButton={true}
-      />
       <MainSeriesContainer>
         <SeriesWrapper>
           <MainContainer>
@@ -69,7 +63,6 @@ export default function page() {
           <BadgeDetail />
         </SeriesWrapper>
       </MainSeriesContainer>
-      <Navbar />
     </>
   );
 }

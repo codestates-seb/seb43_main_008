@@ -1,34 +1,50 @@
-"use client";
-
+import { useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
+import { VscGistSecret } from "react-icons/vsc";
 import styled from "styled-components";
+
+import HeaderModal from "./HeaderModal";
 
 export default function Header({
   backButton,
   textContent,
-  saveButton,
+  secretButton,
 }: {
   backButton: boolean;
   textContent: string | null;
-  saveButton: boolean;
+  secretButton: boolean;
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPublic, setIsPublic] = useState(false);
+
   return (
     <HeaderContainer>
       {backButton ? (
         <BackArrowContainer>
-          <AiOutlineLeft size="24" />
+          <AiOutlineLeft size="18" />
         </BackArrowContainer>
       ) : (
         <BackArrowContainer />
       )}
       {textContent ? <HeaderText>{textContent}</HeaderText> : null}
-      {saveButton ? (
-        <SaveButtonContainer>
-          <SaveButton type="submit">저장</SaveButton>
-        </SaveButtonContainer>
+      {secretButton ? (
+        <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
+          <SecretButton>
+            <SecretButtonContent>
+              <VscGistSecret size="15" />
+              <SecretButtonText>공개 설정</SecretButtonText>
+            </SecretButtonContent>
+          </SecretButton>
+        </SecretButtonContainer>
       ) : (
-        <SaveButtonContainer />
+        <SecretButtonContainer />
       )}
+      <HeaderModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        isPublic={isPublic}
+        setIsPublic={setIsPublic}
+      />
     </HeaderContainer>
   );
 }
@@ -46,9 +62,11 @@ const HeaderContainer = styled.header`
 const BackArrowContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 44px;
+  height: 50px;
   width: 44px;
   padding: 10px;
+  position: relative;
+  cursor: pointer; // 커서를 손가락 모양으로 변경
 `;
 
 const HeaderText = styled.span`
@@ -56,24 +74,37 @@ const HeaderText = styled.span`
   justify-content: center;
   align-items: center;
   height: 100%;
-  font-size: 16px;
+  font-size: 13px;
+  margin-top: 3px;
 `;
 
-const SaveButtonContainer = styled.div`
+const SecretButtonContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 44px;
-  width: 44px;
+  height: 50px;
+  width: 50px;
   padding: 10px 10px 10px 0;
+  margin-top: 3px;
 `;
 
-const SaveButton = styled.button`
+const SecretButton = styled.button`
   height: 100%;
   width: 100%;
-  font-size: 13px;
-  font-weight: 700;
   background: inherit;
   border: none;
   border-radius: 0;
   padding: 0;
+`;
+
+const SecretButtonContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+`;
+
+const SecretButtonText = styled.span`
+  font-size: 6px;
 `;
