@@ -140,7 +140,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto, MultipartFile image) throws IOException{
+    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto, Optional<MultipartFile> image) throws IOException{
 
         Member member = findMemberByToken();
         String nickName=memberEditInfoPatchDto.getNickName();
@@ -152,8 +152,9 @@ public class MemberService {
             verifyExistsNickName(nickName);
             member.setNickName(memberEditInfoPatchDto.getNickName());
         }
-        if(!image.isEmpty()){
-            String saveFileName = s3ImageUploader.upload(image,"daylog");
+        if(image.isPresent()){
+
+            String saveFileName = s3ImageUploader.upload(image.get(),"daylog");
             member.setImage(saveFileName);
         }
         if (!(introduce == null)) {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -107,7 +108,7 @@ public class MemberController {
     * */
     @PatchMapping("/feed")
     public ResponseEntity updateMemberInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
-                                           @RequestPart("image")MultipartFile image) throws IOException{
+                                           @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
 
 
         MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto, image);

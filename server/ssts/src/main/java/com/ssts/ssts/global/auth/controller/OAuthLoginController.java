@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -29,8 +30,7 @@ public class OAuthLoginController {
 
     private String googleScope="email%20profile";
     private String kakaoScope="account_email";
-
-    private String redirectUrl="http://localhost:8080/login/oauth2/code/";
+    private String redirectUrl="http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/";
 
     private final String responseType = "code";
     //private String authRequestUrl;
@@ -65,15 +65,30 @@ public class OAuthLoginController {
             response.addHeader("email", tokenResponse.getEmail());
             response.setStatus(HttpServletResponse.SC_OK);
 
-            response.sendRedirect("https://seb43-main-008-kckrnaxxz-anuena.vercel.app/register");
+            Cookie cookie = new Cookie("email", tokenResponse.getEmail());
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+
+
+            response.sendRedirect("http://localhost:3000/register");
+
+
 
         }else{
+
+            Cookie cookie = new Cookie("accessToken", tokenResponse.getAccessToken());
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
 
             response.addHeader("Authorization", "Bearer " + tokenResponse.getAccessToken());
             response.addHeader("Refresh", tokenResponse.getRefreshToken());
             response.setStatus(HttpServletResponse.SC_OK);
 
-            response.sendRedirect("https://seb43-main-008.vercel.app/main");
+            response.sendRedirect("http://localhost:3000/");
         }
 
 
