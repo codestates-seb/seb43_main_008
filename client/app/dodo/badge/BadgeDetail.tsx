@@ -10,8 +10,16 @@ const CountCardContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 30px 24px;
+  padding: 5px;
   border-radius: 10px;
+  align-items: flex-start;
+`;
+const GetBadgeText = styled.div`
+  /* all: unset; */
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-left: 7px;
 `;
 
 const PlasticList = styled.div`
@@ -22,42 +30,37 @@ const PlasticList = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 84px;
+  /* position: sticky; */
   width: 100%;
-
-  .title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
+  flex-direction: column;
+  align-items: flex-start;
 
   .list-wrapper {
-    margin-top: 30px;
+    margin-top: 300px;
     list-style: none;
-    margin: 0 auto;
-    padding: 0;
+    margin: auto;
+    /* padding: 0; */
     display: flex;
-  }
-
-  .list-detail-wrapper {
-    margin-left: 75px;
-    margin-bottom: 5px;
+    gap: 5px;
   }
 
   .my-plastic {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin: 5px 0;
+    justify-content: space-between;
+    flex-direction: column;
+
+    & > * + * {
+      margin-left: 10px;
+    }
   }
 
   .plastic-circle {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: #fff8de;
-    margin-right: 30px;
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,37 +72,83 @@ export default function BadgeDetail() {
   return (
     <>
       <CountCardContainer>
+        <GetBadgeText>획득한 뱃지 List</GetBadgeText>
         <PlasticList>
-          <div>
-            <div className="title">획득한 뱃지 List</div>
-            <ul className="list-wrapper">
-              <div className="list-detail-wrapper">
-                <li className="my-plastic">
-                  <div className="plastic-circle">😀</div>
-                </li>
-              </div>
-              <div className="list-detail-wrapper">
-                <li className="my-plastic">
-                  <div className="plastic-circle">😆</div>
-                </li>
-              </div>
-              <div className="list-detail-wrapper">
-                <li className="my-plastic">
-                  <div className="plastic-circle">😉</div>
-                </li>
-              </div>
-              <div className="list-detail-wrapper">
-                <li className="my-plastic">
-                  <div className="plastic-circle">😍</div>
-                </li>
-              </div>
-              <div className="list-detail-wrapper">
-                <li className="my-plastic">
-                  <div className="plastic-circle">🍓</div>
-                </li>
-              </div>
-            </ul>
-          </div>
+          <ul className="list-wrapper">
+            <li className="my-plastic">
+              <div className="plastic-circle">😀</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😆</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😉</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😍</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">🍓</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😝</div>
+            </li>
+          </ul>
+          <ul className="list-wrapper">
+            <li className="my-plastic">
+              <div className="plastic-circle">😀</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😆</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😉</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😍</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">🍓</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😝</div>
+            </li>
+          </ul>
+          <ul className="list-wrapper">
+            <li className="my-plastic">
+              <div className="plastic-circle">😀</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😆</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😉</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😍</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">🍓</div>
+            </li>
+
+            <li className="my-plastic">
+              <div className="plastic-circle">😝</div>
+            </li>
+          </ul>
         </PlasticList>
       </CountCardContainer>
     </>

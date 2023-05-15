@@ -19,7 +19,7 @@ const WriteInputDetail = styled(TextareaAutosize)`
   overflow: hidden;
   resize: none;
   width: 100%;
-  font-size: 18px;
+  font-size: 14px;
   &:focus {
     outline: none;
   }
@@ -29,11 +29,12 @@ const PlaceholderLabel = styled.label`
   position: absolute;
   pointer-events: none;
   color: gray;
-  font-size: 18px;
+  font-size: 16px;
   transition: 0.3s;
 `;
 
-export default function WriteInput() {
+// export default function WriteInput({ onChildValue }) {
+export default function WriteInput({}) {
   const [text, setText] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -44,9 +45,14 @@ export default function WriteInput() {
     <Container>
       <PlaceholderLabel
         htmlFor="writeInputDetail"
-        style={{ opacity: text ? "0" : "1" }}
+        style={{
+          opacity: text ? "0" : "1",
+          textAlign: "center",
+        }}
       >
-        노 모어 플라스틱, 더 클린 서울을 위해서 시리즈를 작성해 주세요~
+        노 모어 플라스틱, 더 클린 서울
+        <br />
+        시리즈를 작성해 주세요~
       </PlaceholderLabel>
       <WriteInputDetail
         id="writeInputDetail"

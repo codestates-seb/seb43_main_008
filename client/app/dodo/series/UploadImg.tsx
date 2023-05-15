@@ -3,6 +3,8 @@ import Image from "next/image";
 import styled from "styled-components";
 
 function PictureLabel() {
+  // const [sendPic, setSendPic]
+
   return (
     <label
       htmlFor="picture"
@@ -15,8 +17,8 @@ function PictureLabel() {
       <Image
         src="/add-pic.svg"
         alt="사진 업로드 아이콘"
-        width="400"
-        height="400"
+        width="200"
+        height="200"
         style={{ cursor: "pointer;" }}
       />
     </label>
@@ -25,13 +27,13 @@ function PictureLabel() {
 
 const UploadImageContainer = styled.div`
   background-color: white;
-  margin-top: 25px;
+  margin-top: 10px;
   margin-bottom: 40px;
   width: 100%;
-  height: 450px;
+  height: 60vw;
   display: flex;
   align-items: center;
-  padding: 20px 24px;
+  padding: 5px;
   flex-direction: column;
   border-radius: 10px;
   border: 1px solid #9b9ba0;
