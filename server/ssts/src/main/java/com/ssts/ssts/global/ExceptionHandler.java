@@ -1,11 +1,10 @@
 package com.ssts.ssts.global;
 
-import com.ssts.ssts.exception.BusinessLogicException;
-import com.ssts.ssts.exception.ExceptionCode;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice

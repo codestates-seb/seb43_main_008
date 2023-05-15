@@ -1,8 +1,6 @@
 package com.ssts.ssts.domain.series.service;
 
 
-import com.ssts.ssts.domain.daylog.entity.Daylog;
-import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
@@ -12,10 +10,10 @@ import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesUpdateDto;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
-import com.ssts.ssts.exception.BusinessLogicException;
-import com.ssts.ssts.exception.ExceptionCode;
-import com.ssts.ssts.utils.S3Uploader;
-import com.ssts.ssts.utils.UpdateUtils;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
+import com.ssts.ssts.global.utils.S3Uploader;
+import com.ssts.ssts.global.utils.UpdateUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

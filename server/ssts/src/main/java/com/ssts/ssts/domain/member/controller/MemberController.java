@@ -4,7 +4,6 @@ package com.ssts.ssts.domain.member.controller;
 import com.ssts.ssts.domain.member.dto.*;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
-import com.ssts.ssts.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URI;
 
 @RestController
 @RequestMapping
