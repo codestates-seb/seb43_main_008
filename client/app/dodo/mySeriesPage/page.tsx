@@ -5,16 +5,15 @@ import styled from "styled-components";
 import Card from "./Card";
 import CountCard from "./CountCard";
 import Header from "./Header";
-// import Navbar from "./Navbar";
 
 // 페이지 기본 레이아웃
 const MainSeriesContainer = styled.div`
-  padding-top: 1px;
+  padding: 1px 24px;
   max-width: 1024px;
   margin: 0 auto;
   background-color: #fafafa;
   min-height: 100vh;
-  min-width: 390px;
+  min-width: 368px;
   overflow: hidden;
 
   @media screen and (max-width: 768px) {
@@ -23,8 +22,7 @@ const MainSeriesContainer = styled.div`
 
 // 콘텐츠 박스 레이아웃
 const SeriesWrapper = styled.div`
-  margin: 0 1px;
-  padding: 10px;
+  margin: 7px 1px;
 `;
 
 export default function page() {
@@ -41,7 +39,6 @@ export default function page() {
           <Card />
         </SeriesWrapper>
       </MainSeriesContainer>
-      {/* <Navbar /> */}
     </>
   );
 }

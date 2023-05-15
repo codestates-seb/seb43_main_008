@@ -7,29 +7,21 @@ import styled from "styled-components";
 export default function Header({
   backButton,
   textContent,
-  saveButton,
 }: {
   backButton: boolean;
   textContent: string | null;
-  saveButton: boolean;
 }) {
   return (
     <HeaderContainer>
       {backButton ? (
         <BackArrowContainer>
-          <AiOutlineLeft size="24" />
+          <AiOutlineLeft size="18" />
         </BackArrowContainer>
       ) : (
         <BackArrowContainer />
       )}
       {textContent ? <HeaderText>{textContent}</HeaderText> : null}
-      {saveButton ? (
-        <SaveButtonContainer>
-          <SaveButton type="submit">저장</SaveButton>
-        </SaveButtonContainer>
-      ) : (
-        <SaveButtonContainer />
-      )}
+      <EmptyContainer />
     </HeaderContainer>
   );
 }
@@ -39,7 +31,7 @@ const HeaderContainer = styled.header`
   top: 0;
   display: flex;
   justify-content: space-between;
-  height: 67px;
+  height: 44px;
   background-color: #ffffff;
   z-index: 1;
 `;
@@ -47,9 +39,16 @@ const HeaderContainer = styled.header`
 const BackArrowContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 70px;
+  height: 50px;
   width: 44px;
   padding: 10px;
+
+  cursor: pointer;
+`;
+
+const EmptyContainer = styled.div`
+  width: 44px;
+  height: 50px;
 `;
 
 const HeaderText = styled.span`
@@ -57,24 +56,6 @@ const HeaderText = styled.span`
   justify-content: center;
   align-items: center;
   height: 100%;
-  font-size: 20px;
-`;
-
-const SaveButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  height: 70px;
-  width: 44px;
-  padding: 10px 10px 10px 0;
-`;
-
-const SaveButton = styled.button`
-  height: 100%;
-  width: 100%;
   font-size: 13px;
-  font-weight: 700;
-  background: inherit;
-  border: none;
-  border-radius: 0;
-  padding: 0;
+  margin-top: 3px;
 `;
