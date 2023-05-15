@@ -1,23 +1,11 @@
 "use client";
 
-import axios from 'axios';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import styled from "styled-components";
 
+import { GetMain } from '../api/api';
 import Card from "./Card";
-
-
-
-const fetchData = async () => {
-  try {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/series`);
-    return response.data.data
-  }
-  catch (error) {
-    throw error;
-  }
-}
 
 export const Lists = () => {
   const [list, setList] = useState([]);
@@ -25,7 +13,7 @@ export const Lists = () => {
   useEffect(() => {
     const fetchList = async () => {
       try {
-        const data = await fetchData();
+        const data = await GetMain();
         setList(data);
       } catch (error) {
         console.error('Error fetching list:', error);
