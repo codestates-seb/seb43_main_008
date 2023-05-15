@@ -13,12 +13,14 @@ interface CommentProps {
   comment: string;
   created_at: string;
   handleEditComment: (id: number) => void;
+  setComment: React.Dispatch<React.SetStateAction<string>>
 }
 export const Comment: React.FC<CommentProps> = ({
   member_id,
   comment,
   id,
   handleEditComment,
+  setComment,
 }) => {
   // 댓글 날짜 추가하기
   // 사용자 Id === 댓글 작성자 Id : edit-delete-button 활성화 하기
@@ -48,6 +50,7 @@ export const Comment: React.FC<CommentProps> = ({
           onClickModal={HandleOpenModal}
           commentid={id}
           handleEditComment={handleEditComment}
+          setComment={setComment}
         />
       )}
     </>

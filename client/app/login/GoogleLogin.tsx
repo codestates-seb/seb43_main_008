@@ -1,10 +1,20 @@
 "use client";
+
+import axios from "axios";
 import Image from "next/image";
 import styled from "styled-components";
 
 export default function GoogleLogin() {
+  const googleLoginRequest = async () => {
+    try {
+      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/login/google`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <GoogleLoginButton>
+    <GoogleLoginButton onClick={googleLoginRequest}>
       <GoogleLogoBox>
         <Image
           src="/socialLoginButton/googleLogo.png"

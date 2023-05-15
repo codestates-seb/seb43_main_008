@@ -28,3 +28,8 @@ input, textarea, button {
     width: 100%;
     height: 100vh;   
 }
+
+.headerPageContainer {
+    width: 100%;
+    height: calc(100vh - 44px);   
+}
