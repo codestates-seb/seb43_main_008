@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,14 +30,14 @@ public class MemberService {
     //private final PasswordEncoder passwordEncoder;
     private final SeriesRepository seriesRepository;
 
-    private final S3Uploader s3Uploader;
+    private final S3Uploader s3ImageUploader;
 
     public Member saveMember(MemberSignUpPostDto memberSignUpPostDto) {
         //ouath 로만 로그인 구현하면.. password 필요없는거 아냐..? 나중에 구현 후 생각해보기.
         Member member=Member.of(memberSignUpPostDto.getNickName(),
                 memberSignUpPostDto.getEmail(),
                 memberSignUpPostDto.getPassword());
-        member.setImage(s3Uploader.getS3("ssts-img", "member/default.png"));
+        member.setImage(s3ImageUploader.getS3("ssts-img", "member/default.png"));
 
         verifyExistsEmail(member.getEmail());
         // 중복되지 않는 이메일이라면 그때 비밀번호 암호화하기
@@ -86,8 +88,13 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberEditInfoResponseDto editMemberInfo(long memberId, MemberEditInfoPatchDto memberEditInfoPatchDto) {
+    public MemberEditInfoResponseDto editMemberInfo(long memberId, MemberEditInfoPatchDto memberEditInfoPatchDto, MultipartFile image) throws IOException {
         Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        if(!image.isEmpty()){
+            String saveFileName = s3ImageUploader.upload(image, "member");
+            member.setImage(saveFileName);
+        }
         // member.setImage(memberEditInfoPatchDto.getImage()); 이미지 로직 추가 후 수정
         member.setNickName(memberEditInfoPatchDto.getNickName());
         //member.setPassword(memberEditInfoPatchDto.getPassword()); //oauth로그인이라서 필요없다.

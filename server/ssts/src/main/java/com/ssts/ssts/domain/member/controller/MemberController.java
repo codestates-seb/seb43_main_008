@@ -11,7 +11,9 @@ import com.ssts.ssts.utils.UriCreator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.URI;
 
 @RestController
@@ -68,9 +70,11 @@ public class MemberController {
     *
     * */
     @PatchMapping("/edit/{memberId}")
-    public ResponseEntity<MemberEditInfoResponseDto> updateMemberInfo(@PathVariable long memberId, @RequestBody MemberEditInfoPatchDto memberEditInfoPatchDto) {
+    public ResponseEntity<MemberEditInfoResponseDto> updateMemberInfo(@PathVariable long memberId,
+                                                                      @ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
+                                                                      @RequestPart("image")MultipartFile image) throws IOException {
 
-        MemberEditInfoResponseDto response = memberService.editMemberInfo(memberId, memberEditInfoPatchDto);
+        MemberEditInfoResponseDto response = memberService.editMemberInfo(memberId, memberEditInfoPatchDto, image);
         // 요청 body값이 nickname은 반드시 들어가야한다,image랑 introduce는 nullable이라서 선택적.
         //
 

@@ -11,6 +11,6 @@ public class DaylogPostDto {
 
     private String content;
 
-    private MultipartFile daylogImg;
+    private MultipartFile image;
 
 }

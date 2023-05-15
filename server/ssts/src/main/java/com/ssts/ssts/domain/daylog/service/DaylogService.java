@@ -54,7 +54,7 @@ public class DaylogService {
         return this.DaylogToDaylogResponseDto(daylog);
     }
 
-    public DaylogResponseDto saveDaylog(MultipartFile image, Long seriesId, DaylogPostDto daylogPostDto) throws IOException {
+    public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto,MultipartFile image) throws IOException {
 
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
 

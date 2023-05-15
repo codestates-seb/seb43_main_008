@@ -28,7 +28,7 @@ public class DaylogController {
                                        @ModelAttribute DaylogPostDto daylogPostDto,
                                        @RequestPart(value = "image") MultipartFile image) throws IOException {
 
-        DaylogResponseDto responseDto = daylogService.saveDaylog(image, seriesId, daylogPostDto);
+        DaylogResponseDto responseDto = daylogService.saveDaylog(seriesId, daylogPostDto, image);
 
         return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
