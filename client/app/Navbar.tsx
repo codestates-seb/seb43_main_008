@@ -64,7 +64,7 @@ export default function Navbar() {
 
       <div className="container">
         <Link
-          href="/main"
+          href="/"
           className={`home menu ${selected === "홈" ? "selected" : ""}`}
           onClick={() => handleMenuClick("홈")}
         >
