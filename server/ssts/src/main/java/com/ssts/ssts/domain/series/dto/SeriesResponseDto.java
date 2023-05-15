@@ -7,9 +7,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Setter
 @Getter
 public class SeriesResponseDto {
@@ -46,7 +44,7 @@ public class SeriesResponseDto {
 
     private Boolean isActive;
 
-    private Member member;
+
 
 
     public static SeriesResponseDto of(Long id,
@@ -62,8 +60,7 @@ public class SeriesResponseDto {
                                        Series.VoteStatus voteStatus,
                                        Boolean isPublic,
                                        Boolean isEditable,
-                                       Boolean isActive,
-                                       Member member) {
+                                       Boolean isActive) {
         SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
 
         seriesResponseDto.setId(id);
@@ -82,7 +79,7 @@ public class SeriesResponseDto {
         seriesResponseDto.setIsPublic(isPublic);
         seriesResponseDto.setIsEditable(isEditable);
         seriesResponseDto.setIsActive(isActive);
-        seriesResponseDto.setMember(member);
+
 
         return seriesResponseDto;
     }

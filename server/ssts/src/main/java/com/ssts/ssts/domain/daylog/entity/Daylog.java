@@ -2,9 +2,11 @@ package com.ssts.ssts.domain.daylog.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.series.entity.Series;
 import lombok.Getter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -19,9 +21,11 @@ public class Daylog extends BaseTimeEntity {
 
     @Column
     private String content;
+    @Nullable
     @Column
-    private String contentimg;
+    private String image;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "series_id")
     private Series series;
@@ -32,7 +36,7 @@ public class Daylog extends BaseTimeEntity {
     }
 
     public void setContentImg(String img) {
-        this.contentimg = img;
+        this.image = img;
     }
 
     public void addSeries(Series series) {
@@ -50,7 +54,14 @@ public class Daylog extends BaseTimeEntity {
         daylog.setContentImg(contentImg);
 
         return daylog;
+    }
 
+    public static Daylog of(String content){
+        Daylog daylog = new Daylog();
+
+        daylog.setContent(content);
+
+        return daylog;
     }
 
 

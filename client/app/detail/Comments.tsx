@@ -76,6 +76,7 @@ export const Comments: React.FC = () => {
                   key={data.id}
                   {...data}
                   handleEditComment={handleEditComment}
+                  setComment={setComment}
                 />
               );
             })}
@@ -87,6 +88,7 @@ export const Comments: React.FC = () => {
 };
 
 const StyledComments = styled.div`
+  margin-bottom: 28px;
   .title {
     margin: 0 24px;
     display: flex;

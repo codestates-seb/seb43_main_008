@@ -41,7 +41,7 @@ public class JwtTokenizer {
                                       String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
-        //FIXME claims 암호화처리 구현하기
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
