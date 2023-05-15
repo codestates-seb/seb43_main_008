@@ -59,12 +59,11 @@ public class MemberService {
         return member;
     }
 
-    public Member findMemberByEmail(String email){
+    public Optional<Member> findMemberByEmail(String email){
 
-        Member member = memberRepository.findByEmail(email).
-                orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Optional<Member> member = memberRepository.findByEmail(email);
 
-        log.info("하늘 member service : member email=" + member.getEmail() + " 조회");
+        log.info("하늘 member service : member email=" + email + " 조회, 반환값 optional");
 
         return member;
     }
