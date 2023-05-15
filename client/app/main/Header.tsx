@@ -12,7 +12,6 @@ export const Header = () => {
 
 const StyledHeader = styled.header`
   height: 67.227px;
-  margin: 0 12px;
 
   display: flex;
   align-items: center;

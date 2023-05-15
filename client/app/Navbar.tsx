@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import Link from "next/link";
 import { useState } from "react";
 import { BsPlusLg } from "react-icons/bs";
 import styled from "styled-components";
@@ -62,7 +63,8 @@ export default function Navbar() {
     <StyledNavbar>
 
       <div className="container">
-        <div
+        <Link
+          href="/"
           className={`home menu ${selected === "홈" ? "selected" : ""}`}
           onClick={() => handleMenuClick("홈")}
         >
@@ -84,8 +86,9 @@ export default function Navbar() {
             />
           )}
           <div className="text">홈</div>
-        </div>
-        <div
+        </Link>
+        <Link
+          href="follow"
           className={`follow menu ${selected === "팔로우" ? "selected" : ""}`}
           onClick={() => handleMenuClick("팔로우")}
         >
@@ -107,10 +110,10 @@ export default function Navbar() {
             />
           )}
           <div className="text">팔로우</div>
-        </div>
-        <div className="plus-button">
+        </Link>
+        <Link href="/dodo/series" className="plus-button">
           <BsPlusLg />
-        </div>
+        </Link>
         <div
           className={`add-series menu ${selected === "시리즈 작성" ? "selected" : ""
             }`}
@@ -119,7 +122,8 @@ export default function Navbar() {
           <div className="icon" />
           <div className="text">새글쓰기</div>
         </div>
-        <div
+        <Link
+          href="bookmark"
           className={`book-mark menu ${selected === "북마크" ? "selected" : ""
             }`}
           onClick={() => handleMenuClick("북마크")}
@@ -142,8 +146,9 @@ export default function Navbar() {
             />
           )}
           <div className="text">북마크</div>
-        </div>
-        <div
+        </Link>
+        <Link
+          href="my-page"
           className={`my-page menu ${selected === "마이일지" ? "selected" : ""
             }`}
           onClick={() => handleMenuClick("마이일지")}
@@ -166,7 +171,7 @@ export default function Navbar() {
             />
           )}
           <div className="text">마이일지</div>
-        </div>
+        </Link>
       </div>
     </StyledNavbar>
   );
@@ -186,6 +191,10 @@ const StyledNavbar = styled.nav`
   box-shadow: rgba(0, 0, 0, 0.08) 0px -10px 15px;
 
   color: #222;
+  a {
+  color: inherit;
+  text-decoration: none;
+}
   .container {
     display: flex;
     flex-direction: row;
