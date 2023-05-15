@@ -65,7 +65,7 @@ public class OAuthLoginController {
             response.addHeader("email", tokenResponse.getEmail());
             response.setStatus(HttpServletResponse.SC_OK);
 
-            response.sendRedirect("https://seb43-main-008-kckrnaxxz-anuena.vercel.app/register");
+            response.sendRedirect("http://localhost:3000/register");
 
         }else{
 
@@ -73,7 +73,7 @@ public class OAuthLoginController {
             response.addHeader("Refresh", tokenResponse.getRefreshToken());
             response.setStatus(HttpServletResponse.SC_OK);
 
-            response.sendRedirect("https://seb43-main-008.vercel.app/main");
+            response.sendRedirect("http://localhost:3000/");
         }
 
 
