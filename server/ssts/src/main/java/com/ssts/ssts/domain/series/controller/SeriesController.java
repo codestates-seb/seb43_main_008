@@ -31,6 +31,15 @@ public class SeriesController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping
+    public ResponseEntity getMainSeriesList(@RequestParam(value = "page", defaultValue = "1") int page,
+                                        @RequestParam(value = "size", defaultValue = "12") int size){
+
+        SeriesPageResponseDto response = seriesService.getMainSeriesList(page-1, size);
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{series-id}")
     public ResponseEntity getSeries(@PathVariable("series-id") Long id){
 

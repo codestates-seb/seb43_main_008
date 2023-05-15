@@ -57,6 +57,17 @@ public class SeriesService {
         return new SeriesPageResponseDto(list, seriesInfo);
     }
 
+    public SeriesPageResponseDto getMainSeriesList(int page, int size){
+
+        Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
+                Sort.by("id").descending()));
+
+        List<Series> seriesList = seriesInfo.getContent();
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+
+        return new SeriesPageResponseDto(list, seriesInfo);
+    }
+
     public SeriesResponseDto getSeries(Long id){
         memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(id);
