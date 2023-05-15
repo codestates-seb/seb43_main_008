@@ -25,6 +25,11 @@ public class Series extends BaseTimeEntity {
     @Column
     private String title;
 
+    @Column
+    private String image;
+
+
+
     @ColumnDefault("0")
     @Column
     private int daylogCount;
@@ -94,6 +99,10 @@ public class Series extends BaseTimeEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setVoteAgree(int voteAgree) {
