@@ -6,6 +6,7 @@ import com.ssts.ssts.domain.daylog.dto.DaylogPostDto;
 import com.ssts.ssts.domain.daylog.dto.DaylogResponseDto;
 import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
+import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
@@ -33,11 +34,14 @@ public class DaylogService {
 
     private final SeriesRepository seriesRepository;
 
+    private final MemberService memberService;
+
     private final S3Uploader s3ImageUploader;
 
 
 
     public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto){
+        memberService.findMemberByToken();
 
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
 
@@ -55,7 +59,7 @@ public class DaylogService {
     }
 
     public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto,MultipartFile image) throws IOException {
-
+        memberService.findMemberByToken();
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
 
         Optional<Series> optionalQuestion = seriesRepository.findById(seriesId);
@@ -79,7 +83,7 @@ public class DaylogService {
 
 
     public DaylogPageResponseDto getDaylogList(Long seriesId, int page, int size) {
-
+        memberService.findMemberByToken();
         Page<Daylog> daylogsInfo = daylogRepository.findBySeries_id(seriesId,
                 PageRequest.of(page, size, Sort.by("id").descending()));
 

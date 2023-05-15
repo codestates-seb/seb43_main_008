@@ -5,6 +5,7 @@ import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.dto.SeriesPageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
@@ -15,6 +16,7 @@ import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
 import com.ssts.ssts.utils.UpdateUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,19 +30,24 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SeriesService {
 
     private final SeriesRepository seriesRepository;
 
     private final MemberRepository memberRepository;
 
+    private final MemberService memberService;
+
     private final UpdateUtils<Series> updateUtils;
 
 
 
-    public SeriesPageResponseDto getSeriesList(Long memberid, int page, int size){
+    public SeriesPageResponseDto getSeriesList(int page, int size){
 
-        Page<Series> seriesInfo = seriesRepository.findByMember_id(memberid, PageRequest.of(page, size,
+        Member findMember = memberService.findMemberByToken();
+
+        Page<Series> seriesInfo = seriesRepository.findByMember_id(findMember.getId(), PageRequest.of(page, size,
                 Sort.by("id").descending()));
 
         List<Series> seriesList = seriesInfo.getContent();
@@ -51,7 +58,7 @@ public class SeriesService {
     }
 
     public SeriesResponseDto getSeries(Long id){
-
+        memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(id);
 
         return this.seriesToSeriesResponseDto(series);
@@ -60,12 +67,12 @@ public class SeriesService {
 
 
 
-    public SeriesResponseDto saveSeries(Long memberId, SeriesPostDto seriesPostDto){
-
+    public SeriesResponseDto saveSeries(SeriesPostDto seriesPostDto){
+        Member member = memberService.findMemberByToken();
         Series series = Series.of(seriesPostDto.getTitle());
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Optional<Member> optionalMember = memberRepository.findById(member.getId());
 
-        Member findMember =
+        Member  findMember=
                 optionalMember.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
@@ -76,20 +83,30 @@ public class SeriesService {
     }
 
 
-    public SeriesResponseDto updateSeries(Long memeberId, Long id, SeriesUpdateDto seriesUpdateDto){
+    public SeriesResponseDto updateSeries(SeriesUpdateDto seriesUpdateDto){
+        Member member = memberService.findMemberByToken();
 
-        Series DescSeries = this.findVerifiedSeries(id);
+        Series DescSeries = this.findVerifiedSeries(member.getId());
         Series series = Series.of(seriesUpdateDto.getTitle());
 
-        Series updateSeries = updateUtils.copyNonNullProperties(series,DescSeries);
+        if(DescSeries.getMember().getId()!= member.getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
 
-        return this.seriesToSeriesResponseDto(series);
+        Series updateSeries = updateUtils.copyNonNullProperties(series,DescSeries);
+        seriesRepository.save(updateSeries);
+
+        return this.seriesToSeriesResponseDto(updateSeries);
 
     }
 
     public void deleteSeries(Long id){
-
+        Member member = memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(id);
+        if(series.getMember().getId()!=member.getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
+
         seriesRepository.delete(series);
     }
 

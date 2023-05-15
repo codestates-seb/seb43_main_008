@@ -62,7 +62,6 @@ public class MemberController {
         //FIXME 출력도 고쳐야한다.
         return ResponseEntity.status(HttpStatus.OK).body(member.getPhone()+" 휴대폰 번호가 정상적으로 입력되셨습니다.");
 
-        return ResponseEntity.created(location).build();
     }
 
 
@@ -110,10 +109,10 @@ public class MemberController {
     * */
     @PatchMapping("/feed")
     public ResponseEntity updateMemberInfo(@RequestBody MemberEditInfoPatchDto memberEditInfoPatchDto,
-                                           @RequestPart("image")MultipartFile image) throws IOException){
+                                           @RequestPart("image")MultipartFile image) throws IOException{
 
 
-        MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto);
+        MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto, image);
         // 요청 body값이 nickname은 반드시 들어가야한다,image랑 introduce는 nullable이라서 선택적.
 
         //변경됬으니까 변경된 입력값을 알려줘야 한다.

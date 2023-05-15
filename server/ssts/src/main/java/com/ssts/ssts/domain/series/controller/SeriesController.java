@@ -22,12 +22,11 @@ public class SeriesController {
 
 
 
-    @GetMapping("members/{member-id}")
-    public ResponseEntity getSeriesList(@AuthenticationPrincipal String authId, @PathVariable("member-id") Long id,
-                                        @RequestParam(value = "page", defaultValue = "1") int page,
+    @GetMapping("/members")
+    public ResponseEntity getSeriesList(@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "12") int size){
 
-        SeriesPageResponseDto response = seriesService.getSeriesList(id, page-1, size);
+        SeriesPageResponseDto response = seriesService.getSeriesList(page-1, size);
 
         return ResponseEntity.ok(response);
     }
@@ -41,10 +40,10 @@ public class SeriesController {
     }
 
 
-    @PostMapping("/{member-id}")  //추후 member-id url삭제
-    public ResponseEntity createSeries(@PathVariable("member-id") Long memberid, @RequestBody SeriesPostDto seriesPostDto){
+    @PostMapping  //추후 member-id url삭제
+    public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto){
 
-        SeriesResponseDto response = seriesService.saveSeries(memberid, seriesPostDto);
+        SeriesResponseDto response = seriesService.saveSeries(seriesPostDto);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
@@ -58,10 +57,10 @@ public class SeriesController {
 //    }
 
     @PatchMapping("/{series-id}")
-    public ResponseEntity updateSeries(@PathVariable("series-id") Long id, @RequestBody
+    public ResponseEntity updateSeries(@RequestBody
     SeriesUpdateDto seriesUpdateDto){
 
-        SeriesResponseDto response = seriesService.updateSeries(1L, id, seriesUpdateDto);
+        SeriesResponseDto response = seriesService.updateSeries(seriesUpdateDto);
 
         return ResponseEntity.ok(response);
     }

@@ -1,8 +1,8 @@
 package com.ssts.ssts.domain.member.service;
 
 import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
-import com.ssts.ssts.domain.member.dto.MemberEditInfoResponseDto;
-import com.ssts.ssts.domain.member.dto.MemberMyPageResponseDto;
+import com.ssts.ssts.domain.member.dto.MemberFeedResponseDto;
+import com.ssts.ssts.domain.member.dto.MemberPhoneInfoPostDto;
 import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
@@ -10,12 +10,15 @@ import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
 import com.ssts.ssts.utils.S3Uploader;
+import com.ssts.ssts.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,22 +141,21 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto) {
+    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto, MultipartFile image) throws IOException{
 
         Member member = findMemberByToken();
         String nickName=memberEditInfoPatchDto.getNickName();
-        String image=memberEditInfoPatchDto.getImage();
-        String introduce= memberEditInfoPatchDto.getIntroduce();
 
+        String introduce= memberEditInfoPatchDto.getIntroduce();
         //if문을 왜 쓰느냐? --> 입력안한 값에는 null이 들어가고, DB에 저장되어 버린다. 쌈바?..??훔..
         if (!(nickName == null)) {
 
             verifyExistsNickName(nickName);
             member.setNickName(memberEditInfoPatchDto.getNickName());
         }
-        if (!(image == null)) {
-
-            member.setImage(memberEditInfoPatchDto.getImage());
+        if(!image.isEmpty()){
+            String saveFileName = s3ImageUploader.upload(image,"daylog");
+            member.setImage(saveFileName);
         }
         if (!(introduce == null)) {
 
