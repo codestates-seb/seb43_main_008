@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,101 +25,196 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    //세큐리티 추가시 동작가능
-    //private final PasswordEncoder passwordEncoder;
+
     private final SeriesRepository seriesRepository;
 
     private final S3Uploader s3ImageUploader;
 
+
+    /*
+    * 토큰에서 id 가져와서 Member 반환
+    * */
+    public Member findMemberByToken() {
+
+        long memberId = SecurityUtil.getMemberId();
+        Member member = memberRepository.findById(memberId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        log.info("하늘 member service : memberid=" + member.getId() + " 조회");
+
+        return member;
+    }
+
+    public Member findMemberById(long memberId){
+
+        long findId = SecurityUtil.getMemberId();
+        Member member = memberRepository.findById(findId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        log.info("하늘 member service : member id=" + member.getId() + " 조회");
+
+        return member;
+    }
+
+    public Member findMemberByEmail(String email){
+
+        Member member = memberRepository.findByEmail(email).
+                orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        log.info("하늘 member service : member email=" + member.getEmail() + " 조회");
+
+        return member;
+    }
+
+    /*
+    * 테스트용 회원가입
+    * */
     public Member saveMember(MemberSignUpPostDto memberSignUpPostDto) {
-        //ouath 로만 로그인 구현하면.. password 필요없는거 아냐..? 나중에 구현 후 생각해보기.
-        Member member=Member.of(memberSignUpPostDto.getNickName(),
-                memberSignUpPostDto.getEmail(),
-                memberSignUpPostDto.getPassword());
+
+        Member member = Member.of(memberSignUpPostDto.getEmail(), memberSignUpPostDto.getNickName(), memberSignUpPostDto.getPhone());
         member.setImage(s3ImageUploader.getS3("ssts-img", "member/default.png"));
-
         verifyExistsEmail(member.getEmail());
-        // 중복되지 않는 이메일이라면 그때 비밀번호 암호화하기
-        //member.setPassword(passwordEncoder.encode(member.getPassword());
-        //
+        verifyExistsNickName(member.getNickName());
+        verifyExistsPhoneNumber(member.getPhone());
 
-        //세큐리티 추가시 동작가능
-        //List<String> roles = authorityUtils.createRoles(member.getEmail());
-        //임시 동작 : admin 권한은 이메일에 @ssts.com이 포함되어있으면 관리자!
         List<String> roles;
-        if(isAdmin(member.getEmail())){
-            roles=List.of("ADMIN","USER");
-        }else{
-            roles=List.of("USER");
+        if (isAdmin(member.getEmail())) {
+            roles = List.of("ADMIN", "USER");
+        } else {
+            roles = List.of("USER");
         }
         member.setRoles(roles);
 
-        Member savedMember=memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
 
         return savedMember;
     }
 
-    public MemberMyPageResponseDto findMember(long memberId) {
+    /*
+    * 테스트용 멤버 삭제
+    * */
+    public void deleteMember(long memberId){
 
-        Member member = findMemberById(memberId);
-        MemberMyPageResponseDto responseDto=MemberMyPageResponseDto.of(member.getNickName(),
+        memberRepository.deleteById(memberId);
+        log.info("하늘 member service test delete : memberId="+memberId);
+    }
+
+
+    public MemberFeedResponseDto getFeedInfo(String nickName){
+
+        Member member = memberRepository.findByNickName(nickName).
+                orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+                member.getNickName(),
                 member.getImage(),
-                member.getIntroduce(),
-                seriesRepository.findAllByMemberId(member.getId())); // 데이터 가져오기
+                member.getIntroduce());
 
         return responseDto;
     }
 
-    public Member findMemberById(long memberId){
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        return member;
+    public MemberFeedResponseDto getMyFeedInfo() {
+
+        Member member = findMemberByToken();
+        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+                member.getNickName(),
+                member.getImage(),
+                member.getIntroduce());
+
+        return responseDto;
     }
 
     @Transactional
-    public Member changeMemberStatusWithdraw(long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    public Member changeMemberStatusWithdraw() {
+
+        Member member = findMemberByToken();
+        member.setDeletedAt(LocalDateTime.now());
         member.setStatus(Member.Status.WITHDRAW);
-        //탈퇴 로그 출력
-        log.debug("memberid="+member.getId()+" 탈퇴처리");
+
+        log.info("하늘 member service : memberid=" + member.getId() +
+                ", " + member.getDeletedAt() + "에 탈퇴처리");
 
         return member;
     }
 
     @Transactional
-    public MemberEditInfoResponseDto editMemberInfo(long memberId, MemberEditInfoPatchDto memberEditInfoPatchDto, MultipartFile image) throws IOException {
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto) {
 
-        if(!image.isEmpty()){
-            String saveFileName = s3ImageUploader.upload(image, "member");
-            member.setImage(saveFileName);
+        Member member = findMemberByToken();
+        String nickName=memberEditInfoPatchDto.getNickName();
+        String image=memberEditInfoPatchDto.getImage();
+        String introduce= memberEditInfoPatchDto.getIntroduce();
+
+        //if문을 왜 쓰느냐? --> 입력안한 값에는 null이 들어가고, DB에 저장되어 버린다. 쌈바?..??훔..
+        if (!(nickName == null)) {
+
+            verifyExistsNickName(nickName);
+            member.setNickName(memberEditInfoPatchDto.getNickName());
         }
-        // member.setImage(memberEditInfoPatchDto.getImage()); 이미지 로직 추가 후 수정
-        member.setNickName(memberEditInfoPatchDto.getNickName());
-        //member.setPassword(memberEditInfoPatchDto.getPassword()); //oauth로그인이라서 필요없다.
-        member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
+        if (!(image == null)) {
 
-        MemberEditInfoResponseDto responseDto = MemberEditInfoResponseDto.of(member.getImage(), member.getNickName(), member.getIntroduce());
+            member.setImage(memberEditInfoPatchDto.getImage());
+        }
+        if (!(introduce == null)) {
+
+            member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
+        }
+
+        log.info("하늘 member service : 수정 후 [" +
+                " nickName=" + member.getNickName() +
+                " image=" + member.getImage() +
+                " introduce=" + member.getIntroduce() + "]");
+
+        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+                member.getNickName(),
+                member.getImage(),
+                member.getIntroduce());
         return responseDto;
+    }
+
+    @Transactional
+    public Member updatePhoneInfo(MemberPhoneInfoPostDto memberPhoneInfoPostDto) {
+
+        Member member = findMemberByToken();
+        verifyExistsPhoneNumber(memberPhoneInfoPostDto.getPhone());
+        member.setPhone(memberPhoneInfoPostDto.getPhone());
+
+        log.info("하늘 member service : phone="+member.getPhone()+" 입력");
+
+        return member;
     }
 
     public void verifyExistsEmail(String email) {
 
-        //내가 만든 Exception을 던지려면 supplier 타입으로 던져야한다.
-        Optional<Member> member=memberRepository.findByEmail(email);
-        //멤버가 증명됬다는 의미로 로그를 띄워줘야할까?
+        Optional<Member> member = memberRepository.findByEmail(email);
+
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATE);
         }
 
     }
 
+    public void verifyExistsPhoneNumber(String phone){
 
+        Optional<Member> member = memberRepository.findByPhone(phone);
 
-    private boolean isAdmin(String email){
-        if(email.contains("@ssts.com")){
+        if (member.isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.PHONENUMBER_DUPLICATE);
+        }
+    }
+
+    public void verifyExistsNickName(String nickName){
+        Optional<Member> member = memberRepository.findByNickName(nickName);
+
+        if (member.isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_DUPLICATE);
+        }
+    }
+
+    private boolean isAdmin(String email) {
+        if (email.contains("@ssts.com")) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

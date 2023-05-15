@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class MemberSignUpPostDto {
-
-    String nickName;
+    //테스트 용
     String email;
-    String password;
+    String nickName;
+    String phone;
 
 }

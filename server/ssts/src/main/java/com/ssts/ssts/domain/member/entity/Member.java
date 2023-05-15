@@ -20,7 +20,7 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //post 입력받음---------------------------
+    // null 불가능 ---------------------------
     @Column(nullable = false)
     private String nickName;
 
@@ -28,7 +28,7 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     @Column(nullable = false)
-    private String password; //encoder 작업
+    private String phone;
     //---------------------------------------
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -40,12 +40,6 @@ public class Member extends BaseTimeEntity {
     @Column(length = 20, nullable = false)
     private Status status=Status.ACTIVE;
 
-//
-//    @Column(nullable = false)
-//    private LocalDateTime createdAt = LocalDateTime.now();
-//
-//    @Column(nullable = false)
-//    private LocalDateTime modifiedAt = LocalDateTime.now();
     //---------------------------------------
 
     // null 가능------------------------------
@@ -64,16 +58,15 @@ public class Member extends BaseTimeEntity {
     private List<Series> series;
 
     // of 정적 팩토리 메서드 - 임시 회원가입
-    public static Member of(String nickName, String email, String password) {
+    public static Member of(String email,String nickName, String phone) {
         Member member=new Member();
 
-        member.setNickName(nickName);
         member.setEmail(email);
-        member.setPassword(password);
+        member.setNickName(nickName);
+        member.setPhone(phone);
 
         return member;
     }
-
 
 
     // enum
