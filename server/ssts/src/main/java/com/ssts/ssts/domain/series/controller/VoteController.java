@@ -44,8 +44,10 @@ public class VoteController {
 
 
     //투표 종료
-    @PatchMapping("/quit/{series_id}/{member_id}") //이제 500에러 디버깅 돌리기
-    public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathVariable("member_id") Long memberId, @PathParam("isQuit") Boolean isQuit){ //프론트가 boolean으로 보내야
+    //@PatchMapping("/quit/{series_id}/{member_id}")
+    @PatchMapping("/quit/{series_id}")
+    //public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathVariable("member_id") Long memberId, @PathParam("isQuit") Boolean isQuit){ //프론트가 boolean으로 보내야
+    public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathParam("isQuit") Boolean isQuit){
 
         //VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
         VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, isQuit);

@@ -205,7 +205,6 @@ public class VoteService {
         targetSeries.setActive(false); //활성 상태
         targetSeries.setSeriesStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
         }
-
         return voteCountResponse(targetSeries.getId(), targetSeries);
     }
 
