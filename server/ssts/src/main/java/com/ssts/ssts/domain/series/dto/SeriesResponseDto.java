@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 public class SeriesResponseDto {
 
+    private Long id;
+
     private String title;
 
     private String image;
@@ -44,11 +46,13 @@ public class SeriesResponseDto {
 
     private Boolean isActive;
 
-    //사용자 vote 여부 (true: 참여함, false: 미참여함)
     private Boolean isVotedMember;
 
 
-    public static SeriesResponseDto of(String title,
+
+
+    public static SeriesResponseDto of(Long id,
+                                       String title,
                                        String image,
                                        int daylogCount,
                                        LocalDateTime createdAt,
@@ -64,7 +68,7 @@ public class SeriesResponseDto {
                                        Boolean isActive) {
         SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
 
-
+        seriesResponseDto.setId(id);
         seriesResponseDto.setTitle(title);
         seriesResponseDto.setImage(image);
         seriesResponseDto.setDaylogCount(daylogCount);
@@ -83,10 +87,10 @@ public class SeriesResponseDto {
         seriesResponseDto.setIsActive(isActive);
 
 
+
         return seriesResponseDto;
     }
 
-    //getSerise /오버로드
     public static SeriesResponseDto of(Long id,
                                        String title,
                                        int daylogCount,

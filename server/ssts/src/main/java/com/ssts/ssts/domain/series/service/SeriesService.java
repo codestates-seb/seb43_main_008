@@ -4,6 +4,7 @@ package com.ssts.ssts.domain.series.service;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
@@ -182,7 +183,7 @@ public class SeriesService {
     private SeriesResponseDto seriesToSeriesResponseDto(Series series) {
 
 
-        return SeriesResponseDto.of(
+        return SeriesResponseDto.of(series.getId(),
                 series.getTitle(),
                 series.getImage(),
                 series.getDaylogCount(),
