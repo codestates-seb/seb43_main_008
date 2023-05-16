@@ -23,7 +23,7 @@ public class Daylog extends BaseTimeEntity {
     private String content;
     @Nullable
     @Column
-    private String contentimg;
+    private String image;
 
     @JsonIgnore
     @ManyToOne
@@ -36,7 +36,7 @@ public class Daylog extends BaseTimeEntity {
     }
 
     public void setContentImg(String img) {
-        this.contentimg = img;
+        this.image = img;
     }
 
     public void addSeries(Series series) {
@@ -52,6 +52,14 @@ public class Daylog extends BaseTimeEntity {
 
         daylog.setContent(content);
         daylog.setContentImg(contentImg);
+
+        return daylog;
+    }
+
+    public static Daylog of(String content){
+        Daylog daylog = new Daylog();
+
+        daylog.setContent(content);
 
         return daylog;
     }

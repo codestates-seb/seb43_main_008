@@ -16,20 +16,20 @@
 #          format_sql: true
 spring:
   datasource:
+    #url:jdbc:mysql://ssts.coxwgsn7huq2.ap-northeast-2.rds.amazonaws.com:3306/testsstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
     url: jdbc:mysql://ssts.coxwgsn7huq2.ap-northeast-2.rds.amazonaws.com:3306/sstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     database: mysql
     properties:
       hibernate:
         show_sql: true
         format_sql: true
-
   security:
     oauth2:
       client:
@@ -40,6 +40,7 @@ spring:
             scope:
               - email # resource owner의 이메일 정보
               - profile # resource owner의 프로필 정보
+
           kakao:
             client-id: ${OAUTH_KAKAO_CI}
             client-secret: ${OAUTH_KAKAO_CS}
@@ -59,6 +60,11 @@ spring:
 #logging:
 #  level:
 #    root: DEBUG
+servlet:
+  multipart:
+    max-file-size: 5MB
+    max-request-size: 5MB  #이미지 파일 업로드 최대 용량제한
+
 
 server:
   servlet:
@@ -72,3 +78,17 @@ jwt:
     secret: ${JWT_SECRET_KEY}               # 민감한 정보는 시스템 환경 변수에서 로드한다.
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 420
+
+
+cloud:
+  aws:
+    s3:
+      bucket: ssts-img
+    credentials:
+      accessKey: ${S3Img_AK}       # AWS IAM AccessKey 적기
+      secretKey: ${S3Img_SK}   # AWS IAM SecretKey 적기
+       # ex) marryting-gyunny # ex) /gyunny
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

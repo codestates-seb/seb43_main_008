@@ -16,6 +16,8 @@ public class SeriesResponseDto {
 
     private String title;
 
+    private String image;
+
     private int daylogCount;
 
     private LocalDateTime createdAt;
@@ -50,6 +52,7 @@ public class SeriesResponseDto {
 
     public static SeriesResponseDto of(Long id,
                                        String title,
+                                       String image,
                                        int daylogCount,
                                        LocalDateTime createdAt,
                                        LocalDateTime modifiedAt,
@@ -66,6 +69,7 @@ public class SeriesResponseDto {
 
         seriesResponseDto.setId(id);
         seriesResponseDto.setTitle(title);
+        seriesResponseDto.setImage(image);
         seriesResponseDto.setDaylogCount(daylogCount);
         seriesResponseDto.setCreatedAt(createdAt);
         seriesResponseDto.setModifiedAt(modifiedAt);

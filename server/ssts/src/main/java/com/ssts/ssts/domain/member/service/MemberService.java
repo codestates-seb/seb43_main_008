@@ -1,16 +1,23 @@
 package com.ssts.ssts.domain.member.service;
 
-import com.ssts.ssts.domain.member.dto.*;
+import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
+import com.ssts.ssts.domain.member.dto.MemberFeedResponseDto;
+import com.ssts.ssts.domain.member.dto.MemberPhoneInfoPostDto;
+import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
-import com.ssts.ssts.exception.BusinessLogicException;
-import com.ssts.ssts.exception.ExceptionCode;
-import com.ssts.ssts.utils.security.SecurityUtil;
+import com.ssts.ssts.domain.series.repository.SeriesRepository;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
+import com.ssts.ssts.global.utils.S3Uploader;
+import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +28,11 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+
+    private final SeriesRepository seriesRepository;
+
+    private final S3Uploader s3ImageUploader;
+
 
     /*
     * 토큰에서 id 가져와서 Member 반환
@@ -47,12 +59,11 @@ public class MemberService {
         return member;
     }
 
-    public Member findMemberByEmail(String email){
+    public Optional<Member> findMemberByEmail(String email){
 
-        Member member = memberRepository.findByEmail(email).
-                orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Optional<Member> member = memberRepository.findByEmail(email);
 
-        log.info("하늘 member service : member email=" + member.getEmail() + " 조회");
+        log.info("하늘 member service : member email=" + email + " 조회, 반환값 optional");
 
         return member;
     }
@@ -63,7 +74,7 @@ public class MemberService {
     public Member saveMember(MemberSignUpPostDto memberSignUpPostDto) {
 
         Member member = Member.of(memberSignUpPostDto.getEmail(), memberSignUpPostDto.getNickName(), memberSignUpPostDto.getPhone());
-
+        member.setImage(s3ImageUploader.getS3("ssts-img", "member/default.png"));
         verifyExistsEmail(member.getEmail());
         verifyExistsNickName(member.getNickName());
         verifyExistsPhoneNumber(member.getPhone());
@@ -129,22 +140,22 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto) {
+    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto, Optional<MultipartFile> image) throws IOException{
 
         Member member = findMemberByToken();
         String nickName=memberEditInfoPatchDto.getNickName();
-        String image=memberEditInfoPatchDto.getImage();
-        String introduce= memberEditInfoPatchDto.getIntroduce();
 
+        String introduce= memberEditInfoPatchDto.getIntroduce();
         //if문을 왜 쓰느냐? --> 입력안한 값에는 null이 들어가고, DB에 저장되어 버린다. 쌈바?..??훔..
         if (!(nickName == null)) {
 
             verifyExistsNickName(nickName);
             member.setNickName(memberEditInfoPatchDto.getNickName());
         }
-        if (!(image == null)) {
+        if(image.isPresent()){
 
-            member.setImage(memberEditInfoPatchDto.getImage());
+            String saveFileName = s3ImageUploader.upload(image.get(),"daylog");
+            member.setImage(saveFileName);
         }
         if (!(introduce == null)) {
 

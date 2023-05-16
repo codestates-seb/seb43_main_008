@@ -5,6 +5,7 @@ import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
 import com.ssts.ssts.domain.series.dto.SeriesPageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
@@ -12,11 +13,16 @@ import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesUpdateDto;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
+import com.ssts.ssts.global.utils.S3Uploader;
+import com.ssts.ssts.global.utils.UpdateUtils;
 import com.ssts.ssts.exception.BusinessLogicException;
 import com.ssts.ssts.exception.ExceptionCode;
 import com.ssts.ssts.utils.UpdateUtils;
 import com.ssts.ssts.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,32 +37,50 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SeriesService {
 
     private final SeriesRepository seriesRepository;
 
     private final MemberRepository memberRepository;
 
+    private final MemberService memberService;
+
     private final UpdateUtils<Series> updateUtils;
+
+    private final S3Uploader s3Uploader;
+
 
     //vote
     private final MemberVoteRepository voteMemberRepo;
     private final MemberRepository memberRepo;
 
-    public SeriesPageResponseDto getSeriesList(Long memberid, int page, int size){
+    public SeriesPageResponseDto getSeriesList(int page, int size){
 
-        Page<Series> seriesInfo = seriesRepository.findByMember_id(memberid, PageRequest.of(page, size,
+        Member findMember = memberService.findMemberByToken();
+
+        Page<Series> seriesInfo = seriesRepository.findByMember_id(findMember.getId(), PageRequest.of(page, size,
                 Sort.by("id").descending()));
 
         List<Series> seriesList = seriesInfo.getContent();
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
 
+        return new SeriesPageResponseDto(list, seriesInfo);
+    }
+
+    public SeriesPageResponseDto getMainSeriesList(int page, int size){
+
+        Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
+                Sort.by("id").descending()));
+
+        List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
 
         return new SeriesPageResponseDto(list, seriesInfo);
     }
 
     public SeriesResponseDto getSeries(Long id){
-
+        memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(id);
 
         //사용자 Id받기
@@ -92,36 +116,48 @@ public class SeriesService {
 
 
 
-    public SeriesResponseDto saveSeries(Long memberId, SeriesPostDto seriesPostDto){
+    public SeriesResponseDto saveSeries(SeriesPostDto seriesPostDto){
 
+        Member authMember = memberService.findMemberByToken();
         Series series = Series.of(seriesPostDto.getTitle());
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Member member = memberService.findMemberById(authMember.getId());
 
-        Member findMember =
-                optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        if(authMember.getId()!=member.getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
 
-        series.addMember(findMember);
+        series.setImage(s3Uploader.getS3("ssts-img", "series/series-image.png"));
+        series.addMember(member);
         seriesRepository.save(series);
 
         return this.seriesToSeriesResponseDto(series);
     }
 
 
-    public SeriesResponseDto updateSeries(Long memeberId, Long id, SeriesUpdateDto seriesUpdateDto){
+    public SeriesResponseDto updateSeries(SeriesUpdateDto seriesUpdateDto){
+        Member member = memberService.findMemberByToken();
 
-        Series DescSeries = this.findVerifiedSeries(id);
+        Series DescSeries = this.findVerifiedSeries(member.getId());
         Series series = Series.of(seriesUpdateDto.getTitle());
 
-        Series updateSeries = updateUtils.copyNonNullProperties(series,DescSeries);
+        if(DescSeries.getMember().getId()!= member.getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
 
-        return this.seriesToSeriesResponseDto(series);
+        Series updateSeries = updateUtils.copyNonNullProperties(series,DescSeries);
+        seriesRepository.save(updateSeries);
+
+        return this.seriesToSeriesResponseDto(updateSeries);
 
     }
 
     public void deleteSeries(Long id){
-
+        Member member = memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(id);
+        if(series.getMember().getId()!=member.getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
+
         seriesRepository.delete(series);
     }
 
@@ -146,6 +182,7 @@ public class SeriesService {
 
         return SeriesResponseDto.of(series.getId(),
                 series.getTitle(),
+                series.getImage(),
                 series.getDaylogCount(),
                 series.getCreatedAt(),
                 series.getModifiedAt(),
