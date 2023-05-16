@@ -38,9 +38,8 @@ const Container = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
   width: 100%;
-  height: 160px;
+  height: 190px;
 `;
 
 const WriteInputDetail = styled(TextareaAutosize)`
@@ -53,6 +52,7 @@ const WriteInputDetail = styled(TextareaAutosize)`
   font-size: 14px;
   overflow: hidden;
   max-height: 150px;
+  margin-top: none;
   &:focus {
     outline: none;
   }
