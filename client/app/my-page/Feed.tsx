@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { ActivePost } from './ActivePost';
 import { DonePost } from "./DonePost"
-import { VotingPost } from './VotingPost';
+import { VotingPost } from "./VotingPost"
 
 export const Feed = () => {
   // map 돌려서 게시글 불러오기 
@@ -15,6 +15,7 @@ export const Feed = () => {
       <div className='feed'>
         <ActivePost />
         <VotingPost voting={true} />
+        <VotingPost voting={false} />
         <VotingPost voting={false} />
         <DonePost level={1} />
         <DonePost level={1} />
@@ -39,7 +40,17 @@ const StyledFeed = styled.div`
   .feed {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 4vw;
+    grid-template-rows: repeat(3, 1fr);
+
+    grid-gap: 4vw
+  }
+
+  @media screen and (min-width: 1024px) {
+    .image {
+      width: 250px;
+      height: 250px;
+      font-size: 46px;
+    }
   }
 `
 

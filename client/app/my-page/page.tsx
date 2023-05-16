@@ -53,7 +53,11 @@ export default function MyPage() {
 }
 
 const StylePage = styled.div`
-  min-height: 100vh; 
+  min-height: calc(100vh - 44px - 70.8px); 
+  /* height: auto; */
+
   max-width: 1024px;
   min-width: 260px;
+
+  margin-bottom: 20vw;
 `

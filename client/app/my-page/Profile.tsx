@@ -37,7 +37,7 @@ export const Profile = () => {
 
 const StyledProfile = styled.div`
   background-color: #F0F0F0;
-  height: 150px;
+  height: auto;
   padding:  24px;
   display: flex;
   flex-direction: column;
@@ -46,13 +46,15 @@ const StyledProfile = styled.div`
   a {
   color: inherit;
   text-decoration: none;
-}
+  }
 
   .profile-box{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
+
+    padding-bottom: 24px;
   }
 
   .info-box{
@@ -61,30 +63,30 @@ const StyledProfile = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     margin-right: 18px;
-    .user-info {
+  }
+  .user-info {
     margin-top: 4.3px;
     font-size: 0.8rem;
     color: #757575;
-    }
   }
 
   .button-box{
     display: flex;
     flex-direction:column;
-
-    .badge, .setting {
+  }
+  
+  .badge, .setting {
       cursor: pointer;
       margin-left: 10px;
       margin-bottom: 8px;
       display: flex;
       flex-direction: row;
+  }
 
-      .text {
+  .text {
         margin-left: 2px;
         font-size: 0.8rem;
         color: #757575;
-      }
-    }
   }
 
   .image {
