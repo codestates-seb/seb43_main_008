@@ -33,6 +33,8 @@ public class VoteResponse {
         LocalDateTime voteCreatedAt;
 
 
+
+        //최초 투표일 때의 투표 Response 변경
         public static FirstVoteResponse of(Long seriesId, int voteCount, Boolean voteResult, int voteAgree,
                                            int voteDisagree, Series.VoteStatus voteStatus, LocalDateTime voteCreatedAt, LocalDateTime voteEndAt) {
             VoteResponse.FirstVoteResponse vote = new FirstVoteResponse();
@@ -56,22 +58,22 @@ public class VoteResponse {
     @NoArgsConstructor
     public static class RevoteResponse extends VoteResponse { //재투표 Response
 
-        int revoteCount;
-        Boolean reVoteResult;
-        int reVoteAgree;
-        int reVoteDisagree;
+        int voteCount;
+        Boolean revoteResult;
+        int revoteAgree;
+        int revoteDisagree;
         LocalDateTime voteCreatedAt;
 
-        public static RevoteResponse of(Long seriesId, int revoteCount, Boolean revoteResult, int revoteAgree,
+        public static RevoteResponse of(Long seriesId, int voteCount, Boolean revoteResult, int revoteAgree,
                                         int revoteDisagree, Series.VoteStatus voteStatus, LocalDateTime voteCreatedAt, LocalDateTime voteEndAt) {
             VoteResponse.RevoteResponse revote = new RevoteResponse();
 
 
-            revote.getSeriesId();
-            revote.setRevoteCount(revoteCount);
-            revote.setReVoteResult(revoteResult);
-            revote.setReVoteAgree(revoteAgree);
-            revote.setReVoteDisagree(revoteDisagree);
+            revote.setSeriesId(seriesId);
+            revote.setVoteCount(voteCount);
+            revote.setRevoteResult(revoteResult);
+            revote.setRevoteAgree(revoteAgree);
+            revote.setRevoteDisagree(revoteDisagree);
             revote.setVoteStatus(voteStatus);
             revote.setVoteCreatedAt(voteCreatedAt);
             revote.setVoteEndAt(voteEndAt);
@@ -79,5 +81,25 @@ public class VoteResponse {
         }
     }
 
+    @NoArgsConstructor
+    @Setter
+    @AllArgsConstructor
+    public static class VoteAttendResponse extends VoteResponse{ //최초 투표: 투표 참여 response
+
+        int voteAgree;
+        int voteDisagree;
+
+        public static VoteAttendResponse of( Long seriesId, int voteAgree, int voteDisagree, LocalDateTime voteEndAt) {
+            VoteResponse.VoteAttendResponse firstAttendResponse = new VoteAttendResponse();
+
+            firstAttendResponse.setSeriesId(seriesId);
+            firstAttendResponse.setVoteAgree(voteAgree);
+            firstAttendResponse.setVoteDisagree(voteDisagree);
+            firstAttendResponse.setVoteEndAt(voteEndAt);
+
+            return firstAttendResponse;
+        }
+
+    }
 
 }
