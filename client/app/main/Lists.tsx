@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import styled from "styled-components";
 
-import { GetMain } from '../api/api';
+import { GetMain } from '../api/mainApi';
 import Card from "./Card";
 import { Scroll } from './Scroll';
 
