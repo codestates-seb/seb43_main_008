@@ -23,7 +23,7 @@ export default function WriteInput({}) {
       >
         노 모어 플라스틱, 더 클린 서울
         <br />
-        여기에 시리즈를 작성해 주세요.
+        시리즈를 작성해 주세요.
       </PlaceholderLabel>
       <WriteInputDetail
         id="writeInputDetail"

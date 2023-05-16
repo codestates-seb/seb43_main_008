@@ -25,11 +25,14 @@
     "react-icons": "^4.8.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-responsive-carousel": "^3.2.23",
+    "react-slick": "^0.29.0",
     "react-textarea-autosize": "^8.4.1",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.10",
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@types/react-slick": "^0.23.10",
     "@types/styled-components": "^5.1.26",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
