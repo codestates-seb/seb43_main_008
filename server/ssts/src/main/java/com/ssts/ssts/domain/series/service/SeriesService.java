@@ -2,7 +2,6 @@ package com.ssts.ssts.domain.series.service;
 
 
 import com.ssts.ssts.domain.member.entity.Member;
-import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.dto.SeriesPageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
@@ -33,13 +32,8 @@ import java.util.Optional;
 public class SeriesService {
 
     private final SeriesRepository seriesRepository;
-
-    private final MemberRepository memberRepository;
-
     private final MemberService memberService;
-
     private final UpdateUtils<Series> updateUtils;
-
     private final S3Uploader s3Uploader;
 
 
@@ -57,7 +51,18 @@ public class SeriesService {
         return new SeriesPageResponseDto(list, seriesInfo);
     }
 
-    public SeriesPageResponseDto getMainSeriesList(int page, int size){
+    public SeriesPageResponseDto getMainSeriesListByNewest(int page, int size){
+
+        Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
+                Sort.by("id").descending()));
+
+        List<Series> seriesList = seriesInfo.getContent();
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+
+        return new SeriesPageResponseDto(list, seriesInfo);
+    }
+
+    public SeriesPageResponseDto getMainSeriesListByVotes(int page, int size){
 
         Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
                 Sort.by("id").descending()));

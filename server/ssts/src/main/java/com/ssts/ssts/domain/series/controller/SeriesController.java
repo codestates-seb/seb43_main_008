@@ -9,7 +9,6 @@ import com.ssts.ssts.domain.series.service.SeriesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +18,6 @@ public class SeriesController {
 
 
     private final SeriesService seriesService;
-
 
 
     @GetMapping("/members")
@@ -32,10 +30,13 @@ public class SeriesController {
     }
 
     @GetMapping
-    public ResponseEntity getMainSeriesList(@RequestParam(value = "page", defaultValue = "1") int page,
+    public ResponseEntity getMainSeriesList(@RequestParam(value = "sort", defaultValue = "newest") String sort, @RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "12") int size){
+        if("votes".equals(sort)){
+            SeriesPageResponseDto response = seriesService.getMainSeriesListByVotes(page-1, size);
+        }
 
-        SeriesPageResponseDto response = seriesService.getMainSeriesList(page-1, size);
+        SeriesPageResponseDto response = seriesService.getMainSeriesListByNewest(page-1, size);
 
         return ResponseEntity.ok(response);
     }
@@ -49,21 +50,13 @@ public class SeriesController {
     }
 
 
-    @PostMapping  //추후 member-id url삭제
+    @PostMapping
     public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto){
 
         SeriesResponseDto response = seriesService.saveSeries(seriesPostDto);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
-
-//    @PostMapping("/{member-id}")
-//    public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto, @PathVariable Long memberId){
-//
-//        SeriesResponseDto response = seriesService.saveSeries(memberId,seriesPostDto);
-//
-//        return new ResponseEntity(response, HttpStatus.CREATED);
-//    }
 
     @PatchMapping("/{series-id}")
     public ResponseEntity updateSeries(@RequestBody
@@ -73,7 +66,6 @@ public class SeriesController {
 
         return ResponseEntity.ok(response);
     }
-
 
     @DeleteMapping("/{series-id}")
     public ResponseEntity deleteSeries(@PathVariable("series-id") Long id){
