@@ -137,26 +137,26 @@ public class SeriesService {
     }
 
 
-    public SeriesResponseDto updateSeries(SeriesUpdateDto seriesUpdateDto){
-        Member member = memberService.findMemberByToken();
+    public SeriesResponseDto updateSeries(Long seriesId, SeriesUpdateDto seriesUpdateDto){
 
-        Series DescSeries = this.findVerifiedSeries(member.getId());
+        Member member = memberService.findMemberByToken();
+        Series descSeries = this.findVerifiedSeries(seriesId);
         Series series = Series.of(seriesUpdateDto.getTitle());
 
-        if(DescSeries.getMember().getId()!= member.getId()){
+        if(descSeries.getMember().getId()!= member.getId()){
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
-        Series updateSeries = updateUtils.copyNonNullProperties(series,DescSeries);
+        Series updateSeries = updateUtils.copyNonNullProperties(series,descSeries);
         seriesRepository.save(updateSeries);
 
         return this.seriesToSeriesResponseDto(updateSeries);
 
     }
 
-    public void deleteSeries(Long id){
+    public void deleteSeries(Long seriesId){
         Member member = memberService.findMemberByToken();
-        Series series = this.findVerifiedSeries(id);
+        Series series = this.findVerifiedSeries(seriesId);
         if(series.getMember().getId()!=member.getId()){
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
@@ -169,10 +169,10 @@ public class SeriesService {
 
 
     public Series findVerifiedSeries(Long seriesId){
-        Optional<Series> optionalQuestion = seriesRepository.findById(seriesId);
+        Optional<Series> optionalSeries = seriesRepository.findById(seriesId);
 
         Series findSeries =
-                optionalQuestion.orElseThrow(() ->
+                optionalSeries.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
         return findSeries;

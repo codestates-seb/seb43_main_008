@@ -59,10 +59,10 @@ public class SeriesController {
     }
 
     @PatchMapping("/{series-id}")
-    public ResponseEntity updateSeries(@RequestBody
+    public ResponseEntity updateSeries(@PathVariable("series-id") Long seriesId, @RequestBody
     SeriesUpdateDto seriesUpdateDto){
 
-        SeriesResponseDto response = seriesService.updateSeries(seriesUpdateDto);
+        SeriesResponseDto response = seriesService.updateSeries(seriesId,seriesUpdateDto);
 
         return ResponseEntity.ok(response);
     }
