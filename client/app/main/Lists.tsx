@@ -1,6 +1,6 @@
 "use client";
 
-import Link from 'next/link';
+// import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import styled from "styled-components";
 
@@ -22,12 +22,26 @@ export const Lists = () => {
     fetchList();
   }, []);
 
+  /*
+    const router = useRouter();
+
+  const moveHandler = () => {
+    if (localStorage.getItem("accessToken")) { // 📌(수정 필요) 로그인 되었는지 확인
+      router.push("/detail")
+    }
+    else router.push("/login")
+  }
+
+
+  onClick={() => moveHandler()}
+  */
+
   return (
     <StyledLists className="list">
       {list.map((data) => (
-        <Link href="/detail" className="item" key={data.id}>
+        <div className="item" key={data.id}>
           <Card key={data.id} {...data} />
-        </Link>
+        </div>
       ))}
     </StyledLists>
   )

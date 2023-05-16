@@ -6,9 +6,23 @@ import styled from "styled-components";
 
 // 📌 매번 타입 지정하는게 맞나?
 interface CardProps {
+  id: number;
   title: string;
   image: string;
-  daylogCount: number;
+  daylogCount?: number;
+  createdAt?: string;
+  modifiedAt?: string | null;
+  voteCount?: number;
+  voteResult?: string | null;
+  voteAgree?: number;
+  voteDisagree?: number;
+  revoteResult?: string | null;
+  revoteAgree?: number;
+  revoteDisagree?: number;
+  seriesStatus?: string;
+  isPublic?: boolean;
+  isEditable?: boolean;
+  isActive?: boolean;
 }
 
 export default function Card({ title, image, daylogCount }: CardProps) {

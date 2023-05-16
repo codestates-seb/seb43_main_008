@@ -1,6 +1,5 @@
 "use client";
 
-// import axios from "axios"
 import { useState } from "react";
 import styled from "styled-components";
 // import { useSWRConfig } from 'swr'
@@ -9,30 +8,11 @@ export const Filter: React.FC = () => {
   const [filter, setFilter] = useState<string>("newest");
 
   /*
-    const { mutate } = useSWRConfig()
-
-
   // filter 값이 변경될 때, 데이터를 다시 요청하기 위해 mutate 함수 호출
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 서버에 새로운 데이터를 요청하고 필터링된 데이터를 가져온다
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/series?tab=${filter}`);
-        const newData = response.data;
-
-        // 필터링된 데이터로 캐시를 갱신한다
-        mutate('/series', newData, false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        throw error;
-      }
-    };
-
-    fetchData();
+    GetMainFilter(filter)
   }, [filter, mutate]);
   */
-
-
 
   return (
     <StyledFilter>
