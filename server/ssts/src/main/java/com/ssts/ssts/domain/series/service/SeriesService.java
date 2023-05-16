@@ -1,9 +1,12 @@
 package com.ssts.ssts.domain.series.service;
 
+
 import com.ssts.ssts.domain.member.entity.Member;
+import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
-import com.ssts.ssts.domain.series.dto.SeriesPageResponseDto;
+import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesUpdateDto;
@@ -44,7 +47,7 @@ public class SeriesService {
     private final MemberVoteRepository voteMemberRepo;
     private final MemberRepository memberRepo;
 
-    public SeriesPageResponseDto getSeriesList(int page, int size){
+    public PageResponseDto getSeriesList(int page, int size){
 
         Member findMember = memberService.findMemberByToken();
 
@@ -54,10 +57,10 @@ public class SeriesService {
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
 
-        return new SeriesPageResponseDto(list, seriesInfo);
+        return new PageResponseDto(list, seriesInfo);
     }
 
-    public SeriesPageResponseDto getMainSeriesListByNewest(int page, int size){
+    public PageResponseDto getMainSeriesListByNewest(int page, int size){
 
         Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
                 Sort.by("id").descending()));
@@ -65,10 +68,10 @@ public class SeriesService {
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
 
-        return new SeriesPageResponseDto(list, seriesInfo);
+        return new PageResponseDto(list, seriesInfo);
     }
 
-    public SeriesPageResponseDto getMainSeriesListByVotes(int page, int size){
+    public PageResponseDto getMainSeriesListByVotes(int page, int size){
 
         Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
                 Sort.by("id").descending()));
@@ -76,7 +79,7 @@ public class SeriesService {
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
 
-        return new SeriesPageResponseDto(list, seriesInfo);
+        return new PageResponseDto(list, seriesInfo);
     }
 
     public SeriesResponseDto getSeries(Long id){

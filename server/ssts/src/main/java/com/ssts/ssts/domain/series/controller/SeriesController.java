@@ -1,7 +1,7 @@
 package com.ssts.ssts.domain.series.controller;
 
 
-import com.ssts.ssts.domain.series.dto.SeriesPageResponseDto;
+import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesUpdateDto;
@@ -24,7 +24,7 @@ public class SeriesController {
     public ResponseEntity getSeriesList(@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "12") int size){
 
-        SeriesPageResponseDto response = seriesService.getSeriesList(page-1, size);
+        PageResponseDto response = seriesService.getSeriesList(page-1, size);
 
         return ResponseEntity.ok(response);
     }
@@ -33,10 +33,10 @@ public class SeriesController {
     public ResponseEntity getMainSeriesList(@RequestParam(value = "sort", defaultValue = "newest") String sort, @RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "12") int size){
         if("votes".equals(sort)){
-            SeriesPageResponseDto response = seriesService.getMainSeriesListByVotes(page-1, size);
+            PageResponseDto response = seriesService.getMainSeriesListByVotes(page-1, size);
         }
 
-        SeriesPageResponseDto response = seriesService.getMainSeriesListByNewest(page-1, size);
+        PageResponseDto response = seriesService.getMainSeriesListByNewest(page-1, size);
 
         return ResponseEntity.ok(response);
     }
