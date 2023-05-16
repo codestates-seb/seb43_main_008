@@ -9,11 +9,12 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity(name = "bookmark")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "bookmark")
 public class Bookmark {
 
     @Id
@@ -34,4 +35,6 @@ public class Bookmark {
         bookmark.setSeries(series);
         return bookmark;
     }
+
+
 }
