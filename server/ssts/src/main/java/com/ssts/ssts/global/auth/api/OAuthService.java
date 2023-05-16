@@ -57,8 +57,8 @@ public class OAuthService {
 
             Cookie cookie = new Cookie("Authorization", accessToken);
             cookie.setHttpOnly(false);
-            cookie.setSecure(false);
-            cookie.setPath("/");
+            cookie.setSecure(true);
+            cookie.setPath("/; SameSite=None");
             cookie.setMaxAge(1000);
             response.addCookie(cookie);
 
@@ -74,8 +74,8 @@ public class OAuthService {
 
             Cookie cookie = new Cookie("email", email);
             cookie.setHttpOnly(false);
-            cookie.setSecure(false);
-            cookie.setPath("/");
+            cookie.setSecure(true);
+            cookie.setPath("/; SameSite=None");
             cookie.setMaxAge(1000);
             response.addCookie(cookie);
 
