@@ -1,8 +1,20 @@
 "use client";
-
+import { useEffect } from "react";
 import styled from "styled-components";
 
+import { getMyData } from "../api/test";
+
 export default function ProfileEdit() {
+  useEffect(() => {
+    getMyData()
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <ProfileEditContainer>
       <EditForm>
@@ -15,7 +27,7 @@ export default function ProfileEdit() {
 
 const ProfileEditContainer = styled.div`
   width: 100%;
-  padding: 10px;
+  padding: 10px 24px;
 `;
 
 const EditForm = styled.form`
@@ -33,7 +45,6 @@ const NicknameInput = styled.input`
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 3px 15px;
-  outline: none;
 `;
 
 const MemberDescriptionTextarea = styled.textarea`
@@ -44,7 +55,6 @@ const MemberDescriptionTextarea = styled.textarea`
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 10px 15px;
-  outline: none;
   resize: none;
 
   @media (min-width: 800px) {

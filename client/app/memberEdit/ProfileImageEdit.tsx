@@ -33,7 +33,7 @@ const ProfileImageEditContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 120px;
-  padding: 10px;
+  padding: 10px 24px;
 `;
 
 const EditDescriptionContainer = styled.div`
