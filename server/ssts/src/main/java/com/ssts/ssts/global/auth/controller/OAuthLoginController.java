@@ -5,10 +5,13 @@ import com.ssts.ssts.global.auth.api.OAuthTokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -30,6 +33,8 @@ public class OAuthLoginController {
     private String googleScope="email%20profile";
     private String kakaoScope="account_email";
     private String redirectUrl="http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/";
+    //private String redirectUrl="http://localhost:8080/login/oauth2/code/";
+
 
     private final String responseType = "code";
     //private String authRequestUrl;
@@ -55,25 +60,11 @@ public class OAuthLoginController {
     public void callbackGoogle(HttpServletResponse response, @RequestParam(name = "code") String code) throws IOException{
         log.info("하늘/oauth login callback: google\n"+
                 "code="+code);
-        OAuthTokenResponse tokenResponse=oAuthService.login(code);
+        oAuthService.login(response, code);
 
         System.out.println("하늘/oauth oauth service : redirect");
 
-        if(tokenResponse.getAccessToken()==null){
-            //FIXME 비회원이면 토큰에 암호화해서 담고 쿠키 발급하기
-            response.addHeader("email", tokenResponse.getEmail());
-            response.setStatus(HttpServletResponse.SC_OK);
 
-            response.sendRedirect("http://localhost:3000/register");
-
-        }else{
-
-            response.addHeader("Authorization", "Bearer " + tokenResponse.getAccessToken());
-            response.addHeader("Refresh", tokenResponse.getRefreshToken());
-            response.setStatus(HttpServletResponse.SC_OK);
-
-            response.sendRedirect("http://localhost:3000/");
-        }
 
 
     }

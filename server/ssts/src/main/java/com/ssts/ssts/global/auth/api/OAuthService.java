@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,7 +25,7 @@ public class OAuthService {
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
 
-    public OAuthTokenResponse login(String code) {
+    public void login(HttpServletResponse response, String code) throws IOException {
 
         log.info("하늘/oauth oauth service : login()");
         GoogleProfileResponse googleProfileResponse=googleInfraService.getGoogleAccount(googleInfraService.getAccessToken(code));
@@ -49,19 +52,38 @@ public class OAuthService {
             String refreshToken = delegateRefreshToken(email);     // refresh token 생성
             log.info("하늘/security Bearer {}" , accessToken);
 
-            OAuthTokenResponse response = OAuthTokenResponse.of(accessToken, refreshToken, email);
+            response.addHeader("Authorization", "Bearer " + accessToken);
+            response.addHeader("Refresh", refreshToken);
 
-            return response;
+            Cookie cookie = new Cookie("Authorization", accessToken);
+            cookie.setHttpOnly(false);
+            cookie.setSecure(false);
+            cookie.setPath("/");
+            cookie.setMaxAge(1000);
+            response.addCookie(cookie);
+
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.sendRedirect("http://localhost:3000/");
 
         }
         else{
 
             String email= googleProfileResponse.getEmail();
+            response.addHeader("email", email);
+            response.setStatus(HttpServletResponse.SC_OK);
 
-            OAuthTokenResponse response = OAuthTokenResponse.of(null, null, email);
+            Cookie cookie = new Cookie("email", email);
+            cookie.setHttpOnly(false);
+            cookie.setSecure(false);
+            cookie.setPath("/");
+            cookie.setMaxAge(1000);
+            response.addCookie(cookie);
 
-            return response;
+            response.sendRedirect("http://localhost:3000/register");
+
         }
+
+
 
     }
 
