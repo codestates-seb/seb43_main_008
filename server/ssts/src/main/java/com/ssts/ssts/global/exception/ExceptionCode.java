@@ -1,4 +1,4 @@
-package com.ssts.ssts.exception;
+package com.ssts.ssts.global.exception;
 
 import lombok.Getter;
 
