@@ -46,8 +46,9 @@ public class SeriesResponseDto {
 
     private Boolean isActive;
 
-    //사용자 vote 여부 (true: 참여함, false: 미참여함)
     private Boolean isVotedMember;
+
+
 
 
     public static SeriesResponseDto of(Long id,
@@ -86,10 +87,10 @@ public class SeriesResponseDto {
         seriesResponseDto.setIsActive(isActive);
 
 
+
         return seriesResponseDto;
     }
 
-    //getSerise /오버로드
     public static SeriesResponseDto of(Long id,
                                        String title,
                                        int daylogCount,

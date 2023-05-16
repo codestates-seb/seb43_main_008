@@ -57,13 +57,13 @@ public class OAuthService {
 
             Cookie cookie = new Cookie("Authorization", accessToken);
             cookie.setHttpOnly(false);
-            cookie.setSecure(false);
+            cookie.setSecure(true);
             cookie.setPath("/");
             cookie.setMaxAge(1000);
             response.addCookie(cookie);
 
             response.setStatus(HttpServletResponse.SC_OK);
-            response.sendRedirect("http://localhost:3000/");
+            //response.sendRedirect("http://localhost:3000/");
 
         }
         else{
@@ -74,12 +74,12 @@ public class OAuthService {
 
             Cookie cookie = new Cookie("email", email);
             cookie.setHttpOnly(false);
-            cookie.setSecure(false);
+            cookie.setSecure(true);
             cookie.setPath("/");
             cookie.setMaxAge(1000);
             response.addCookie(cookie);
 
-            response.sendRedirect("http://localhost:3000/register");
+            //response.sendRedirect("http://localhost:3000/register");
 
         }
 
