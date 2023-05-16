@@ -1,26 +1,46 @@
 "use client";
 
+// import { useEffect } from 'react';
 import styled from 'styled-components';
 
+// import { GetMembers } from "../api/api"
 import { ActivePost } from './ActivePost';
 import { DonePost } from "./DonePost"
+import { postData } from './postData';
 import { VotingPost } from "./VotingPost"
 
 export const Feed = () => {
   // map 돌려서 게시글 불러오기 
 
+  /* 로그인 되면 수정
+  useEffect(() => {
+    if (!authState) {
+      router.push("/login")
+    }
+    GetMembers().then((data) => {
+      if (data) {
+        setList(data)
+      }
+    })
+  }, [])
+   */
+
+  console.log(postData)
   return (
 
     <StyledFeed className='container'>
       <div className='feed'>
-        <ActivePost />
-        <VotingPost voting={true} />
-        <VotingPost voting={false} />
-        <VotingPost voting={false} />
-        <DonePost level={1} />
-        <DonePost level={1} />
-        <DonePost level={1} />
-        <DonePost />
+        {postData.map((data) => {
+          if (data.seriesStatus === "SERIES_ACTIVE") { // active: 투표전
+            return <ActivePost key={data.id}  {...data} />
+          }
+          if (data.seriesStatus === "SERIES_SLEEP") { // sleep: 투표 중
+            return <VotingPost key={data.id} {...data} />
+          }
+          if (data.seriesStatus === "SERIES_QUIET") { // quiet: 투표 종료
+            return <DonePost key={data.id} {...data} />
+          }
+        })}
       </div>
 
     </StyledFeed>

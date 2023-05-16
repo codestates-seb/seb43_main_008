@@ -1,30 +1,31 @@
 "use client";
 
-// import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import styled from "styled-components";
 
 import { GetMain } from '../api/api';
 import Card from "./Card";
+import { Scroll } from './Scroll';
 
 export const Lists = () => {
   const [list, setList] = useState([]);
 
+  const searchParams = useSearchParams();
+  const search = searchParams.get('search');
+  console.log(search)
+
   useEffect(() => {
-    const fetchList = async () => {
-      try {
-        const data = await GetMain();
-        setList(data);
-      } catch (error) {
-        console.error('Error fetching list:', error);
+    GetMain().then((data) => {
+      if (data) {
+        setList(data)
       }
-    };
-    fetchList();
-  }, []);
+    })
+  }, [])
 
-  /*
-    const router = useRouter();
 
+  // 사용자의 로그인 여부를 확인하기 위한 함수 & 로그인 여부에 따라 경로를 다르게 보냄
+  const router = useRouter();
   const moveHandler = () => {
     if (localStorage.getItem("accessToken")) { // 📌(수정 필요) 로그인 되었는지 확인
       router.push("/detail")
@@ -33,16 +34,14 @@ export const Lists = () => {
   }
 
 
-  onClick={() => moveHandler()}
-  */
-
   return (
     <StyledLists className="list">
       {list.map((data) => (
-        <div className="item" key={data.id}>
+        <div onClick={() => moveHandler()} className="item" key={data.id}>
           <Card key={data.id} {...data} />
         </div>
       ))}
+      <Scroll />
     </StyledLists>
   )
 }

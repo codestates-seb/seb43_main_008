@@ -1,30 +1,25 @@
 "use-client"
 import styled from 'styled-components'
 
-import { data } from "./data"
 import { Medal } from './Medal'
 import { StyledPost } from "./StyledPost"
+import { PostData } from "./type"
 
-interface Props {
-  level?: number;
-  voting?: boolean;
-}
-
-export const VotingPost: React.FC<Props> = ({ level, voting }) => {
+export const VotingPost = ({ ...data }: PostData) => {
   return (
     <StyledVoting>
       <div className='box'>
-        <div className="image" style={{ backgroundImage: `url(${data.image})` }}> {voting ? <div className='voting'>투표중</div> : <div className='voting'>투표완료</div>}</div>
+        <div className="image" style={{ backgroundImage: `url(${data.image})` }}> {data.voteResult === false ? <div className='voting'>투표완료</div> : <div className='voting'>투표중</div>}</div>
       </div>
-      <div className='text'> 세바스찬 </div>
-      {level ? <Medal /> : null}
+      <div className='text'> voting {data.id} </div>
+      {data.voteResult ? <Medal /> : null}
     </StyledVoting>
   )
 }
 
 const StyledVoting = styled(StyledPost)`
   .image {    
-    filter: grayscale(80%);
+    filter: grayscale(90%);
   }
   .voting{
     font-size: 4.5vw;

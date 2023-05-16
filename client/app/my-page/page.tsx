@@ -1,8 +1,6 @@
 
-"use client"
-import styled from 'styled-components'
-
 import { Feed } from './Feed'
+import styles from "./page.module.css"
 import { Profile } from './Profile'
 export default function MyPage() {
   /*
@@ -45,19 +43,9 @@ export default function MyPage() {
    */
 
   return (
-    <StylePage>
+    <div className={`${styles.container}`}>
       <Profile />
       <Feed />
-    </StylePage>
+    </div>
   )
 }
-
-const StylePage = styled.div`
-  min-height: calc(100vh - 44px - 70.8px); 
-  /* height: auto; */
-
-  max-width: 1024px;
-  min-width: 260px;
-
-  margin-bottom: 20vw;
-`
