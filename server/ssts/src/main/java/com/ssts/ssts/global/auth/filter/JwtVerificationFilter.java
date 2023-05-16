@@ -31,6 +31,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        log.info("하늘/security : jwt verification filter -> 동작");
         Map<String, Object> claims = verifyJws(request); // 하위 메서드 호출 1. 서명 검증
         setAuthenticationToContext(claims);      // 하위 메서드 호출 2. securityContext에 Authentication 객체 저장
 
@@ -40,7 +41,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
-        log.info("하늘/security : jwt verification filter");
+        log.info("하늘/security : jwt verification filter -> 사전 검사 ");
         return authorization == null || !authorization.startsWith("Bearer");
     }
 
@@ -53,6 +54,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
         // 토큰에서 클레임즈 파싱 -> (검증)
+        // 이 과정에서 subject에 넣어놨던 email을 claims Map 에 key("sub"), value(email)로 들어가게 된다.
 
         return claims;
     }
@@ -60,14 +62,16 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     //Authentication 객체를 SecurityContext에 저장 2. Authentication 저장 -> SecurityUtil에서 접근할 수 있음.
     private void setAuthenticationToContext(Map<String, Object> claims) {
 
-        String principal = (String) claims.get("email");
+        String principal = (String) claims.get("sub");
+        log.info("하늘/security set authentication to context\n"+
+                "principal="+principal);
+
         Map<String, Object> credentials=new HashMap<>();
         credentials.put("id",claims.get("id"));
-
+        //GrantedAuthority String -> string
         List<String> fixRoles=authorityUtils.grantedAuthorityStringToRoleString((List)claims.get("roles"));
-        //FIXME
+        //string -> GrantedAuthority
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities(fixRoles);
-
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, credentials, authorities);
 

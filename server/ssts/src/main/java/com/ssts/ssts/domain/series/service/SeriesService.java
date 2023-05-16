@@ -1,10 +1,12 @@
 package com.ssts.ssts.domain.series.service;
 
+
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
-import com.ssts.ssts.domain.series.dto.SeriesPageResponseDto;
+import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesUpdateDto;
@@ -36,13 +38,8 @@ import java.util.Optional;
 public class SeriesService {
 
     private final SeriesRepository seriesRepository;
-
-    private final MemberRepository memberRepository;
-
     private final MemberService memberService;
-
     private final UpdateUtils<Series> updateUtils;
-
     private final S3Uploader s3Uploader;
 
 
@@ -50,7 +47,7 @@ public class SeriesService {
     private final MemberVoteRepository voteMemberRepo;
     private final MemberRepository memberRepo;
 
-    public SeriesPageResponseDto getSeriesList(int page, int size){
+    public PageResponseDto getSeriesList(int page, int size){
 
         Member findMember = memberService.findMemberByToken();
 
@@ -60,10 +57,10 @@ public class SeriesService {
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
 
-        return new SeriesPageResponseDto(list, seriesInfo);
+        return new PageResponseDto(list, seriesInfo);
     }
 
-    public SeriesPageResponseDto getMainSeriesList(int page, int size){
+    public PageResponseDto getMainSeriesListByNewest(int page, int size){
 
         Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
                 Sort.by("id").descending()));
@@ -71,7 +68,18 @@ public class SeriesService {
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
 
-        return new SeriesPageResponseDto(list, seriesInfo);
+        return new PageResponseDto(list, seriesInfo);
+    }
+
+    public PageResponseDto getMainSeriesListByVotes(int page, int size){
+
+        Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
+                Sort.by("id").descending()));
+
+        List<Series> seriesList = seriesInfo.getContent();
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+
+        return new PageResponseDto(list, seriesInfo);
     }
 
     public SeriesResponseDto getSeries(Long id){
@@ -102,7 +110,7 @@ public class SeriesService {
         else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==false){
             series.setEditable(false); //수정 불가능
             series.setActive(false);
-            series.setSeriesStatus(Series.VoteStatus.SERIES_QUIT);
+            series.setSeriesStatus(Series.VoteStatus.SERIES_SLEEP);
             seriesRepository.save(series); //사용자가 재투표를 받을지 말지 선택하기 전까지 유지되는 상태값
         }
         return this.seriesToSeriesResponseDto(series, isVotedMember);
