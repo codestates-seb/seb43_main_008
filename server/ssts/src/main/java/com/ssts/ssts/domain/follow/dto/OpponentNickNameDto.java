@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OpponentNickNamePostDto {
+public class OpponentNickNameDto {
     String nickName;
 }
