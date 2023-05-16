@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 public class SeriesResponseDto {
 
-    private Long id;
-
     private String title;
 
     private String image;
@@ -50,8 +48,7 @@ public class SeriesResponseDto {
     private Boolean isVotedMember;
 
 
-    public static SeriesResponseDto of(Long id,
-                                       String title,
+    public static SeriesResponseDto of(String title,
                                        String image,
                                        int daylogCount,
                                        LocalDateTime createdAt,
@@ -67,7 +64,7 @@ public class SeriesResponseDto {
                                        Boolean isActive) {
         SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
 
-        seriesResponseDto.setId(id);
+
         seriesResponseDto.setTitle(title);
         seriesResponseDto.setImage(image);
         seriesResponseDto.setDaylogCount(daylogCount);
