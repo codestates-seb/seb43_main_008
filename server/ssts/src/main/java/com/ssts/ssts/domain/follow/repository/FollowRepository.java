@@ -10,10 +10,12 @@ import java.util.Optional;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
-    void deleteByFollowerAndFollowing(long follower, long following);
+    void deleteByFollowerIdAndFollowingId(long followerId, long followingId);
+//    Page<Follow> findAllByFollower(long follower, Pageable pageable);
+//    Page<Follow> findAllByFollowing(long following, Pageable pageable);
+    Boolean existsByFollowerIdAndFollowingId(long followerId, long followingId);
 
-    Page<Follow> findAllByFollower(long follower, Pageable pageable);
-    Page<Follow> findAllByFollowing(long following, Pageable pageable);
+    Page<Follow> findAllByFollower(Member follower, Pageable pageable);
+    Page<Follow> findAllByFollowing(Member following, Pageable pageable);
 
-    Boolean existsByFollowerAndFollowing(long follower, long following);
 }

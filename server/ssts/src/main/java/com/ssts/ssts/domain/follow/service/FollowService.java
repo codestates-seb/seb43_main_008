@@ -1,5 +1,6 @@
 package com.ssts.ssts.domain.follow.service;
 
+import com.ssts.ssts.domain.follow.dto.FollowListResponse;
 import com.ssts.ssts.domain.follow.dto.OpponentNickNameDto;
 import com.ssts.ssts.domain.follow.entity.Follow;
 import com.ssts.ssts.domain.follow.repository.FollowRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,7 @@ public class FollowService {
                 "\nfollower="+follower.getId()+
                 "\nfollowing="+following.getId());
 
-        boolean isFollowing=followRepository.existsByFollowerAndFollowing(follower.getId(),following.getId());
+        boolean isFollowing=followRepository.existsByFollowerIdAndFollowingId(follower.getId(),following.getId());
 
         //팔로잉이 본인이거나, 탈퇴한 사용자일 경우(탈퇴한 사용자가 화면에 뜰일은 없을 거 같긴한데..혹시 모르니까)
         if(following.getId()==follower.getId() || following.getStatus()== Member.Status.WITHDRAW){
@@ -45,7 +47,9 @@ public class FollowService {
         }else if(isFollowing){ //이미 팔로잉한 사용자일 경우(혹시 모르니까2)
             throw new BusinessLogicException(ExceptionCode.IS_ALREADY_FOLLOWING);
         }
-        Follow follow = Follow.of(follower.getId(), following.getId());
+
+        Follow follow = Follow.of(follower, following);
+        //Follow follow = Follow.of(follower.getId(), following.getId());
         followRepository.save(follow);
     }
 
@@ -60,7 +64,7 @@ public class FollowService {
                 "\nfollower="+follower.getId()+
                 "\nunfollowing="+unfollowing.getId());
 
-        boolean isFollowing=followRepository.existsByFollowerAndFollowing(follower.getId(), unfollowing.getId());
+        boolean isFollowing=followRepository.existsByFollowerIdAndFollowingId(follower.getId(), unfollowing.getId());
         //존재하면, 언팔로우가 가능하다.
         //존재하지 않는다면, 언팔로우가 불가능하다.
 
@@ -71,7 +75,8 @@ public class FollowService {
             throw new BusinessLogicException(ExceptionCode.IS_ALREADY_UNFOLLOWING);
         }
 
-        followRepository.deleteByFollowerAndFollowing(follower.getId(), unfollowing.getId());
+
+        followRepository.deleteByFollowerIdAndFollowingId(follower.getId(), unfollowing.getId());
 
     }
 
@@ -83,12 +88,16 @@ public class FollowService {
                 "\nfollower="+follower.getId());
 
         Page<Follow> pageinfo=followRepository.findAllByFollower(
-                follower.getId(),
+                follower,
                 PageRequest.of(page, size));
 
-        List<Follow> followingList=pageinfo.getContent();
+        List<FollowListResponse> responseList = pageinfo.getContent().stream()
+                .map(follow -> FollowListResponse.of(
+                        follow.getFollowing().getNickName(),
+                        follow.getFollowing().getIntroduce()))
+                .collect(Collectors.toList());
 
-        return new PageResponseDto(followingList, pageinfo);
+        return new PageResponseDto(responseList, pageinfo);
 
     }
 
@@ -101,12 +110,16 @@ public class FollowService {
                 "\nfollower="+follower.getId());
 
         Page<Follow> pageinfo=followRepository.findAllByFollowing(
-                follower.getId(),
+                follower,
                 PageRequest.of(page, size));
 
-        List<Follow> followerList=pageinfo.getContent();
+        List<FollowListResponse> responseList=pageinfo.getContent().stream()
+                .map(follow -> FollowListResponse.of(
+                        follow.getFollower().getNickName(),
+                        follow.getFollower().getIntroduce()))
+                .collect(Collectors.toList());
 
-        return new PageResponseDto(followerList, pageinfo);
+        return new PageResponseDto(responseList, pageinfo);
 
     }
 }
