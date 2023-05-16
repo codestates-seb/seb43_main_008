@@ -55,7 +55,7 @@ public class OAuthService {
             response.addHeader("Authorization", "Bearer " + accessToken);
             response.addHeader("Refresh", refreshToken);
 
-            Cookie cookie = new Cookie("Authorization", email);
+            Cookie cookie = new Cookie("Authorization", accessToken);
             cookie.setHttpOnly(false);
             cookie.setSecure(false);
             cookie.setPath("/");
@@ -73,8 +73,8 @@ public class OAuthService {
             response.setStatus(HttpServletResponse.SC_OK);
 
             Cookie cookie = new Cookie("email", email);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(true);
+            cookie.setHttpOnly(false);
+            cookie.setSecure(false);
             cookie.setPath("/");
             cookie.setMaxAge(1000);
             response.addCookie(cookie);
