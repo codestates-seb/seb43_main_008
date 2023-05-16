@@ -5,13 +5,12 @@ import com.ssts.ssts.domain.member.entity.MemberVote;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
-import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.domain.series.response.vote.VoteResponse;
-import com.ssts.ssts.exception.BusinessLogicException;
-import com.ssts.ssts.exception.ExceptionCode;
-import com.ssts.ssts.utils.security.SecurityUtil;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
+import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
