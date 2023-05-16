@@ -11,12 +11,13 @@ import java.util.List;
 @Setter
 public class PageResponseDto<T> {
 
+
     private List<T> data;
-    private PageDto seriesPage;
+    private PageDto pageInfo;
 
     public PageResponseDto(List<T> data, Page pageInfo) {
         this.data = data;
-        this.seriesPage = new PageDto(pageInfo.getNumber() + 1,
+        this.pageInfo = new PageDto(pageInfo.getNumber() + 1,
                 pageInfo.getSize(), pageInfo.getTotalElements(), pageInfo.getTotalPages()) {
         };
     }
