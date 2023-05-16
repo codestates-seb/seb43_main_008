@@ -1,4 +1,4 @@
-package com.ssts.ssts.domain.series.dto;
+package com.ssts.ssts.global.utils.MultipleResponseDto;
 
 
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class SerisePageDto {
+public class PageDto {
 
 
     private int page;
