@@ -19,7 +19,7 @@ export interface PostData {
 }
 
 export interface ProfileData {
-  id: number;
   nickName: string;
   image: string;
+  introduce: string;
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { GetMembers } from "../api/myPageApi"
+import { GetFeed } from "../api/myPageApi"
 import { ActivePost } from './ActivePost';
 import { DonePost } from "./DonePost";
 import { EmptyFeed } from "./EmptyFeed"
@@ -16,7 +16,7 @@ export const Feed = () => {
     // if (!authState) {
     //   router.push("/login")
     // }
-    GetMembers().then((data) => {
+    GetFeed().then((data) => {
       if (data) {
         setPost(data)
       }
