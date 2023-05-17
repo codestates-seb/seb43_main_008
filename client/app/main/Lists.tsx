@@ -17,8 +17,8 @@ export const Lists: React.FC = () => {
 
   useEffect(() => {
     GetMain().then((data) => {
-      if (data) {
-        setList(data) // ...list, 
+      if (data && isLoading) {
+        setList(data) // ...list, data로 바꿔야함
         setIsLoading(false)
         setListDataNumber(data.length)
       }
@@ -45,7 +45,7 @@ export const Lists: React.FC = () => {
         </div>
       ))}
       {/* api 호출중이거나 이전에 받아온 데이터가 12개 미만이라면 무한 스크롤 차단 */}
-      {!isLoading && listDataNumber < 12 && <Scroll setPageQuery={setPageQuery} pageQuery={pageQuery} />}
+      {isLoading && listDataNumber >= 12 && <Scroll setPageQuery={setPageQuery} pageQuery={pageQuery} />}
     </StyledLists>
   )
 }
