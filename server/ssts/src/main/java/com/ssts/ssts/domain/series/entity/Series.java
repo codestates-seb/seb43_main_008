@@ -2,6 +2,7 @@ package com.ssts.ssts.domain.series.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssts.ssts.domain.comment.Entity.Comment;
 import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.member.entity.Member;
@@ -24,6 +25,9 @@ public class Series extends BaseTimeEntity {
 
     @Column
     private String title;
+
+    @Column
+    private String image;
 
     @ColumnDefault("0")
     @Column
@@ -71,11 +75,13 @@ public class Series extends BaseTimeEntity {
     private Member member;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "series", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Daylog> daylogs = new ArrayList<>();
 
 
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "series", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
 
     //투표 개설 시간
@@ -94,6 +100,10 @@ public class Series extends BaseTimeEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setVoteAgree(int voteAgree) {

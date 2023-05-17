@@ -9,9 +9,9 @@ import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
-import com.ssts.ssts.exception.BusinessLogicException;
-import com.ssts.ssts.exception.ExceptionCode;
-import com.ssts.ssts.utils.S3Uploader;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
+import com.ssts.ssts.global.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
@@ -67,9 +67,11 @@ public class DaylogService {
         Series findSeries =
                 optionalQuestion.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+
         if(!image.isEmpty()){
             String saveFileName = s3ImageUploader.upload(image,"daylog");
             daylog.setContentImg(saveFileName);
+            findSeries.setImage(saveFileName);
         }
 
         daylog.addSeries(findSeries);

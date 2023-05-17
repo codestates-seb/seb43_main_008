@@ -1,6 +1,7 @@
 package com.ssts.ssts.domain.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssts.ssts.domain.comment.Entity.Comment;
 import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.series.entity.Series;
 import lombok.Getter;
@@ -53,9 +54,12 @@ public class Member extends BaseTimeEntity {
 
     //FetchType.EAGER 전략 : 항상 목록 가져오기 (불필요한 조회를 막으려면 FetchType.LAZY)
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="member_id")
+    @OneToMany(mappedBy ="member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Series> series;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
     // of 정적 팩토리 메서드 - 임시 회원가입
     public static Member of(String email,String nickName, String phone) {

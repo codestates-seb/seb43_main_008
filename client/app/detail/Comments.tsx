@@ -88,7 +88,7 @@ export const Comments: React.FC = () => {
 };
 
 const StyledComments = styled.div`
-  margin-bottom: 28px;
+  margin-bottom: 100px;
   .title {
     margin: 0 24px;
     display: flex;
