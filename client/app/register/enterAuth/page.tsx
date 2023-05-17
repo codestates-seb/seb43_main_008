@@ -7,7 +7,7 @@ export default function PhoneAuthPage() {
       <Header
         backButton={false}
         textContent={"인증번호 입력"}
-        saveButton={false}
+        secretButton={false}
       />
       <AuthNumberSubmit />
     </div>
