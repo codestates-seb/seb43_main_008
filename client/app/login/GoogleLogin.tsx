@@ -1,20 +1,19 @@
 "use client";
 
-import axios from "axios";
+// import axios from "axios";
 import Image from "next/image";
+import { signIn, useSession } from "next-auth/react";
 import styled from "styled-components";
 
 export default function GoogleLogin() {
-  const googleLoginRequest = async () => {
-    try {
-      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/login/google`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { data: session, status } = useSession();
+  console.log("session", session);
+  console.log("status", status);
+  console.log(session?.user?.email);
+  console.log(session?.user?.name);
 
   return (
-    <GoogleLoginButton onClick={googleLoginRequest}>
+    <GoogleLoginButton onClick={() => signIn("google")}>
       <GoogleLogoBox>
         <Image
           src="/socialLoginButton/googleLogo.png"

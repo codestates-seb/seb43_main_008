@@ -15,6 +15,7 @@ const options: Options = {
 }
 
 export const Scroll = () => {
+  // const [page, setPage] = useState(1)
   const target = useRef<HTMLDivElement>(null);
 
   const callback: IntersectionObserverCallback = (entries, observer) => {
@@ -40,5 +41,4 @@ export const Scroll = () => {
   return (
     <div ref={target} />
   )
-
 }

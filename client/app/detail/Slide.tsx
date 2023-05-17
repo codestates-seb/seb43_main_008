@@ -4,20 +4,20 @@ import styled from "styled-components";
 
 interface SlideProps {
   id: number;
-  nickName: string;
+  title: string;
   image: string;
   usageCount: number;
 }
 const Slide: React.FC<SlideProps> = ({
   image,
-  nickName,
+  title,
   usageCount,
 }: SlideProps) => {
   return (
     <StyledSlide>
       <div className="slide">
         <div className="info">
-          <div className="nickName">{nickName} | </div>
+          <div className="nickName">{title} | </div>
           <div className="usageCount">{usageCount}번 사용</div>
         </div>
 
