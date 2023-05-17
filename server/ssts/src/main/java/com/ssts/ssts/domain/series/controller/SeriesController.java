@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("/series")
 @RequiredArgsConstructor
@@ -20,11 +22,11 @@ public class SeriesController {
     private final SeriesService seriesService;
 
 
-    @GetMapping("/members")
-    public ResponseEntity getSeriesList(@RequestParam(value = "page", defaultValue = "1") int page,
+    @GetMapping("/members/{member-id}")
+    public ResponseEntity getSeriesList(@PathVariable("member-id") Long memberid,@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "12") int size){
 
-        PageResponseDto response = seriesService.getSeriesList(page-1, size);
+        PageResponseDto response = seriesService.getSeriesList(memberid,page-1, size);
 
         return ResponseEntity.ok(response);
     }
@@ -34,10 +36,9 @@ public class SeriesController {
                                         @RequestParam(value = "size", defaultValue = "12") int size){
         if("votes".equals(sort)){
             PageResponseDto response = seriesService.getMainSeriesListByVotes(page-1, size);
+            return ResponseEntity.ok(response);
         }
-
         PageResponseDto response = seriesService.getMainSeriesListByNewest(page-1, size);
-
         return ResponseEntity.ok(response);
     }
 
@@ -51,12 +52,13 @@ public class SeriesController {
 
 
     @PostMapping
-    public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto){
+    public ResponseEntity createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic, @RequestBody SeriesPostDto seriesPostDto){
 
-        SeriesResponseDto response = seriesService.saveSeries(seriesPostDto);
+        SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
+
 
     @PatchMapping("/{series-id}")
     public ResponseEntity updateSeries(@PathVariable("series-id") Long seriesId, @RequestBody
@@ -66,6 +68,7 @@ public class SeriesController {
 
         return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("/{series-id}")
     public ResponseEntity deleteSeries(@PathVariable("series-id") Long id){

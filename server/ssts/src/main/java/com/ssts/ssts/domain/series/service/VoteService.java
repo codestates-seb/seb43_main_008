@@ -49,9 +49,9 @@ public class VoteService {
 
         //투표에 따른 상태값 변경 //of를 쓴 게 아닌데 일단은 냅 두기 / 리팩토링 대상
         targetSeries.setPublic(true); //시리즈 공개
-        targetSeries.setEditable(false); //타이틀 수정 불가
-        targetSeries.setActive(true); //활성 상태
-        targetSeries.setSeriesStatus(Series.VoteStatus.SERIES_SLEEP); //투표중 할당
+        targetSeries.setIsEditable(false); //타이틀 수정 불가
+        targetSeries.setIsActive(true); //활성 상태
+        targetSeries.setVoteStatus(Series.VoteStatus.SERIES_SLEEP); //투표중 할당
         targetSeries.setVoteCount(targetSeries.getVoteCount() + 1); //최초투표이든, 아니든 +1 //투표함을 만들 때, voteCount가 증가
 
         //투표 생성시간 할당
@@ -102,8 +102,10 @@ public class VoteService {
             //경우1: 최초 투표일 경우
             if (isAgree == 1) {//본래 있는 db의 컬럼을 바꿔줌
                 targetSeries.setVoteAgree(targetSeries.getVoteAgree() + 1);
+                targetSeries.setTotalVote(targetSeries.getTotalVote()+1);
             } else if (isAgree == 0) {
                 targetSeries.setVoteDisagree(targetSeries.getVoteDisagree() + 1);
+                targetSeries.setTotalVote(targetSeries.getTotalVote()+1);
             } else {
                 return voteCountResponse(targetSeries.getId(),targetSeries);
             }
@@ -119,11 +121,13 @@ public class VoteService {
 
         //재투표
         else if (voteCount == 2) {
-
+            targetSeries.setTotalVote(0);
             if (isAgree == 1) { //찬성
                 targetSeries.setRevoteAgree(targetSeries.getRevoteAgree() + 1);
+                targetSeries.setTotalVote(targetSeries.getTotalVote()+1);
             } else if (isAgree == 0) { //반대
                 targetSeries.setRevoteDisagree(targetSeries.getRevoteDisagree() + 1);
+                targetSeries.setTotalVote(targetSeries.getTotalVote()+1);
             }
 
             //set revote Result
@@ -193,16 +197,16 @@ public class VoteService {
 
         //걸려지는 경우 (1) 투표를 더 한다고 선택 ( && voteCount==1)
         if(!isQuit){ //(isQuit==false)
-            targetSeries.setEditable(true);
-            targetSeries.setActive(true);
-            targetSeries.setSeriesStatus(Series.VoteStatus.SERIES_ACTIVE);
+            targetSeries.setIsEditable(true);
+            targetSeries.setIsActive(true);
+            targetSeries.setVoteStatus(Series.VoteStatus.SERIES_ACTIVE);
         }
 
         //걸러지는 경우 (2) / 최종: 투표를 더 안할게요 voteCount==1&&voteResult==false => 로직이 도는 대상 (isQuit==1)
         else {
-        targetSeries.setEditable(false); //타이틀 수정 가능
-        targetSeries.setActive(false); //활성 상태
-        targetSeries.setSeriesStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
+        targetSeries.setIsEditable(false); //타이틀 수정 가능
+        targetSeries.setIsActive(false); //활성 상태
+        targetSeries.setVoteStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
         }
         return voteCountResponse(targetSeries.getId(), targetSeries);
     }

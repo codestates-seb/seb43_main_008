@@ -7,5 +7,6 @@ public class SeriesUpdateDto {
 
 
     private String title;
+    private Boolean isPublic;
 
 }

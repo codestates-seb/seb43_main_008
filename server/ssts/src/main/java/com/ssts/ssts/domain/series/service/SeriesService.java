@@ -26,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -47,12 +48,21 @@ public class SeriesService {
     private final MemberVoteRepository voteMemberRepo;
     private final MemberRepository memberRepo;
 
-    public PageResponseDto getSeriesList(int page, int size){
+    public PageResponseDto getSeriesList(Long memberId, int page, int size){
 
-        Member findMember = memberService.findMemberByToken();
+        Page<Series> seriesInfo;
+        Member authMember = memberService.findMemberByToken();
 
-        Page<Series> seriesInfo = seriesRepository.findByMember_id(findMember.getId(), PageRequest.of(page, size,
-                Sort.by("id").descending()));
+        if(authMember.getId() == memberId) {
+            seriesInfo = seriesRepository.findByMember_id(memberId, PageRequest.of(page, size,
+                    Sort.by("id").descending()));
+
+        }else if(authMember.getId() != memberId){
+            seriesInfo = seriesRepository.findByMember_idAndIsPublicTrue(memberId, PageRequest.of(page, size,
+                    Sort.by("id").descending()));
+        }else{
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
 
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
@@ -62,8 +72,8 @@ public class SeriesService {
 
     public PageResponseDto getMainSeriesListByNewest(int page, int size){
 
-        Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
-                Sort.by("id").descending()));
+        Page<Series> seriesInfo = seriesRepository.findAllByIsPublic(true, PageRequest.of(page, size,
+                Sort.by("voteCreatedAt").descending()));
 
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
@@ -73,8 +83,8 @@ public class SeriesService {
 
     public PageResponseDto getMainSeriesListByVotes(int page, int size){
 
-        Page<Series> seriesInfo = seriesRepository.findAll(PageRequest.of(page, size,
-                Sort.by("id").descending()));
+        Page<Series> seriesInfo = seriesRepository.findAllByIsPublic(true, PageRequest.of(page, size,
+                Sort.by("totalVote").descending()));
 
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
@@ -99,18 +109,18 @@ public class SeriesService {
 
         //[마감 기한이 지난 경우 + 투표 2회를 전부 진행한 경우 상태 변경]
         if (series.getVoteCount()==2 && currentTime.isAfter(series.getVoteEndAt())) {
-            series.setEditable(false); //타이틀 수정 불가능
-            series.setActive(false); //활성 상태 끄기 (프론트 세피아처리)
-            series.setSeriesStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
+            series.setIsEditable(false); //타이틀 수정 불가능
+            series.setIsActive(false); //활성 상태 끄기 (프론트 세피아처리)
+            series.setVoteStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
             seriesRepository.save(series);
         }
 
         //사용자가 재투표 연다는 선택을 하기 전, 자동으로 바뀌는 값
         //[마감기한이 지났지만, 재투표의 기회가 있는 경우의 상태 변경] => 활성 상태는 변경하지 않고, 수정이 자동으로 가능하도록 합니다.
         else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==false){
-            series.setEditable(false); //수정 불가능
-            series.setActive(false);
-            series.setSeriesStatus(Series.VoteStatus.SERIES_SLEEP);
+            series.setIsEditable(false); //수정 불가능
+            series.setIsActive(false);
+            series.setVoteStatus(Series.VoteStatus.SERIES_SLEEP);
             seriesRepository.save(series); //사용자가 재투표를 받을지 말지 선택하기 전까지 유지되는 상태값
         }
         return this.seriesToSeriesResponseDto(series, isVotedMember);
@@ -118,8 +128,8 @@ public class SeriesService {
 
 
 
-
-    public SeriesResponseDto saveSeries(SeriesPostDto seriesPostDto){
+    @Transactional
+    public SeriesResponseDto saveSeries(String isPulic, SeriesPostDto seriesPostDto){
 
         Member authMember = memberService.findMemberByToken();
         Series series = Series.of(seriesPostDto.getTitle());
@@ -129,6 +139,10 @@ public class SeriesService {
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
+        if(isPulic.equals("true")){
+            series.setPublic(true);
+        }
+
         series.setImage(s3Uploader.getS3("ssts-img", "series/series-image.png"));
         series.addMember(member);
         seriesRepository.save(series);
@@ -136,13 +150,16 @@ public class SeriesService {
         return this.seriesToSeriesResponseDto(series);
     }
 
-
+    @Transactional
     public SeriesResponseDto updateSeries(Long seriesId, SeriesUpdateDto seriesUpdateDto){
 
         Member member = memberService.findMemberByToken();
         Series descSeries = this.findVerifiedSeries(seriesId);
-        Series series = Series.of(seriesUpdateDto.getTitle());
+        Series series = Series.of(seriesUpdateDto.getTitle(), seriesUpdateDto.getIsPublic());
 
+        if(descSeries.getIsEditable().equals(false)){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
         if(descSeries.getMember().getId()!= member.getId()){
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
@@ -151,19 +168,17 @@ public class SeriesService {
         seriesRepository.save(updateSeries);
 
         return this.seriesToSeriesResponseDto(updateSeries);
-
     }
 
+    @Transactional
     public void deleteSeries(Long seriesId){
         Member member = memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(seriesId);
         if(series.getMember().getId()!=member.getId()){
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
-
         seriesRepository.delete(series);
     }
-
 
 
 
@@ -176,7 +191,6 @@ public class SeriesService {
                         new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
         return findSeries;
-
     }
 
     @NotNull
@@ -199,8 +213,10 @@ public class SeriesService {
                 series.getVoteStatus(),
                 series.getIsPublic(),
                 series.getIsEditable(),
-                series.getIsActive());
+                series.getIsActive(),
+                series.getTotalVote());
     }
+
 
     //getSerise
     @NotNull

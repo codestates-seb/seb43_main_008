@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -48,21 +49,22 @@ public class CommentService {
         return new PageResponseDto<>(list,commentInfo);
     }
 
-
+    @Transactional
     public CommentResponseDto saveComment(Long seriesId, CommentPostDto commentPostDto){
         Comment comment = Comment.of(commentPostDto.getComment());
         Series findSeries = seriesService.findVerifiedSeries(seriesId);
-        Member findmember = memberService.findMemberByToken();
+        Member findMember = memberService.findMemberByToken();
 
         comment.addSeries(findSeries);
-        comment.addMember(findmember);
+        comment.addMember(findMember);
 
         commentRepository.save(comment);
 
         return this.commentToResponseDto(comment);
     }
 
-    public CommentResponseDto updateDto(Long seriesId, Long commentId, CommentUpdateDto commentUpdateDto){
+    @Transactional
+    public CommentResponseDto updateComment(Long seriesId, Long commentId, CommentUpdateDto commentUpdateDto){
         Comment descComment = this.findVerifiedComment(commentId);
         Comment comment = Comment.of(commentUpdateDto.getComment());
 
@@ -76,6 +78,7 @@ public class CommentService {
         return this.commentToResponseDto(updateComment);
     }
 
+    @Transactional
     public void deleteComment(Long commentId){
         Comment comment = this.findVerifiedComment(commentId);
         if(memberService.findMemberByToken().getId() ==  comment.getMember().getId()){

@@ -48,6 +48,8 @@ public class SeriesResponseDto {
 
     private Boolean isVotedMember;
 
+    private int totalVote;
+
 
 
 
@@ -65,7 +67,8 @@ public class SeriesResponseDto {
                                        Series.VoteStatus voteStatus,
                                        Boolean isPublic,
                                        Boolean isEditable,
-                                       Boolean isActive) {
+                                       Boolean isActive,
+                                       int totalVote) {
         SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
 
         seriesResponseDto.setId(id);
@@ -85,7 +88,7 @@ public class SeriesResponseDto {
         seriesResponseDto.setIsPublic(isPublic);
         seriesResponseDto.setIsEditable(isEditable);
         seriesResponseDto.setIsActive(isActive);
-
+        seriesResponseDto.setTotalVote(totalVote);
 
 
         return seriesResponseDto;
