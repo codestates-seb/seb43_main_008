@@ -110,7 +110,7 @@ public class SeriesService {
         else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==false){
             series.setEditable(false); //수정 불가능
             series.setActive(false);
-            series.setSeriesStatus(Series.VoteStatus.SERIES_QUIT);
+            series.setSeriesStatus(Series.VoteStatus.SERIES_SLEEP);
             seriesRepository.save(series); //사용자가 재투표를 받을지 말지 선택하기 전까지 유지되는 상태값
         }
         return this.seriesToSeriesResponseDto(series, isVotedMember);
