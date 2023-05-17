@@ -15,6 +15,7 @@ export default function Badge() {
     src: "/logoSquare.png", // 초기 이미지의 경로가져오기
     alt: "쓰또 로고",
   });
+  // const [isAcquired, setIsAcquired] = useState<boolean>(true);
 
   // 뱃지 획득 방법 설명 텍스트 관리
   const [mainText, setMainText] = useState("쓰쓰또쓰 가입을 환영합니다!");
@@ -22,18 +23,21 @@ export default function Badge() {
     "'쓰쓰또쓰의 다양한 뱃지들을 획득해보세요!"
   );
 
+  // 뱃지 세피아 처리
+  const [isAcquired, setIsAcquired] = useState(false);
   return (
     <>
       <MainContainer>
         <MainText>{mainText}</MainText>
         <SubText>{subText}</SubText>
-        <BadgeCircle image={selectedImageDetail} />
+        <BadgeCircle image={selectedImageDetail} isAcquired={isAcquired} />
       </MainContainer>
       {/* <BadgeDetail setSelectedImageDetail={setSelectedImageDetail} /> */}
       <BadgeDetail
         setSelectedImageDetail={setSelectedImageDetail}
         setMainText={setMainText}
         setSubText={setSubText}
+        setIsAcquired={setIsAcquired}
       />
     </>
   );

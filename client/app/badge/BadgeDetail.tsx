@@ -9,16 +9,31 @@ interface PlasticItemProps {
   imageSrc: string;
   altText: string;
   onClick: () => void;
+  isAcquired: boolean;
 }
 
 const PlasticItem: React.FC<PlasticItemProps> = ({
   imageSrc,
   altText,
   onClick,
+  isAcquired,
 }) => (
   <li className="my-plastic" onClick={onClick}>
-    <div className="plastic-circle">
-      <Image src={imageSrc} alt={altText} width={35} height={35} />
+    <div
+      className="plastic-circle"
+      style={{
+        backgroundColor: isAcquired ? "#fff8de" : "#b5b5ba ",
+      }}
+    >
+      <Image
+        src={imageSrc}
+        alt={altText}
+        width={35}
+        height={35}
+        style={{
+          filter: isAcquired ? "none" : "grayscale(100%)",
+        }}
+      />
     </div>
   </li>
 );
@@ -29,6 +44,8 @@ interface BadgeDetailProps {
   >;
   setMainText: Dispatch<SetStateAction<string>>;
   setSubText: Dispatch<SetStateAction<string>>;
+
+  setIsAcquired: Dispatch<SetStateAction<boolean>>;
 }
 
 interface ImageData {
@@ -36,12 +53,14 @@ interface ImageData {
   alt: string;
   mainText: string;
   subText: string;
+  isAcquired: boolean;
 }
 
 export default function BadgeDetail({
   setSelectedImageDetail,
   setMainText,
   setSubText,
+  setIsAcquired,
 }: BadgeDetailProps) {
   const [, setSelectedImage] = useState<ImageData | null>(null);
 
@@ -52,6 +71,10 @@ export default function BadgeDetail({
     // 뱃지에 따라 원하는 텍스트로 변경
     setMainText(image.mainText);
     setSubText(image.subText);
+
+    // 뱃지가 획득되었는지 결정
+    // 여기서는 badgeLists에 이미 획득한 뱃지의 정보를 추가해야 합니다.
+    setIsAcquired(badgeLists.includes(image));
   };
 
   return (
@@ -66,6 +89,7 @@ export default function BadgeDetail({
                 imageSrc={image.src}
                 altText={image.alt}
                 onClick={() => handleClick(image)}
+                isAcquired={image.isAcquired}
               />
             ))}
           </ul>

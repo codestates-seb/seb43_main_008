@@ -5,15 +5,28 @@ import styled from "styled-components";
 
 interface BadgeCircleProps {
   image: { src: string; alt: string } | null;
+  isAcquired: boolean;
 }
 
-const BadgeCircle: React.FC<BadgeCircleProps> = ({ image }) => {
+const BadgeCircle: React.FC<BadgeCircleProps> = ({ image, isAcquired }) => {
   return (
     <>
       <ContentsContainer>
-        <BadgeImgContents>
+        <BadgeImgContents
+          style={{
+            backgroundColor: isAcquired ? "#fff8de" : "#b5b5ba",
+          }}
+        >
           {image && (
-            <Image src={image.src} alt={image.alt} width={170} height={170} />
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={170}
+              height={170}
+              style={{
+                filter: isAcquired ? "none" : "grayscale(100%)",
+              }}
+            />
           )}
         </BadgeImgContents>
       </ContentsContainer>
