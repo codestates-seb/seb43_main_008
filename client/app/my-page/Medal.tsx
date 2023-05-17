@@ -14,15 +14,11 @@ const StyledMedal = styled.div`
   z-index: 10;
   
   position: absolute;
-  bottom: 12px;
-  right: -7px;
-  /* left: 50%;
-  transform: translate(-50%, -20%); */
+  right: -10%;
+  transform: translate(0%, 220%);
 
   width: calc(25vw / 3);
   height: calc(25vw / 3);
-  /* width: calc(40vw / 3);
-  height: calc(40vw / 3); */
 
   display: flex;
   justify-content: center;

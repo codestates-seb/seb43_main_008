@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
-import slides from "../main/list";
+import slides from "./list";
 import { Slide } from "./Slide";
 export const Slider = (): JSX.Element => {
   // 🚨 렌더되기 전에 슬라이더 조작하면 에러남. 
