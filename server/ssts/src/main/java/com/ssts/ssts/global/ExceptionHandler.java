@@ -57,10 +57,14 @@ public class ExceptionHandler {
              response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.CAN_NOT_VOTE_VALUE.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.BOOKMARK_IS_DUPLICATION) {
             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.BOOKMARK_IS_DUPLICATION.getMessage());
-         else if(ex.getExceptionCode()==ExceptionCode.IS_ALREADY_FOLLOWING){
+        } else if(ex.getExceptionCode()==ExceptionCode.IS_ALREADY_FOLLOWING){
             response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.IS_ALREADY_FOLLOWING.getMessage());
-        }else if (ex.getExceptionCode()==ExceptionCode.IS_ALREADY_UNFOLLOWING){
+        } else if (ex.getExceptionCode()==ExceptionCode.IS_ALREADY_UNFOLLOWING){
             response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.IS_ALREADY_UNFOLLOWING.getMessage());
+        } else if (ex.getExceptionCode()==ExceptionCode.BADGE_NOT_FOUND){
+            response=ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.BADGE_NOT_FOUND.getMessage());
+        } else if (ex.getExceptionCode()==ExceptionCode.ALREADY_HAVE_BADGE){
+            response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.ALREADY_HAVE_BADGE.getMessage());
         }
 
 

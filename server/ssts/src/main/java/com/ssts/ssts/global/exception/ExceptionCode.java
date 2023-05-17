@@ -31,7 +31,9 @@ public enum ExceptionCode {
     VOTE_RESULT_IS_NOT_EXSIST(1006, "투표 결과가 존재하지 않아요."),
     THIS_VOTE_RESULT_IS_TRUE(1007, "이 투표는 이미 졸업했어요!"),
     CAN_NOT_VOTE_VALUE(1008, "투표할 수 없는 값이예요."),
-    BOOKMARK_IS_DUPLICATION(1009, "이미 북마크한 시리즈예요.");
+    BOOKMARK_IS_DUPLICATION(1009, "이미 북마크한 시리즈예요."),
+    BADGE_NOT_FOUND(1010, "존재하지 않는 뱃지예요."),
+    ALREADY_HAVE_BADGE(1011, "이미 취득한 뱃지예요.");
 
 
     @Getter
