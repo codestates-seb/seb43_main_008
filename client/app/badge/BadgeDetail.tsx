@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 
-import badgeLists from "./BadgeLists";
+import badgeLists from "./BadgeData";
 
 interface PlasticItemProps {
   imageSrc: string;
@@ -18,7 +18,7 @@ const PlasticItem: React.FC<PlasticItemProps> = ({
 }) => (
   <li className="my-plastic" onClick={onClick}>
     <div className="plastic-circle">
-      <Image src={imageSrc} alt={altText} width={40} height={40} />
+      <Image src={imageSrc} alt={altText} width={35} height={35} />
     </div>
   </li>
 );
@@ -27,21 +27,31 @@ interface BadgeDetailProps {
   setSelectedImageDetail: Dispatch<
     SetStateAction<{ src: string; alt: string } | null>
   >;
+  setMainText: Dispatch<SetStateAction<string>>;
+  setSubText: Dispatch<SetStateAction<string>>;
 }
 
 interface ImageData {
   src: string;
   alt: string;
+  mainText: string;
+  subText: string;
 }
 
 export default function BadgeDetail({
   setSelectedImageDetail,
+  setMainText,
+  setSubText,
 }: BadgeDetailProps) {
   const [, setSelectedImage] = useState<ImageData | null>(null);
 
   const handleClick = (image: ImageData) => {
     setSelectedImage(image);
     setSelectedImageDetail(image);
+
+    // 뱃지에 따라 원하는 텍스트로 변경
+    setMainText(image.mainText);
+    setSubText(image.subText);
   };
 
   return (
@@ -75,6 +85,7 @@ const CountCardContainer = styled.div`
   padding: 5px;
   border-radius: 10px;
   align-items: flex-start;
+  margin-top: 10px;
 `;
 const GetBadgeText = styled.div`
   /* all: unset; */

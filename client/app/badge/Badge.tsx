@@ -6,25 +6,35 @@ import BadgeCircle from "./BadgeCircle";
 import BadgeDetail from "./BadgeDetail";
 
 export default function Badge() {
+  // 뱃지 아이콘 관리
   const [selectedImageDetail, setSelectedImageDetail] = useState<{
     src: string;
     alt: string;
-  } | null>(null);
+    // } | null>(null);
+  } | null>({
+    src: "/logoSquare.png", // 초기 이미지의 경로가져오기
+    alt: "쓰또 로고",
+  });
+
+  // 뱃지 획득 방법 설명 텍스트 관리
+  const [mainText, setMainText] = useState("쓰쓰또쓰 가입을 환영합니다!");
+  const [subText, setSubText] = useState(
+    "'쓰쓰또쓰의 다양한 뱃지들을 획득해보세요!"
+  );
 
   return (
     <>
       <MainContainer>
-        <MainText>재활용률 100%를 달성하셨네요!</MainText>
-        <SubText>300%를 달성하여 아래 뱃지를 획득해보세요!</SubText>
-        <BadgeCircle
-          image={selectedImageDetail}
-          // image={{
-          //   src: "/logoSquare.png",
-          //   alt: "쓰또 로고",
-          // }}
-        />
+        <MainText>{mainText}</MainText>
+        <SubText>{subText}</SubText>
+        <BadgeCircle image={selectedImageDetail} />
       </MainContainer>
-      <BadgeDetail setSelectedImageDetail={setSelectedImageDetail} />
+      {/* <BadgeDetail setSelectedImageDetail={setSelectedImageDetail} /> */}
+      <BadgeDetail
+        setSelectedImageDetail={setSelectedImageDetail}
+        setMainText={setMainText}
+        setSubText={setSubText}
+      />
     </>
   );
 }

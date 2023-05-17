@@ -13,7 +13,7 @@ const BadgeCircle: React.FC<BadgeCircleProps> = ({ image }) => {
       <ContentsContainer>
         <BadgeImgContents>
           {image && (
-            <Image src={image.src} alt={image.alt} width={200} height={200} />
+            <Image src={image.src} alt={image.alt} width={170} height={170} />
           )}
         </BadgeImgContents>
       </ContentsContainer>
@@ -27,8 +27,8 @@ const ContentsContainer = styled.div``;
 // 중앙부 획득 뱃지 콘텐츠
 const BadgeImgContents = styled(ContentsContainer)`
   border: 1px solid #9b9ba0;
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
   background-color: #fff8de;
   margin-top: 25px;
