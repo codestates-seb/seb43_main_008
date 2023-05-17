@@ -62,8 +62,8 @@ public class OAuthService {
             cookie.setMaxAge(1000);
             //response.addCookie(cookie);
 
-            response.setHeader("Set-Cookie", "Authorization=Bearer " + accessToken+"; Secure; SameSite=None");
-            response.addHeader("Set-Cookie", "Refresh="+refreshToken+"; Secure; SameSite=None");
+            response.setHeader("Set-Cookie", "Authorization=Bearer " + accessToken+"; SameSite=None");
+            response.addHeader("Set-Cookie", "Refresh="+refreshToken+"; SameSite=None");
 
             response.setStatus(HttpServletResponse.SC_OK);
             response.sendRedirect("http://localhost:3000/");
@@ -82,7 +82,7 @@ public class OAuthService {
             cookie2.setPath("/");
             cookie2.setMaxAge(1000);
             //response.addCookie(cookie2);
-            response.setHeader("Set-Cookie", "email="+email+"; Secure; SameSite=None");
+            response.setHeader("Set-Cookie", "email="+email+"; SameSite=None");
 
             response.sendRedirect("http://localhost:3000/register");
 
