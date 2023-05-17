@@ -70,7 +70,8 @@ public class Series extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "series", cascade = CascadeType.PERSIST)
+    @JsonIgnore
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL)
     private List<Daylog> daylogs = new ArrayList<>();
 
 
