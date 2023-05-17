@@ -1,9 +1,10 @@
 import "./global.css";
 import "./font.css";
 
+import Provider from "./Provider";
 import StyledComponentsRegistry from "./registry";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -27,9 +28,11 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <StyledComponentsRegistry>
-          <div className="mainContainer">{children}</div>
-        </StyledComponentsRegistry>
+        <Provider>
+          <StyledComponentsRegistry>
+            <div className="mainContainer">{children}</div>
+          </StyledComponentsRegistry>
+        </Provider>
       </body>
     </html>
   );
