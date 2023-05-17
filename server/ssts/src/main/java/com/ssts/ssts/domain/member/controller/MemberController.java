@@ -8,12 +8,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @RestController
+@RequestMapping
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
+
+
 
     /*
     * 테스트용 멤버 회원가입 기능
@@ -100,9 +107,11 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @PatchMapping("/feed")
-    public ResponseEntity updateMemberInfo(@RequestBody MemberEditInfoPatchDto memberEditInfoPatchDto) {
+    public ResponseEntity updateMemberInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
+                                           @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
 
-        MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto);
+
+        MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto, image);
         // 요청 body값이 nickname은 반드시 들어가야한다,image랑 introduce는 nullable이라서 선택적.
 
         //변경됬으니까 변경된 입력값을 알려줘야 한다.

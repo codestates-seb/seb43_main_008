@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/series")
@@ -20,12 +23,15 @@ public class DaylogController {
 
 
     @PostMapping("/{series-id}/daylog")
-    public ResponseEntity createSeries(@PathVariable("series-id") Long seriesId, @RequestBody DaylogPostDto daylogPostDto){
+    public ResponseEntity createSeries(@PathVariable("series-id") Long seriesId,
+                                       @ModelAttribute DaylogPostDto daylogPostDto,
+                                       @RequestPart(value = "image") MultipartFile image) throws IOException {
 
-        DaylogResponseDto responseDto = daylogService.saveDaylog(seriesId, daylogPostDto);
+        DaylogResponseDto responseDto = daylogService.saveDaylog(seriesId, daylogPostDto, image);
 
         return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
+
 
     @GetMapping("/{series-id}/daylog")
     public ResponseEntity getDaylogList(@PathVariable("series-id") Long id,
