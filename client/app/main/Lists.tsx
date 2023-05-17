@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import styled from "styled-components";
 
@@ -8,21 +8,25 @@ import { GetMain } from '../api/mainApi';
 import Card from "./Card";
 import { Scroll } from './Scroll';
 
-export const Lists = () => {
-  const [list, setList] = useState([]);
 
-  const searchParams = useSearchParams();
-  const search = searchParams.get('search');
-  console.log(search)
+export const Lists: React.FC = () => {
+  const [list, setList] = useState([]);
+  const [pageQuery, setPageQuery] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [listDataNumber, setListDataNumber] = useState<number>(0)
 
   useEffect(() => {
     GetMain().then((data) => {
       if (data) {
-        setList(data)
+        setList(data) // ...list, 
+        setIsLoading(false)
+        setListDataNumber(data.length)
       }
     })
   }, [])
 
+  console.log(`pageQuery: ${pageQuery}`)
+  console.log(`listDataNumber: ${listDataNumber}`)
 
   // 사용자의 로그인 여부를 확인하기 위한 함수 & 로그인 여부에 따라 경로를 다르게 보냄
   const router = useRouter();
@@ -33,7 +37,6 @@ export const Lists = () => {
     else router.push("/login")
   }
 
-
   return (
     <StyledLists className="list">
       {list.map((data) => (
@@ -41,7 +44,8 @@ export const Lists = () => {
           <Card key={data.id} {...data} />
         </div>
       ))}
-      <Scroll />
+      {/* api 호출중이거나 이전에 받아온 데이터가 12개 미만이라면 무한 스크롤 차단 */}
+      {!isLoading && listDataNumber < 12 && <Scroll setPageQuery={setPageQuery} pageQuery={pageQuery} />}
     </StyledLists>
   )
 }

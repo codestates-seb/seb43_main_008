@@ -18,13 +18,6 @@ export const Modal: React.FC<Props> = ({
   commentid,
   setComment,
 }) => {
-  // const HandleEdit = () => {
-  //   /*
-  //   리덕스
-  //   수정 버튼 누르면 -> 스토어에서 수정 상태 true로 변경 & 수정할 댓글
-  //   Comments: 스토어에서 가져온 수정 상태가 true라면 value를 업데이트 타겟 데이터로 주기
-  //   */
-  // };
 
   const HandleDelete = () => {
     onClickModal();
