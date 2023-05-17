@@ -8,7 +8,7 @@ export default function MemberEdit() {
       <Header
         backButton={false}
         textContent={"회원가입 축하"}
-        saveButton={false}
+        secretButton={false}
       />
       <RegisterContext />
       <HomeButton />
