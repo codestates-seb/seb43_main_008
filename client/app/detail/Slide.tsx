@@ -7,18 +7,21 @@ interface SlideProps {
   content: string;
   contentImg: string;
   usageCount: number;
+  series: { title: string },
+  count: number
 }
 const Slide = ({
+  id,
   contentImg,
   content,
-  usageCount,
+  series,
 }: SlideProps) => {
   return (
     <StyledSlide>
       <div className="slide">
         <div className="info">
-          <div className="nickName">{content} | </div>
-          <div className="usageCount">{usageCount}번 사용</div>
+          <div className="nickName">{series.title} | </div>
+          <div className="usageCount">{id}번째 사용</div>
         </div>
 
         <div className="image" style={{ backgroundImage: `url(${contentImg})` }} />
@@ -53,7 +56,7 @@ const StyledSlide = styled.div`
     }
   }
   .image {
-    height: 35vw;
+    height: 25vh;
     width: 100%;
     margin-bottom: 1.5rem;
 
@@ -70,6 +73,7 @@ const StyledSlide = styled.div`
 
   .p {
     overflow: hidden;
+    height: 15vh;
   }
 `;
 

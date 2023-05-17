@@ -30,9 +30,10 @@ export const Lists: React.FC = () => {
 
   // 사용자의 로그인 여부를 확인하기 위한 함수 & 로그인 여부에 따라 경로를 다르게 보냄
   const router = useRouter();
-  const moveHandler = (id: number) => {
+  const moveHandler = (id: number, title: string) => {
     if (localStorage.getItem("accessToken")) { // 📌(수정 필요) 로그인 되었는지 확인
       router.push(`/detail/${id}`)
+      sessionStorage.setItem("header", title)
     }
     else router.push("/login")
   }
@@ -40,7 +41,7 @@ export const Lists: React.FC = () => {
   return (
     <StyledLists className="list">
       {list.map((data) => (
-        <div onClick={() => moveHandler(data.id)} className="item" key={data.id}>
+        <div onClick={() => moveHandler(data.id, data.title)} className="item" key={data.id}>
           <Card key={data.id} {...data} />
         </div>
       ))}

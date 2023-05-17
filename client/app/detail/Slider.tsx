@@ -62,13 +62,11 @@ export const Slider = (): JSX.Element => {
   // api 요청 함수
   const [slides, setSlides] = useState([]);
   const params = useParams();
-  console.log(params.id)
 
   useEffect(() => {
     GetDaylog(params.id).then((data) => {
-      if (slides) {
+      if (data) {
         setSlides(data)
-        console.log(slides)
       }
     })
   }, [])
