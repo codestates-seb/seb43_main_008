@@ -27,7 +27,6 @@
     "react-responsive-carousel": "^3.2.23",
     "react-textarea-autosize": "^8.4.1",
     "styled-components": "^5.3.10",
-    "swr": "^2.1.5",
     "typescript": "5.0.4"
   },
   "devDependencies": {
