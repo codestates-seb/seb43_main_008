@@ -1,19 +1,17 @@
 "use client";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import styled from "styled-components";
 
-import { getMyData } from "../api/test";
-
 export default function ProfileEdit() {
-  useEffect(() => {
-    getMyData()
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   getMyData()
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
 
   return (
     <ProfileEditContainer>

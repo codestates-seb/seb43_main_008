@@ -25,4 +25,5 @@ export default function Follow() {
 }
 const StylePage = styled.div`
   min-height: calc(100vh - 110px); 
+  margin-bottom: 100px;
 `

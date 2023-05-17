@@ -32,6 +32,7 @@ public class Member extends BaseTimeEntity {
     private String phone;
     //---------------------------------------
 
+
     @ElementCollection(fetch = FetchType.EAGER)
     // 값 타입 컬렉션(값 타입을 컬렉션에 담아서 사용할때) -> 1:N 관계 (별도의 테이블 생성해서 컬렉션 관리)
     private List<String> roles = new ArrayList<>();

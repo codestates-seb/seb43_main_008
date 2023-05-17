@@ -1,43 +1,27 @@
 "use-client"
 import styled from 'styled-components'
 
-import { data } from "./data"
+import { StyledPost } from "./StyledPost"
+import { PostData } from "./type"
 
 
-export const ActivePost = () => {
+export const ActivePost = ({ ...data }: PostData) => {
   return (
     <StyledActive>
-      <div className="image" style={{ backgroundImage: `url(${data.image})` }} />
-      <div className='text'> 공백포함여덟글자 </div>
+      <div className='box'>
+        <div className="image" style={{ backgroundImage: `url(${data.image})` }} />
+      </div>
+      <div className='text'> active {data.id} </div>
 
     </StyledActive>
   )
 }
 
-const StyledActive = styled.div`
-  position: relative;
+const StyledActive = styled(StyledPost)`
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  .text{
-    font-size: 0.8rem;
-    color: #757575;
-  }
-  .image {
+  .box {
     border-radius: 8px;
     border: solid 2px #3f910c;
     box-shadow: 6px 6px #e4fabf, -6px 6px #e4fabf, 6px -6px #e4fabf, -6px -6px #e4fabf;
-
-    width: calc(75vw / 3);
-    max-width: 256px;
-    height: calc(75vw / 3);
-    margin-bottom: 8px;
-
-    background-position: center;
-    background-size: cover;
-    border-radius: 5px;
   }
-
 `

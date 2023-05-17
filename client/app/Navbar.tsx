@@ -180,10 +180,11 @@ export default function Navbar() {
 const StyledNavbar = styled.nav`
   z-index: 10;
   height: 70px;
+  max-height: 70px;
   width: 100vw;
   max-width: 1024px;
 
-  position: sticky;
+  position: fixed;
   bottom: 0;
 
   background-color: white;
@@ -224,6 +225,8 @@ const StyledNavbar = styled.nav`
         font-size: 1.55rem;
       }
       .text {
+        /* font-size: 3.5vw; */
+        white-space: nowrap;
       }
     }
     .plus-button {
