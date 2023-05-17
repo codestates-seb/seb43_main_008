@@ -60,10 +60,14 @@ public class OAuthService {
             cookie.setSecure(true);
             cookie.setPath("/");
             cookie.setMaxAge(1000);
-            response.addCookie(cookie);
+            //response.addCookie(cookie);
+
+            response.setHeader("Set-Cookie", "Authorization=Bearer " + accessToken+"; SameSite=None");
+            response.addHeader("Set-Cookie", "Refresh="+refreshToken+"; SameSite=None");
 
             response.setStatus(HttpServletResponse.SC_OK);
-            //response.sendRedirect("http://localhost:3000/");
+            response.sendRedirect("http://localhost:3000/");
+            //response.sendRedirect("http://localhost:8080/");
 
         }
         else{
@@ -72,14 +76,15 @@ public class OAuthService {
             response.addHeader("email", email);
             response.setStatus(HttpServletResponse.SC_OK);
 
-            Cookie cookie = new Cookie("email", email);
-            cookie.setHttpOnly(false);
-            cookie.setSecure(true);
-            cookie.setPath("/");
-            cookie.setMaxAge(1000);
-            response.addCookie(cookie);
+            Cookie cookie2 = new Cookie("email", email);
+            cookie2.setHttpOnly(false);
+            cookie2.setSecure(true);
+            cookie2.setPath("/");
+            cookie2.setMaxAge(1000);
+            //response.addCookie(cookie2);
+            response.setHeader("Set-Cookie", "email="+email+"; SameSite=None");
 
-            //response.sendRedirect("http://localhost:3000/register");
+            response.sendRedirect("http://localhost:3000/register");
 
         }
 
