@@ -4,31 +4,26 @@ import styled from "styled-components";
 
 interface SlideProps {
   id: number;
-  title: string;
-  image: string;
+  content: string;
+  contentImg: string;
   usageCount: number;
 }
-const Slide: React.FC<SlideProps> = ({
-  image,
-  title,
+const Slide = ({
+  contentImg,
+  content,
   usageCount,
 }: SlideProps) => {
   return (
     <StyledSlide>
       <div className="slide">
         <div className="info">
-          <div className="nickName">{title} | </div>
+          <div className="nickName">{content} | </div>
           <div className="usageCount">{usageCount}번 사용</div>
         </div>
 
-        <div className="image" style={{ backgroundImage: `url(${image})` }} />
+        <div className="image" style={{ backgroundImage: `url(${contentImg})` }} />
         <p>
-          이 새로운 함수는 내부 함수 func를 호출하는 역할을 하며, 함수를 호출할
-          때 인자를 받습니다. (...args)는 인자를 받는 매개변수입니다. <br />
-          따라서, throttle 함수가 반환하는 함수를 호출할 때, 인자를 전달하면
-          해당 인자가 내부 함수 func로 전달되며, 이 인자를 이용하여 원래 함수의
-          실행 결과를 반환합니다. 예를 들어, 다음과 같이 throttle 함수를
-          사용한다고 가정해봅시다.
+          {content}
         </p>
       </div>
     </StyledSlide>
@@ -36,7 +31,6 @@ const Slide: React.FC<SlideProps> = ({
 };
 
 const StyledSlide = styled.div`
-  width: 80vw;
   padding: 24px 21px;
   margin: 10px -10px 10px 24px;
 
@@ -61,7 +55,7 @@ const StyledSlide = styled.div`
   .image {
     height: 35vw;
     width: 100%;
-    margin-bottom: 0.73rem;
+    margin-bottom: 1.5rem;
 
     background-position: center;
     background-size: cover;
@@ -69,7 +63,13 @@ const StyledSlide = styled.div`
   }
 
   .slide {
-    width: 100%;
+    width: 70vw;
+    height: 40vh;
+    overflow: auto;
+  }
+
+  .p {
+    overflow: hidden;
   }
 `;
 

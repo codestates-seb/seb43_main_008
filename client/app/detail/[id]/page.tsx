@@ -1,7 +1,7 @@
-import Header from "../Header";
-import { Comments } from "./Comments";
-import { Slider } from "./Slider";
-import { Vote } from "./Vote";
+import Header from "../../Header";
+import { Comments } from "../Comments";
+import { Slider } from "../Slider";
+import { Vote } from "../Vote";
 
 export default function Detail() {
   return (

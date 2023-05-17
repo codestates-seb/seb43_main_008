@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useParams } from 'next/navigation';
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import slides from "./list";
+import { GetDaylog } from '../api/detailApi';
+// import slides from "./list";
 import { Slide } from "./Slide";
 export const Slider = (): JSX.Element => {
   // 🚨 렌더되기 전에 슬라이더 조작하면 에러남. 
@@ -57,6 +59,20 @@ export const Slider = (): JSX.Element => {
   const delay = 10;
   const onThrottleDragMove = throttle(onDragMove, delay);
 
+  // api 요청 함수
+  const [slides, setSlides] = useState([]);
+  const params = useParams();
+  console.log(params.id)
+
+  useEffect(() => {
+    GetDaylog(params.id).then((data) => {
+      if (slides) {
+        setSlides(data)
+        console.log(slides)
+      }
+    })
+  }, [])
+
   return (
     <StyledSlider>
       <section className="container">
@@ -69,9 +85,7 @@ export const Slider = (): JSX.Element => {
           onMouseLeave={onDragEnd}
         >
           {slides.map((data) => (
-            <li key={data.id}>
-              <Slide {...data} />
-            </li>
+            <Slide key={data.id} {...data} />
           ))}
         </ul>
       </section>
