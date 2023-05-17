@@ -24,7 +24,7 @@ export const Profile = () => {
       }
     })
   }, [])
-  console.log(profile.image)
+  console.log(sessionStorage.getItem("header"))
   return <StyledProfile className='box'>
     <div className='profile-box'>
       <Image

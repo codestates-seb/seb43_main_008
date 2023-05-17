@@ -11,7 +11,7 @@ export const VotingPost = ({ ...data }: PostData) => {
       <div className='box'>
         <div className="image" style={{ backgroundImage: `url(${data.image})` }}> {data.voteResult === false ? <div className='voting'>투표완료</div> : <div className='voting'>투표중</div>}</div>
       </div>
-      <div className='text'> voting {data.id} </div>
+      <div className='text'> {data.title} </div>
       {data.voteResult ? <Medal /> : null}
     </StyledVoting>
   )

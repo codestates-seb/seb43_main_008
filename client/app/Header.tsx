@@ -21,7 +21,7 @@ export default function Header({
       ) : (
         <BackArrowContainer />
       )}
-      {textContent ? <HeaderText>{textContent}</HeaderText> : null}
+      {textContent ? <HeaderText>{sessionStorage?.getItem("header")}</HeaderText> : null}
       {saveButton ? (
         <SaveButtonContainer>
           <SaveButton type="submit">저장</SaveButton>
