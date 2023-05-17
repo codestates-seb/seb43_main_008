@@ -12,8 +12,12 @@ import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +41,10 @@ public class BookmarkService {
         Member member = memberRepo.findById(memberId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
+        //북마크 중복 체크
+        Boolean duplicationCheck = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, seriseId);
+        if (duplicationCheck){ throw new BusinessLogicException(ExceptionCode.BOOKMARK_IS_DUPLICATION); }
+
         Bookmark bookmark = Bookmark.of(member, series);
         bookmarkRepo.save(bookmark);
 
@@ -44,14 +52,15 @@ public class BookmarkService {
     }
 
     @Transactional
-    public List<BookmarkResponse> getListBookmarks(){ //series.getId(), series.getTitle(), series.getDaylogCount(), series.getImage()
+    public List<BookmarkResponse> getListBookmarks(int page, int size){ //series.getId(), series.getTitle(), series.getDaylogCount(), series.getImage()
         Long memberId = SecurityUtil.getMemberId();
         memberRepo.findById(memberId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        List<Bookmark> bookmarks = bookmarkRepo.findAllByMemberId(memberId);
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<Bookmark> bookmarksInfo = bookmarkRepo.findAllByMemberId(memberId, pageable);
 
-
+        List<Bookmark> bookmarks = bookmarksInfo.getContent();
         List<BookmarkResponse> responses = bookmarks.stream()
                 .map(bookmark ->
                         BookmarkResponse.of(

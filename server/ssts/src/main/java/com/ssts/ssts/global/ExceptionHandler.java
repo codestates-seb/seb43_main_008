@@ -48,11 +48,13 @@ public class ExceptionHandler {
         } else if (ex.getExceptionCode()==ExceptionCode.NOT_HAVE_VOTE_AUTHORITY) {
             response=ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.VOTE_RESULT_IS_NOT_EXSIST) {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.VOTE_RESULT_IS_NOT_EXSIST.getMessage());
+            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.VOTE_RESULT_IS_NOT_EXSIST.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.THIS_VOTE_RESULT_IS_TRUE) {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE.getMessage());
+            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.CAN_NOT_VOTE_VALUE) {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionCode.CAN_NOT_VOTE_VALUE.getMessage());
+            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.CAN_NOT_VOTE_VALUE.getMessage());
+        } else if (ex.getExceptionCode()==ExceptionCode.BOOKMARK_IS_DUPLICATION) {
+            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.BOOKMARK_IS_DUPLICATION.getMessage());
         }
 
 

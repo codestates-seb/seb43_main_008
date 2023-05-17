@@ -26,8 +26,9 @@ public class BookmarkController {
     }
 
     @GetMapping
-    public ResponseEntity getBookmarks(){
-        List<BookmarkResponse> response = bookmarkService.getListBookmarks();
+    public ResponseEntity getBookmarks(@RequestParam(value = "page", defaultValue = "1") int page,
+                                       @RequestParam(value = "size", defaultValue = "12") int size){
+        List<BookmarkResponse> response = bookmarkService.getListBookmarks(page-1, size);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
