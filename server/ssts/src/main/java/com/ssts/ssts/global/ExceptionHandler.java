@@ -14,6 +14,8 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(BusinessLogicException.class)
     public ResponseEntity<String> handleException(BusinessLogicException ex){
         ResponseEntity<String> response=ResponseEntity.badRequest().body("Occurred BusinessLoginException.");
+        //TODO Exception CODE에 Status항목 추가하기.
+        //
 
         if (ex.getExceptionCode()== ExceptionCode.EMAIL_DUPLICATE) {
             response=ResponseEntity.status(HttpStatus.CONFLICT).body(ExceptionCode.EMAIL_DUPLICATE.getMessage());
@@ -52,9 +54,13 @@ public class ExceptionHandler {
         } else if (ex.getExceptionCode()==ExceptionCode.THIS_VOTE_RESULT_IS_TRUE) {
             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.CAN_NOT_VOTE_VALUE) {
-            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.CAN_NOT_VOTE_VALUE.getMessage());
+             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.CAN_NOT_VOTE_VALUE.getMessage());
         } else if (ex.getExceptionCode()==ExceptionCode.BOOKMARK_IS_DUPLICATION) {
             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.BOOKMARK_IS_DUPLICATION.getMessage());
+         else if(ex.getExceptionCode()==ExceptionCode.IS_ALREADY_FOLLOWING){
+            response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.IS_ALREADY_FOLLOWING.getMessage());
+        }else if (ex.getExceptionCode()==ExceptionCode.IS_ALREADY_UNFOLLOWING){
+            response=ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionCode.IS_ALREADY_UNFOLLOWING.getMessage());
         }
 
 
