@@ -30,7 +30,7 @@ public class BadgeController {
 
 
     //사용자 뱃지 취득하기
-    @PostMapping("/get/{badge_id}")
+    @PostMapping("/{badge_id}")
     public ResponseEntity postBadgeMember(@PathVariable("badge_id") Long badgeId){
         MemberBadge response = badgeService.saveBadgeMember(badgeId);
         return new ResponseEntity(response, HttpStatus.OK);
