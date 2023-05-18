@@ -30,6 +30,8 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        jdbc:
+          time_zone: Asia/Seoul
   security:
     oauth2:
       client:

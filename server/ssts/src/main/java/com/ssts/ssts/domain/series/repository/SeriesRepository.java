@@ -18,6 +18,9 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 
     Page<Series> findAllByIsPublic(Boolean isPublic, Pageable pageable);
 
+    Page<Series> findAllByIsPublicAndVoteStatus(Boolean isPublic, Series.VoteStatus voteStatus, Pageable pageable);
+
+
     /* 멤버 서비스에서 멤버 아이디에 해당하는 시리즈 목록 출력 목적 */
     List<Series> findAllByMemberId(long memberId);
 }

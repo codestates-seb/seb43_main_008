@@ -139,7 +139,7 @@ public class Series extends BaseTimeEntity {
         this.voteStatus = seriesStatus;
     }
 
-    public void setPublic(Boolean aPublic) {
+    public void setIsPublic(Boolean aPublic) {
         isPublic = aPublic;
     }
 
@@ -185,7 +185,7 @@ public class Series extends BaseTimeEntity {
         Series series = new Series();
 
         series.setTitle(title);
-        series.setPublic(isPublic);
+        series.setIsPublic(isPublic);
 
         return series;
 

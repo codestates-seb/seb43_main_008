@@ -25,11 +25,11 @@ public class CommentController {
 
     @GetMapping("/{series-id}")
     public ResponseEntity getCommentList(@PathVariable("series-id") Long seriesId,
-                                         @AuthenticationPrincipal String authId, @RequestParam(value = "page", defaultValue = "1") int page,
+                                         @RequestParam(value = "page", defaultValue = "1") int page,
                                          @RequestParam(value = "size", defaultValue = "12") int size){
 
 
-        PageResponseDto response = commentService.getCommentList(seriesId,page, size);
+        PageResponseDto response = commentService.getCommentList(seriesId,page-1, size);
 
         return ResponseEntity.ok(response);
     }

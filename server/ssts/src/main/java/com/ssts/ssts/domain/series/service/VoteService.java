@@ -56,7 +56,7 @@ public class VoteService {
         }
 
         //투표에 따른 상태값 변경 //of를 쓴 게 아닌데 일단은 냅 두기 / 리팩토링 대상
-        targetSeries.setPublic(true); //시리즈 공개
+        targetSeries.setIsPublic(true); //시리즈 공개
         targetSeries.setIsEditable(false); //타이틀 수정 불가
         targetSeries.setIsActive(true); //활성 상태
         targetSeries.setVoteStatus(Series.VoteStatus.SERIES_SLEEP); //투표중 할당

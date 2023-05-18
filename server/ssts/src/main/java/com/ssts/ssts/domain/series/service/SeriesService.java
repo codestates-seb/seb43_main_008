@@ -73,7 +73,7 @@ public class SeriesService {
     public PageResponseDto getMainSeriesListByNewest(int page, int size){
 
         Page<Series> seriesInfo = seriesRepository.findAllByIsPublic(true, PageRequest.of(page, size,
-                Sort.by("voteCreatedAt").descending()));
+                Sort.by("voteCreatedAt")));
 
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
@@ -83,7 +83,7 @@ public class SeriesService {
 
     public PageResponseDto getMainSeriesListByVotes(int page, int size){
 
-        Page<Series> seriesInfo = seriesRepository.findAllByIsPublic(true, PageRequest.of(page, size,
+        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteStatus(true, Series.VoteStatus.SERIES_SLEEP,PageRequest.of(page, size,
                 Sort.by("totalVote").descending()));
 
         List<Series> seriesList = seriesInfo.getContent();
@@ -140,7 +140,7 @@ public class SeriesService {
         }
 
         if(isPulic.equals("true")){
-            series.setPublic(true);
+            series.setIsPublic(true);
         }
 
         series.setImage(s3Uploader.getS3("ssts-img", "series/series-image.png"));

@@ -45,6 +45,7 @@ public class DaylogService {
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
         Series series = seriesService.findVerifiedSeries(seriesId);
 
+        series.setDaylogCount(series.getDaylogCount()+1);
         daylog.addSeries(series);
         daylogRepository.save(daylog);
 

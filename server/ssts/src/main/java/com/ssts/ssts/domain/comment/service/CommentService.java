@@ -15,6 +15,7 @@ import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.global.utils.UpdateUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -28,6 +29,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -57,6 +59,8 @@ public class CommentService {
 
         comment.addSeries(findSeries);
         comment.addMember(findMember);
+        comment.getCreatedAt();
+        log.info("time= {}", comment.getCreatedAt());
 
         commentRepository.save(comment);
 
@@ -68,10 +72,10 @@ public class CommentService {
         Comment descComment = this.findVerifiedComment(commentId);
         Comment comment = Comment.of(commentUpdateDto.getComment());
 
-        if(memberService.findMemberByToken().getId() ==  descComment.getMember().getId()){
+        if(memberService.findMemberByToken().getId() !=  descComment.getMember().getId()){
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
-
+        log.info("실행됌");
         Comment updateComment = updateUtils.copyNonNullProperties(comment, descComment);
         commentRepository.save(updateComment);
 
@@ -81,7 +85,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId){
         Comment comment = this.findVerifiedComment(commentId);
-        if(memberService.findMemberByToken().getId() ==  comment.getMember().getId()){
+        if(memberService.findMemberByToken().getId() !=  comment.getMember().getId()){
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
