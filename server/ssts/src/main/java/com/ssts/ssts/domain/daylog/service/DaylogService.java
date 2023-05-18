@@ -115,6 +115,7 @@ public class DaylogService {
         }
 
         return list;
+        //클래스 추가 , 책임 이전
     }
 
 

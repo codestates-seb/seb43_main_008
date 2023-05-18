@@ -59,8 +59,7 @@ public class CommentService {
 
         comment.addSeries(findSeries);
         comment.addMember(findMember);
-        comment.getCreatedAt();
-        log.info("time= {}", comment.getCreatedAt());
+
 
         commentRepository.save(comment);
 

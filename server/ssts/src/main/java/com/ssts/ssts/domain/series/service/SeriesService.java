@@ -49,7 +49,7 @@ public class SeriesService {
     private final MemberRepository memberRepo;
 
     public PageResponseDto getSeriesList(Long memberId, int page, int size){
-
+        // 파라미터 체크
         Page<Series> seriesInfo;
         Member authMember = memberService.findMemberByToken();
 
@@ -143,7 +143,7 @@ public class SeriesService {
 
     @Transactional
     public SeriesResponseDto saveSeries(String isPulic, SeriesPostDto seriesPostDto){
-
+        // 파라미터 체크
         Member authMember = memberService.findMemberByToken();
         Series series = Series.of(seriesPostDto.getTitle());
         Member member = memberService.findMemberById(authMember.getId());
@@ -152,11 +152,12 @@ public class SeriesService {
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
-        if(isPulic.equals("true")){
+        if("true".equals(isPulic)){
             series.setIsPublic(true);
+            // 예외처리
         }
 
-        series.setImage(s3Uploader.getS3("ssts-img", "series/series-image.png"));
+        series.setImage(s3Uploader.getS3("ssts-img", "series/series-image.png")); // 상수 선언
         series.addMember(member);
         seriesRepository.save(series);
 
@@ -165,15 +166,15 @@ public class SeriesService {
 
     @Transactional
     public SeriesResponseDto updateSeries(Long seriesId, SeriesUpdateDto seriesUpdateDto){
-
+        // 파라미터 체크
         Member member = memberService.findMemberByToken();
         Series descSeries = this.findVerifiedSeries(seriesId);
         Series series = Series.of(seriesUpdateDto.getTitle(), seriesUpdateDto.getIsPublic());
 
-        if(descSeries.getIsEditable().equals(false)){
+        if(descSeries.getIsEditable().equals(false)){ // 반대로 false.equ~
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
-        if(descSeries.getMember().getId()!= member.getId()){
+        if(descSeries.getMember().getId() != member.getId()){ // 스트링값 equal로비교
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
