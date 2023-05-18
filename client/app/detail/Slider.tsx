@@ -12,14 +12,16 @@ export const Slider = (): JSX.Element => {
   // api 요청 함수
   const [slides, setSlides] = useState([]);
   const [pageNumber, setPageNumber] = useState(1)
-  const [isLoading, setIsLoading] = useState(true)
+  const [lastDataLength, setLastDataLength] = useState<number>(0)
+
   const params = useParams();
 
   useEffect(() => {
     GetDaylog(params.id, pageNumber).then((data) => {
       if (data) {
-        setSlides(data)
-        setIsLoading(false)
+        setSlides((prevList) => [...prevList, ...data])
+        setLastDataLength(data.length)
+        console.log(`페이지 요청 ${pageNumber}`)
       }
     })
   }, [pageNumber])
@@ -46,9 +48,7 @@ export const Slider = (): JSX.Element => {
 
       scrollRef.current.scrollLeft = startX - e.pageX;
 
-      if (scrollWidth <= Math.ceil(clientWidth + scrollLeft) && isLoading) {
-        console.log("서버에 다음 페이지 요청하기 & 요청중이라면 재요청 안보내기")
-        console.log(pageNumber)
+      if (scrollWidth <= Math.ceil(clientWidth + scrollLeft) && lastDataLength >= 6) { // 마지막에 들어온 데이터가 6개 미만이라면 페이지네이션 차단 
         setPageNumber((prev) => prev + 1)
       }
     }
