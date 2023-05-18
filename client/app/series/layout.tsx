@@ -1,3 +1,4 @@
+"use client";
 import Header from "../Header";
 import Navbar from "../Navbar";
 
@@ -8,7 +9,11 @@ export default function MemberEditLayout({
 }) {
   return (
     <>
-      <Header backButton={true} textContent={"북마크"} secretButton={false} />
+      <Header
+        backButton={true}
+        textContent={"시리즈 작성"}
+        secretButton={true}
+      />
       {children}
       <Navbar />
     </>
