@@ -56,6 +56,14 @@ public class VoteController {
     }
 
 
+    //1차 투표 결과 확인
+    @GetMapping("/graduation/{series_id}")
+    public ResponseEntity getStartVote(@PathVariable("series_id") Long seriesId){
 
+        //VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
+        VoteResponse.VoteAttendResponse response = (VoteResponse.VoteAttendResponse) voteService.getStartVote(seriesId);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
 
 }

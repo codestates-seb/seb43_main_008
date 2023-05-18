@@ -2,6 +2,7 @@ package com.ssts.ssts.domain.series.response.vote;
 
 //package com.ssts.ssts.domain.series.response.vote;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.domain.series.entity.Series;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -83,19 +84,25 @@ public class VoteResponse {
 
     @NoArgsConstructor
     @Setter
+    @Getter
     @AllArgsConstructor
     public static class VoteAttendResponse extends VoteResponse{ //최초 투표: 투표 참여 response
 
         int voteAgree;
         int voteDisagree;
 
-        public static VoteAttendResponse of( Long seriesId, int voteAgree, int voteDisagree, LocalDateTime voteEndAt) {
+        @JsonIgnore
+        Series.VoteStatus voteStatus;
+
+        @JsonIgnore
+        LocalDateTime voteEndAt;
+
+        public static VoteAttendResponse of( Long seriesId, int voteAgree, int voteDisagree) {
             VoteResponse.VoteAttendResponse firstAttendResponse = new VoteAttendResponse();
 
             firstAttendResponse.setSeriesId(seriesId);
             firstAttendResponse.setVoteAgree(voteAgree);
             firstAttendResponse.setVoteDisagree(voteDisagree);
-            firstAttendResponse.setVoteEndAt(voteEndAt);
 
             return firstAttendResponse;
         }
