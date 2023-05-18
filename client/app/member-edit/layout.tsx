@@ -1,4 +1,5 @@
 import Header from "../Header";
+import Navbar from "../Navbar";
 
 export default function MemberEditLayout({
   children,
@@ -9,6 +10,7 @@ export default function MemberEditLayout({
     <>
       <Header backButton={true} textContent={null} secretButton={false} />
       {children}
+      <Navbar />
     </>
   );
 }

@@ -17,7 +17,7 @@ export default function ProfileImageEdit() {
         <EditDescription>기호는 -_.만 사용 가능합니다.</EditDescription>
       </EditDescriptionContainer>
       <ImageContainer>
-        {image ? <Image src={image} alt="Profile Picture" /> : <DefaultImage />}
+        {image ? <Image src={image} alt="프로필 사진" /> : <DefaultImage />}
         <CameraIconContainer>
           <AiFillCamera />
         </CameraIconContainer>
