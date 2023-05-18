@@ -11,7 +11,6 @@ import java.util.List;
 @Setter
 public class PageResponseDto<T> {
 
-
     private List<T> data;
     private PageDto pageInfo;
 

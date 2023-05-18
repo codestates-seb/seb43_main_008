@@ -14,6 +14,10 @@ import java.util.List;
 public interface SeriesRepository extends JpaRepository<Series, Long> {
     Page<Series> findByMember_id(Long memberId, Pageable pageable);
 
+    Page<Series> findByMember_idAndIsPublicTrue(Long memberId, Pageable pageable);
+
+    Page<Series> findAllByIsPublic(Boolean isPublic, Pageable pageable);
+
     /* 멤버 서비스에서 멤버 아이디에 해당하는 시리즈 목록 출력 목적 */
     List<Series> findAllByMemberId(long memberId);
 }

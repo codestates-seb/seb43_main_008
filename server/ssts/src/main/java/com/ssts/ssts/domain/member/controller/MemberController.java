@@ -1,8 +1,11 @@
 package com.ssts.ssts.domain.member.controller;
 
 
-import com.ssts.ssts.domain.member.dto.*;
 import com.ssts.ssts.domain.member.entity.Member;
+import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
+import com.ssts.ssts.domain.member.dto.MemberFeedResponseDto;
+import com.ssts.ssts.domain.member.dto.MemberPhoneInfoPostDto;
+import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
 import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

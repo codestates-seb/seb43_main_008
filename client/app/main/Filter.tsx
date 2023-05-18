@@ -2,22 +2,30 @@
 
 import { useState } from "react";
 import styled from "styled-components";
+// import { useSWRConfig } from 'swr'
 
 export const Filter: React.FC = () => {
-  const [isSelected, setIsSelected] = useState(false);
+  const [filter, setFilter] = useState<string>("newest");
+
+  /*
+  // filter 값이 변경될 때, 데이터를 다시 요청하기 위해 mutate 함수 호출
+  useEffect(() => {
+    GetMainFilter(filter)
+  }, [filter, mutate]);
+  */
 
   return (
     <StyledFilter>
       <div className="filter">
         <div
-          className={isSelected ? "tag" : "selected tag"}
-          onClick={() => setIsSelected(false)}
+          className={filter === "newest" ? "selected tag" : "tag"}
+          onClick={() => setFilter("newest")}
         >
           새로운 게시글
         </div>
         <div
-          className={isSelected ? "selected tag" : "tag"}
-          onClick={() => setIsSelected(true)}
+          className={filter === "voteCount" ? "selected tag" : "tag"}
+          onClick={() => setFilter("voteCount")}
         >
           인기 게시글
         </div>

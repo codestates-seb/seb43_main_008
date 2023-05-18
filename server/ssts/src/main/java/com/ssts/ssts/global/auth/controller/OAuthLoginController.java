@@ -27,7 +27,8 @@ public class OAuthLoginController {
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+
+    //@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String kakaoClientId;
 
     private String googleScope="email%20profile";
@@ -74,14 +75,15 @@ public class OAuthLoginController {
         log.info("하늘/oauth login : kakao");
 
         UriComponents uri = UriComponentsBuilder.fromUriString(kakaoUrl)
-                .pathSegment("o", "oauth2", "v2", "auth")
+                .pathSegment("oauth", "authorize")
                 .queryParam("response_type", responseType)
                 .queryParam("client_id", kakaoClientId)
                 .queryParam("redirect_uri", redirectUrl+"kakao")
-                .queryParam("scope", kakaoScope)
                 .build();
 
 
         response.sendRedirect(uri.toString());
     }
+
+
 }
