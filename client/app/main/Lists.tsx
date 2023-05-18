@@ -12,19 +12,15 @@ import { Scroll } from './Scroll';
 export const Lists: React.FC = () => {
   const [list, setList] = useState([]);
   const [pageQuery, setPageQuery] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [lastDataLength, setLastDataLength] = useState<number>(0)
 
   useEffect(() => {
     GetMain(pageQuery).then((data) => {
       if (data) {
         setList((prevList) => [...prevList, ...data]) // ...list, data로 바꿔야함
-        setIsLoading(false)
         setLastDataLength(data.length)
-        console.log(`api ${pageQuery}`)
       }
     })
-    setIsLoading(true)
   }, [pageQuery])
 
 
@@ -37,7 +33,6 @@ export const Lists: React.FC = () => {
     }
     else router.push("/login")
   }
-  console.log(isLoading)
   return (
     <StyledLists className="list">
       {list.map((data) => (

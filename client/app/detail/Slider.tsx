@@ -21,7 +21,6 @@ export const Slider = (): JSX.Element => {
       if (data) {
         setSlides((prevList) => [...prevList, ...data])
         setLastDataLength(data.length)
-        console.log(`페이지 요청 ${pageNumber}`)
       }
     })
   }, [pageNumber])
@@ -32,23 +31,39 @@ export const Slider = (): JSX.Element => {
   const [isDrag, setIsDrag] = useState<boolean>(false);
   const [startX, setStartX] = useState<number>();
 
-  const onDragStart = (e: React.MouseEvent<HTMLUListElement>) => {
+  // 터치 이벤트인지 확인하는 함수
+  const isTouchEvent = (event: React.MouseEvent<HTMLUListElement> | React.TouchEvent<HTMLUListElement>): event is React.TouchEvent<HTMLUListElement> => {
+    return "touches" in event;
+  };
+
+  const onDragStart = (e: React.MouseEvent<HTMLUListElement> | React.TouchEvent<HTMLUListElement>) => {
     e.preventDefault();
+
+    // 터치 이벤트인 경우에는 터치 좌표를 가져온다. 
+    const pageX = isTouchEvent(e) ? e.touches[0].pageX : e.pageX;
+    console.log(`pageX ${pageX}`)
+
+
     setIsDrag(true);
-    setStartX(e.pageX + scrollRef.current?.scrollLeft);
+    setStartX(pageX + (scrollRef.current?.scrollLeft || 0));
   };
 
   const onDragEnd = () => {
     setIsDrag(false);
   };
 
-  const onDragMove = (e: React.MouseEvent<HTMLUListElement>) => {
+  const onDragMove = (e: React.MouseEvent<HTMLUListElement> | React.TouchEvent<HTMLUListElement>) => {
     if (isDrag) {
       const { scrollWidth, clientWidth, scrollLeft } = scrollRef.current;
 
-      scrollRef.current.scrollLeft = startX - e.pageX;
+      // 터치 이벤트인 경우에는 터치 좌표를 가져온다. 
+      const pageX = isTouchEvent(e) ? e.touches[0].pageX : e.pageX;
 
-      if (scrollWidth <= Math.ceil(clientWidth + scrollLeft) && lastDataLength >= 6) { // 마지막에 들어온 데이터가 6개 미만이라면 페이지네이션 차단 
+      scrollRef.current.scrollLeft = startX - pageX;
+      console.log(`clientWidth ${clientWidth}`)
+      // 추가 api 요청은 pageNumber에 의존한다.
+      // 마지막에 들어온 데이터 길이가 7개 미만이면 pageNumber 변경을 차단시켜 무한 스크롤을 멈춘다. 
+      if (scrollWidth <= Math.ceil(clientWidth + scrollLeft) && lastDataLength >= 7) {
         setPageNumber((prev) => prev + 1)
       }
     }
@@ -83,10 +98,16 @@ export const Slider = (): JSX.Element => {
         <ul
           className="slider-container"
           ref={scrollRef}
+          // 데스크탑 클릭
           onMouseDown={onDragStart}
           onMouseMove={onThrottleDragMove}
           onMouseUp={onDragEnd}
           onMouseLeave={onDragEnd}
+          // 모바일 터치
+          onTouchStart={onDragStart}
+          onTouchMove={onThrottleDragMove}
+          onTouchEnd={onDragEnd}
+          onTouchCancel={onDragEnd}
         >
           {slides.map((data) => (
             <Slide key={data.id} {...data} />
