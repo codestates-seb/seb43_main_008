@@ -220,6 +220,47 @@ public class VoteService {
     }
 
 
+    //1차 투표 결과
+    public VoteResponse.VoteAttendResponse getStartVote(Long seriseId){
+        long memberId = SecurityUtil.getMemberId();
+        memberRepo.findById(memberId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        Series targetSeries = seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+
+        //예외: 투표를 개설한 본인이 아닙니다 //TODO 토큰
+        if(targetSeries.getMember().getId() != memberId){
+            //투표를 개설한 본인이 아닙니다
+            throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
+        }
+
+        //예외: 투표의 총 횟수를 다 씀 (voteCount==2 여기서 거른다)
+        if(targetSeries.getVoteCount()!=1){
+            //투표 종료에 대한 권한이 없습니다
+            throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
+        }
+
+        //예외: 투표를 개설하지 않았습니다
+        if (targetSeries.getVoteCount()==0) {
+            throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND);
+        }
+
+        //예외: 최초투표를 진행함, 최초투표에서 찬성 결과가 나옴 (voteCount==1 && voteResult==true)
+        if(targetSeries.getVoteResult()){
+            //이 투표는 이미 졸업했어요!
+            throw new BusinessLogicException(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE);
+        }
+
+        return VoteResponse.VoteAttendResponse.of(
+                seriseId,
+                targetSeries.getVoteAgree(),
+                targetSeries.getVoteDisagree()
+        );
+
+    }
+
+
+
     //로직: 마감기한 지났는지의 여부
     private Boolean isVotedNotEntAt(Series targetSeries){ //마감기한 안지남: true
         LocalDateTime currentTime = LocalDateTime.now();
