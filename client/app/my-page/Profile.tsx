@@ -24,7 +24,6 @@ export const Profile = () => {
       }
     })
   }, [])
-  console.log(profile.image)
   return <StyledProfile className='box'>
     <div className='profile-box'>
       <Image

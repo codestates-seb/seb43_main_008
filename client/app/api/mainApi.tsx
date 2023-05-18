@@ -3,14 +3,16 @@ axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 // 📌 Main api
 
-export const GetMain = async () => {
+export const GetMain = async (pageQuery: number) => {
   try {
-    const response = await axios.get(`/series`);
+    const response = await axios.get(`/series?page=${pageQuery}`);
     return response.data.data;
   } catch (error) {
     throw error;
   }
 }
+
+/*
 
 export const GetMainFilter = async (filter: string) => {
   try {
@@ -33,3 +35,6 @@ export const GetMainPage = async (page: number) => {
     throw error;
   }
 };
+
+*/
+

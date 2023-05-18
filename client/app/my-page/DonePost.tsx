@@ -12,7 +12,7 @@ export const DonePost = ({ ...data }: PostData) => {
       <div className='box'>
         <div className="image" style={{ backgroundImage: `url(${data.image})` }}> </div>
       </div>
-      <div className='text'> done {data.id} </div>
+      <div className='text'> {data.title} </div>
       {data.voteResult ? <Medal /> : null}
     </StyledDone>
   )
