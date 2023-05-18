@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from 'react';
 import { AiOutlineLeft } from "react-icons/ai";
 import styled from "styled-components";
 
@@ -12,6 +13,12 @@ export default function Header({
   textContent: string | null;
   saveButton: boolean;
 }) {
+
+  useEffect(() => {
+    sessionStorage.setItem("header", "default")
+  })
+
+
   return (
     <HeaderContainer>
       {backButton ? (
