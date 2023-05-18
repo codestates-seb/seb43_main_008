@@ -1,7 +1,6 @@
 import Header from "../Header";
 import Navbar from "../Navbar";
 
-
 export default function MemberEditLayout({
   children,
 }: {
@@ -9,7 +8,7 @@ export default function MemberEditLayout({
 }) {
   return (
     <>
-      <Header backButton={true} textContent={"맹구네"} saveButton={false} />
+      <Header backButton={true} textContent={"맹구네"} secretButton={false} />
       {children}
       <Navbar />
     </>

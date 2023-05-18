@@ -2,22 +2,22 @@
 
 // import axios from "axios";
 import Image from "next/image";
-import { signIn, useSession } from "next-auth/react";
+// import { signIn, useSession } from "next-auth/react";
 import styled from "styled-components";
 
 export default function GoogleLogin() {
-  const { data: session, status } = useSession();
-  console.log("session", session);
-  console.log("status", status);
-  console.log(session?.user?.email);
-  console.log(session?.user?.name);
+  // const { data: session, status } = useSession();
+
+  const googleLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/login/google`;
+  };
 
   return (
-    <GoogleLoginButton onClick={() => signIn("google")}>
+    <GoogleLoginButton onClick={() => googleLogin()}>
       <GoogleLogoBox>
         <Image
           src="/socialLoginButton/googleLogo.png"
-          alt="Google Logo for Google Login"
+          alt="구글 로고"
           width="24"
           height="24"
         />

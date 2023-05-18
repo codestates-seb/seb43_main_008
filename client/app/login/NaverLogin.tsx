@@ -8,7 +8,7 @@ export default function NaverLogin() {
       <NaverLogoBox>
         <Image
           src="/socialLoginButton/naverLogo.png"
-          alt="Naver Logo for Naver Login"
+          alt="네이버 로고"
           width="40"
           height="40"
         />

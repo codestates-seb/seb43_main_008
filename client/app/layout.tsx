@@ -30,7 +30,7 @@ export default async function RootLayout({
       <body>
         <Provider>
           <StyledComponentsRegistry>
-            <div className="mainContainer">{children}</div>
+            <div className="main-container">{children}</div>
           </StyledComponentsRegistry>
         </Provider>
       </body>

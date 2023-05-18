@@ -1,6 +1,7 @@
 import Header from "../Header";
+import Navbar from "../Navbar";
 
-export default function LoginLayout({
+export default function MemberEditLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ export default function LoginLayout({
     <>
       <Header backButton={true} textContent={null} secretButton={false} />
       {children}
+      <Navbar />
     </>
   );
 }

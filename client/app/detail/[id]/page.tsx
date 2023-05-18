@@ -6,7 +6,11 @@ import { Vote } from "../Vote";
 export default function Detail() {
   return (
     <>
-      <Header backButton={true} textContent={"이름 어떻게 불러오지..?"} saveButton={false} />
+      <Header
+        backButton={true}
+        textContent={"이름 어떻게 불러오지..?"}
+        secretButton={false}
+      />
       <Slider />
       <Vote />
       <Comments />
