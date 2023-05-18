@@ -6,7 +6,7 @@ import SocialLoginButtonBox from "./SocialLoginButtonBox";
 
 export default function Login() {
   return (
-    <div className={`${styles.loginPage} header-page-container`}>
+    <div className={`${styles["login-page"]} header-page-container`}>
       <Image
         src="/logoSquare.png"
         alt="쓰쓰또쓰 로고"
