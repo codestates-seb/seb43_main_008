@@ -42,6 +42,7 @@ public enum ExceptionCode {
 
     //북마크 에러
     BOOKMARK_IS_DUPLICATION(RtnHttpStatus.Validation,1009, "이미 북마크한 시리즈예요."),
+    NOT_SERISE_WRITER(RtnHttpStatus.Validation,1012, "시리즈를 작성한 본인이 아니라서 투표를 개설할 수 없어요."),
 
     //뱃지 에러
     BADGE_NOT_FOUND(RtnHttpStatus.Validation, 1010, "존재하지 않는 뱃지예요."),
