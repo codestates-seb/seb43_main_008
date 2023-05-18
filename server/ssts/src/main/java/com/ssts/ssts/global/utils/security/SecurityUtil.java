@@ -28,5 +28,19 @@ public class SecurityUtil {
         long longId = new Long(integerId.longValue());
         return longId;
     }
+
+    public static String getMemberEmail(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || authentication.getCredentials()==null) {
+            throw new BusinessLogicException(ExceptionCode.SECURITY_NO_CREDENTIALS);
+        }
+
+        String email=(String)authentication.getPrincipal();
+
+        return email;
+
+    }
 }
 

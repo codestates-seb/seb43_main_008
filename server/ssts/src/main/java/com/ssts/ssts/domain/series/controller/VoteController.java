@@ -45,7 +45,7 @@ public class VoteController {
 
     //투표 종료
     //@PatchMapping("/quit/{series_id}/{member_id}")
-    @PatchMapping("/quit/{series_id}")
+    @PatchMapping("/graduation/{series_id}")
     //public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathVariable("member_id") Long memberId, @PathParam("isQuit") Boolean isQuit){ //프론트가 boolean으로 보내야
     public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathParam("isQuit") Boolean isQuit){
 
