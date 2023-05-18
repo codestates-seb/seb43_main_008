@@ -5,7 +5,7 @@ import VoteResultContext from "./VoteResultContext";
 export default function MemberEdit() {
   return (
     <div className="header-page-container">
-      <Header backButton={true} textContent="투표 결과" saveButton={false} />
+      <Header backButton={true} textContent="투표 결과" secretButton={false} />
       <VoteResultContext />
       <Navbar />
     </div>
