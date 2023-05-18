@@ -2,11 +2,8 @@ package com.ssts.ssts.domain.member.service;
 
 import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
 import com.ssts.ssts.domain.member.dto.MemberFeedResponseDto;
-import com.ssts.ssts.domain.member.dto.MemberPhoneInfoPostDto;
-import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
-import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.S3Uploader;
@@ -29,8 +26,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    private final SeriesRepository seriesRepository;
-
     private final S3Uploader s3ImageUploader;
 
 
@@ -43,7 +38,8 @@ public class MemberService {
         Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        log.info("하늘 member service : memberid=" + member.getId() + " 조회");
+        log.info("하늘/member service : token(id) -> member 조회 " +
+                "\nmemberid=" + member.getId());
 
         return member;
     }
@@ -52,17 +48,19 @@ public class MemberService {
         Member member = memberRepository.findByNickName(nickName).
                 orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        log.info("하늘 member service : member nickName="+member.getNickName());
+        log.info("하늘/member service : nickName -> member 조회" +
+                "\nmemberid=" + member.getId()+
+                "\nnickName="+member.getNickName());
         return member;
     }
 
     public Member findMemberById(long memberId){
 
-        long findId = SecurityUtil.getMemberId();
-        Member member = memberRepository.findById(findId).
+        Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        log.info("하늘 member service : member id=" + member.getId() + " 조회");
+        log.info("하늘/member service : id -> member 조회 " +
+                "\nmemberid=" + member.getId());
 
         return member;
     }
@@ -71,17 +69,23 @@ public class MemberService {
 
         Optional<Member> member = memberRepository.findByEmail(email);
 
-        log.info("하늘 member service : member email=" + email + " 조회, 반환값 optional");
+        log.info("하늘 member service : email -> (optional)member 조회" +
+                "\nemail=" + email);
 
         return member;
     }
 
     /*
-    * 테스트용 회원가입
+    * DB에 멤버 등록 - test랑 실제 서비스 둘다 사용
     * */
-    public Member saveMember(MemberSignUpPostDto memberSignUpPostDto) {
+    public Member saveMember(String email, String nickName, String phone ) {
 
-        Member member = Member.of(memberSignUpPostDto.getEmail(), memberSignUpPostDto.getNickName(), memberSignUpPostDto.getPhone());
+        log.info("하늘/member service : save 회원가입 전 기입정보 " +
+                "\nemail="+email+
+                "\nphone="+phone+
+                "\nnickName="+nickName);
+
+        Member member = Member.of(email, nickName, phone);
         member.setImage(s3ImageUploader.getS3("ssts-img", "member/default.png"));
         verifyExistsEmail(member.getEmail());
         verifyExistsNickName(member.getNickName());
@@ -97,20 +101,24 @@ public class MemberService {
 
         Member savedMember = memberRepository.save(member);
 
+        log.info("하늘/member service : save 회원가입 완료" +
+                "\nmemberId="+savedMember.getId());
+
         return savedMember;
     }
 
     /*
     * 테스트용 멤버 삭제
     * */
-    public void deleteMember(long memberId){
+    public void testDeleteMember(long memberId){
 
         memberRepository.deleteById(memberId);
-        log.info("하늘 member service test delete : memberId="+memberId);
+        log.info("하늘/member service : test delete 테스트 삭제" +
+                "\nmemberId="+memberId);
     }
 
 
-    public MemberFeedResponseDto getFeedInfo(String nickName){
+    public MemberFeedResponseDto getMemberFeedInfo(String nickName){
 
         Member member = memberRepository.findByNickName(nickName).
                 orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
@@ -141,8 +149,9 @@ public class MemberService {
         member.setDeletedAt(LocalDateTime.now());
         member.setStatus(Member.Status.WITHDRAW);
 
-        log.info("하늘 member service : memberid=" + member.getId() +
-                ", " + member.getDeletedAt() + "에 탈퇴처리");
+        log.info("하늘/member service : withdraw 탈퇴" +
+                "\nmemberid=" + member.getId() +
+                "\ndeletedAt="+member.getDeletedAt());
 
         return member;
     }
@@ -152,10 +161,9 @@ public class MemberService {
 
         Member member = findMemberByToken();
         String nickName=memberEditInfoPatchDto.getNickName();
-
         String introduce= memberEditInfoPatchDto.getIntroduce();
-        //if문을 왜 쓰느냐? --> 입력안한 값에는 null이 들어가고, DB에 저장되어 버린다. 쌈바?..??훔..
-        if (!(nickName == null)) {
+
+        if (nickName != null) {
 
             verifyExistsNickName(nickName);
             member.setNickName(memberEditInfoPatchDto.getNickName());
@@ -165,31 +173,28 @@ public class MemberService {
             String saveFileName = s3ImageUploader.upload(image.get(),"daylog");
             member.setImage(saveFileName);
         }
-        if (!(introduce == null)) {
+        if (introduce != null) {
 
             member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
         }
 
-        log.info("하늘 member service : 수정 후 [" +
-                " nickName=" + member.getNickName() +
-                " image=" + member.getImage() +
-                " introduce=" + member.getIntroduce() + "]");
+        log.info("하늘/member service : update 업데이트 후 피드" +
+                "\nnickName=" + member.getNickName() +
+                "\nimage=" + member.getImage() +
+                "\nintroduce=" + member.getIntroduce());
 
         MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
                 member.getNickName(),
                 member.getImage(),
                 member.getIntroduce());
+
         return responseDto;
     }
 
-    @Transactional
-    public Member updatePhoneInfo(MemberPhoneInfoPostDto memberPhoneInfoPostDto) {
+    public Member signUpMember(String phone, String nickName) {
 
-        Member member = findMemberByToken();
-        verifyExistsPhoneNumber(memberPhoneInfoPostDto.getPhone());
-        member.setPhone(memberPhoneInfoPostDto.getPhone());
-
-        log.info("하늘 member service : phone="+member.getPhone()+" 입력");
+        String email=SecurityUtil.getMemberEmail();
+        Member member=saveMember(email, nickName, phone);
 
         return member;
     }
