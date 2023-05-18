@@ -41,6 +41,8 @@ public class BookmarkService {
         Member member = memberRepo.findById(memberId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
+        seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+
         //북마크 중복 체크
         Boolean duplicationCheck = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, seriseId);
         if (duplicationCheck){ throw new BusinessLogicException(ExceptionCode.BOOKMARK_IS_DUPLICATION); }
