@@ -66,7 +66,7 @@ public class VoteService {
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
         //투표 마감기간 (2일) 할당
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusDays(2));
-        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
+        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(1));
         //ㄴ> 테스트 마감기간: 15초
 
         //재투표시에 memberVote 초기화 (중복 제거)
@@ -158,7 +158,7 @@ public class VoteService {
     //[마감 1개 하고 재투표 없이 종료하는 경우] => 새 페이지 처리
     @Transactional //[모든 예외를 거치고 남은 걸려져서 들어오는 값이 종료하기의 조건이 되도록]
     //public Object quitVote(Long seriesId,  Long memberId, Boolean isQuit){
-    public Object quitVote(Long seriesId, Boolean isQuit){ //TODO 토큰 적용시에 풀기
+    public VoteResponse quitVote(Long seriesId, Boolean isQuit){ //TODO 토큰 적용시에 풀기
 
         //TODO *-토큰Id적용--* TODO토큰시에 주석풀기
         long memberId = SecurityUtil.getMemberId();
