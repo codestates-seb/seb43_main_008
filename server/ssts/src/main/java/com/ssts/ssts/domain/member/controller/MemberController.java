@@ -1,11 +1,11 @@
 package com.ssts.ssts.domain.member.controller;
 
 
+import com.ssts.ssts.domain.member.dto.MemberSignUpAddInfoDto;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
 import com.ssts.ssts.domain.member.dto.MemberFeedResponseDto;
-import com.ssts.ssts.domain.member.dto.MemberPhoneInfoPostDto;
-import com.ssts.ssts.domain.member.dto.MemberSignUpPostDto;
+import com.ssts.ssts.domain.member.dto.MemberTestSignUpDto;
 import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -65,11 +65,24 @@ public class MemberController {
         Member member=memberService.signUpMember(memberSignUpAddInfoDto.getPhone(), memberSignUpAddInfoDto.getNickName());
 
         //FIXME 출력도 고쳐야한다.
-        return ResponseEntity.status(HttpStatus.OK).body(member.getPhone()+" 휴대폰 번호가 정상적으로 입력되셨습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(
+                member.getNickName()+"님! 회원가입이 끝났어요.");
 
     }
 
 
+    /*
+     * 멤버 탈퇴 기능
+     * 권한 : USER, ADMIN
+     * */
+    @DeleteMapping("/members")
+    public ResponseEntity withdrawMember() {
+
+        Member member=memberService.changeMemberStatusWithdraw();
+
+        return ResponseEntity.status(HttpStatus.OK).body(member.getDeletedAt()+"에 탈퇴처리되셨습니다. " +
+                "정책에 따라 6개월 보관할 예정하겠습니다 :) ");
+    }
 
     /*
     * 멤버 본인 피드 조회 기능
@@ -95,21 +108,9 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    /*
-     * 멤버 탈퇴 기능
-     * 권한 : USER, ADMIN
-     * */
-    @DeleteMapping("/members")
-    public ResponseEntity withdrawMember() {
-
-        Member member=memberService.changeMemberStatusWithdraw();
-
-        return ResponseEntity.status(HttpStatus.OK).body(member.getDeletedAt()+"에 탈퇴처리되셨습니다. " +
-                "정책에 따라 6개월 보관할 예정하겠습니다 :) ");
-    }
 
     /*
-    * 멤버 정보 수정
+    * 멤버 본인 피드 정보 수정 기능
     * 권한 : USER, ADMIN
     * */
     @PatchMapping("/feed")

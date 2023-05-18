@@ -76,7 +76,7 @@ public class MemberService {
     }
 
     /*
-    * DB에 멤버 등록
+    * DB에 멤버 등록 - test랑 실제 서비스 둘다 사용
     * */
     public Member saveMember(String email, String nickName, String phone ) {
 
@@ -161,10 +161,9 @@ public class MemberService {
 
         Member member = findMemberByToken();
         String nickName=memberEditInfoPatchDto.getNickName();
-
         String introduce= memberEditInfoPatchDto.getIntroduce();
-        //if문을 왜 쓰느냐? --> 입력안한 값에는 null이 들어가고, DB에 저장되어 버린다. 쌈바?..??훔..
-        if (!(nickName == null)) {
+
+        if (nickName != null) {
 
             verifyExistsNickName(nickName);
             member.setNickName(memberEditInfoPatchDto.getNickName());
@@ -174,7 +173,7 @@ public class MemberService {
             String saveFileName = s3ImageUploader.upload(image.get(),"daylog");
             member.setImage(saveFileName);
         }
-        if (!(introduce == null)) {
+        if (introduce != null) {
 
             member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
         }
@@ -195,7 +194,7 @@ public class MemberService {
     public Member signUpMember(String phone, String nickName) {
 
         String email=SecurityUtil.getMemberEmail();
-        Member member=saveMember(email, phone, nickName);
+        Member member=saveMember(email, nickName, phone);
 
         return member;
     }
