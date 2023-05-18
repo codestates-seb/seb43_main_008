@@ -6,6 +6,7 @@ import styled from "styled-components";
 import names from "./Names";
 
 export default function NameInput() {
+  const [inputValue, setInputValue] = useState("");
   const [placeholder, setPlaceholder] = useState(
     "❤️를 누르면 랜덤으로 이름을 정할수 있어요"
   );
@@ -15,12 +16,21 @@ export default function NameInput() {
     setPlaceholder("  " + names[randomIndex]); // 마우스 커서와 랜덤이름 갭주기
   };
 
+  const handleInputChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setInputValue(event.target.value);
+    setInput(event.target.value);
+  };
+
   return (
     <InputContainer>
       <StyleInput
         type="text"
+        value={inputValue}
         placeholder={placeholder}
         onClick={generateRandomName}
+        onChange={handleInputChange}
       />
     </InputContainer>
   );
@@ -54,3 +64,6 @@ const StyleInput = styled.input`
     font-size: 14px;
   }
 `;
+function setInput(value: React.SetStateAction<string>) {
+  throw new Error("Function not implemented.");
+}

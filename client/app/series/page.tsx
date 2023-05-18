@@ -2,28 +2,13 @@
 
 import styled from "styled-components";
 
-// import { Axios } from "axios";
-import SubmitButton from "./SubmitButton";
-import UploadImg from "./UploadImg";
-import WriteInput from "./WriteInput";
+import Form from "./Form";
 
 export default function page() {
-  // // const [value, setValue] = useState("");
-  // // const handleChildValue = (childValue) => {
-  // //   // 자식 컴포넌트에서 전달된 값을 처리
-  // //   setValue(childValue);
-  // // };
-  // // onChildValue(event.target.value);
-
   return (
     <>
       <MainSeriesContainer>
-        <SeriesWrapper>
-          <UploadImg />
-          {/* <WriteInput onChildValue={handleChildValue} /> */}
-          <WriteInput />
-        </SeriesWrapper>
-        <SubmitButton />
+        <Form />
       </MainSeriesContainer>
     </>
   );
@@ -41,19 +26,6 @@ const MainSeriesContainer = styled.div`
   /* @media screen and (min-width: 768px) { */
   @media screen and (max-width: 768px) {
   }
-`;
-
-// 사진 + 글 업로드 디테일 레이아웃
-const SeriesWrapper = styled.div`
-  flex: 1;
-  margin-top: 10px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding: 5px 24px 30px 24px;
-  border-radius: 10px;
 `;
 
 // 사진 -> 처리 방법

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import list from "../bookmark/list";
+// import list from "../bookmark/list";
+import { mySeriesPage } from "../api/mySeriesPage";
 import { Slide } from "./Slide";
 export const Slider = (): JSX.Element => {
   // 🚨 렌더되기 전에 슬라이더 조작하면 에러남.
@@ -11,6 +12,16 @@ export const Slider = (): JSX.Element => {
   const scrollRef = useRef<HTMLUListElement>(null);
   const [isDrag, setIsDrag] = useState<boolean>(false);
   const [startX, setStartX] = useState<number>();
+
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    mySeriesPage("1").then((data) => {
+      if (data) {
+        setList(data);
+        console.log(data);
+      }
+    });
+  }, []);
 
   const onDragStart = (e: React.MouseEvent<HTMLUListElement>) => {
     e.preventDefault();

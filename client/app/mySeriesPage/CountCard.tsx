@@ -1,12 +1,24 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+
+import { mySeriesPage } from "../api/mySeriesPage";
 
 const CountCard: React.FC = () => {
   const scrollRef = useRef<HTMLUListElement>(null);
   const [isDrag, setIsDrag] = useState<boolean>(false);
   const [startX, setStartX] = useState<number>();
+  const [slidesData, setSlidesData] = useState([]);
+
+  // API에서 데이터 가져오기
+  useEffect(() => {
+    mySeriesPage("1").then((data) => {
+      if (data) {
+        setSlidesData(data);
+      }
+    });
+  }, []);
 
   const onDragStart = (e: React.MouseEvent<HTMLUListElement>) => {
     e.preventDefault();
@@ -24,7 +36,7 @@ const CountCard: React.FC = () => {
   };
 
   // 슬라이드 데이터 배열
-  const slidesData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const slidesData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
     <CountCardContainer>

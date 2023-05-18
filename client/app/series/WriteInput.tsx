@@ -1,15 +1,62 @@
-"use client";
+// "use client";
+
+// import React, { useState } from "react";
+// import TextareaAutosize from "react-textarea-autosize";
+// import styled from "styled-components";
+
+// // export default function WriteInput({ onChildValue }) {
+// export default function WriteInput({ setText }) {
+//   const [inputText, setInputText] = useState(undefined);
+
+//   // const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+//   //   setText(event.target.value);
+//   //   console.log(event.target.value);
+//   // };
+//   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+//     setInputText(event.target.value);
+//     setText(event.target.value); // 텍스트가 입력되면 setText를 호출하여 text 상태를 변경합니다.
+//     console.log(event.target.value);
+//   };
+
+//   return (
+//     <Container>
+//       <PlaceholderLabel
+//         htmlFor="writeInputDetail"
+//         style={{
+//           opacity: text ? "0" : "1",
+//           textAlign: "center",
+//         }}
+//       >
+//         노 모어 플라스틱, 더 클린 서울
+//         <br />
+//         시리즈를 작성해 주세요.
+//       </PlaceholderLabel>
+//       <WriteInputDetail
+//         id="writeInputDetail"
+//         value={text}
+//         onChange={handleChange}
+//         autoFocus
+//       />
+//     </Container>
+//   );
+// }
 
 import React, { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 
-// export default function WriteInput({ onChildValue }) {
-export default function WriteInput({}) {
-  const [text, setText] = useState("");
+export default function WriteInput({
+  setText,
+}: {
+  setText: (value: string) => void;
+}) {
+  // export default function WriteInput({ setText }) {
+  const [inputText, setInputText] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputText(event.target.value);
     setText(event.target.value);
+    console.log(event.target.value);
   };
 
   return (
@@ -17,23 +64,23 @@ export default function WriteInput({}) {
       <PlaceholderLabel
         htmlFor="writeInputDetail"
         style={{
-          opacity: text ? "0" : "1",
+          opacity: inputText ? "0" : "1",
           textAlign: "center",
         }}
       >
-        노 모어 플라스틱, 더 클린 서울
-        <br />
-        시리즈를 작성해 주세요.
+        노 모어 플라스틱
+        <br />더 나은 환경을 위해 시리즈를 작성해 주세요.
       </PlaceholderLabel>
       <WriteInputDetail
         id="writeInputDetail"
-        value={text}
+        value={inputText}
         onChange={handleChange}
         autoFocus
       />
     </Container>
   );
 }
+
 const Container = styled.div`
   position: relative;
   display: flex;
