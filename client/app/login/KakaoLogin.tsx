@@ -8,7 +8,7 @@ export default function KakaoLogin() {
       <KakaoLogoBox>
         <Image
           src="/socialLoginButton/kakaoLogo.png"
-          alt="Kakao Logo for Kakao Login"
+          alt="카카오 로고"
           width="24"
           height="24"
         />

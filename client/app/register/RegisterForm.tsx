@@ -17,7 +17,7 @@ export default function RegisterForm() {
     formState: { errors, isValid },
     watch,
   } = useForm<FormValues>({
-    mode: "onChange", // This is needed to make `isValid` work properly
+    mode: "onChange",
   });
 
   const submitRegister: SubmitHandler<FormValues> = async (data) => {
@@ -27,10 +27,8 @@ export default function RegisterForm() {
         data
       );
       console.log(response);
-      // handle the response as per your needs
     } catch (error) {
       console.log(error);
-      // handle the error as per your needs
     }
   };
 
@@ -136,10 +134,17 @@ const SubmitButtonContainer = styled.div`
 const SubmitButton = styled.input<{ isValid: boolean }>`
   height: 100%;
   width: 100%;
+  /* color: #85858e;
   border: none;
   border-radius: 4px;
   background-color: ${(props) => (props.isValid ? "#0078ff" : "#b6b6b8")};
-  color: #ffffff;
+  color: #ffffff; */
+  color: ${(props) => (props.isValid ? "#3f910c" : "#85858e")};
+  background-color: ${(props) => (props.isValid ? "#eff4e7" : "#f5f2f0")};
+  border-radius: 16px;
+  border: ${(props) =>
+    props.isValid ? "1px solid #3f910c" : "solid 1px #85858e"};
+
   cursor: ${(props) => (props.isValid ? "pointer" : "not-allowed")};
   transition: all ease-out 1.2s;
 `;
