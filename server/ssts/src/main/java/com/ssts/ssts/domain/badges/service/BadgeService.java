@@ -59,7 +59,7 @@ public class BadgeService {
         if(isBadge){throw new BusinessLogicException(ExceptionCode.ALREADY_HAVE_BADGE);}
 
         //해당 뱃지를 해당 유저가 보유하고 있다고 뱃지의 값을 바꿔줌
-        badge.setIsAcquired(true);
+       // badge.setIsAcquired(true);
 
         //멤버와 뱃지를 맵핑 테이브에 등록
         memberBadgeRepo.save(MemberBadge.of(member, badge));
@@ -88,7 +88,7 @@ public class BadgeService {
 
         List<Badge> badges = badgeRepo.findAll();
 
-
+        //@: 3개의 스트림 메소드로 빼기 refactor
         //검증 결과가 true
         List<BadgeResponse> memberGetBadges = badges.stream()
                 .map(badge -> new BadgeResponse(badge.getId(), badge.getIsAcquired(), badge.getImg()))

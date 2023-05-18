@@ -33,8 +33,8 @@ public class BookmarkController {
         memberRepo.findById(memberId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        Bookmark response = bookmarkService.createBookmark(seriesId);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        bookmarkService.createBookmark(seriesId);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping

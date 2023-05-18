@@ -33,7 +33,7 @@ public class BookmarkService {
 
 
     @Transactional
-    public Bookmark createBookmark(Long seriseId){
+    public void createBookmark(Long seriseId){
 
         Series series = seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
@@ -49,8 +49,6 @@ public class BookmarkService {
 
         Bookmark bookmark = Bookmark.of(member, series);
         bookmarkRepo.save(bookmark);
-
-        return bookmark;
     }
 
     @Transactional
