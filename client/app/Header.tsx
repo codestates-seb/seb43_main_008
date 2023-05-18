@@ -16,7 +16,7 @@ export default function Header({
 
   useEffect(() => {
     sessionStorage.setItem("header", "default")
-  })
+  }, [])
 
 
   return (
