@@ -3,9 +3,9 @@ import ProfileImageEdit from "./ProfileImageEdit";
 
 export default function MemberEdit() {
   return (
-    <div>
+    <>
       <ProfileImageEdit />
       <ProfileEdit />
-    </div>
+    </>
   );
 }
