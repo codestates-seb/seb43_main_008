@@ -113,6 +113,40 @@ public class BadgeService {
     }
 
 
+    //타인의 피드 뱃지 리스트 확인
+    public List<BadgeResponse> findYourBadges(String nickname){
+        Member member = memberRepo.findByNickName(nickname).
+                orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Long memberId = member.getId();
+
+        List<Badge> badges = badgeRepo.findAll();
+
+        //@: 3개의 스트림 메소드로 빼기 refactor
+        //검증 결과가 true
+        List<BadgeResponse> memberGetBadges = badges.stream()
+                .map(badge -> new BadgeResponse(badge.getId(), badge.getIsAcquired(), badge.getImg()))
+                .filter(badge -> memberBadgeRepo.existsByMember_IdAndBadgeId(memberId, badge.getBadgeId()) == true)
+                .peek(badge -> badge.setIsAcquired(true))
+                .collect(Collectors.toList());
+
+        //검증 결과가 false
+        List<BadgeResponse> memberUngetBadges = badges.stream()
+                .map(badge -> new BadgeResponse(badge.getId(), badge.getIsAcquired(), badge.getImg()))
+                .filter(badge -> memberBadgeRepo.existsByMember_IdAndBadgeId(memberId, badge.getBadgeId()) == false)
+                .peek(badge -> badge.setIsAcquired(false)) //요소를 바꿔주는 peek
+                .collect(Collectors.toList());
+
+        //두 response 합침 -> sort LongId
+        List<BadgeResponse> combinedBadges = Stream.concat(memberGetBadges.stream(), memberUngetBadges.stream())
+                .sorted(Comparator.comparingLong(BadgeResponse::getId))
+                .collect(Collectors.toList());
+
+
+        return combinedBadges;
+    }
+
+
+
     public BadgeResponse isAcquiredResponse(Badge badge){
        if(badge.getIsAcquired()){
            return BadgeResponse.isAcquiredResponse.of(

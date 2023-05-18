@@ -115,6 +115,18 @@ public class SeriesService {
             seriesRepository.save(series);
         }
 
+        else if(series.getVoteCount()==1 && !currentTime.isAfter(series.getVoteEndAt())){ //마감기간 안지났을 때
+            return this.seriesToSeriesResponseDto(series, isVotedMember);
+        }
+
+        else if(series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==null){ //결과가 null일때
+            return this.seriesToSeriesResponseDto(series, isVotedMember);
+        }
+
+        else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==true){
+            return this.seriesToSeriesResponseDto(series, isVotedMember);
+        }
+
         //사용자가 재투표 연다는 선택을 하기 전, 자동으로 바뀌는 값
         //[마감기한이 지났지만, 재투표의 기회가 있는 경우의 상태 변경] => 활성 상태는 변경하지 않고, 수정이 자동으로 가능하도록 합니다.
         else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==false){
@@ -123,6 +135,7 @@ public class SeriesService {
             series.setVoteStatus(Series.VoteStatus.SERIES_SLEEP);
             seriesRepository.save(series); //사용자가 재투표를 받을지 말지 선택하기 전까지 유지되는 상태값
         }
+
         return this.seriesToSeriesResponseDto(series, isVotedMember);
     }
 
