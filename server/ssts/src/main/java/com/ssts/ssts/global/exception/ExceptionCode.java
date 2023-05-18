@@ -39,10 +39,11 @@ public enum ExceptionCode {
     VOTE_RESULT_IS_NOT_EXSIST(RtnHttpStatus.Validation,1006, "투표 결과가 존재하지 않아요."),
     THIS_VOTE_RESULT_IS_TRUE(RtnHttpStatus.Validation,1007, "이 투표는 이미 졸업했어요!"),
     CAN_NOT_VOTE_VALUE(RtnHttpStatus.Validation,1008, "투표할 수 없는 값이예요."),
+    NOT_SERISE_WRITER(RtnHttpStatus.Validation,1012, "시리즈를 작성한 본인이 아니라서 투표를 개설할 수 없어요."),
 
     //북마크 에러
     BOOKMARK_IS_DUPLICATION(RtnHttpStatus.Validation,1009, "이미 북마크한 시리즈예요."),
-    NOT_SERISE_WRITER(RtnHttpStatus.Validation,1012, "시리즈를 작성한 본인이 아니라서 투표를 개설할 수 없어요."),
+    BOOKMARKS_NOT_FOUND(RtnHttpStatus.Validation, 1013, "북마크한 시리즈가 없어요. 시리즈를 구경해 볼까요?"),
 
     //뱃지 에러
     BADGE_NOT_FOUND(RtnHttpStatus.Validation, 1010, "존재하지 않는 뱃지예요."),

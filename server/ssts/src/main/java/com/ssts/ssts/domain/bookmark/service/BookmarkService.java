@@ -61,6 +61,9 @@ public class BookmarkService {
         Page<Bookmark> bookmarksInfo = bookmarkRepo.findAllByMemberId(memberId, pageable);
 
         List<Bookmark> bookmarks = bookmarksInfo.getContent();
+
+        if(bookmarks.isEmpty()){throw new BusinessLogicException(ExceptionCode.BOOKMARKS_NOT_FOUND);}
+
         List<BookmarkResponse> responses = bookmarks.stream()
                 .map(bookmark ->
                         BookmarkResponse.of(
