@@ -1,11 +1,10 @@
 package com.ssts.ssts.domain.badges.controller;
 
-import com.ssts.ssts.domain.badges.BadgeResponse;
+import com.ssts.ssts.domain.badges.response.BadgeResponse;
 import com.ssts.ssts.domain.badges.dto.BadgePostDto;
 import com.ssts.ssts.domain.badges.entity.Badge;
 
 import com.ssts.ssts.domain.badges.service.BadgeService;
-import com.ssts.ssts.domain.member.entity.MemberBadge;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +31,8 @@ public class BadgeController {
     //사용자 뱃지 취득하기
     @PostMapping("/{badge_id}")
     public ResponseEntity postBadgeMember(@PathVariable("badge_id") Long badgeId){
-        MemberBadge response = badgeService.saveBadgeMember(badgeId);
-        return new ResponseEntity(response, HttpStatus.OK);
+        badgeService.saveBadgeMember(badgeId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 
@@ -51,7 +50,7 @@ public class BadgeController {
     //전체 뱃지 조회
     @GetMapping
     public ResponseEntity getBadges(){
-        List<Badge> response = badgeService.findAllBadge();
+        List<BadgeResponse> response = badgeService.findAllBadge();
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
