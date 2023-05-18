@@ -18,9 +18,10 @@ export const Lists: React.FC = () => {
   useEffect(() => {
     GetMain(pageQuery).then((data) => {
       if (data) {
-        setList(data) // ...list, data로 바꿔야함
+        setList((prevList) => [...prevList, ...data]) // ...list, data로 바꿔야함
         setIsLoading(false)
         setLastDataLength(data.length)
+        console.log(`api ${pageQuery}`)
       }
     })
     setIsLoading(true)
@@ -36,7 +37,7 @@ export const Lists: React.FC = () => {
     }
     else router.push("/login")
   }
-
+  console.log(isLoading)
   return (
     <StyledLists className="list">
       {list.map((data) => (
@@ -45,7 +46,7 @@ export const Lists: React.FC = () => {
         </div>
       ))}
       {/* api 호출중이거나 이전에 받아온 데이터가 12개 미만이라면 무한 스크롤 차단 */}
-      {isLoading && lastDataLength >= 12 && <Scroll lastDataLength={lastDataLength} setPageQuery={setPageQuery} pageQuery={pageQuery} countNumber={1} />}
+      {lastDataLength >= 12 && <Scroll lastDataLength={lastDataLength} setPageQuery={setPageQuery} pageQuery={pageQuery} countNumber={1} />}
     </StyledLists>
   )
 }
