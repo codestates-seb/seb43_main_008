@@ -28,7 +28,8 @@ export default function Header({
       ) : (
         <BackArrowContainer />
       )}
-      {textContent ? <HeaderText>{sessionStorage?.getItem("header")}</HeaderText> : null}
+      {/* typeof window !== 'undefined' ? sessionStorage.getItem('header') : null; */}
+      {textContent ? <HeaderText>{typeof window !== 'undefined' ? sessionStorage.getItem('header') : null}</HeaderText> : null}
       {saveButton ? (
         <SaveButtonContainer>
           <SaveButton type="submit">저장</SaveButton>
