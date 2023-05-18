@@ -13,20 +13,19 @@ export const Lists: React.FC = () => {
   const [list, setList] = useState([]);
   const [pageQuery, setPageQuery] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [listDataNumber, setListDataNumber] = useState<number>(0)
+  const [lastDataLength, setLastDataLength] = useState<number>(0)
 
   useEffect(() => {
-    GetMain().then((data) => {
-      if (data && isLoading) {
+    GetMain(pageQuery).then((data) => {
+      if (data) {
         setList(data) // ...list, data로 바꿔야함
         setIsLoading(false)
-        setListDataNumber(data.length)
+        setLastDataLength(data.length)
       }
     })
-  }, [])
+    setIsLoading(true)
+  }, [pageQuery])
 
-  console.log(`pageQuery: ${pageQuery}`)
-  console.log(`listDataNumber: ${listDataNumber}`)
 
   // 사용자의 로그인 여부를 확인하기 위한 함수 & 로그인 여부에 따라 경로를 다르게 보냄
   const router = useRouter();
@@ -46,7 +45,7 @@ export const Lists: React.FC = () => {
         </div>
       ))}
       {/* api 호출중이거나 이전에 받아온 데이터가 12개 미만이라면 무한 스크롤 차단 */}
-      {isLoading && listDataNumber >= 12 && <Scroll setPageQuery={setPageQuery} pageQuery={pageQuery} />}
+      {isLoading && lastDataLength >= 12 && <Scroll lastDataLength={lastDataLength} setPageQuery={setPageQuery} pageQuery={pageQuery} countNumber={1} />}
     </StyledLists>
   )
 }
