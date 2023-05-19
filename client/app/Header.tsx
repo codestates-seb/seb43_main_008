@@ -16,7 +16,6 @@ export default function Header({
   textContent: boolean | string;
   secretButton: boolean;
 }) {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
 

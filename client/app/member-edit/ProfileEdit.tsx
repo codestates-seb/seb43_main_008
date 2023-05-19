@@ -1,9 +1,14 @@
 "use client";
 
+import Image from "next/image";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
+import { AiFillCamera } from "react-icons/ai";
+
+import * as S from "./ProfileEditStyle";
 
 export default function ProfileEdit() {
+  const [image, setImage] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -14,68 +19,56 @@ export default function ProfileEdit() {
 
   const onSubmit = () => {};
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
-    <ProfileEditContainer>
-      <EditForm onSubmit={handleSubmit(onSubmit)}>
-        <NicknameInput
-          {...register("nickname", { required: true })}
-          type="text"
-        />
-        <MemberDescriptionTextarea
-          {...register("description", { required: false, maxLength: 100 })}
-        />
-        <SubmitButton isValid={isValid} type="submit" value="Submit" />
-      </EditForm>
-    </ProfileEditContainer>
+    <>
+      <S.ProfileImageEditContainer>
+        <S.EditDescriptionContainer>
+          <S.EditDescriptionH1>내 정보를 변경합니다.</S.EditDescriptionH1>
+          <S.EditDescription>
+            이름은 <b>공백없이</b> 12자 이하,
+          </S.EditDescription>
+          <S.EditDescription>기호는 -_.만 사용 가능합니다.</S.EditDescription>
+        </S.EditDescriptionContainer>
+        <S.ImageContainer>
+          {image ? (
+            <Image src={image} alt="Profile picture" layout="fill" />
+          ) : (
+            <S.DefaultImage />
+          )}
+          <S.CameraIconContainer>
+            <AiFillCamera />
+          </S.CameraIconContainer>
+          <S.ImageEditInput
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+          />
+        </S.ImageContainer>
+      </S.ProfileImageEditContainer>
+
+      <S.ProfileEditContainer>
+        <S.EditForm onSubmit={handleSubmit(onSubmit)}>
+          <S.NicknameInput
+            {...register("nickname", { required: true })}
+            type="text"
+          />
+          <S.MemberDescriptionTextarea
+            {...register("description", { required: false, maxLength: 100 })}
+          />
+          <S.SubmitButton isValid={isValid} type="submit" value="Submit" />
+        </S.EditForm>
+      </S.ProfileEditContainer>
+    </>
   );
 }
-
-const ProfileEditContainer = styled.div`
-  width: 100%;
-  padding: 10px 24px;
-`;
-
-const EditForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const NicknameInput = styled.input`
-  width: 100%;
-  height: 45px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 3px 15px;
-`;
-
-const MemberDescriptionTextarea = styled.textarea`
-  width: 100%;
-  height: 100px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 10px 15px;
-  resize: none;
-
-  @media (min-width: 800px) {
-    height: 450px;
-  }
-`;
-
-const SubmitButton = styled.input<{ isValid: boolean }>`
-  height: 100%;
-  width: 100%;
-  color: ${(props) => (props.isValid ? "#3f910c" : "#85858e")};
-  background-color: ${(props) => (props.isValid ? "#eff4e7" : "#f5f2f0")};
-  border-radius: 16px;
-  border: ${(props) =>
-    props.isValid ? "1px solid #3f910c" : "solid 1px #85858e"};
-
-  cursor: ${(props) => (props.isValid ? "pointer" : "not-allowed")};
-  transition: all ease-out 1.2s;
-`;
