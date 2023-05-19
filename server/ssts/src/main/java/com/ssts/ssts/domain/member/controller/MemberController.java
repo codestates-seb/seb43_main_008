@@ -133,7 +133,7 @@ public class MemberController {
 
     /* 상대 멤버 뱃지 피드 조회 기능
     * */
-    @GetMapping("/feed/{nickname}")
+    @GetMapping("/feed/badge/{nickname}")
     public ResponseEntity getYourBadges(@PathVariable("nickname") String nickname){
         List<BadgeResponse> response = badgeService.findYourBadges(nickname);
         return new ResponseEntity(response, HttpStatus.OK);
