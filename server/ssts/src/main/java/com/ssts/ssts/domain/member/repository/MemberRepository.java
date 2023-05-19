@@ -15,5 +15,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByPhone(String phone);
 
-    Boolean existsById(long id);
 }

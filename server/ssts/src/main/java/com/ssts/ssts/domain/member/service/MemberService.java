@@ -62,9 +62,6 @@ public class MemberService {
                 "\nmemberid=" + member.getId()+
                 "\nnickName="+member.getNickName());
 
-        Long memberId = SecurityUtil.getMemberId();
-        findMemberById(memberId);
-        findMemberById(12);
         return member;
     }
 
