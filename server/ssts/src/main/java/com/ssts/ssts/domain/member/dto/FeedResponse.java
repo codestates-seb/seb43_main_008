@@ -1,5 +1,6 @@
 package com.ssts.ssts.domain.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,9 @@ public class FeedResponse {
     String nickName;
     String image;
     String introduce;
+
+    @JsonIgnore
+    Boolean isFollowedMember;
 
     public static MemberFeedResponse of(String nickName, String image, String introduce) {
         MemberFeedResponse memberFeedResponse = new MemberFeedResponse();

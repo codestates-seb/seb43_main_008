@@ -1,9 +1,8 @@
 package com.ssts.ssts.domain.member.service;
 
 import com.ssts.ssts.domain.follow.repository.FollowRepository;
-import com.ssts.ssts.domain.follow.service.FollowService;
+import com.ssts.ssts.domain.member.constant.MemberConstants;
 import com.ssts.ssts.domain.member.dto.FeedResponse;
-import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.global.exception.BusinessLogicException;

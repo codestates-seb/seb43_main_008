@@ -116,7 +116,7 @@ public class MemberController {
                                                             @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
 
 
-        FeedResponse response = memberService.updateMyFeedInfo(memberEditInfoPatchDto, image);
+        FeedResponse response = memberService.updateMyFeedInfo(memberEditInfoPatchDto.getNickName(), image,memberEditInfoPatchDto.getIntroduce());
 
         //변경됬으니까 변경된 입력값을 알려줘야 한다.
         return ApiResponse.ok(response);
