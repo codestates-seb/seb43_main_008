@@ -6,6 +6,7 @@ import com.ssts.ssts.domain.badges.service.BadgeService;
 import com.ssts.ssts.domain.member.dto.*;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
