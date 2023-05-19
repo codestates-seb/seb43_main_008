@@ -1,7 +1,9 @@
 package com.ssts.ssts.domain.member.service;
 
+import com.ssts.ssts.domain.follow.repository.FollowRepository;
+import com.ssts.ssts.domain.follow.service.FollowService;
+import com.ssts.ssts.domain.member.dto.FeedResponse;
 import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
-import com.ssts.ssts.domain.member.dto.MemberFeedResponseDto;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.global.exception.BusinessLogicException;
@@ -26,7 +28,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    private final FollowRepository followRepository;
+
     private final S3Uploader s3ImageUploader;
+
+    //private final FollowService followService;
+
 
 
     /*
@@ -118,23 +125,29 @@ public class MemberService {
     }
 
 
-    public MemberFeedResponseDto getMemberFeedInfo(String nickName){
+    public FeedResponse.MemberFeedResponse getMemberFeedInfo(String nickName){
 
-        Member member = memberRepository.findByNickName(nickName).
+        Member target = memberRepository.findByNickName(nickName).
                 orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+
+        Member member = findMemberByToken();
+        //FIXME -> followService 사용시 순환참조 발생!
+        //boolean isFollowedMember= followService.isMemberFollowing(member.getId(), target.getId());
+        boolean isFollowedMember=followRepository.existsByFollowerIdAndFollowingId(member.getId(), target.getId());
+        FeedResponse.MemberFeedResponse responseDto = FeedResponse.MemberFeedResponse.of(
                 member.getNickName(),
                 member.getImage(),
-                member.getIntroduce());
+                member.getIntroduce(),
+                isFollowedMember);
 
         return responseDto;
     }
 
 
-    public MemberFeedResponseDto getMyFeedInfo() {
+    public FeedResponse getMyFeedInfo() {
 
         Member member = findMemberByToken();
-        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+        FeedResponse responseDto = FeedResponse.of(
                 member.getNickName(),
                 member.getImage(),
                 member.getIntroduce());
@@ -157,7 +170,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto, Optional<MultipartFile> image) throws IOException{
+    public FeedResponse updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto, Optional<MultipartFile> image) throws IOException{
 
         Member member = findMemberByToken();
         String nickName=memberEditInfoPatchDto.getNickName();
@@ -183,7 +196,7 @@ public class MemberService {
                 "\nimage=" + member.getImage() +
                 "\nintroduce=" + member.getIntroduce());
 
-        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+        FeedResponse responseDto = FeedResponse.of(
                 member.getNickName(),
                 member.getImage(),
                 member.getIntroduce());

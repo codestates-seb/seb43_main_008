@@ -37,19 +37,4 @@ public class Follow {
         this.following = following;
     }
 
-    /* long 타입 id 기준
-    @Column(nullable = false)
-    private long follower;
-    // give_member_id;
-
-    @Column(nullable = false)
-    private long following;
-    // receive_member_id;
-
-    public static Follow of(long follower, long following) {
-        Follow follow=new Follow();
-        follow.setFollower(follower);
-        follow.setFollowing(following);
-        return follow;
-    }*/
 }
