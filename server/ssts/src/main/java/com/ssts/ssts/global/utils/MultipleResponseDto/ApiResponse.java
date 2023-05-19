@@ -1,8 +1,6 @@
-package com.ssts.ssts.domain.member.dto;
+package com.ssts.ssts.global.utils.MultipleResponseDto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.global.exception.ExceptionCode;
-import com.ssts.ssts.global.exception.RtnHttpStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
