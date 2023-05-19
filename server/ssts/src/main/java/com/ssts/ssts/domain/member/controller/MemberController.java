@@ -58,13 +58,13 @@ public class MemberController {
     //FIXME [보안문제] 이거 휴대폰 인증 API안쓰면 그냥 번호가 노출되서 나중에 무조건 고쳐야한다.
     //https://lasbe.tistory.com/132
     @PostMapping("/signup")
-    public ApiResponse signUpMember(@RequestBody MemberSignUpAddInfoDto memberSignUpAddInfoDto){
+    public ResponseEntity signUpMember(@RequestBody MemberSignUpAddInfoDto memberSignUpAddInfoDto){
 
         Member member=memberService.signUpMember(memberSignUpAddInfoDto.getPhone(), memberSignUpAddInfoDto.getNickName());
 
         //FIXME 출력도 고쳐야한다.
         //return ResponseEntity.status(HttpStatus.OK).body(member.getNickName()+"님! 회원가입이 끝났어요.");
-        return ApiResponse.ok(member.getNickName()+"님! 회원가입이 끝났어요.");
+        return ResponseEntity.ok(member.getNickName()+"님! 회원가입이 끝났어요.");
 
 
     }

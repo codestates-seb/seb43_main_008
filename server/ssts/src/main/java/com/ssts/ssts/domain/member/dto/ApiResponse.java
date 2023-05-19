@@ -31,7 +31,7 @@ public class ApiResponse<T> {
                 data
         );
     }
-
+    //FIXME api호출 -> 500에러 -> 엔진엑스 서버 에러다! 이런 거 안돼.........! (관련 서버 취약점으로 공격가능) 서버 에러를 푸쉬안하는 방법 찾아보기.
     public static <T> ApiResponse<T> failure(ExceptionCode ec) {
         return new ApiResponse<>(
                 ec.getMessage(),
