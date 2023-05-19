@@ -13,7 +13,7 @@ export const GetFollower = async () => {
 
 export const GetFollow = async () => {
   try {
-    const response = await axios.get(`/followings`);
+    const response = await axios.get(`/follow/followings`);
     axios.defaults.headers.common["Authorization"] = `Bearer ${response.headers.authorization}`;
     return response.data.data;
   } catch (error) {
