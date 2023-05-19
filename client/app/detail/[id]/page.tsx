@@ -8,7 +8,7 @@ export default function Detail() {
     <>
       <Header
         backButton={true}
-        textContent={"이름 어떻게 불러오지..?"}
+        textContent={true}
         secretButton={false}
       />
       <Slider />

@@ -12,18 +12,15 @@ import { Scroll } from './Scroll';
 export const Lists: React.FC = () => {
   const [list, setList] = useState([]);
   const [pageQuery, setPageQuery] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [lastDataLength, setLastDataLength] = useState<number>(0)
 
   useEffect(() => {
     GetMain(pageQuery).then((data) => {
       if (data) {
-        setList(data) // ...list, data로 바꿔야함
-        setIsLoading(false)
+        setList((prevList) => [...prevList, ...data]) // ...list, data로 바꿔야함
         setLastDataLength(data.length)
       }
     })
-    setIsLoading(true)
   }, [pageQuery])
 
 
@@ -36,7 +33,6 @@ export const Lists: React.FC = () => {
     }
     else router.push("/login")
   }
-
   return (
     <StyledLists className="list">
       {list.map((data) => (
@@ -45,7 +41,7 @@ export const Lists: React.FC = () => {
         </div>
       ))}
       {/* api 호출중이거나 이전에 받아온 데이터가 12개 미만이라면 무한 스크롤 차단 */}
-      {isLoading && lastDataLength >= 12 && <Scroll lastDataLength={lastDataLength} setPageQuery={setPageQuery} pageQuery={pageQuery} countNumber={1} />}
+      {lastDataLength >= 12 && <Scroll lastDataLength={lastDataLength} setPageQuery={setPageQuery} pageQuery={pageQuery} countNumber={1} />}
     </StyledLists>
   )
 }

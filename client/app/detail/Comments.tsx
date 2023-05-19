@@ -1,15 +1,18 @@
 "use client";
-
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import styled from "styled-components";
 
+import { GetComment } from "../api/commentApi"
 import { StyledCard } from "./Card";
 import { Comment } from "./Comment";
 import { comments } from "./commentData";
 export const Comments: React.FC = () => {
+
   // 댓글 입력 및 서버 전달을 위한 상태 & 함수
   const [comment, setComment] = useState<string>("");
+  const params = useParams();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
@@ -21,6 +24,7 @@ export const Comments: React.FC = () => {
     e.preventDefault();
     if (comment.length !== 0) {
       setComment("");
+      GetComment(params.id)
       console.log("서버에 데이터 보내고 & 댓글 리스트 새로 가져와야함");
     }
   };

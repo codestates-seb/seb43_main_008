@@ -1,7 +1,6 @@
 import "./global.css";
 import "./font.css";
 
-import Provider from "./Provider";
 import StyledComponentsRegistry from "./registry";
 
 export default async function RootLayout({
@@ -28,11 +27,9 @@ export default async function RootLayout({
         />
       </head>
       <body>
-        <Provider>
-          <StyledComponentsRegistry>
-            <div className="main-container">{children}</div>
-          </StyledComponentsRegistry>
-        </Provider>
+        <StyledComponentsRegistry>
+          <div className="main-container">{children}</div>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

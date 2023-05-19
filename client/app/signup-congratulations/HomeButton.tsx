@@ -6,7 +6,7 @@ import styled from "styled-components";
 export default function HomeButton() {
   return (
     <HomeButtonContainer>
-      <Link href="/main" passHref legacyBehavior>
+      <Link href="/" passHref legacyBehavior>
         {/*passHref는 next Link에서 하위 컴포넌트로 href 속성을 전달해주는 역할*/}
         <HomeNavButton>홈으로</HomeNavButton>
       </Link>

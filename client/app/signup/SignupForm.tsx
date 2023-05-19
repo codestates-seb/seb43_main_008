@@ -1,6 +1,8 @@
 "use client";
 
 import axios from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -11,6 +13,11 @@ type FormValues = {
 };
 
 export default function RegisterForm() {
+  useEffect(() => {
+    // URL 숨기기
+    history.replaceState({}, null, location.pathname);
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -20,23 +27,29 @@ export default function RegisterForm() {
     mode: "onChange",
   });
 
+  const router = useRouter();
   const submitRegister: SubmitHandler<FormValues> = async (data) => {
+    data.email = emailValue;
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/test/signup`,
+        `${process.env.NEXT_PUBLIC_API_URL}/signup`,
         data
       );
-      console.log(response);
+
+      const authorizationToken = response.headers["authorization"];
+      const refreshToken = response.headers["refresh-token"];
+      localStorage.setItem("Authorization", authorizationToken);
+      localStorage.setItem("RefreshToken", refreshToken);
+      router.push("/signup-congratulations");
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Mocked email from Google
-  const googleEmail = "user@gmail.com";
-
   const watchedNickname = watch("nickname");
   const watchedPhoneNumber = watch("phoneNumber");
+  const searchParams = useSearchParams();
+  const emailValue = searchParams.get("email");
 
   return (
     <form onSubmit={handleSubmit(submitRegister)}>
@@ -44,8 +57,9 @@ export default function RegisterForm() {
         <Label htmlFor="email">이메일</Label>
         <Input
           {...register("email")}
-          defaultValue={googleEmail}
+          defaultValue={emailValue}
           disabled
+          readOnly
           id="email"
         />
       </InputContainer>
