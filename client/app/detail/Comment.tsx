@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { Modal } from "./Modal";
 
 interface CommentProps {
+  commentId?: string
   id: number;
   member_id: number;
   series_id: number;
@@ -48,7 +49,7 @@ export const Comment: React.FC<CommentProps> = ({
       {isOpenModal && (
         <Modal
           onClickModal={HandleOpenModal}
-          commentid={id}
+          // commentId={id}
           handleEditComment={handleEditComment}
           setComment={setComment}
         />

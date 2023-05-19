@@ -24,8 +24,6 @@ const options: Options = {
 
 export const Scroll: React.FC<ScrollProps> = ({ setPageQuery, pageQuery, countNumber, lastDataLength }) => {
   const target = useRef<HTMLDivElement>(null);
-  console.log(`countNumber ${countNumber}`)
-  console.log(`pageQuery ${pageQuery}`)
 
   const callback: IntersectionObserverCallback = (entries, observer) => {
     entries.forEach(entry => {
