@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from 'react';
 import { useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import { VscGistSecret } from "react-icons/vsc";
@@ -17,9 +16,6 @@ export default function Header({
   textContent: string | null;
   secretButton: boolean;
 }) {
-  useEffect(() => {
-    sessionStorage.setItem("header", "default")
-  }, [])
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
 
@@ -33,7 +29,6 @@ export default function Header({
         <BackArrowContainer />
       )}
       {/* typeof window !== 'undefined' ? sessionStorage.getItem('header') : null; */}
-      {textContent ? <HeaderText>{typeof window !== 'undefined' ? sessionStorage.getItem('header') : null}</HeaderText> : null}
       {textContent ? <HeaderText>{textContent}</HeaderText> : null}
       {secretButton ? (
         <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
