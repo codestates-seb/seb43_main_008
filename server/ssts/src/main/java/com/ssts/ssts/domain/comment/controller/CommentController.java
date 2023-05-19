@@ -5,6 +5,7 @@ import com.ssts.ssts.domain.comment.dto.CommentPostDto;
 import com.ssts.ssts.domain.comment.dto.CommentResponseDto;
 import com.ssts.ssts.domain.comment.dto.CommentUpdateDto;
 import com.ssts.ssts.domain.comment.service.CommentService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,40 +25,40 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/{series-id}")
-    public ResponseEntity getCommentList(@PathVariable("series-id") Long seriesId,
-                                         @RequestParam(value = "page", defaultValue = "1") int page,
-                                         @RequestParam(value = "size", defaultValue = "12") int size){
+    public ApiResponse getCommentList(@PathVariable("series-id") Long seriesId,
+                                      @RequestParam(value = "page", defaultValue = "1") int page,
+                                      @RequestParam(value = "size", defaultValue = "12") int size){
 
 
         PageResponseDto response = commentService.getCommentList(seriesId,page-1, size);
 
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 
     @PostMapping("/{series-id}")
-    public ResponseEntity createComment(@PathVariable("series-id") Long seriesId, @RequestBody CommentPostDto commentPostDto){
+    public ApiResponse createComment(@PathVariable("series-id") Long seriesId, @RequestBody CommentPostDto commentPostDto){
 
         CommentResponseDto response = commentService.saveComment(seriesId, commentPostDto);
 
-        return new ResponseEntity(response, HttpStatus.CREATED);
+        return ApiResponse.create(response);
     }
 
     @PatchMapping("/{series-id}/{comment-id}")
-    public ResponseEntity updateComment(@PathVariable("series-id") Long seriesId,
+    public ApiResponse updateComment(@PathVariable("series-id") Long seriesId,
                                         @PathVariable("comment-id") Long commentId,
                                         @RequestBody CommentUpdateDto commentUpdateDto){
 
         CommentResponseDto response = commentService.updateComment(seriesId, commentId, commentUpdateDto);
 
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 
     @DeleteMapping("/{series-id}/{comment-id}")
-    public ResponseEntity deleteComment(@PathVariable("series-id") Long seriesId,
+    public ApiResponse deleteComment(@PathVariable("series-id") Long seriesId,
                                         @PathVariable("comment-id") Long commentId){
 
         commentService.deleteComment(commentId);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ApiResponse.ok();
     }
 }

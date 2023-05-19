@@ -56,26 +56,26 @@ public class SeriesController {
 
         SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
 
-        return ApiResponse.ok(response);
+        return ApiResponse.create(response);
     }
 
 
     @PatchMapping("/series/{series-id}")
-    public ResponseEntity updateSeries(@PathVariable("series-id") Long seriesId, @RequestBody
+    public ApiResponse updateSeries(@PathVariable("series-id") Long seriesId, @RequestBody
     SeriesUpdateDto seriesUpdateDto){
 
         SeriesResponseDto response = seriesService.updateSeries(seriesId,seriesUpdateDto);
 
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 
 
     @DeleteMapping("/series/{series-id}")
-    public ResponseEntity deleteSeries(@PathVariable("series-id") Long id){
+    public ApiResponse deleteSeries(@PathVariable("series-id") Long id){
 
         seriesService.deleteSeries(id);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ApiResponse.ok();
     }
 
 }
