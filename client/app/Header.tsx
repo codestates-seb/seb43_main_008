@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
-import { VscGistSecret } from "react-icons/vsc";
+import { AiOutlineLock } from "react-icons/ai";
 import styled from "styled-components";
 
 import HeaderModal from "./HeaderModal";
@@ -29,13 +29,21 @@ export default function Header({
         <BackArrowContainer />
       )}
 
-      {textContent ? <HeaderText>{typeof textContent === "string" ? textContent : typeof window !== 'undefined' ? sessionStorage.getItem('header') : null}</HeaderText> : null}
+      {textContent ? (
+        <HeaderText>
+          {typeof textContent === "string"
+            ? textContent
+            : typeof window !== "undefined"
+            ? sessionStorage.getItem("header")
+            : null}
+        </HeaderText>
+      ) : null}
 
       {secretButton ? (
         <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
           <SecretButton>
             <SecretButtonContent>
-              <VscGistSecret size="15" />
+              <AiOutlineLock size="15" />
               <SecretButtonText>공개 설정</SecretButtonText>
             </SecretButtonContent>
           </SecretButton>
