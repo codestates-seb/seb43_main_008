@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import NameInput from "./NameInput";
 
-export default function page() {
+export default function Page() {
   return (
     <>
       <BodyContainer>

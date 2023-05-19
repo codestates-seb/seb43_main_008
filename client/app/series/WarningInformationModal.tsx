@@ -15,11 +15,20 @@ export default function Information({
   message,
   additionalMessage,
   onClose,
-}: InformationProps) {
+}: // formData,
+InformationProps) {
   const [checkbox1, setCheckbox1] = useState(false); // 체크박스1의 상태
   const [checkbox2, setCheckbox2] = useState(false); // 체크박스2의 상태
 
   const canSubmit = checkbox1 && checkbox2; // 두 체크박스가 모두 체크되었는지 판단
+
+  // const saveData = async () => {
+  //   try {
+  //     await async.post(`/series`, formData);
+  //   } catch (e) {
+  //     console.warn(e);
+  //   }
+  // };
 
   return (
     <InformationModal onClick={onClose}>

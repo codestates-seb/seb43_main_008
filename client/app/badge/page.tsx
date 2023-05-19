@@ -2,14 +2,16 @@
 
 import styled from "styled-components";
 
-// import Badge from "./Badge";
+import Badge from "./Badge";
 // import styles from "./page.module.css";
 
 export default function page() {
   return (
     <>
       <MainSeriesContainer>
-        <SeriesWrapper>{/* <Badge /> */}</SeriesWrapper>
+        <SeriesWrapper>
+          <Badge />
+        </SeriesWrapper>
       </MainSeriesContainer>
     </>
   );

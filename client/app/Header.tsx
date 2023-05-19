@@ -28,7 +28,9 @@ export default function Header({
       ) : (
         <BackArrowContainer />
       )}
+
       {textContent ? <HeaderText>{typeof textContent === "string" ? textContent : typeof window !== 'undefined' ? sessionStorage.getItem('header') : null}</HeaderText> : null}
+
       {secretButton ? (
         <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
           <SecretButton>

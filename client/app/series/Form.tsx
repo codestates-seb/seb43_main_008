@@ -1,3 +1,4 @@
+// import { useEffect, useState } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -8,6 +9,9 @@ import WriteInput from "./WriteInput";
 export default function Form() {
   const [photo, setPhoto] = useState(false);
   const [text, setText] = useState("");
+
+  // const [formData, setFormData] = useState({});
+  // console.log(formData, "form");
 
   return (
     <form>

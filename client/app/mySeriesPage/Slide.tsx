@@ -41,21 +41,10 @@ const StyledSlide = styled.div`
   border-radius: 3px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
-  .info {
-    display: flex;
-    flex-direction: row;
-    font-size: 13px;
-    color: #757575;
-    margin-bottom: 0.6rem;
-    .nickName {
-      margin-right: 0.1rem;
-    }
-  }
   .image {
     height: 50vw;
     width: 100%;
     margin-bottom: 0.73rem;
-
     background-position: center;
     background-size: cover;
     border-radius: 5px;
