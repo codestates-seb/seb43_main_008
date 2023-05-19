@@ -3,11 +3,8 @@ package com.ssts.ssts.domain.member.controller;
 
 import com.ssts.ssts.domain.badges.response.BadgeResponse;
 import com.ssts.ssts.domain.badges.service.BadgeService;
-import com.ssts.ssts.domain.member.dto.MemberSignUpAddInfoDto;
+import com.ssts.ssts.domain.member.dto.*;
 import com.ssts.ssts.domain.member.entity.Member;
-import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
-import com.ssts.ssts.domain.member.dto.MemberFeedResponseDto;
-import com.ssts.ssts.domain.member.dto.MemberTestSignUpDto;
 import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,14 +32,14 @@ public class MemberController {
     * 권한 : ADMIN
     * */
     @PostMapping("/test/signup")
-    public ResponseEntity testCreateMember(@RequestBody MemberTestSignUpDto memberTestSignUpDto) {
+    public ApiResponse testCreateMember(@RequestBody MemberTestSignUpDto memberTestSignUpDto) {
 
         Member member = memberService.saveMember(
                 memberTestSignUpDto.getEmail(),
                 memberTestSignUpDto.getNickName(),
                 memberTestSignUpDto.getPhone());
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ApiResponse.ok();
     }
 
     /*
@@ -50,10 +47,11 @@ public class MemberController {
      * 권한 : ADMIN
      * */
     @DeleteMapping("/test/{memberId}")
-    public ResponseEntity testDeleteMember(@PathVariable long memberId) {
+    public ApiResponse testDeleteMember(@PathVariable long memberId) {
 
         memberService.testDeleteMember(memberId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+
+        return ApiResponse.ok();
     }
 
 
@@ -66,13 +64,13 @@ public class MemberController {
     //FIXME [보안문제] 이거 휴대폰 인증 API안쓰면 그냥 번호가 노출되서 나중에 무조건 고쳐야한다.
     //https://lasbe.tistory.com/132
     @PostMapping("/signup")
-    public ResponseEntity signUpMember(@RequestBody MemberSignUpAddInfoDto memberSignUpAddInfoDto){
+    public ApiResponse signUpMember(@RequestBody MemberSignUpAddInfoDto memberSignUpAddInfoDto){
 
         Member member=memberService.signUpMember(memberSignUpAddInfoDto.getPhone(), memberSignUpAddInfoDto.getNickName());
 
         //FIXME 출력도 고쳐야한다.
-        return ResponseEntity.status(HttpStatus.OK).body(
-                member.getNickName()+"님! 회원가입이 끝났어요.");
+
+        return ApiResponse.ok(member.getNickName()+"님! 회원가입이 끝났어요.");
 
     }
 
@@ -82,11 +80,11 @@ public class MemberController {
      * 권한 : USER, ADMIN
      * */
     @DeleteMapping("/members")
-    public ResponseEntity withdrawMember() {
+    public ApiResponse withdrawMember() {
 
         Member member=memberService.changeMemberStatusWithdraw();
 
-        return ResponseEntity.status(HttpStatus.OK).body(member.getDeletedAt()+"에 탈퇴처리되셨습니다. " +
+        return ApiResponse.ok(member.getDeletedAt()+"에 탈퇴처리되셨습니다. " +
                 "정책에 따라 6개월 보관할 예정하겠습니다 :) ");
     }
 
@@ -95,11 +93,11 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @GetMapping("/feed")
-    public ResponseEntity<MemberFeedResponseDto> getMyFeedInfo() {
+    public ApiResponse<MemberFeedResponseDto> getMyFeedInfo() {
 
         MemberFeedResponseDto response = memberService.getMyFeedInfo();
 
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 
     /*
@@ -107,11 +105,11 @@ public class MemberController {
      * 권한 : USER, ADMIN
      * */
     @GetMapping("/feed/{nickName}")
-    public ResponseEntity<MemberFeedResponseDto> getMemberFeedInfo(@PathVariable String nickName) {
+    public ApiResponse<MemberFeedResponseDto> getMemberFeedInfo(@PathVariable String nickName) {
 
         MemberFeedResponseDto response = memberService.getMemberFeedInfo(nickName);
 
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 
 
@@ -120,23 +118,23 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @PatchMapping("/feed")
-    public ResponseEntity updateMyFeedInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
+    public ApiResponse<MemberFeedResponseDto> updateMyFeedInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
                                            @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
 
 
         MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto, image);
 
         //변경됬으니까 변경된 입력값을 알려줘야 한다.
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 
 
     /* 상대 멤버 뱃지 피드 조회 기능
     * */
     @GetMapping("/feed/badge/{nickname}")
-    public ResponseEntity getYourBadges(@PathVariable("nickname") String nickname){
+    public ApiResponse<List<BadgeResponse>> getYourBadges(@PathVariable("nickname") String nickname){
         List<BadgeResponse> response = badgeService.findYourBadges(nickname);
-        return new ResponseEntity(response, HttpStatus.OK);
+        return ApiResponse.ok(response);
     }
 
 
