@@ -1,8 +1,9 @@
 package com.ssts.ssts.domain.series.controller;
 
-import com.ssts.ssts.domain.member.dto.ApiResponse;
+
 import com.ssts.ssts.domain.series.response.vote.VoteResponse;
 import com.ssts.ssts.domain.series.service.VoteService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

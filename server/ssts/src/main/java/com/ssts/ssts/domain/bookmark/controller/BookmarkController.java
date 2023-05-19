@@ -3,13 +3,14 @@ package com.ssts.ssts.domain.bookmark.controller;
 import com.ssts.ssts.domain.bookmark.entity.Bookmark;
 import com.ssts.ssts.domain.bookmark.response.BookmarkResponse;
 import com.ssts.ssts.domain.bookmark.service.BookmarkService;
-import com.ssts.ssts.domain.member.dto.ApiResponse;
+
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
+import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

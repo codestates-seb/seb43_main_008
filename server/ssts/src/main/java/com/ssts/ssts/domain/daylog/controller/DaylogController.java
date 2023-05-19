@@ -30,7 +30,7 @@ public class DaylogController {
 
         DaylogResponseDto responseDto = daylogService.saveDaylog(seriesId, daylogPostDto, image);
 
-        return ApiResponse.create(responseDto)
+        return ApiResponse.create(responseDto);
     }
 
 

@@ -5,7 +5,8 @@ import com.ssts.ssts.domain.badges.dto.BadgePostDto;
 import com.ssts.ssts.domain.badges.entity.Badge;
 
 import com.ssts.ssts.domain.badges.service.BadgeService;
-import com.ssts.ssts.domain.member.dto.ApiResponse;
+
+import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class BadgeController {
     }
 
 
-//    특정 뱃지 보기 (특정 뱃지 보는 거 상세내용)
+//    특정 뱃지 보기, (특정 뱃지 보는 거 상세내용)
 //    특정 뱃지를 볼 떄에 isAcquired에 따라서 response가 바뀜
     @GetMapping("/{badge_id}")
     public ApiResponse<BadgeResponse> getBadge(@PathVariable("badge_id") Long badgeId){
