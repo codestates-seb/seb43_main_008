@@ -55,11 +55,6 @@ public class BadgeController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/feed/{nickname}")
-    public ResponseEntity getYourBadges(@PathVariable("nickname") String nickname){
-        List<BadgeResponse> response = badgeService.findYourBadges(nickname);
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
 
 
 }

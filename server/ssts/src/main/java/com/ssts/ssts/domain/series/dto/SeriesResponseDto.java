@@ -50,6 +50,8 @@ public class SeriesResponseDto {
 
     private int totalVote;
 
+    private Boolean isBookmarkedMember;
+
 
 
 
@@ -108,7 +110,8 @@ public class SeriesResponseDto {
                                        Boolean isPublic,
                                        Boolean isEditable,
                                        Boolean isActive,
-                                       Boolean isVotedMember) {
+                                       Boolean isVotedMember,
+                                       Boolean isBookmarkedMember) {
         SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
 
         seriesResponseDto.setId(id);
@@ -128,7 +131,7 @@ public class SeriesResponseDto {
         seriesResponseDto.setIsEditable(isEditable);
         seriesResponseDto.setIsActive(isActive);
         seriesResponseDto.setIsVotedMember(isVotedMember);
-
+        seriesResponseDto.setIsBookmarkedMember(isBookmarkedMember);
 
         return seriesResponseDto;
     }
