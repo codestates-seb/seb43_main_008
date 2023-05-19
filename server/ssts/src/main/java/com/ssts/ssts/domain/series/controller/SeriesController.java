@@ -22,7 +22,7 @@ public class SeriesController {
     private final SeriesService seriesService;
 
 
-    @GetMapping("/members/{member-id}")
+    @GetMapping("/feed/{member-id}")
     public ResponseEntity getSeriesList(@PathVariable("member-id") Long memberid,@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "12") int size){
 

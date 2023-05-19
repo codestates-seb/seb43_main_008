@@ -35,7 +35,6 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final SeriesService seriesService;
     private final MemberService memberService;
-
     private final UpdateUtils<Comment> updateUtils;
 
     public PageResponseDto getCommentList(Long seriesId, int page, int size){
