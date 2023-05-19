@@ -50,13 +50,16 @@ export default function WriteInput({
 }: {
   setText: (value: string) => void;
 }) {
-  // export default function WriteInput({ setText }) {
+  // export default function WriteInput({ setformData }) {
+  // export default function WriteInput() {
   const [inputText, setInputText] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(event.target.value);
     setText(event.target.value);
     console.log(event.target.value);
+
+    //   setFormData({content: event.target.value});
   };
 
   return (
@@ -95,7 +98,6 @@ const WriteInputDetail = styled(TextareaAutosize)`
   padding: 10px;
   overflow: hidden;
   resize: none;
-  /* width: 100%; */
   font-size: 14px;
   overflow: hidden;
   max-height: 150px;
@@ -114,8 +116,8 @@ const PlaceholderLabel = styled.label`
   font-size: 16px;
   transition: 0.3s;
   width: 279px;
-  height: 160px;
-  top: 90%; // Container의 상단으로부터 50% 떨어져랏
+  height: 50px;
+  top: 50%; // Container의 상단으로부터 50% 떨어져랏
   left: 50%; // Container의 왼쪽으로부터 50% 떨어져랏
   transform: translate(-50%, -50%); // 위치를 조정하여 중앙에 배치
 `;
