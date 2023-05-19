@@ -8,6 +8,7 @@ import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.entity.MemberBadge;
 import com.ssts.ssts.domain.member.repository.MemberBadgeRepository;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.security.SecurityUtil;
@@ -29,6 +30,7 @@ public class BadgeService {
     private final BadgeRepository badgeRepo;
     private final MemberRepository memberRepo;
     private final MemberBadgeRepository memberBadgeRepo;
+    private final MemberService memberService;
 
 
    @Transactional //testAPI: 실제로 사용하지 않습니다
@@ -51,9 +53,8 @@ public class BadgeService {
     public void saveBadgeMember(Long badgeId){
 
        //사용자 검증
-        Long memberId = SecurityUtil.getMemberId();
-        Member member = memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         Badge badge = badgeRepo.findById(badgeId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.BADGE_NOT_FOUND));
@@ -72,9 +73,8 @@ public class BadgeService {
     //뱃지 상세조회
     public BadgeResponse findBadge(Long badgeId){
 
-        Long memberId = SecurityUtil.getMemberId();
-        memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         Badge badge = badgeRepo.findById(badgeId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.BADGE_NOT_FOUND));
@@ -85,9 +85,8 @@ public class BadgeService {
     }
 
     public List<BadgeResponse> findAllBadge(){ // 이거 전체 뱃지가 나와야 하는데 안나옴
-        Long memberId = SecurityUtil.getMemberId();
-        memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         List<Badge> badges = badgeRepo.findAll();
 
