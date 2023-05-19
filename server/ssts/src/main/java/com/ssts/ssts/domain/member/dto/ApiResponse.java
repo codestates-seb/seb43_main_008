@@ -40,6 +40,14 @@ public class ApiResponse<T> {
         );
     }
 
+    public static <T> ApiResponse<T> create(T data) {
+        return new ApiResponse<> (
+                "생성 완료",
+                201,
+                data
+        );
+    }
+
     /*public static <T> ApiResponse<T> failure(ExceptionCode ec, String message) {
         return new ApiResponse<>(
                 message,
