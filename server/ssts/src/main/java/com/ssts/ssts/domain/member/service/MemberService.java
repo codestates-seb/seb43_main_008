@@ -1,12 +1,14 @@
 package com.ssts.ssts.domain.member.service;
 
+import com.ssts.ssts.domain.member.constant.MemberConstants;
 import com.ssts.ssts.domain.member.dto.MemberEditInfoPatchDto;
-import com.ssts.ssts.domain.member.dto.MemberFeedResponseDto;
+import com.ssts.ssts.domain.member.dto.MemberFeedResponse;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.S3Uploader;
+import com.ssts.ssts.global.utils.UpdateUtils;
 import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,44 +30,61 @@ public class MemberService {
 
     private final S3Uploader s3ImageUploader;
 
+    private final UpdateUtils updateUtils;
 
     /*
     * 토큰에서 id 가져와서 Member 반환
     * */
     public Member findMemberByToken() {
 
+        //null값 검사 : getMemberId는 long 타입 반환.
         long memberId = SecurityUtil.getMemberId();
+
         Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        log.info("하늘/member service : token(id) -> member 조회 " +
+        log.info("하늘/member service : token(id) -> member 조회" +
                 "\nmemberid=" + member.getId());
 
         return member;
     }
 
     public Member findMemberByNickName(String nickName) {
+
+        //null값 검사
+        if (nickName.isEmpty())
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+
         Member member = memberRepository.findByNickName(nickName).
                 orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         log.info("하늘/member service : nickName -> member 조회" +
                 "\nmemberid=" + member.getId()+
                 "\nnickName="+member.getNickName());
+
+        Long memberId = SecurityUtil.getMemberId();
+        findMemberById(memberId);
+        findMemberById(12);
         return member;
     }
 
     public Member findMemberById(long memberId){
 
+        //null값 검사 : long 타입이라 null값 들어올 일 없음.
         Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        log.info("하늘/member service : id -> member 조회 " +
+        log.info("하늘/member service : id -> member 조회" +
                 "\nmemberid=" + member.getId());
 
         return member;
     }
 
     public Optional<Member> findMemberByEmail(String email){
+
+        //null값 검사
+        if (email.isEmpty())
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
 
         Optional<Member> member = memberRepository.findByEmail(email);
 
@@ -78,26 +97,26 @@ public class MemberService {
     /*
     * DB에 멤버 등록 - test랑 실제 서비스 둘다 사용
     * */
-    public Member saveMember(String email, String nickName, String phone ) {
+    public Member saveMember(String email, String nickName, String phone) {
 
-        log.info("하늘/member service : save 회원가입 전 기입정보 " +
+        //null값 검사 : 세 변수 다 필수 입력값.
+        if (email.isEmpty() || nickName.isEmpty() || phone.isEmpty())
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+
+        log.info("하늘/member service : save 회원가입 전 기입정보" +
                 "\nemail="+email+
                 "\nphone="+phone+
                 "\nnickName="+nickName);
 
         Member member = Member.of(email, nickName, phone);
+
         member.setImage(s3ImageUploader.getS3("ssts-img", "member/default.png"));
+
         verifyExistsEmail(member.getEmail());
         verifyExistsNickName(member.getNickName());
         verifyExistsPhoneNumber(member.getPhone());
 
-        List<String> roles;
-        if (isAdmin(member.getEmail())) {
-            roles = List.of("ADMIN", "USER");
-        } else {
-            roles = List.of("USER");
-        }
-        member.setRoles(roles);
+        member.setRoles(createRoles(member));
 
         Member savedMember = memberRepository.save(member);
 
@@ -110,19 +129,28 @@ public class MemberService {
     /*
     * 테스트용 멤버 삭제
     * */
-    public void testDeleteMember(long memberId){
-
-        memberRepository.deleteById(memberId);
+    public void testDeleteMember(Long memberId){
         log.info("하늘/member service : test delete 테스트 삭제" +
                 "\nmemberId="+memberId);
+
+        //null값 검사
+        if (memberId == null)
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+
+        findMemberById(memberId);
+
+        memberRepository.deleteById(memberId);
+
     }
 
+    public MemberFeedResponse getMemberFeedInfo(String nickName){
 
-    public MemberFeedResponseDto getMemberFeedInfo(String nickName){
+        //null값 검사
+        if(nickName.isEmpty())
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
 
-        Member member = memberRepository.findByNickName(nickName).
-                orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+        Member member = findMemberByNickName(nickName);
+        MemberFeedResponse responseDto = MemberFeedResponse.of(
                 member.getNickName(),
                 member.getImage(),
                 member.getIntroduce());
@@ -130,11 +158,10 @@ public class MemberService {
         return responseDto;
     }
 
-
-    public MemberFeedResponseDto getMyFeedInfo() {
+    public MemberFeedResponse getMyFeedInfo() {
 
         Member member = findMemberByToken();
-        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+        MemberFeedResponse responseDto = MemberFeedResponse.of(
                 member.getNickName(),
                 member.getImage(),
                 member.getIntroduce());
@@ -157,33 +184,45 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberFeedResponseDto updateMyFeedInfo(MemberEditInfoPatchDto memberEditInfoPatchDto, Optional<MultipartFile> image) throws IOException{
+    public MemberFeedResponse updateMyFeedInfo(String nickName, Optional<MultipartFile> image, String introduce) throws IOException{
+
+        //null값 검사 : 1. 세 변수 다 값이 안들어오면 수정값이 없어서 서비스할 필요 없음. -> 예외
+        if ( (nickName == null && !image.isPresent() && introduce == null)
+        || (nickName != null && nickName.isEmpty()) // 2. nickName이 null이 아닌데, 입력값이 "" 이면 예외
+        || (image.isPresent() && image.get().getOriginalFilename().equals(""))) // 3. image가 null이 아닌데, 입력값이 "" 이면 예외
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
 
         Member member = findMemberByToken();
-        String nickName=memberEditInfoPatchDto.getNickName();
-        String introduce= memberEditInfoPatchDto.getIntroduce();
 
-        if (nickName != null) {
+        if (nickName != null && !(nickName.isEmpty())) {
 
-            verifyExistsNickName(nickName);
-            member.setNickName(memberEditInfoPatchDto.getNickName());
+            if (!(member.getNickName().equals(nickName))) {
+                // 원래 본인의 닉네임과 다른 닉네임이라면
+                verifyExistsNickName(nickName);
+                member.setNickName(nickName);
+            }
+
         }
-        if(image.isPresent()){
+        if (image.isPresent() && !(image.get().getName().equals(""))) {
 
-            String saveFileName = s3ImageUploader.upload(image.get(),"daylog");
+            String saveFileName = s3ImageUploader.upload(image.get(),"member");
             member.setImage(saveFileName);
         }
         if (introduce != null) {
 
-            member.setIntroduce(memberEditInfoPatchDto.getIntroduce());
+            member.setIntroduce(introduce);
         }
+
+       /* updateUtils.copyNonNullProperties(nickName,member.getNickName());
+        updateUtils.copyNonNullProperties(image,member.getImage());
+        updateUtils.copyNonNullProperties(introduce,member.getIntroduce());*/
 
         log.info("하늘/member service : update 업데이트 후 피드" +
                 "\nnickName=" + member.getNickName() +
                 "\nimage=" + member.getImage() +
                 "\nintroduce=" + member.getIntroduce());
 
-        MemberFeedResponseDto responseDto = MemberFeedResponseDto.of(
+        MemberFeedResponse responseDto = MemberFeedResponse.of(
                 member.getNickName(),
                 member.getImage(),
                 member.getIntroduce());
@@ -193,13 +232,17 @@ public class MemberService {
 
     public Member signUpMember(String phone, String nickName) {
 
+        //null값 검사 : 두 변수 다 필수 입력값.
+        if (nickName.isEmpty() || phone.isEmpty())
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+
         String email=SecurityUtil.getMemberEmail();
         Member member=saveMember(email, nickName, phone);
 
         return member;
     }
 
-    public void verifyExistsEmail(String email) {
+    private void verifyExistsEmail(String email) {
 
         Optional<Member> member = memberRepository.findByEmail(email);
 
@@ -209,7 +252,7 @@ public class MemberService {
 
     }
 
-    public void verifyExistsPhoneNumber(String phone){
+    private void verifyExistsPhoneNumber(String phone){
 
         Optional<Member> member = memberRepository.findByPhone(phone);
 
@@ -218,7 +261,7 @@ public class MemberService {
         }
     }
 
-    public void verifyExistsNickName(String nickName){
+    private void verifyExistsNickName(String nickName){
         Optional<Member> member = memberRepository.findByNickName(nickName);
 
         if (member.isPresent()) {
@@ -226,8 +269,17 @@ public class MemberService {
         }
     }
 
+    private List<String> createRoles(Member member){
+        if (isAdmin(member.getEmail())) {
+            return List.of(MemberConstants.ROLE_ADMIN.getConstant(), MemberConstants.ROLE_USER.getConstant());
+        } else {
+            return List.of(MemberConstants.ROLE_USER.getConstant());
+        }
+    }
+
     private boolean isAdmin(String email) {
-        if (email.contains("@ssts.com")) {
+
+        if (email.contains(MemberConstants.ADMIN_EMAIL.getConstant())) {
             return true;
         } else {
             return false;

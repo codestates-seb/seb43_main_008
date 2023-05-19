@@ -7,8 +7,6 @@ import com.ssts.ssts.domain.member.dto.*;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,10 +20,8 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
-
     //badgeFeed
     private final BadgeService badgeService;
-
 
     /*
     * 테스트용 멤버 회원가입 기능
@@ -39,7 +35,7 @@ public class MemberController {
                 memberTestSignUpDto.getNickName(),
                 memberTestSignUpDto.getPhone());
 
-        return ApiResponse.ok();
+        return ApiResponse.ok(member);
     }
 
     /*
@@ -47,14 +43,12 @@ public class MemberController {
      * 권한 : ADMIN
      * */
     @DeleteMapping("/test/{memberId}")
-    public ApiResponse testDeleteMember(@PathVariable long memberId) {
+    public ApiResponse testDeleteMember(@PathVariable Long memberId) {
 
         memberService.testDeleteMember(memberId);
 
-        return ApiResponse.ok();
+        return ApiResponse.ok("id="+memberId+"의 멤버 정보가 삭제됐어요.");
     }
-
-
 
     /*
      * 회원가입
@@ -68,12 +62,9 @@ public class MemberController {
 
         Member member=memberService.signUpMember(memberSignUpAddInfoDto.getPhone(), memberSignUpAddInfoDto.getNickName());
 
-        //FIXME 출력도 고쳐야한다.
-
         return ApiResponse.ok(member.getNickName()+"님! 회원가입이 끝났어요.");
 
     }
-
 
     /*
      * 멤버 탈퇴 기능
@@ -93,9 +84,9 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @GetMapping("/feed")
-    public ApiResponse<MemberFeedResponseDto> getMyFeedInfo() {
+    public ApiResponse<MemberFeedResponse> getMyFeedInfo() {
 
-        MemberFeedResponseDto response = memberService.getMyFeedInfo();
+        MemberFeedResponse response = memberService.getMyFeedInfo();
 
         return ApiResponse.ok(response);
     }
@@ -105,29 +96,29 @@ public class MemberController {
      * 권한 : USER, ADMIN
      * */
     @GetMapping("/feed/{nickName}")
-    public ApiResponse<MemberFeedResponseDto> getMemberFeedInfo(@PathVariable String nickName) {
+    public ApiResponse<MemberFeedResponse> getMemberFeedInfo(@PathVariable String nickName) {
 
-        MemberFeedResponseDto response = memberService.getMemberFeedInfo(nickName);
+        MemberFeedResponse response = memberService.getMemberFeedInfo(nickName);
 
         return ApiResponse.ok(response);
     }
-
 
     /*
     * 멤버 본인 피드 정보 수정 기능
     * 권한 : USER, ADMIN
     * */
     @PatchMapping("/feed")
-    public ApiResponse<MemberFeedResponseDto> updateMyFeedInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
-                                           @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
+    public ApiResponse<MemberFeedResponse> updateMyFeedInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
+                                                            @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
 
+        MemberFeedResponse response = memberService.updateMyFeedInfo(
+                memberEditInfoPatchDto.getNickName(),
+                image,
+                memberEditInfoPatchDto.getIntroduce());
 
-        MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto, image);
-
-        //변경됬으니까 변경된 입력값을 알려줘야 한다.
+        //변경됐으니까 변경된 입력값을 알려줘야 한다.
         return ApiResponse.ok(response);
     }
-
 
     /* 상대 멤버 뱃지 피드 조회 기능
     * */
@@ -136,7 +127,5 @@ public class MemberController {
         List<BadgeResponse> response = badgeService.findYourBadges(nickname);
         return ApiResponse.ok(response);
     }
-
-
 
 }

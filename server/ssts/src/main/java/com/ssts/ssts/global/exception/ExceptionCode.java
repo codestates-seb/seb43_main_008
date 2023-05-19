@@ -9,21 +9,23 @@ public enum ExceptionCode {
 
     //TODO 사용자한테 노출되는 예외랑 개발자한테만 보이는 예외를 나눠야할까?
 
+    INPUT_NULL(RtnHttpStatus.Validation, 500, "입력값이 없어요."),
+    IS_NULL(RtnHttpStatus.System, 501, "null값이예요."),
+
     //사용자 관련 에러
-    MEMBER_NOT_FOUND(RtnHttpStatus.Validation, 2000, "사용자를 찾을 수 없어요."),
-    INVALID_MEMBER_STATUS(RtnHttpStatus.Validation, 2004, "Invalid member status"),
-    EMAIL_DUPLICATE(RtnHttpStatus.Validation, 2002, "이메일이 중복되었습니다"),
-    PHONENUMBER_DUPLICATE(RtnHttpStatus.Validation,2002, "휴대폰 번호가 중복되었습니다"),
-    NICKNAME_DUPLICATE(RtnHttpStatus.Validation,2008, "닉네임이 중복되었어요."),
+    MEMBER_NOT_FOUND(RtnHttpStatus.System, 2000, "사용자를 찾을 수 없어요."),
+    EMAIL_DUPLICATE(RtnHttpStatus.Validation, 2001, "이메일이 중복이예요."),
+    PHONENUMBER_DUPLICATE(RtnHttpStatus.Validation,2002, "휴대폰 번호가 중복이예요."),
+    NICKNAME_DUPLICATE(RtnHttpStatus.Validation,2008, "닉네임이 중복이예요."),
 
     //Auth 에러
-    SECURITY_TEST_LOGIN_NO_MEMBER(RtnHttpStatus.Validation,2009, "Test용 로그인 에러: 사용자 없어요"),
-    SECURITY_GUEST_OBJECT_SERIALIZE_ERROR(RtnHttpStatus.Validation,2006, "GUEST object information json serialization error"),
-    SECURITY_NO_CREDENTIALS(RtnHttpStatus.Validation,2007,"사용자 정보가 없습니다"),
+    SECURITY_TEST_LOGIN_NO_MEMBER(RtnHttpStatus.Validation,2009, "Test용 로그인 에러: 사용자 없음."),
+    SECURITY_GUEST_OBJECT_SERIALIZE_ERROR(RtnHttpStatus.Validation,2006, "GUEST객체 Json 직렬화 에러."),
+    SECURITY_NO_CREDENTIALS(RtnHttpStatus.Validation,2007,"해당 사용자의 정보가 없어요."),
 
     //시리즈 에러
-    SERIES_NOT_EXISTS(RtnHttpStatus.Validation, 2005, "시리즈를 찾을 수 없습니다"),
-    NOT_ALLOWED_PERMISSION(RtnHttpStatus.Validation,2010, "허용되지 않은 사용자입니다."),
+    SERIES_NOT_EXISTS(RtnHttpStatus.Validation, 2005, "시리즈를 찾을 수 없어요."),
+    NOT_ALLOWED_PERMISSION(RtnHttpStatus.Validation,2010, "허용되지 않은 사용자예요."),
 
     //팔로우 에러
     FOLLOW_NOT_AVAILABLE(RtnHttpStatus.Validation,1050, "팔로우 할 수 없는 상대예요."),
