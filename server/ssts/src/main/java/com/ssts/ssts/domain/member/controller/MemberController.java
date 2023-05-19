@@ -38,7 +38,7 @@ public class MemberController {
                 memberTestSignUpDto.getNickName(),
                 memberTestSignUpDto.getPhone());
 
-        return ApiResponse.ok();
+        return ApiResponse.ok(member);
     }
 
     /*
@@ -46,14 +46,12 @@ public class MemberController {
      * 권한 : ADMIN
      * */
     @DeleteMapping("/test/{memberId}")
-    public ApiResponse testDeleteMember(@PathVariable long memberId) {
+    public ApiResponse testDeleteMember(@PathVariable Long memberId) {
 
         memberService.testDeleteMember(memberId);
 
-        return ApiResponse.ok();
+        return ApiResponse.ok("id="+memberId+"의 멤버 정보가 삭제됐어요.");
     }
-
-
 
     /*
      * 회원가입
@@ -67,12 +65,9 @@ public class MemberController {
 
         Member member=memberService.signUpMember(memberSignUpAddInfoDto.getPhone(), memberSignUpAddInfoDto.getNickName());
 
-        //FIXME 출력도 고쳐야한다.
-
         return ApiResponse.ok(member.getNickName()+"님! 회원가입이 끝났어요.");
 
     }
-
 
     /*
      * 멤버 탈퇴 기능

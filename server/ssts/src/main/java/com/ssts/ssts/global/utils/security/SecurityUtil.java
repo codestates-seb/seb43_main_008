@@ -17,15 +17,20 @@ public class SecurityUtil {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
         if (authentication == null || authentication.getCredentials()==null) {
             throw new BusinessLogicException(ExceptionCode.SECURITY_NO_CREDENTIALS);
         }
 
+        //FIXME 여기도...으악...
         Map<String, Object> credentials =  (Map<String, Object>)authentication.getCredentials();
-        Integer integerId=(Integer)credentials.get("id");
+
+        //FIXME 아 사실 너무 마음에 안들어.....
+        Integer integerId=(Integer)credentials.get("id"); // V = Object값이 출력된다.
         //Long id=new Long(credentials.get("id").longValue());
-        long longId = new Long(integerId.longValue());
+        Long longId = new Long(integerId.longValue());
+        if(longId == null){
+            throw new BusinessLogicException(ExceptionCode.IS_NULL);
+        }
         return longId;
     }
 
@@ -37,9 +42,7 @@ public class SecurityUtil {
             throw new BusinessLogicException(ExceptionCode.SECURITY_NO_CREDENTIALS);
         }
 
-        String email=(String)authentication.getPrincipal();
-
-        return email;
+        return authentication.getPrincipal().toString();
 
     }
 }
