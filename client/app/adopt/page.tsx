@@ -2,14 +2,11 @@
 
 import Image from "next/image";
 import React from "react";
-import { useState } from "react";
 import styled from "styled-components";
 
 import NameInput from "./NameInput";
 
 export default function Page() {
-  const [a, setA] = useState(1);
-
   return (
     <>
       <BodyContainer>
