@@ -12,6 +12,7 @@ import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BadgeService {
@@ -41,6 +43,7 @@ public class BadgeService {
                 postDto.getImg()
         );
         Badge saveBadge = badgeRepo.save(badge);
+       log.info("뺏지. 맹들기.써어비스.");
     return saveBadge;
     }
 
