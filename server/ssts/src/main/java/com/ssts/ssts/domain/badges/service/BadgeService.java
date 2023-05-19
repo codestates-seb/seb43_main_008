@@ -79,7 +79,8 @@ public class BadgeService {
         Badge badge = badgeRepo.findById(badgeId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.BADGE_NOT_FOUND));
 
-        //Boolean isBadged  = memberBadgeRepo.existsByMember_IdAndBadgeId(memberId, badgeId);
+        Boolean isBadged  = memberBadgeRepo.existsByMember_IdAndBadgeId(memberId, badgeId);
+        badge.setIsAcquired(isBadged);
 
         return isAcquiredResponse(badge);
     }
