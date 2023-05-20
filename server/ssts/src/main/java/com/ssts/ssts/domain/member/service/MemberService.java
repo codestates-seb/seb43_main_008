@@ -191,13 +191,15 @@ public class MemberService {
         return responseDto;
     }
 
+
     public Member signUpMember(String phone, String nickName) {
 
-        String email=SecurityUtil.getMemberEmail();
+        String email= SecurityUtil.getMemberEmail();
         Member member=saveMember(email, nickName, phone);
 
         return member;
     }
+
 
     public void verifyExistsEmail(String email) {
 
