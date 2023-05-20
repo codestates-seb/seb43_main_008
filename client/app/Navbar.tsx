@@ -2,61 +2,21 @@
 
 import Image from 'next/image';
 import Link from "next/link";
-import { useState } from "react";
 import { BsPlusLg } from "react-icons/bs";
 import styled from "styled-components";
 
 export default function Navbar() {
   // 클릭 메뉴 관리 함수
-  const [selected, setSelected] = useState("홈");
 
-  const handleMenuClick = (menuName: string) => {
-    setSelected(menuName);
+  const menuClickHandle = (menuName: string) => {
+    sessionStorage.setItem("menu", menuName)
   };
 
-  // 스크롤 이벤트 감지 함수
-  /* 
-  const [isNavOn, setIsNavOn] = useState<boolean>(true);
+  let selectedMenu = "홈"
+  if (typeof window !== undefined) {
+    selectedMenu = sessionStorage.getItem("menu")
+  }
 
-  const throttle = <T extends unknown[]>(
-    func: (...args: T) => void,
-    ms: number
-  ) => {
-    let throttled = false;
-    return (...args: T) => {
-      if (!throttled) {
-        throttled = true;
-        setTimeout(() => {
-          func(...args);
-          throttled = false;
-        }, ms);
-      }
-    };
-  };
-
-  const scrollDirection = () => {
-    const beforeScrollY = useRef<number>(window.pageYOffset);
-
-    if (window.pageYOffset > beforeScrollY.current) {
-      setIsNavOn(false);
-      console.log("켜기");
-    } else {
-      setIsNavOn(true);
-      console.log("끄기");
-    }
-
-    beforeScrollY.current = window.pageYOffset;
-  };
-
-  const scrollEvent: any = useMemo(throttle(scrollDirection, 100), [isNavOn]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", scrollEvent);
-    return () => {
-      window.removeEventListener("scroll", scrollEvent);
-    };
-  }, [scrollEvent]);
-  */
 
   return (
     // <StyledNavbar style={{ display: isNavOn ? "block" : "none" }}>
@@ -65,10 +25,10 @@ export default function Navbar() {
       <div className="container">
         <Link
           href="/"
-          className={`home menu ${selected === "홈" ? "selected" : ""}`}
-          onClick={() => handleMenuClick("홈")}
+          className={`home menu ${selectedMenu === "홈" ? "selectedMenu" : ""}`}
+          onClick={() => menuClickHandle("홈")}
         >
-          {selected === "홈" ? (
+          {selectedMenu === "홈" ? (
             <Image
               className='icon'
               src="/icons/HomeFill.svg"
@@ -89,10 +49,10 @@ export default function Navbar() {
         </Link>
         <Link
           href="follow"
-          className={`follow menu ${selected === "팔로우" ? "selected" : ""}`}
-          onClick={() => handleMenuClick("팔로우")}
+          className={`follow menu ${selectedMenu === "팔로우" ? "selectedMenu" : ""}`}
+          onClick={() => menuClickHandle("팔로우")}
         >
-          {selected === "팔로우" ? (
+          {selectedMenu === "팔로우" ? (
             <Image
               className='icon'
               src="/icons/HeartFill.svg"
@@ -115,20 +75,20 @@ export default function Navbar() {
           <BsPlusLg />
         </Link>
         <div
-          className={`add-series menu ${selected === "시리즈 작성" ? "selected" : ""
+          className={`add-series menu ${selectedMenu === "시리즈 작성" ? "selectedMenu" : ""
             }`}
-          onClick={() => handleMenuClick("시리즈 작성")}
+          onClick={() => menuClickHandle("시리즈 작성")}
         >
           <div className="icon" />
           <div className="text">새글쓰기</div>
         </div>
         <Link
           href="bookmark"
-          className={`book-mark menu ${selected === "북마크" ? "selected" : ""
+          className={`book-mark menu ${selectedMenu === "북마크" ? "selectedMenu" : ""
             }`}
-          onClick={() => handleMenuClick("북마크")}
+          onClick={() => menuClickHandle("북마크")}
         >
-          {selected === "북마크" ? (
+          {selectedMenu === "북마크" ? (
             <Image
               className='icon'
               src="/icons/BookmarkFill.svg"
@@ -149,11 +109,11 @@ export default function Navbar() {
         </Link>
         <Link
           href="my-page"
-          className={`my-page menu ${selected === "마이일지" ? "selected" : ""
+          className={`my-page menu ${selectedMenu === "마이일지" ? "selectedMenu" : ""
             }`}
-          onClick={() => handleMenuClick("마이일지")}
+          onClick={() => menuClickHandle("마이일지")}
         >
-          {selected === "마이일지" ? (
+          {selectedMenu === "마이일지" ? (
             <Image
               className='icon'
               src="/icons/MyFill.svg"
@@ -264,3 +224,48 @@ const StyledNavbar = styled.nav`
     }
   }
 `;
+
+
+  // 스크롤 이벤트 감지 함수
+/*
+const [isNavOn, setIsNavOn] = useState<boolean>(true);
+
+const throttle = <T extends unknown[]>(
+  func: (...args: T) => void,
+  ms: number
+) => {
+  let throttled = false;
+  return (...args: T) => {
+    if (!throttled) {
+      throttled = true;
+      setTimeout(() => {
+        func(...args);
+        throttled = false;
+      }, ms);
+    }
+  };
+};
+
+const scrollDirection = () => {
+  const beforeScrollY = useRef<number>(window.pageYOffset);
+
+  if (window.pageYOffset > beforeScrollY.current) {
+    setIsNavOn(false);
+    console.log("켜기");
+  } else {
+    setIsNavOn(true);
+    console.log("끄기");
+  }
+
+  beforeScrollY.current = window.pageYOffset;
+};
+
+const scrollEvent: any = useMemo(throttle(scrollDirection, 100), [isNavOn]);
+
+useEffect(() => {
+  window.addEventListener("scroll", scrollEvent);
+  return () => {
+    window.removeEventListener("scroll", scrollEvent);
+  };
+}, [scrollEvent]);
+*/

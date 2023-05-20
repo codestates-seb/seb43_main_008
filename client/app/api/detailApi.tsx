@@ -22,7 +22,7 @@ export const GetDaylog = async (seriesId: string, page: number) => {
     const response = await axios.get(`/series/${seriesId}/daylog?page=${page}`, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX0dVRVNUIl0sInN1YiI6ImhnZDEyMzQ1NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ0MTI5NDgsImV4cCI6MTY4NDQxNDc0OH0.WuZduEDVNnJZ798ckwG7cpX6YFs1Qw5NUyDAoDBtTjwtfNuMH9ULgiSpqAgI-7FY",
+        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE4LCJzdWIiOiJ0dHR0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ1MDEzMjIsImV4cCI6MTY4NDUwMzEyMn0.MibxgWKGACCWsk0uv0fLge6exAk1KVGKNIS7C-bzn8mA1s9vRjV88UaZyhyGe5YN",
       },
     });
     // axios.defaults.headers.common["Authorization"] = `Bearer ${response.headers.authorization}`;

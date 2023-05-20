@@ -12,6 +12,7 @@ export const Comments: React.FC = () => {
 
   // 댓글 입력 및 서버 전달을 위한 상태 & 함수
   const [comment, setComment] = useState<string>("");
+  // 두글자 초과 유효성 검사
   const params = useParams();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
