@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import { AiOutlineLock } from "react-icons/ai";
+import { BiArchiveOut } from "react-icons/bi";
 import styled from "styled-components";
 
 import HeaderModal from "./HeaderModal";
@@ -11,10 +12,12 @@ export default function Header({
   backButton,
   textContent,
   secretButton,
+  voteButton,
 }: {
   backButton: boolean;
   textContent: boolean | string;
-  secretButton: boolean;
+  secretButton?: boolean; // secretButton을 optional로 변경
+  voteButton?: boolean; // voteButton을 optional로 변경
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
@@ -39,7 +42,7 @@ export default function Header({
         </HeaderText>
       ) : null}
 
-      {secretButton ? (
+      {secretButton && ( // Optional chaining을 사용하여 secretButton이 true인 경우에만 렌더링
         <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
           <SecretButton>
             <SecretButtonContent>
@@ -48,9 +51,19 @@ export default function Header({
             </SecretButtonContent>
           </SecretButton>
         </SecretButtonContainer>
-      ) : (
-        <SecretButtonContainer />
       )}
+
+      {voteButton && ( // Optional chaining을 사용하여 voteButton이 true인 경우에만 렌더링
+        <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
+          <SecretButton>
+            <SecretButtonContent>
+              <BiArchiveOut size="15" />
+              <SecretButtonText>투표가기</SecretButtonText>
+            </SecretButtonContent>
+          </SecretButton>
+        </SecretButtonContainer>
+      )}
+
       <HeaderModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
