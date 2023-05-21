@@ -29,7 +29,8 @@ public class GoogleInfraService {
 
     //요청 보내기
     public String getAccessToken(String code) {
-        String str=googleAuthApi.getAccessToken(code, clientId, clientSecret, TestConstants.GOOGLE_REDIRECT_URL, "authorization_code", EMPTY_STRING).getAccessToken();
+        //FIXME
+        String str=googleAuthApi.getAccessToken(code, clientId, clientSecret, TestConstants.SERVER_GOOGLE_REDIRECT_URL, "authorization_code", EMPTY_STRING).getAccessToken();
         log.info("하늘/oauth google infra service -> get access token() : \n"+
                 "access token="+str);
         return str;
