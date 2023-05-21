@@ -4,16 +4,31 @@ import React, { useEffect, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import styled from "styled-components";
 
-import { GetComment } from "../api/commentApi"
+import { GetComment, PatchComment, PostComment } from "../api/commentApi"
 import { StyledCard } from "./Card";
 import { Comment } from "./Comment";
-import { comments } from "./commentData";
 export const Comments: React.FC = () => {
+
+  // 댓글 <생성, 수정, 삭제>시 댓글 리스트 업데이트를 위한 함수
+  const [update, setUpdate] = useState<boolean>(false);
+
+  // 서버에서 받아오는 댓글 리스트
+  const [commentList, setCommentList] = useState([]);
+  const params = useParams();
+
+  useEffect(() => {
+    console.log("GetComment 요청")
+    console.log(`GetComment : ${update}`)
+    GetComment(params.id).then((data) => {
+      if (data) {
+        setCommentList((data))
+        console.log(data)
+      }
+    })
+  }, [update]) // 📌 상태는 변경되는데 GetComment는 한템포 늦음
 
   // 댓글 입력 및 서버 전달을 위한 상태 & 함수
   const [comment, setComment] = useState<string>("");
-  // 두글자 초과 유효성 검사
-  const params = useParams();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
@@ -23,10 +38,19 @@ export const Comments: React.FC = () => {
     e: React.FormEvent<HTMLFormElement | HTMLTextAreaElement>
   ) => {
     e.preventDefault();
-    if (comment.length !== 0) {
+    if (editCommentId !== undefined && comment.length > 2) {
+      PatchComment(params.id, editCommentId, comment) // 댓글 수정 요청 보내기
+      setEditCommentId(undefined) // 수정 댓글 id 리셋하기
+      GetComment(params.id) // 📌 왜 update 상태만으로 안되지? 
+      setUpdate(!update)
       setComment("");
-      GetComment(params.id)
-      console.log("서버에 데이터 보내고 & 댓글 리스트 새로 가져와야함");
+    }
+    else if (comment.length > 2) { // 두글자 초과 입력시에만 댓글 저장 가능
+      PostComment(params.id, comment) // 새로운 댓글 보내기
+      // GetComment(params.id) // 📌 왜 update 상태만으로 안되지? 
+      setUpdate(!update)
+      setComment("");
+      console.log(`handleSubmit : ${update}`)
     }
   };
 
@@ -37,15 +61,19 @@ export const Comments: React.FC = () => {
   };
 
   // 댓글 수정을 위한 함수
-  const [editCommentId, setEditCommentId] = useState<number | undefined>(
+  const [editCommentId, setEditCommentId] = useState<string | undefined>(
     undefined
   );
 
-  const handleEditComment = (id: number) => {
+  console.log(editCommentId)
+
+  const handleEditComment = (id: string) => {
     setEditCommentId(id);
   };
 
-  const editCommentData = comments.find((data) => data.id === editCommentId);
+  const editCommentData = commentList.find((data) =>
+    data.id === Number(editCommentId)
+  );
 
   useEffect(() => {
     setComment(editCommentData?.comment);
@@ -75,16 +103,20 @@ export const Comments: React.FC = () => {
           </form>
 
           <ul className="comment-box">
-            {comments.map((data) => {
-              return (
+
+            {commentList.length > 0 ?
+              commentList.map((data) => (
                 <Comment
                   key={data.id}
                   {...data}
                   handleEditComment={handleEditComment}
                   setComment={setComment}
+                  setUpdate={setUpdate}
+                  update={update}
                 />
-              );
-            })}
+              ))
+              : <div> 작성된 댓글이 없습니다. </div>}
+
           </ul>
         </div>
       </StyledCard>
