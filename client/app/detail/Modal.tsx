@@ -1,17 +1,19 @@
 "use client";
 
+import { useParams } from 'next/navigation';
 import { AiOutlineMinus } from "react-icons/ai";
 import { RiDeleteBinLine, RiEdit2Line } from "react-icons/ri";
 import styled from "styled-components";
 
-// import { DeleteComment } from "../api/commentApi"
+import { DeleteComment } from "../api/commentApi"
 
 interface Props {
   onClickModal: () => void;
-  handleEditComment: (id: number) => void;
+  handleEditComment: (id: string) => void;
   commentId?: string;
-  seriesID?: string;
   setComment: React.Dispatch<React.SetStateAction<string>>
+  setUpdate: React.Dispatch<React.SetStateAction<boolean>>
+  update: boolean
 }
 
 export const Modal: React.FC<Props> = ({
@@ -19,18 +21,24 @@ export const Modal: React.FC<Props> = ({
   handleEditComment,
   commentId,
   setComment,
+  setUpdate,
+  update,
 }) => {
+
+  const series = useParams();
+
 
   const HandleDelete = () => {
     onClickModal();
     setComment("")
-    // DeleteComment(seriesID, commentId)
-    console.log("서버에 삭제 요청 보내기");
+    DeleteComment(series.id, commentId)
+    setUpdate(!update)
+    console.log(update)
   };
 
   const HandleEdit = () => {
     onClickModal();
-    // handleEditComment(commentId);
+    handleEditComment(commentId);
   };
 
   return (

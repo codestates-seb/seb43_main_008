@@ -193,7 +193,7 @@ export const Slider = (): JSX.Element => {
         >
           {list.map((data) => (
             <li key={data.id}>
-              <Slide {...data} />
+              <Slide date={undefined} {...data} />
             </li>
           ))}
         </ul>

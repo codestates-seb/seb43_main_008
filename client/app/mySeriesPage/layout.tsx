@@ -13,6 +13,7 @@ export default function SeriesLayout({
         backButton={true}
         textContent={"봉다리 세바스찬"}
         secretButton={false}
+        voteButton={true}
       />
       {children}
       <Navbar />
