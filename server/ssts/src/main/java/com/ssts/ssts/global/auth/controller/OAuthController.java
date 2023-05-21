@@ -71,11 +71,11 @@ public class OAuthController {
         UriComponents uri;
 
         if (tokenResponse.isAuthenticated()) {
-            uri = UriComponentsBuilder.fromUriString(TestConstants.BE_BASE_URL) //FIXME url 수정 필요
+            uri = UriComponentsBuilder.fromUriString(TestConstants.FE_BASE_URL) //FIXME url 수정 필요
                     .queryParam("Access",tokenResponse.getAccessToken())
                     .build();
         }else{
-            uri = UriComponentsBuilder.fromUriString(TestConstants.BE_BASE_URL) //FIXME url 수정 필요
+            uri = UriComponentsBuilder.fromUriString(TestConstants.FE_BASE_URL+"/register") //FIXME url 수정 필요
                     .queryParam("Access",tokenResponse.getAccessToken())
                     .queryParam("email",tokenResponse.getEmail())
                     .build();
