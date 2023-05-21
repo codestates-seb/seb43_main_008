@@ -5,9 +5,9 @@ import com.ssts.ssts.domain.bookmark.repository.BookmarkRepository;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.domain.series.constant.SeriesConstants;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
-import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesUpdateDto;
@@ -43,8 +43,6 @@ public class SeriesService {
     private final MemberService memberService;
     private final UpdateUtils<Series> updateUtils;
     private final S3Uploader s3Uploader;
-
-
     //vote
     private final MemberVoteRepository voteMemberRepo;
     private final MemberRepository memberRepo;
@@ -66,8 +64,10 @@ public class SeriesService {
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
+        /////////////////
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+        //////////////
 
         return new PageResponseDto(list, seriesInfo);
     }
@@ -147,8 +147,10 @@ public class SeriesService {
 
 
     @Transactional
-    public SeriesResponseDto saveSeries(String isPulic, SeriesPostDto seriesPostDto){
+    public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto){
         // 파라미터 체크
+
+
         Member authMember = memberService.findMemberByToken();
         Series series = Series.of(seriesPostDto.getTitle());
         Member member = memberService.findMemberById(authMember.getId());
@@ -157,12 +159,12 @@ public class SeriesService {
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
-        if("true".equals(isPulic)){
+        if("true".equals(isPublic)){
             series.setIsPublic(true);
             // 예외처리
         }
 
-        series.setImage(s3Uploader.getS3("ssts-img", "series/series-image.png")); // 상수 선언
+        series.setImage(s3Uploader.getS3(SeriesConstants.FILE_NAME.getSeriesConstant())); // 상수 선언
         series.addMember(member);
         seriesRepository.save(series);
 

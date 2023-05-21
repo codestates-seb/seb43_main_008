@@ -86,7 +86,7 @@ public class MemberService {
                 "\nnickName="+nickName);
 
         Member member = Member.of(email, nickName, phone);
-        member.setImage(s3ImageUploader.getS3("ssts-img", "member/default.png"));
+        member.setImage(s3ImageUploader.getS3("member/default.png"));
         verifyExistsEmail(member.getEmail());
         verifyExistsNickName(member.getNickName());
         verifyExistsPhoneNumber(member.getPhone());
