@@ -9,6 +9,8 @@ import { GetProfile } from "../api/myPageApi";
 import * as S from "./ProfileEditStyle";
 
 export default function ProfileEdit() {
+  // const Authorization =
+  // typeof window !== "undefined" ? localStorage.getItem("Authorization") : null;
   const [image, setImage] = useState<string | null>(null);
   const [nickName, setNickName] = useState<string>("");
   const [introduce, setIntroduce] = useState<string>("");

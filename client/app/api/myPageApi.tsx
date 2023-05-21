@@ -1,15 +1,13 @@
 import axios from "axios";
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
-const Authorization =
-  typeof window !== "undefined" ? localStorage.getItem("Authorization") : null;
-
 // 📌 My-page api
 export const GetFeed = async () => {
   try {
     const response = await axios.get(`/series/members`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: Authorization,
+        Authorization:
+          "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE3LCJzdWIiOiJ0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ0MTMxNTQsImV4cCI6MTY4NDQxNDk1NH0.g4818krXAKEhU53KFYvoRMwU_IyAWGGWYoP0u_YJPZoFuDMOt2fOQguyajCjemqe",
       },
     });
     // axios.defaults.headers.common["Authorization"] = `Bearer ${response.headers.authorization}`;
@@ -24,7 +22,8 @@ export const GetProfile = async () => {
     const response = await axios.get(`/feed`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: Authorization,
+        Authorization:
+          "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE3LCJzdWIiOiJ0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ0MTMxNTQsImV4cCI6MTY4NDQxNDk1NH0.g4818krXAKEhU53KFYvoRMwU_IyAWGGWYoP0u_YJPZoFuDMOt2fOQguyajCjemqe",
       },
     });
     sessionStorage.setItem("header", response.data.nickName);
