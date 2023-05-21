@@ -27,8 +27,8 @@ public class LoginSignupController {
         log.info("하늘/token response :\n"+
                 tokenResponse.toString());
 
-        response.setHeader("Authorization", "Bearer " + tokenResponse.getAccessToken());
-        response.setHeader("Refresh", tokenResponse.getRefreshToken());
+        response.setHeader("authorization", "Bearer " + tokenResponse.getAccessToken());
+        response.setHeader("refresh", tokenResponse.getRefreshToken());
     }
 
 
@@ -45,8 +45,8 @@ public class LoginSignupController {
         log.info("하늘/token response :\n"+
                 tokenResponse.toString());
 
-        response.setHeader("Authorization", "Bearer " + tokenResponse.getAccessToken());
-        response.setHeader("Refresh", tokenResponse.getRefreshToken());
+        response.setHeader("authorization", "Bearer " + tokenResponse.getAccessToken());
+        response.setHeader("refresh", tokenResponse.getRefreshToken());
 
     }
 
