@@ -15,6 +15,7 @@ public class CommentResponseDto {
     private Long id;
     private String comment;
     private Member member;
+    private boolean isMine = false;
 
 
     public static CommentResponseDto of(Comment comment) {

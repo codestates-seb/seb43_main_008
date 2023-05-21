@@ -1,6 +1,7 @@
 package com.ssts.ssts.domain.series.controller;
 
 
+import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
@@ -10,12 +11,15 @@ import com.ssts.ssts.domain.series.service.SeriesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class SeriesController {
 
 
@@ -23,8 +27,9 @@ public class SeriesController {
 
 
     @GetMapping("/feed/series/{member-id}")
-    public ApiResponse getSeriesList(@PathVariable("member-id") Long memberid,@RequestParam(value = "page", defaultValue = "1") int page,
-                                        @RequestParam(value = "size", defaultValue = "12") int size){
+    public ApiResponse getSeriesList(@Positive @PathVariable("member-id") Long memberid,
+                                     @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                     @Positive @RequestParam(value = "size", defaultValue = "12") int size){
 
         PageResponseDto response = seriesService.getSeriesList(memberid,page-1, size);
 
@@ -32,8 +37,10 @@ public class SeriesController {
     }
 
     @GetMapping("/series")
-    public ApiResponse<PageResponseDto> getMainSeriesList(@RequestParam(value = "sort", defaultValue = "newest") String sort, @RequestParam(value = "page", defaultValue = "1") int page,
-                                        @RequestParam(value = "size", defaultValue = "12") int size){
+    public ApiResponse<PageResponseDto> getMainSeriesList(@RequestParam(value = "sort", defaultValue = "newest") String sort,
+                                                          @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                                          @Positive @RequestParam(value = "size", defaultValue = "12") int size){
+
         if("votes".equals(sort)){
             PageResponseDto response = seriesService.getMainSeriesListByVotes(page-1, size);
             return ApiResponse.ok(response);
@@ -43,7 +50,7 @@ public class SeriesController {
     }
 
     @GetMapping("/series/{series-id}")
-    public ApiResponse getSeries(@PathVariable("series-id") Long id){
+    public ApiResponse getSeries(@Positive @PathVariable("series-id") Long id){
 
         SeriesResponseDto response = seriesService.getSeries(id);
 
@@ -52,7 +59,8 @@ public class SeriesController {
 
 
     @PostMapping("/series")
-    public ApiResponse createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic, @RequestBody SeriesPostDto seriesPostDto){
+    public ApiResponse createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic,
+                                    @Validated @RequestBody SeriesPostDto seriesPostDto){
 
         SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
 
@@ -61,8 +69,8 @@ public class SeriesController {
 
 
     @PatchMapping("/series/{series-id}")
-    public ApiResponse updateSeries(@PathVariable("series-id") Long seriesId, @RequestBody
-    SeriesUpdateDto seriesUpdateDto){
+    public ApiResponse updateSeries(@Positive @PathVariable("series-id") Long seriesId,
+                                    @Validated @RequestBody SeriesUpdateDto seriesUpdateDto){
 
         SeriesResponseDto response = seriesService.updateSeries(seriesId,seriesUpdateDto);
 
@@ -71,7 +79,7 @@ public class SeriesController {
 
 
     @DeleteMapping("/series/{series-id}")
-    public ApiResponse deleteSeries(@PathVariable("series-id") Long id){
+    public ApiResponse deleteSeries(@Positive @PathVariable("series-id") Long id){
 
         seriesService.deleteSeries(id);
 

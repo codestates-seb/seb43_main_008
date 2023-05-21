@@ -14,20 +14,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("/comments")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class CommentController {
 
     private final CommentService commentService;
 
     @GetMapping("/{series-id}")
-    public ApiResponse getCommentList(@PathVariable("series-id") Long seriesId,
-                                      @RequestParam(value = "page", defaultValue = "1") int page,
-                                      @RequestParam(value = "size", defaultValue = "12") int size){
+    public ApiResponse getCommentList(@Positive @PathVariable("series-id") Long seriesId,
+                                      @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                      @Positive @RequestParam(value = "size", defaultValue = "12") int size){
 
 
         PageResponseDto response = commentService.getCommentList(seriesId,page-1, size);
@@ -36,7 +40,7 @@ public class CommentController {
     }
 
     @PostMapping("/{series-id}")
-    public ApiResponse createComment(@PathVariable("series-id") Long seriesId, @RequestBody CommentPostDto commentPostDto){
+    public ApiResponse createComment(@Positive @PathVariable("series-id") Long seriesId, @RequestBody CommentPostDto commentPostDto){
 
         CommentResponseDto response = commentService.saveComment(seriesId, commentPostDto);
 
@@ -44,9 +48,9 @@ public class CommentController {
     }
 
     @PatchMapping("/{series-id}/{comment-id}")
-    public ApiResponse updateComment(@PathVariable("series-id") Long seriesId,
-                                        @PathVariable("comment-id") Long commentId,
-                                        @RequestBody CommentUpdateDto commentUpdateDto){
+    public ApiResponse updateComment(@Positive @PathVariable("series-id") Long seriesId,
+                                     @Positive @PathVariable("comment-id") Long commentId,
+                                     @RequestBody CommentUpdateDto commentUpdateDto){
 
         CommentResponseDto response = commentService.updateComment(seriesId, commentId, commentUpdateDto);
 
@@ -54,8 +58,8 @@ public class CommentController {
     }
 
     @DeleteMapping("/{series-id}/{comment-id}")
-    public ApiResponse deleteComment(@PathVariable("series-id") Long seriesId,
-                                        @PathVariable("comment-id") Long commentId){
+    public ApiResponse deleteComment(@Positive @PathVariable("series-id") Long seriesId,
+                                     @Positive @PathVariable("comment-id") Long commentId){
 
         commentService.deleteComment(commentId);
 
