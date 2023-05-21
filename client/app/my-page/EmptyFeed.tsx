@@ -1,7 +1,7 @@
 "use client";
 import styled from "styled-components";
 
-export const EmptyFeed = (content: string) => {
+export const EmptyFeed = () => {
   return (
     <StyledEmptyFeed>
       <div> 작성된 글이 없습니다. </div>
