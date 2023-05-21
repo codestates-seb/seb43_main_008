@@ -7,15 +7,12 @@ import styled from "styled-components";
 
 export default function Navbar() {
   // 클릭 메뉴 관리 함수
-
   const menuClickHandle = (menuName: string) => {
-    if (typeof window !== undefined) {
-      sessionStorage.setItem("menu", menuName)
-    }
+    sessionStorage.setItem("menu", menuName)
   };
 
   let selectedMenu = "홈"
-  if (typeof window !== undefined) {
+  if (typeof window !== "undefined") {
     selectedMenu = sessionStorage.getItem("menu")
   }
 
