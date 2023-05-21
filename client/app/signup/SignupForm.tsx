@@ -7,14 +7,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
 
 type FormValues = {
-  email: string;
-  nickname: string;
-  phoneNumber: string;
+  nickName: string;
+  phone: string;
 };
 
 export default function RegisterForm() {
   useEffect(() => {
-    // URL 숨기기
+    // Hide URL
     history.replaceState({}, null, location.pathname);
   }, []);
 
@@ -29,16 +28,22 @@ export default function RegisterForm() {
 
   const router = useRouter();
   const submitRegister: SubmitHandler<FormValues> = async (data) => {
-    data.email = emailValue;
     try {
+      const accessToken = searchParams.get("Access");
+      const authorizationToken = `Bearer ${accessToken}`;
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/signup`,
-        data
+        data,
+        {
+          headers: {
+            Authorization: authorizationToken,
+          },
+        }
       );
-
-      const authorizationToken = response.headers["authorization"];
-      const refreshToken = response.headers["refresh-token"];
-      localStorage.setItem("Authorization", authorizationToken);
+      console.log(response);
+      const loginToken = response.headers["authorization"];
+      const refreshToken = response.headers["refresh"];
+      localStorage.setItem("Authorization", loginToken);
       localStorage.setItem("RefreshToken", refreshToken);
       router.push("/signup-congratulations");
     } catch (error) {
@@ -46,8 +51,8 @@ export default function RegisterForm() {
     }
   };
 
-  const watchedNickname = watch("nickname");
-  const watchedPhoneNumber = watch("phoneNumber");
+  const watchedNickname = watch("nickName");
+  const watchedPhoneNumber = watch("phone");
   const searchParams = useSearchParams();
   const emailValue = searchParams.get("email");
 
@@ -55,19 +60,13 @@ export default function RegisterForm() {
     <form onSubmit={handleSubmit(submitRegister)}>
       <InputContainer>
         <Label htmlFor="email">이메일</Label>
-        <Input
-          {...register("email")}
-          defaultValue={emailValue}
-          disabled
-          readOnly
-          id="email"
-        />
+        <Input defaultValue={emailValue} disabled readOnly id="email" />
       </InputContainer>
 
       <InputContainer>
         <Label htmlFor="nickname">닉네임</Label>
         <Input
-          {...register("nickname", {
+          {...register("nickName", {
             required: true,
             minLength: 2,
             maxLength: 10,
@@ -77,14 +76,14 @@ export default function RegisterForm() {
         />
       </InputContainer>
 
-      {watchedNickname && errors.nickname && (
+      {watchedNickname && errors.nickName && (
         <ErrorSpan>2글자 이상, 10글자 이하로 작성해주세요.</ErrorSpan>
       )}
 
       <InputContainer>
-        <Label htmlFor="phoneNumber">휴대전화 번호</Label>
+        <Label htmlFor="phone">휴대전화 번호</Label>
         <Input
-          {...register("phoneNumber", {
+          {...register("phone", {
             required: true,
             minLength: 9,
             maxLength: 11,
@@ -92,11 +91,11 @@ export default function RegisterForm() {
           placeholder="휴대폰 번호를 -없이 숫자만 입력해주세요."
           maxLength={11}
           type="tel"
-          id="phoneNumber"
+          id="phone"
         />
       </InputContainer>
 
-      {watchedPhoneNumber && errors.phoneNumber && (
+      {watchedPhoneNumber && errors.phone && (
         <ErrorSpan>휴대폰 번호 형식이 일치하지 않습니다.</ErrorSpan>
       )}
       <SubmitButtonContainer>
