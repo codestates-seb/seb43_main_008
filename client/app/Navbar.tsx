@@ -9,7 +9,9 @@ export default function Navbar() {
   // 클릭 메뉴 관리 함수
 
   const menuClickHandle = (menuName: string) => {
-    sessionStorage.setItem("menu", menuName)
+    if (typeof window !== undefined) {
+      sessionStorage.setItem("menu", menuName)
+    }
   };
 
   let selectedMenu = "홈"
