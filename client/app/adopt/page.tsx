@@ -67,6 +67,3 @@ const SubmitButton = styled.button`
     transform: translateY(-2px);
   }
 `;
-
-// 플레이스 홀더 좀 다시 정리하고 싶음
-// 랜덤이름 100만가지 양산 하기

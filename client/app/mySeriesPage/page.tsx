@@ -5,7 +5,7 @@ import styled from "styled-components";
 import CountCard from "./CountCard";
 import { Slider } from "./Slider";
 
-export default function page() {
+export default function Page() {
   return (
     <>
       <MainSeriesContainer>

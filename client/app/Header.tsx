@@ -7,6 +7,7 @@ import { BiArchiveOut } from "react-icons/bi";
 import styled from "styled-components";
 
 import HeaderModal from "./HeaderModal";
+import VoteModal from "./VoteModal";
 
 export default function Header({
   backButton,
@@ -16,11 +17,14 @@ export default function Header({
 }: {
   backButton: boolean;
   textContent: boolean | string;
-  secretButton?: boolean; // secretButton을 optional로 변경
+  secretButton: boolean; // secretButton을 optional로 변경
   voteButton?: boolean; // voteButton을 optional로 변경
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
+
+  const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
+  const [isVotePublic, setIsVotePublic] = useState(false);
 
   return (
     <HeaderContainer>
@@ -42,33 +46,38 @@ export default function Header({
         </HeaderText>
       ) : null}
 
-      {secretButton && ( // Optional chaining을 사용하여 secretButton이 true인 경우에만 렌더링
-        <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
-          <SecretButton>
+      <SecretButtonContainer>
+        {secretButton && (
+          <SecretButton onClick={() => setIsModalOpen(true)}>
             <SecretButtonContent>
               <AiOutlineLock size="15" />
               <SecretButtonText>공개 설정</SecretButtonText>
             </SecretButtonContent>
           </SecretButton>
-        </SecretButtonContainer>
-      )}
-
-      {voteButton && ( // Optional chaining을 사용하여 voteButton이 true인 경우에만 렌더링
-        <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
-          <SecretButton>
+        )}
+        {voteButton && (
+          <SecretButton onClick={() => setIsVoteModalOpen(true)}>
             <SecretButtonContent>
               <BiArchiveOut size="15" />
-              <SecretButtonText>투표가기</SecretButtonText>
+              <SecretButtonText>투표 가기</SecretButtonText>
             </SecretButtonContent>
           </SecretButton>
-        </SecretButtonContainer>
-      )}
+        )}
+      </SecretButtonContainer>
 
       <HeaderModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         isPublic={isPublic}
         setIsPublic={setIsPublic}
+      />
+      {/* </HeaderContainer> */}
+
+      <VoteModal
+        isVoteModalOpen={isVoteModalOpen}
+        setIsVoteModalOpen={setIsVoteModalOpen}
+        isVotePublic={isVotePublic}
+        setIsVotePublic={setIsVotePublic}
       />
     </HeaderContainer>
   );
