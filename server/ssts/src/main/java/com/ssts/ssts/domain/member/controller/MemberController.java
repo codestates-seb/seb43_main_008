@@ -1,16 +1,18 @@
 package com.ssts.ssts.domain.member.controller;
 
 
+import com.ssts.ssts.domain.badges.response.BadgeResponse;
+import com.ssts.ssts.domain.badges.service.BadgeService;
 import com.ssts.ssts.domain.member.dto.*;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,6 +21,9 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
+
+    //badgeFeed
+    private final BadgeService badgeService;
 
 
     /*
@@ -33,7 +38,7 @@ public class MemberController {
                 memberTestSignUpDto.getNickName(),
                 memberTestSignUpDto.getPhone());
 
-        return ApiResponse.ok();
+        return ApiResponse.ok(member);
     }
 
     /*
@@ -41,12 +46,13 @@ public class MemberController {
      * 권한 : ADMIN
      * */
     @DeleteMapping("/test/{memberId}")
-    public ApiResponse testDeleteMember(@PathVariable long memberId) {
+    public ApiResponse testDeleteMember(@PathVariable Long memberId) {
 
         memberService.testDeleteMember(memberId);
-        //return ResponseEntity.status(HttpStatus.OK).body(null);
-        return ApiResponse.ok();
+
+        return ApiResponse.ok("id="+memberId+"의 멤버 정보가 삭제됐어요.");
     }
+
 
 
     /*
@@ -69,9 +75,9 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @GetMapping("/feed")
-    public ApiResponse<MemberFeedResponseDto> getMyFeedInfo() {
+    public ApiResponse<FeedResponse> getMyFeedInfo() {
 
-        MemberFeedResponseDto response = memberService.getMyFeedInfo();
+        FeedResponse response = memberService.getMyFeedInfo();
 
         return ApiResponse.ok(response);
     }
@@ -81,9 +87,9 @@ public class MemberController {
      * 권한 : USER, ADMIN
      * */
     @GetMapping("/feed/{nickName}")
-    public ApiResponse<MemberFeedResponseDto> getMemberFeedInfo(@PathVariable String nickName) {
+    public ApiResponse<FeedResponse.MemberFeedResponse> getMemberFeedInfo(@PathVariable String nickName) {
 
-        MemberFeedResponseDto response = memberService.getMemberFeedInfo(nickName);
+        FeedResponse.MemberFeedResponse response = memberService.getMemberFeedInfo(nickName);
 
         return ApiResponse.ok(response);
     }
@@ -94,13 +100,22 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @PatchMapping("/feed")
-    public ApiResponse updateMyFeedInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
-                                           @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
+    public ApiResponse<FeedResponse> updateMyFeedInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
+                                                            @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
 
 
-        MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto, image);
+        FeedResponse response = memberService.updateMyFeedInfo(memberEditInfoPatchDto.getNickName(), image,memberEditInfoPatchDto.getIntroduce());
 
         //변경됬으니까 변경된 입력값을 알려줘야 한다.
+        return ApiResponse.ok(response);
+    }
+
+
+    /* 상대 멤버 뱃지 피드 조회 기능
+    * */
+    @GetMapping("/feed/badge/{nickname}")
+    public ApiResponse<List<BadgeResponse>> getYourBadges(@PathVariable("nickname") String nickname){
+        List<BadgeResponse> response = badgeService.findYourBadges(nickname);
         return ApiResponse.ok(response);
     }
 

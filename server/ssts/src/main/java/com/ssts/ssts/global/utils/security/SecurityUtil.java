@@ -1,11 +1,9 @@
 package com.ssts.ssts.global.utils.security;
 
-import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +13,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-//@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtil {
 
 

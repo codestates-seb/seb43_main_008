@@ -5,6 +5,7 @@ import com.ssts.ssts.domain.member.entity.MemberVote;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
+import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.domain.series.response.vote.VoteResponse;
@@ -27,6 +28,7 @@ public class VoteService {
     private final SeriesRepository seriesRepo;
     private final MemberVoteRepository voteMemberRepo;
     private final MemberRepository memberRepo;
+    private final MemberService memberService;
 
     //투표 생성
     @Transactional
@@ -34,10 +36,8 @@ public class VoteService {
 
         Series targetSeries = seriesRepo.findById(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS)); //투표를 생성할 Series Entity 찾기
 
-        //TODO *-토큰Id적용--* TODO토큰시에 주석풀기
-        long memberId = SecurityUtil.getMemberId();
-        memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         if(memberId != targetSeries.getMember().getId()){ throw new BusinessLogicException(ExceptionCode.NOT_SERISE_WRITER); }
 
@@ -66,7 +66,8 @@ public class VoteService {
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
         //투표 마감기간 (2일) 할당
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusDays(2));
-        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(1));
+        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(1));
+        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusHours(12));
         //ㄴ> 테스트 마감기간: 15초
 
         //재투표시에 memberVote 초기화 (중복 제거)
@@ -85,11 +86,8 @@ public class VoteService {
 
         if(isAgree < 0 || isAgree > 1){throw new BusinessLogicException(ExceptionCode.CAN_NOT_VOTE_VALUE);}
 
-        //TODO *-토큰Id적용--* TODO토큰시에 주석풀기
-        long memberId = SecurityUtil.getMemberId();
-        memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         //시리즈가 존재하지 않습니다.
         Series targetSeries = seriesRepo.findById(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
@@ -160,10 +158,8 @@ public class VoteService {
     //public Object quitVote(Long seriesId,  Long memberId, Boolean isQuit){
     public VoteResponse quitVote(Long seriesId, Boolean isQuit){ //TODO 토큰 적용시에 풀기
 
-        //TODO *-토큰Id적용--* TODO토큰시에 주석풀기
-        long memberId = SecurityUtil.getMemberId();
-        memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         Series targetSeries = seriesRepo.findById(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
@@ -222,9 +218,8 @@ public class VoteService {
 
     //1차 투표 결과
     public VoteResponse.VoteAttendResponse getStartVote(Long seriseId){
-        long memberId = SecurityUtil.getMemberId();
-        memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         Series targetSeries = seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 

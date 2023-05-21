@@ -1,8 +1,6 @@
-package com.ssts.ssts.domain.member.dto;
+package com.ssts.ssts.global.utils.MultipleResponseDto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.global.exception.ExceptionCode;
-import com.ssts.ssts.global.exception.RtnHttpStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -36,6 +34,22 @@ public class ApiResponse<T> {
         return new ApiResponse<>(
                 ec.getMessage(),
                 ec.getRtnHttpStatus().getStatusCode(),
+                null
+        );
+    }
+
+    public static <T> ApiResponse<T> create(T data) {
+        return new ApiResponse<> (
+                "생성 완료",
+                201,
+                data
+        );
+    }
+
+    public static <T> ApiResponse<T> create() {
+        return new ApiResponse<> (
+                "생성 완료",
+                201,
                 null
         );
     }
