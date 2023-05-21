@@ -28,7 +28,6 @@ public class BadgeController {
     @PostMapping
     public ApiResponse postBadge(@RequestBody BadgePostDto postDto){
         Badge response = badgeService.saveBadge(postDto);
-        log.info("뺏지. 맹들기.");
         return ApiResponse.create(response);
     }
 
