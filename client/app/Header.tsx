@@ -2,22 +2,29 @@
 
 import { useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
-import { VscGistSecret } from "react-icons/vsc";
+import { AiOutlineLock } from "react-icons/ai";
+import { BiArchiveOut } from "react-icons/bi";
 import styled from "styled-components";
 
 import HeaderModal from "./HeaderModal";
+import VoteModal from "./VoteModal";
 
 export default function Header({
   backButton,
   textContent,
   secretButton,
+  voteButton,
 }: {
   backButton: boolean;
   textContent: boolean | string;
-  secretButton: boolean;
+  secretButton: boolean; // secretButton을 optional로 변경
+  voteButton?: boolean; // voteButton을 optional로 변경
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
+
+  const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
+  const [isVotePublic, setIsVotePublic] = useState(false);
 
   return (
     <HeaderContainer>
@@ -29,25 +36,48 @@ export default function Header({
         <BackArrowContainer />
       )}
 
-      {textContent ? <HeaderText>{typeof textContent === "string" ? textContent : typeof window !== 'undefined' ? sessionStorage.getItem('header') : null}</HeaderText> : null}
+      {textContent ? (
+        <HeaderText>
+          {typeof textContent === "string"
+            ? textContent
+            : typeof window !== "undefined"
+            ? sessionStorage.getItem("header")
+            : null}
+        </HeaderText>
+      ) : null}
 
-      {secretButton ? (
-        <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
-          <SecretButton>
+      <SecretButtonContainer>
+        {secretButton && (
+          <SecretButton onClick={() => setIsModalOpen(true)}>
             <SecretButtonContent>
-              <VscGistSecret size="15" />
+              <AiOutlineLock size="15" />
               <SecretButtonText>공개 설정</SecretButtonText>
             </SecretButtonContent>
           </SecretButton>
-        </SecretButtonContainer>
-      ) : (
-        <SecretButtonContainer />
-      )}
+        )}
+        {voteButton && (
+          <SecretButton onClick={() => setIsVoteModalOpen(true)}>
+            <SecretButtonContent>
+              <BiArchiveOut size="15" />
+              <SecretButtonText>투표 가기</SecretButtonText>
+            </SecretButtonContent>
+          </SecretButton>
+        )}
+      </SecretButtonContainer>
+
       <HeaderModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         isPublic={isPublic}
         setIsPublic={setIsPublic}
+      />
+      {/* </HeaderContainer> */}
+
+      <VoteModal
+        isVoteModalOpen={isVoteModalOpen}
+        setIsVoteModalOpen={setIsVoteModalOpen}
+        isVotePublic={isVotePublic}
+        setIsVotePublic={setIsVotePublic}
       />
     </HeaderContainer>
   );
