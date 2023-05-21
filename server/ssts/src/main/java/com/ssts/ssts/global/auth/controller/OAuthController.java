@@ -86,7 +86,7 @@ public class OAuthController {
 
     }
 
-
+/*
     @GetMapping("/login/kakao")
     public void redirectKakao(HttpServletResponse response) throws IOException {
         log.info("하늘/oauth redirect : kakao");
@@ -99,7 +99,7 @@ public class OAuthController {
                 .build();
 
         response.sendRedirect(uri.toString());
-    }
+    }*/
 
 
 }
