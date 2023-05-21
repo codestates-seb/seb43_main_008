@@ -1,8 +1,7 @@
 package com.ssts.ssts.global.auth.service;
 
-import com.ssts.ssts.global.auth.constansts.TestConstants;
 import com.ssts.ssts.global.auth.dto.GoogleProfileResponse;
-import com.ssts.ssts.global.auth.dto.OAuthResponse;
+import com.ssts.ssts.global.auth.dto.KakaoProfileResponse;
 import com.ssts.ssts.global.auth.dto.OAuthTokenResponse;
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
@@ -14,9 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,16 +22,28 @@ import java.util.stream.Collectors;
 public class OAuthService {
 
     private final GoogleInfraService googleInfraService;
+    private final KakaoInfraService kakaoInfraService;
     private final MemberService memberService;
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
 
-    public OAuthTokenResponse accessResources(String code) {
+    public OAuthTokenResponse accessResources(String code, String socialType) {
 
-        log.info("하늘/oauth service : access resources()");
-        GoogleProfileResponse googleProfileResponse=googleInfraService.getGoogleAccount(googleInfraService.getAccessToken(code));
+        log.info("하늘/oauth service : access resources()" +
+                        "\nsocialType="+socialType);
+        String email;
 
-        return resourceAccessTokenResponse(googleProfileResponse.getEmail());
+        if("google".equals(socialType)){
+            GoogleProfileResponse googleProfileResponse = googleInfraService.getGoogleAccount(googleInfraService.getAccessToken(code));
+            email = googleProfileResponse.getEmail();
+        } else if ("kakao".equals(socialType)) {
+            KakaoProfileResponse kakaoProfileResponse = kakaoInfraService.getKakaoAccount(kakaoInfraService.getAccessToken(code));
+            email = kakaoProfileResponse.getEmail();
+        } else{
+            email = "yunide073@gmail.com";
+        }
+
+        return resourceAccessTokenResponse(email);
     }
 
     public OAuthTokenResponse login() {
@@ -104,7 +112,7 @@ public class OAuthService {
         log.info("하늘/oauth service : access resources" +
                 "\n발급한 access token Bearer {}", accessToken);
 
-        return OAuthTokenResponse.of(accessToken, email, TestConstants.GOOGLE_REDIRECT_URL, member.isPresent());
+        return OAuthTokenResponse.of(accessToken, email, member.isPresent());
     }
 
     //FIXME
