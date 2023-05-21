@@ -6,10 +6,10 @@ export const GetComment = async (seriesID: string) => {
     const response = await axios.get(`comments/${seriesID}`, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE3LCJzdWIiOiJ0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ0MTMxNTQsImV4cCI6MTY4NDQxNDk1NH0.g4818krXAKEhU53KFYvoRMwU_IyAWGGWYoP0u_YJPZoFuDMOt2fOQguyajCjemqe",
+        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE4LCJzdWIiOiJ0dHR0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ2NTA4NTksImV4cCI6MTY4NDY1MjY1OX0.az-mZlcjwZ6MNV2UsQCQYa4BIOebj3nthg19_VszvLozt_V6M1YYZ-8oRVCA9j-a",
       },
     });
-    return response.data;
+    return response.data.data.pagedata;
   } catch (error) {
     throw error;
   }
@@ -17,10 +17,10 @@ export const GetComment = async (seriesID: string) => {
 
 export const PostComment = async (seriesID: string, comment: string) => {
   try {
-    const response = await axios.post(`comments/${seriesID}`, { comment }, {
+    const response = await axios.post(`comments/${seriesID}`, { "comment": comment }, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE3LCJzdWIiOiJ0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ0MTMxNTQsImV4cCI6MTY4NDQxNDk1NH0.g4818krXAKEhU53KFYvoRMwU_IyAWGGWYoP0u_YJPZoFuDMOt2fOQguyajCjemqe",
+        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE4LCJzdWIiOiJ0dHR0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ2NTA4NTksImV4cCI6MTY4NDY1MjY1OX0.az-mZlcjwZ6MNV2UsQCQYa4BIOebj3nthg19_VszvLozt_V6M1YYZ-8oRVCA9j-a",
       },
     });
     return response.data;
@@ -31,10 +31,10 @@ export const PostComment = async (seriesID: string, comment: string) => {
 
 export const PatchComment = async (seriesID: string, commentId: string, comment: string) => {
   try {
-    const response = await axios.patch(`comments/${seriesID}/${commentId}`, { comment }, {
+    const response = await axios.patch(`comments/${seriesID}/${commentId}`, { "comment": comment }, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE3LCJzdWIiOiJ0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ0MTMxNTQsImV4cCI6MTY4NDQxNDk1NH0.g4818krXAKEhU53KFYvoRMwU_IyAWGGWYoP0u_YJPZoFuDMOt2fOQguyajCjemqe",
+        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE4LCJzdWIiOiJ0dHR0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ2NTA4NTksImV4cCI6MTY4NDY1MjY1OX0.az-mZlcjwZ6MNV2UsQCQYa4BIOebj3nthg19_VszvLozt_V6M1YYZ-8oRVCA9j-a",
       },
     });
     return response.data;
@@ -48,7 +48,7 @@ export const DeleteComment = async (seriesID: string, commentId: string) => {
     const response = await axios.delete(`comments/${seriesID}/${commentId}`, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE3LCJzdWIiOiJ0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ0MTMxNTQsImV4cCI6MTY4NDQxNDk1NH0.g4818krXAKEhU53KFYvoRMwU_IyAWGGWYoP0u_YJPZoFuDMOt2fOQguyajCjemqe",
+        "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjE4LCJzdWIiOiJ0dHR0dGV0NUBuYXZlci5jb20iLCJpYXQiOjE2ODQ2NTA4NTksImV4cCI6MTY4NDY1MjY1OX0.az-mZlcjwZ6MNV2UsQCQYa4BIOebj3nthg19_VszvLozt_V6M1YYZ-8oRVCA9j-a",
       },
     });
     return response.data;
