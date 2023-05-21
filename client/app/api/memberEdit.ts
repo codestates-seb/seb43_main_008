@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const Authorization = localStorage.getItem("Authorization");
+const Authorization =
+  typeof window !== "undefined" ? localStorage.getItem("Authorization") : null;
 
 export const memberEdit = async (nickname: string, introduce: string) => {
   try {
