@@ -13,7 +13,7 @@ export default function Header({
   secretButton,
 }: {
   backButton: boolean;
-  textContent: string | null;
+  textContent: boolean | string;
   secretButton: boolean;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,8 +28,9 @@ export default function Header({
       ) : (
         <BackArrowContainer />
       )}
-      {/* typeof window !== 'undefined' ? sessionStorage.getItem('header') : null; */}
-      {textContent ? <HeaderText>{textContent}</HeaderText> : null}
+
+      {textContent ? <HeaderText>{typeof textContent === "string" ? textContent : typeof window !== 'undefined' ? sessionStorage.getItem('header') : null}</HeaderText> : null}
+
       {secretButton ? (
         <SecretButtonContainer onClick={() => setIsModalOpen(true)}>
           <SecretButton>

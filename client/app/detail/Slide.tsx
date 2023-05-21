@@ -2,12 +2,16 @@
 
 import styled from "styled-components";
 
+import { BookmarkButton } from "./BookmarkButton"
+
 interface SlideProps {
   id: number;
   content: string;
   contentImg: string;
-  usageCount: number;
-  series: { title: string },
+  series: {
+    title: string,
+    id: string
+  },
   count: number
 }
 const Slide = ({
@@ -22,6 +26,7 @@ const Slide = ({
         <div className="info">
           <div className="nickName">{series.title} | </div>
           <div className="usageCount">{id}번째 사용</div>
+          <BookmarkButton seriesId={series.id} />
         </div>
 
         <div className="image" style={{ backgroundImage: `url(${contentImg})` }} />

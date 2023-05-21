@@ -98,6 +98,7 @@ import Information from "./WarningInformationModal";
 interface SubmitButtonProps {
   isPhotoUploaded: boolean;
   isTextWritten: boolean;
+  // formData;
   onCreate?: () => void;
   onClose?: () => void;
 }
@@ -110,9 +111,10 @@ export default function SubmitButton({
 }: SubmitButtonProps) {
   const [showInformation, setShowInformation] = useState(false);
 
-  const handleCreated = () => {
+  const handleCreated = (e: { preventDefault: () => void }) => {
     if (isPhotoUploaded && isTextWritten) {
       setShowInformation(true);
+      e.preventDefault();
       if (onCreate) {
         onCreate();
       }
@@ -137,6 +139,7 @@ export default function SubmitButton({
       </SubmitButtonStyled>
       {showInformation && (
         <Information
+          // formData={formData}
           message="아래의 안내 내용을 확인해주세요❤️"
           additionalMessage="안내 내용 좀 우리 모두 같이 정해보아용~ 데헷데헷"
           onClose={handleCloseModal} // 확인 버튼을 누르면 호출될 함수를 prop으로 전달

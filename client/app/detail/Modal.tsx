@@ -4,30 +4,33 @@ import { AiOutlineMinus } from "react-icons/ai";
 import { RiDeleteBinLine, RiEdit2Line } from "react-icons/ri";
 import styled from "styled-components";
 
+// import { DeleteComment } from "../api/commentApi"
+
 interface Props {
   onClickModal: () => void;
   handleEditComment: (id: number) => void;
-  commentid: number;
+  commentId?: string;
+  seriesID?: string;
   setComment: React.Dispatch<React.SetStateAction<string>>
-
 }
 
 export const Modal: React.FC<Props> = ({
   onClickModal,
   handleEditComment,
-  commentid,
+  commentId,
   setComment,
 }) => {
 
   const HandleDelete = () => {
     onClickModal();
     setComment("")
+    // DeleteComment(seriesID, commentId)
     console.log("서버에 삭제 요청 보내기");
   };
 
   const HandleEdit = () => {
     onClickModal();
-    handleEditComment(commentid);
+    // handleEditComment(commentId);
   };
 
   return (

@@ -28,7 +28,6 @@ export default function ConfirmButtonComponent({
 const ConfirmButton = styled.button`
   color: ${(props) =>
     props.disabled ? " #dadada " : "#222"}; // 활성화 상태에 따라 색 변경
-  background-color: #fcfcfd;
   border: 1px solid rgba(34, 36, 38, 0.5);
   padding: 0.3rem 0.5rem;
   margin-left: 110px;
