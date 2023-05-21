@@ -1,4 +1,4 @@
-package com.ssts.ssts.global.auth.api;
+package com.ssts.ssts.global.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

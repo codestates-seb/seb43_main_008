@@ -48,4 +48,13 @@ public class Comment extends BaseTimeEntity {
             this.member.getComments().add(this);
         }
     }
+
+
+    public static Comment of(String comment){
+        Comment response = new Comment();
+
+        response.setComment(comment);
+
+        return response;
+    }
 }

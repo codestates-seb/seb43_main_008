@@ -48,6 +48,10 @@ public class SeriesResponseDto {
 
     private Boolean isVotedMember;
 
+    private int totalVote;
+
+    private Boolean isBookmarkedMember;
+
 
 
 
@@ -65,7 +69,8 @@ public class SeriesResponseDto {
                                        Series.VoteStatus voteStatus,
                                        Boolean isPublic,
                                        Boolean isEditable,
-                                       Boolean isActive) {
+                                       Boolean isActive,
+                                       int totalVote) {
         SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
 
         seriesResponseDto.setId(id);
@@ -85,7 +90,7 @@ public class SeriesResponseDto {
         seriesResponseDto.setIsPublic(isPublic);
         seriesResponseDto.setIsEditable(isEditable);
         seriesResponseDto.setIsActive(isActive);
-
+        seriesResponseDto.setTotalVote(totalVote);
 
 
         return seriesResponseDto;
@@ -105,7 +110,8 @@ public class SeriesResponseDto {
                                        Boolean isPublic,
                                        Boolean isEditable,
                                        Boolean isActive,
-                                       Boolean isVotedMember) {
+                                       Boolean isVotedMember,
+                                       Boolean isBookmarkedMember) {
         SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
 
         seriesResponseDto.setId(id);
@@ -125,7 +131,7 @@ public class SeriesResponseDto {
         seriesResponseDto.setIsEditable(isEditable);
         seriesResponseDto.setIsActive(isActive);
         seriesResponseDto.setIsVotedMember(isVotedMember);
-
+        seriesResponseDto.setIsBookmarkedMember(isBookmarkedMember);
 
         return seriesResponseDto;
     }

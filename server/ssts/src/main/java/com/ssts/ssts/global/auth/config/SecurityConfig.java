@@ -44,12 +44,14 @@ public class SecurityConfig {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.PATCH,"/**/members/edit/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET,"/login/auth").hasAnyRole("AUTH","ADMIN")
+                        .antMatchers(HttpMethod.POST,"/signup").hasAnyRole("GUEST","ADMIN")
                         .antMatchers("/test/login").permitAll()
                         .antMatchers("/test/**").permitAll()
                         .antMatchers("/test/signup").permitAll()
-                        //.anyRequest().authenticated()) //FIXME 인증 끌때 여기 주석처리하세요
-                        .anyRequest().permitAll());
+                        .antMatchers("/login/**").permitAll()
+                        .anyRequest().authenticated()); //FIXME 인증 끌때 여기 주석처리하세요
+                        //.anyRequest().permitAll());
 //                .oauth2Login()
 //                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer))
 //                .failureHandler(new OAuth2MemberFailureHandler())

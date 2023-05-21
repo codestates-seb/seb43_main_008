@@ -8,9 +8,7 @@ import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
-import com.ssts.ssts.domain.series.repository.SeriesRepository;
-import com.ssts.ssts.global.exception.BusinessLogicException;
-import com.ssts.ssts.global.exception.ExceptionCode;
+import com.ssts.ssts.domain.series.service.SeriesService;
 import com.ssts.ssts.global.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -20,11 +18,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Service
@@ -32,49 +31,42 @@ public class DaylogService {
 
     private final DaylogRepository daylogRepository;
 
-    private final SeriesRepository seriesRepository;
+    private final SeriesService seriesService;
 
     private final MemberService memberService;
 
     private final S3Uploader s3ImageUploader;
 
 
-
+    @Transactional
     public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto){
         memberService.findMemberByToken();
 
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
+        Series series = seriesService.findVerifiedSeries(seriesId);
 
-        Optional<Series> optionalQuestion = seriesRepository.findById(seriesId);
-
-        Series findSeries =
-                optionalQuestion.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
-
-        daylog.addSeries(findSeries);
+        series.setDaylogCount(series.getDaylogCount()+1);
+        daylog.addSeries(series);
         daylogRepository.save(daylog);
 
 
         return this.DaylogToDaylogResponseDto(daylog);
     }
 
+    @Transactional
     public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto,MultipartFile image) throws IOException {
         memberService.findMemberByToken();
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
-
-        Optional<Series> optionalQuestion = seriesRepository.findById(seriesId);
-
-        Series findSeries =
-                optionalQuestion.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+        Series series = seriesService.findVerifiedSeries(seriesId);
 
         if(!image.isEmpty()){
             String saveFileName = s3ImageUploader.upload(image,"daylog");
             daylog.setContentImg(saveFileName);
-            findSeries.setImage(saveFileName);
+            series.setImage(saveFileName);
+            series.setDaylogCount(series.getDaylogCount()+1);
         }
 
-        daylog.addSeries(findSeries);
+        daylog.addSeries(series);
         daylogRepository.save(daylog);
 
         return this.DaylogToDaylogResponseDto(daylog);
@@ -123,6 +115,7 @@ public class DaylogService {
         }
 
         return list;
+        //클래스 추가 , 책임 이전
     }
 
 

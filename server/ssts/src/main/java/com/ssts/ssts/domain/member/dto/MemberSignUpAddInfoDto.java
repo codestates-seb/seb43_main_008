@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MemberPhoneInfoPostDto {
+public class MemberSignUpAddInfoDto {
     String phone;
+    String nickName;
 }

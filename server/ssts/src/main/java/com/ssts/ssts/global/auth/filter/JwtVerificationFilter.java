@@ -48,9 +48,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     //JWT 검증 1. 서명 검증
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
-        // jws 토큰 가져오기
+
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        // key 생성하기
 
         Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
         // 토큰에서 클레임즈 파싱 -> (검증)

@@ -1,4 +1,4 @@
-package com.ssts.ssts.global.auth.api;
+package com.ssts.ssts.global.auth.dto;
 
 public interface OAuthResponse {
     String getId();

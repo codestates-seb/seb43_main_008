@@ -1,5 +1,6 @@
 package com.ssts.ssts.global.auth.api;
 
+import com.ssts.ssts.global.auth.dto.GoogleProfileResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;

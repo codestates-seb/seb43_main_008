@@ -1,18 +1,20 @@
 package com.ssts.ssts.domain.comment.controller;
 
 
+import com.ssts.ssts.domain.comment.dto.CommentPostDto;
+import com.ssts.ssts.domain.comment.dto.CommentResponseDto;
+import com.ssts.ssts.domain.comment.dto.CommentUpdateDto;
 import com.ssts.ssts.domain.comment.service.CommentService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/comments")
@@ -23,17 +25,40 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/{series-id}")
-    public ResponseEntity getCommentList(@AuthenticationPrincipal String authId, @RequestParam(value = "page", defaultValue = "1") int page,
-                                         @RequestParam(value = "size", defaultValue = "12") int size){
+    public ApiResponse getCommentList(@PathVariable("series-id") Long seriesId,
+                                      @RequestParam(value = "page", defaultValue = "1") int page,
+                                      @RequestParam(value = "size", defaultValue = "12") int size){
 
-        Object authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Authentication authentication2 = SecurityContextHolder.getContext().getAuthentication();
 
-        log.info("authen2={}", authentication2);
-        log.info("prin={}",authentication);
-        log.info("authId= {}", authId);
-        PageResponseDto response = commentService.getCommentList(page, size);
+        PageResponseDto response = commentService.getCommentList(seriesId,page-1, size);
 
-        return null;
+        return ApiResponse.ok(response);
+    }
+
+    @PostMapping("/{series-id}")
+    public ApiResponse createComment(@PathVariable("series-id") Long seriesId, @RequestBody CommentPostDto commentPostDto){
+
+        CommentResponseDto response = commentService.saveComment(seriesId, commentPostDto);
+
+        return ApiResponse.create(response);
+    }
+
+    @PatchMapping("/{series-id}/{comment-id}")
+    public ApiResponse updateComment(@PathVariable("series-id") Long seriesId,
+                                        @PathVariable("comment-id") Long commentId,
+                                        @RequestBody CommentUpdateDto commentUpdateDto){
+
+        CommentResponseDto response = commentService.updateComment(seriesId, commentId, commentUpdateDto);
+
+        return ApiResponse.ok(response);
+    }
+
+    @DeleteMapping("/{series-id}/{comment-id}")
+    public ApiResponse deleteComment(@PathVariable("series-id") Long seriesId,
+                                        @PathVariable("comment-id") Long commentId){
+
+        commentService.deleteComment(commentId);
+
+        return ApiResponse.ok();
     }
 }

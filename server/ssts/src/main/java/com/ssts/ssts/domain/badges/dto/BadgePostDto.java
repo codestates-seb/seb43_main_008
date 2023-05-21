@@ -9,5 +9,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BadgePostDto {
     private String name;
-    private String description;
+    private String earnMainText;
+    private String earnSubText;
+    private String unEarnMainText;
+    private String unEarnSubText;
+    private Boolean isAcquired;
+    private String img;
+
+
 }
