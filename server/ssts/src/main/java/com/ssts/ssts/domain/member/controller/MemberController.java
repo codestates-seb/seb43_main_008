@@ -8,8 +8,6 @@ import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,7 +38,7 @@ public class MemberController {
                 memberTestSignUpDto.getNickName(),
                 memberTestSignUpDto.getPhone());
 
-        return ApiResponse.ok();
+        return ApiResponse.ok(member);
     }
 
     /*
@@ -48,32 +46,13 @@ public class MemberController {
      * 권한 : ADMIN
      * */
     @DeleteMapping("/test/{memberId}")
-    public ApiResponse testDeleteMember(@PathVariable long memberId) {
+    public ApiResponse testDeleteMember(@PathVariable Long memberId) {
 
         memberService.testDeleteMember(memberId);
 
-        return ApiResponse.ok();
+        return ApiResponse.ok("id="+memberId+"의 멤버 정보가 삭제됐어요.");
     }
 
-
-
-    /*
-     * 회원가입
-     * 권한 : USER, ADMIN
-     * */
-    //FIXME 핸드폰번호,이메일,닉네임이.. 다 넘어와야 하는데..어..
-    //FIXME [보안문제] 이거 휴대폰 인증 API안쓰면 그냥 번호가 노출되서 나중에 무조건 고쳐야한다.
-    //https://lasbe.tistory.com/132
-    @PostMapping("/signup")
-    public ApiResponse signUpMember(@RequestBody MemberSignUpAddInfoDto memberSignUpAddInfoDto){
-
-        Member member=memberService.signUpMember(memberSignUpAddInfoDto.getPhone(), memberSignUpAddInfoDto.getNickName());
-
-        //FIXME 출력도 고쳐야한다.
-
-        return ApiResponse.ok(member.getNickName()+"님! 회원가입이 끝났어요.");
-
-    }
 
 
     /*
@@ -85,8 +64,10 @@ public class MemberController {
 
         Member member=memberService.changeMemberStatusWithdraw();
 
-        return ApiResponse.ok(member.getDeletedAt()+"에 탈퇴처리되셨습니다. " +
-                "정책에 따라 6개월 보관할 예정하겠습니다 :) ");
+        //return ResponseEntity.status(HttpStatus.OK).body(member.getDeletedAt()+"에 정상적으로 탈퇴처리되셨습니다. " +
+        //        "정책에 따라 6개월 보관 하겠습니다 :) ");
+        return ApiResponse.ok(member.getDeletedAt()+"에 정상적으로 탈퇴처리되셨습니다. " +
+                        "정책에 따라 6개월 보관 하겠습니다 :) ");
     }
 
     /*
@@ -94,9 +75,9 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @GetMapping("/feed")
-    public ApiResponse<MemberFeedResponseDto> getMyFeedInfo() {
+    public ApiResponse<FeedResponse> getMyFeedInfo() {
 
-        MemberFeedResponseDto response = memberService.getMyFeedInfo();
+        FeedResponse response = memberService.getMyFeedInfo();
 
         return ApiResponse.ok(response);
     }
@@ -106,9 +87,9 @@ public class MemberController {
      * 권한 : USER, ADMIN
      * */
     @GetMapping("/feed/{nickName}")
-    public ApiResponse<MemberFeedResponseDto> getMemberFeedInfo(@PathVariable String nickName) {
+    public ApiResponse<FeedResponse.MemberFeedResponse> getMemberFeedInfo(@PathVariable String nickName) {
 
-        MemberFeedResponseDto response = memberService.getMemberFeedInfo(nickName);
+        FeedResponse.MemberFeedResponse response = memberService.getMemberFeedInfo(nickName);
 
         return ApiResponse.ok(response);
     }
@@ -119,11 +100,11 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @PatchMapping("/feed")
-    public ApiResponse<MemberFeedResponseDto> updateMyFeedInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
-                                           @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
+    public ApiResponse<FeedResponse> updateMyFeedInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
+                                                            @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
 
 
-        MemberFeedResponseDto response = memberService.updateMyFeedInfo(memberEditInfoPatchDto, image);
+        FeedResponse response = memberService.updateMyFeedInfo(memberEditInfoPatchDto.getNickName(), image,memberEditInfoPatchDto.getIntroduce());
 
         //변경됬으니까 변경된 입력값을 알려줘야 한다.
         return ApiResponse.ok(response);

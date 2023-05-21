@@ -76,9 +76,6 @@ server:
     session:
       cookie:
         same-site: none
-mail:
-  address:
-    admin: '@ssts.com'
 jwt:
   key:
     secret: ${JWT_SECRET_KEY}               # 민감한 정보는 시스템 환경 변수에서 로드한다.

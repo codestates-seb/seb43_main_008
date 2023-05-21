@@ -6,6 +6,7 @@ import com.ssts.ssts.domain.bookmark.response.BookmarkResponse;
 import com.ssts.ssts.domain.member.entity.Member;
 
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.global.exception.BusinessLogicException;
@@ -29,6 +30,7 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepo;
     private final MemberRepository memberRepo;
     private final SeriesRepository seriesRepo;
+    private final MemberService memberService;
 
 
 
@@ -37,9 +39,8 @@ public class BookmarkService {
 
         Series series = seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
-        Long memberId = SecurityUtil.getMemberId();
-        Member member = memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
@@ -53,9 +54,8 @@ public class BookmarkService {
 
     @Transactional
     public List<BookmarkResponse> getListBookmarks(int page, int size){ //series.getId(), series.getTitle(), series.getDaylogCount(), series.getImage()
-        Long memberId = SecurityUtil.getMemberId();
-        memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Bookmark> bookmarksInfo = bookmarkRepo.findAllByMemberId(memberId, pageable);
@@ -80,9 +80,8 @@ public class BookmarkService {
 
         seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
-        Long memberId = SecurityUtil.getMemberId();
-        memberRepo.findById(memberId).
-                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
 
         bookmarkRepo.deleteByMember_IdAndSeries_Id(memberId, seriseId);
     }

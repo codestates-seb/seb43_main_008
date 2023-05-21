@@ -1,4 +1,4 @@
-package com.ssts.ssts.global.auth.api;
+package com.ssts.ssts.global.auth.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
