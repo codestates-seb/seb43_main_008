@@ -12,7 +12,7 @@ export default function MemberEditLayout({
       <Header
         backButton={true}
         textContent={"시리즈 작성"}
-        secretButton={true}
+        secretButton={false}
       />
       {children}
       <Navbar />

@@ -8,7 +8,7 @@ export const mySeriesPage = async () => {
       headers: {
         "Content-Type": "application/json",
         Authorization:
-          "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjksInN1YiI6ImFsa2pmaGFAbmF2ZXIuY29tIiwiaWF0IjoxNjg0MzkxMzc3LCJleHAiOjE2ODQzOTMxNzd9.tRXhLjWvqLWyM1HNy-Dheh_toRys3SSS_UEPLBYx__ZPFXIa2gVQzMvOlc1S5w9u",
+          "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjI1LCJzdWIiOiJhbGtmaGFAbmF2ZXIuY29tIiwiaWF0IjoxNjg0NTgxNTgyLCJleHAiOjE2ODQ1ODMzODJ9.OBpS8zbizJAPnqReEbLp1baDG3VVgrXD7iQl4n7A6_1ufU2RbZ6j1mdAjParW586",
       },
     });
     console.log(response.data.data);

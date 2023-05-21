@@ -5,7 +5,7 @@ import styled from "styled-components";
 interface SlideProps {
   id: number;
   image: string;
-  // date: Date;
+  date: Date;
 }
 // const Slide: React.FC<SlideProps> = ({ image, date }: SlideProps) => {
 const Slide: React.FC<SlideProps> = ({ image }: SlideProps) => {
@@ -22,7 +22,7 @@ const Slide: React.FC<SlideProps> = ({ image }: SlideProps) => {
           무너지고 말아 나의 맘은 와르르 내게 이러지마 baby 너 없는 하루는
           상상하기 조차 싫은 걸 아무것도 할 수 없을 걸 난 바보가 돼버릴거야~
         </p>
-        {/* <div className="date">{date.toLocaleDateString()}|</div> -> 하단에 날짜도 찍히게 변경 */}
+        <div className="date">2023년 5월 15일</div>
       </div>
     </StyledSlide>
   );
@@ -31,7 +31,7 @@ const Slide: React.FC<SlideProps> = ({ image }: SlideProps) => {
 const StyledSlide = styled.div`
   width: 80vw;
   padding: 10px 10px;
-  margin: 5px 5px 0 0px;
+  margin: 0 5px 0 0px;
 
   display: flex;
   flex-direction: column;
@@ -52,6 +52,11 @@ const StyledSlide = styled.div`
 
   .slide {
     width: 100%;
+  }
+
+  .date {
+    margin-top: 7px;
+    font-size: 12px;
   }
 `;
 

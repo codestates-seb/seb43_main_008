@@ -12,7 +12,7 @@ export default function SeriesLayout({
       <Header
         backButton={true}
         textContent={"플라스틱 육아 시작하기"}
-        secretButton={false}
+        secretButton={true}
       />
       {children}
       <Navbar />
