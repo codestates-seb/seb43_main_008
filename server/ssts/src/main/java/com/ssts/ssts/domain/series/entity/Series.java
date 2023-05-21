@@ -37,7 +37,7 @@ public class Series extends BaseTimeEntity {
     @Column
     private int voteCount;
 
-    @Column
+    @Column(name = "vote_result")
     private Boolean voteResult;
 
     @Column
