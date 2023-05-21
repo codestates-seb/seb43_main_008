@@ -59,7 +59,7 @@ public class OAuthController {
     }
 
     @GetMapping("/login/oauth2/code/google")
-    public void callbackGoogle(HttpServletResponse response, @RequestParam(name = "code") String code) throws IOException{
+    public void callbackGoogle(@RequestParam(name = "code") String code,HttpServletResponse response) throws IOException{
         log.info("하늘/oauth redirect callback : google" +
                 "\ncode="+code);
 
