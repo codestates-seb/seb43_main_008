@@ -1,23 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { AiFillCamera } from "react-icons/ai";
 
+// import { memberEdit } from "../api/memberEdit";
+import { GetProfile } from "../api/myPageApi";
 import * as S from "./ProfileEditStyle";
 
 export default function ProfileEdit() {
+  // const Authorization =
+  // typeof window !== "undefined" ? localStorage.getItem("Authorization") : null;
   const [image, setImage] = useState<string | null>(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { isValid },
-  } = useForm({
-    mode: "onChange",
-  });
+  const [nickName, setNickName] = useState<string>("");
+  const [introduce, setIntroduce] = useState<string>("");
 
-  const onSubmit = () => {};
+  useEffect(() => {
+    GetProfile().then((res) => {
+      setImage(res.image);
+      setNickName(res.nickName);
+      setIntroduce(res.introduce);
+    });
+  }, []);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -29,6 +33,12 @@ export default function ProfileEdit() {
       reader.readAsDataURL(file);
     }
   };
+
+  // const onSubmit = (nickName: string, introduce: string) => {
+  //   memberEdit(nickName, introduce).then((res) => {
+  //     console.log(res);
+  //   });
+  // };
 
   return (
     <>
@@ -58,16 +68,18 @@ export default function ProfileEdit() {
       </S.ProfileImageEditContainer>
 
       <S.ProfileEditContainer>
-        <S.EditForm onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <S.NicknameInput
-            {...register("nickname", { required: true })}
             type="text"
+            value={nickName}
+            onChange={(e) => setNickName(e.target.value)}
           />
           <S.MemberDescriptionTextarea
-            {...register("description", { required: false, maxLength: 100 })}
+            value={introduce}
+            onChange={(e) => setIntroduce(e.target.value)}
           />
-          <S.SubmitButton isValid={isValid} type="submit" value="Submit" />
-        </S.EditForm>
+          <S.SubmitButton type="button">수정하기</S.SubmitButton>
+        </form>
       </S.ProfileEditContainer>
     </>
   );

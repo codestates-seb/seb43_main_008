@@ -100,14 +100,14 @@ export const MemberDescriptionTextarea = styled.textarea`
   }
 `;
 
-export const SubmitButton = styled.input<{ isValid: boolean }>`
-  height: 100%;
+export const SubmitButton = styled.button`
+  height: 50px;
   width: 100%;
   color: #85858e;
   border: none;
   border-radius: 4px;
-  background-color: ${(props) => (props.isValid ? "#0078ff" : "#b6b6b8")};
+  background-color: #0078ff;
   color: #ffffff;
-  cursor: ${(props) => (props.isValid ? "pointer" : "not-allowed")};
+  cursor: "pointer";
   transition: all ease-out 1.2s;
 `;

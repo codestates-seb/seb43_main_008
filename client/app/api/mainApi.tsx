@@ -10,7 +10,7 @@ export const GetMain = async (pageQuery: number) => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 /*
 export const GetMainFilter = async (filter: string) => {
@@ -35,4 +35,3 @@ export const GetMainPage = async (page: number) => {
   }
 };
 */
-
