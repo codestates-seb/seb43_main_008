@@ -1,6 +1,7 @@
 import axios from "axios";
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
-const Authorization = localStorage.getItem("Authorization");
+const Authorization =
+  typeof window !== "undefined" ? localStorage.getItem("Authorization") : null;
 
 // 📌 My-page api
 export const GetFeed = async () => {
