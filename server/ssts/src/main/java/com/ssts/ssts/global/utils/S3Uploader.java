@@ -51,7 +51,7 @@ public class S3Uploader {
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
-    public String getS3(String fileName) {
+    public String getS3(String bucket, String fileName) {
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 

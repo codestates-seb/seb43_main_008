@@ -164,7 +164,7 @@ public class SeriesService {
             // 예외처리
         }
 
-        series.setImage(s3Uploader.getS3(SeriesConstants.FILE_NAME.getSeriesConstant())); // 상수 선언
+        series.setImage(s3Uploader.getS3("ssts-img", SeriesConstants.FILE_NAME.getSeriesConstant())); // 상수 선언
         series.addMember(member);
         seriesRepository.save(series);
 
