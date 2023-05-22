@@ -10,9 +10,12 @@ import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.service.SeriesService;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.global.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.net.BindException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +33,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class DaylogService {
 
     private final DaylogRepository daylogRepository;
@@ -62,6 +67,10 @@ public class DaylogService {
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
         Series series = seriesService.findVerifiedSeries(seriesId);
 
+        if (member.getId() != series.getMember().getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
+
         if(!image.isEmpty()){
             String saveFileName = s3ImageUploader.upload(image,"daylog");
             daylog.setContentImg(saveFileName);
@@ -92,8 +101,8 @@ public class DaylogService {
         List<Daylog> daylogList = daylogsInfo.getContent();
 
         List<DaylogResponseDto> list = this.seriesToSeriesListResponseDtos(daylogList);
-        List<DaylogResponseDto> responseDtos = this.isMineDaylog(list);
-
+        List<DaylogResponseDto> responseDtos = this.isMineDaylog(list, member);
+        log.info("responseDtos={}", responseDtos);
         return new PageResponseDto<>(responseDtos, daylogsInfo);
         }
 
@@ -130,10 +139,10 @@ public class DaylogService {
         //클래스 추가 , 책임 이전
     }
 
-    private List<DaylogResponseDto> isMineDaylog(List<DaylogResponseDto> daylogResponseDtosList){
+    private List<DaylogResponseDto> isMineDaylog(List<DaylogResponseDto> daylogResponseDtosList, Member member){
 
         for(DaylogResponseDto daylogResponseDto : daylogResponseDtosList){
-            if(daylogResponseDto.getMember().getId() == memberService.findMemberByToken().getId()){
+            if(daylogResponseDto.getMember().getId() == member.getId()){
                 daylogResponseDto.setMine(true);
             }
         }
