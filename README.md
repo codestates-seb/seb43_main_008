@@ -6,8 +6,8 @@
   <h3>쓰쓰또쓰와 함께 플라스틱을 재활용하고 기록해봐요.</h3>
   <img src="https://raw.githubusercontent.com/codestates-seb/seb43_main_008/main/client/public/images/qrCode.png" width="200px" height="200px">
 </div>
-<br/>
 
+<br/>
 
 사용자가 물건이 “쉽게 버릴 수 있는 물건”이 아닌 “끝까지 제 쓸모를 다한 물건”이 될 수 있도록 도와줍니다. 
 함께 하며 서로가 서로의 원동력이 되도록 환경을 조성합니다. 
@@ -16,7 +16,7 @@
 - 재사용한 플라스틱의 졸업을 위해, 투표 기능을 제공합니다. 
 - 투표 결과에 따라 배지와 메달 보상으로 성취감을 느낄 수 있도록 만들었습니다.
 
-
+<br/>
 
 ## 팀 소개
 
