@@ -36,7 +36,7 @@ export const Profile: React.FC<Props> = ({ type }) => {
     세션 스토리지 nickName === params.nickName: follow 버튼
     else: following 버튼 & isFollowed props
   */
-  console.log(profile.followedMember)
+
   return (
     <StyledProfile className="box">
       <div className="profile-box">

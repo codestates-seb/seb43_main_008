@@ -23,24 +23,34 @@ interface Props {
 }
 
 export const FollowingButton: React.FC<Props> = ({ followedMember, nickName }) => {
-  const [isFollowing, setIsFollowing] = useState<boolean>(null)
+  const [isFollowing, setIsFollowing] = useState<boolean>(followedMember || false)
 
   useEffect(() => {
-    setIsFollowing(followedMember)
-  }, [])
+    setIsFollowing(followedMember || false);
+  }, [followedMember]);
+
+  console.log(isFollowing)
 
   return (
     <>
       {isFollowing === true ? (
-        <StyledUnFollowingButton onClick={() => {
-          DeleteUnFollowing(nickName)
-          setIsFollowing(false)
-        }}>언팔로우</StyledUnFollowingButton>
+        <StyledUnFollowingButton
+          onClick={() => {
+            DeleteUnFollowing(nickName)
+            setIsFollowing(false)
+          }}
+        >
+          언팔로우
+        </StyledUnFollowingButton>
       ) : (
-        <StyledFollowingButton onClick={() => {
-          PostFollowing(nickName)
-          setIsFollowing(true)
-        }}>팔로우</StyledFollowingButton>
+        <StyledFollowingButton
+          onClick={() => {
+            PostFollowing(nickName)
+            setIsFollowing(true)
+          }}
+        >
+          팔로우
+        </StyledFollowingButton>
       )}
     </>
   );
