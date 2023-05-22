@@ -211,6 +211,7 @@ public class VoteService {
             targetSeries.setIsEditable(true);
             targetSeries.setIsActive(true);
             targetSeries.setVoteStatus(Series.VoteStatus.SERIES_ACTIVE);
+            seriesRepo.save(targetSeries);
         }
 
         //걸러지는 경우 (2) / 최종: 투표를 더 안할게요 voteCount==1&&voteResult==false => 로직이 도는 대상 (isQuit==1)
@@ -218,6 +219,7 @@ public class VoteService {
         targetSeries.setIsEditable(false); //타이틀 수정 가능
         targetSeries.setIsActive(false); //활성 상태
         targetSeries.setVoteStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
+        seriesRepo.save(targetSeries);
         }
         return voteCountResponse(targetSeries.getId(), targetSeries);
     }
