@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import FetchToken from "../api/fetchToken";
@@ -8,6 +8,10 @@ import FetchToken from "../api/fetchToken";
 // import { useSWRConfig } from 'swr'
 
 export const Filter: React.FC = () => {
+  useEffect(() => {
+    // Hide URL
+    history.replaceState({}, null, location.pathname);
+  }, []);
   const [filter, setFilter] = useState<string>("newest");
   FetchToken();
 
