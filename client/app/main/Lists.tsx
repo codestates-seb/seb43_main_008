@@ -43,6 +43,7 @@ export const Lists: React.FC = () => {
       // 📌(수정 필요) 로그인 되었는지 확인
       router.push(`/detail/${id}`);
       sessionStorage.setItem("header", title);
+      sessionStorage.setItem("menu", null); //📌 확인하기
     } else router.push("/login");
   };
   console.log(list)

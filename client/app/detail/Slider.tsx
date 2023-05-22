@@ -13,6 +13,7 @@ export const Slider = (): JSX.Element => {
   const [slides, setSlides] = useState([]);
   const [pageNumber, setPageNumber] = useState(1)
   const [lastDataLength, setLastDataLength] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const params = useParams();
 
@@ -21,8 +22,10 @@ export const Slider = (): JSX.Element => {
       if (data) {
         setSlides((prevList) => [...prevList, ...data])
         setLastDataLength(data.length)
+        setIsLoading(false)
       }
     })
+    setIsLoading(true)
   }, [pageNumber])
 
 
@@ -41,8 +44,6 @@ export const Slider = (): JSX.Element => {
 
     // 터치 이벤트인 경우에는 터치 좌표를 가져온다. 
     const pageX = isTouchEvent(e) ? e.touches[0].pageX : e.pageX;
-    console.log(`pageX ${pageX}`)
-
 
     setIsDrag(true);
     setStartX(pageX + (scrollRef.current?.scrollLeft || 0));
@@ -60,10 +61,9 @@ export const Slider = (): JSX.Element => {
       const pageX = isTouchEvent(e) ? e.touches[0].pageX : e.pageX;
 
       scrollRef.current.scrollLeft = startX - pageX;
-      console.log(`clientWidth ${clientWidth}`)
       // 추가 api 요청은 pageNumber에 의존한다.
       // 마지막에 들어온 데이터 길이가 7개 미만이면 pageNumber 변경을 차단시켜 무한 스크롤을 멈춘다. 
-      if (scrollWidth <= Math.ceil(clientWidth + scrollLeft) && lastDataLength >= 7) {
+      if (isLoading && scrollWidth === Math.ceil(clientWidth + scrollLeft) && lastDataLength >= 7) {
         setPageNumber((prev) => prev + 1)
       }
     }
