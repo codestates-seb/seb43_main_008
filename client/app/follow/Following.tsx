@@ -19,6 +19,7 @@ export const Follow: React.FC<FollowProps> = ({ image, nickName, introduce }) =>
   const moveToMypageHandler = (nickName: string) => {
     router.push(`my-page/${nickName}`)
     sessionStorage.setItem("header", nickName);
+    sessionStorage.setItem("menu", null);
   }
 
   return (

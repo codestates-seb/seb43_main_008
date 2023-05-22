@@ -11,6 +11,7 @@ export const ActivePost = ({ ...data }: PostData) => {
   const HandleMoveToDetail = (id: number, title: string) => {
     router.push(`/detail/${id}`);
     sessionStorage.setItem("header", title);
+    sessionStorage.setItem("menu", null);
   }
 
   return (

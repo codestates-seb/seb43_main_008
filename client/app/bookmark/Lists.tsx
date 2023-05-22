@@ -29,6 +29,7 @@ export const Lists: React.FC = () => {
   const moveHandler = (id: number, title: string) => {
     router.push(`/detail/${id}`);
     sessionStorage.setItem("header", title);
+    sessionStorage.setItem("menu", null);
   };
   return (
     <StyledLists className="list">
