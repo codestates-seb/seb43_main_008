@@ -68,4 +68,11 @@ public class VoteController {
         return ApiResponse.ok(response);
     }
 
+    //시리즈 투표 개별조회
+    @GetMapping("{series_id}")
+    public ApiResponse getVoteInfo(@PathVariable("series_id") Long seriesId){
+        VoteResponse response = (VoteResponse) voteService.getVoteInfo(seriesId);
+        return ApiResponse.ok(response);
+    }
+
 }
