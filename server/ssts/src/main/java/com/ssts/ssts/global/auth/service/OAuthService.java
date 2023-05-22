@@ -1,9 +1,6 @@
 package com.ssts.ssts.global.auth.service;
 
-import com.ssts.ssts.global.auth.dto.GoogleProfileResponse;
-import com.ssts.ssts.global.auth.dto.KakaoProfileResponse;
-import com.ssts.ssts.global.auth.dto.NaverProfileResponse;
-import com.ssts.ssts.global.auth.dto.OAuthTokenResponse;
+import com.ssts.ssts.global.auth.dto.*;
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.entity.Member;
@@ -31,7 +28,7 @@ public class OAuthService {
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
 
-    public OAuthTokenResponse accessResources(String code, String socialType) {
+    public AccessTokenResponse accessResources(String code, String socialType) {
 
         log.info("하늘/oauth service : access resources()" +
                         "\nsocialType="+socialType);
@@ -53,7 +50,7 @@ public class OAuthService {
         return resourceAccessTokenResponse(email);
     }
 
-    public OAuthTokenResponse login() {
+    public AuthenticationTokenResponse login() {
 
         Member member=memberService.findMemberByToken();
         log.info("하늘/oauth service : login"+
@@ -65,7 +62,7 @@ public class OAuthService {
         return authorizationTokenResponse(member);
     }
 
-    public OAuthTokenResponse signup(String phone, String nickName){
+    public AuthenticationTokenResponse signup(String phone, String nickName){
 
         Member member=memberService.signUpMember(phone, nickName);
         log.info("하늘/oauth service : signup"+
@@ -77,7 +74,7 @@ public class OAuthService {
         return authorizationTokenResponse(member);
     }
 
-    public OAuthTokenResponse authorizationTokenResponse(Member member){
+    public AuthenticationTokenResponse authorizationTokenResponse(Member member){
         List<String> authorityList = authorityUtils.dbRolesToAuthorities(member.getRoles())
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -86,10 +83,10 @@ public class OAuthService {
         String accessToken=delegateAccessToken(member.getId(), member.getEmail(), authorityList);
         String refreshToken=delegateRefreshToken(member.getEmail());
 
-        return OAuthTokenResponse.of(accessToken,refreshToken);
+        return AuthenticationTokenResponse.of(accessToken,refreshToken,member.getNickName());
     }
 
-    public OAuthTokenResponse resourceAccessTokenResponse(String email) {
+    public AccessTokenResponse resourceAccessTokenResponse(String email) {
 
         Optional<Member> member= memberService.findMemberByEmail(email);
         List<String> authorityList;
@@ -119,7 +116,7 @@ public class OAuthService {
         log.info("하늘/oauth service : access resources" +
                 "\n발급한 access token Bearer {}", accessToken);
 
-        return OAuthTokenResponse.of(accessToken, email, member.isPresent());
+        return AccessTokenResponse.of(accessToken, email, member.isPresent());
     }
 
     //FIXME

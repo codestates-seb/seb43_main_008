@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-public class NaverProfileResponse {
+public class NaverProfileResponse implements OAuthResponse {
     private String id;
     private String email;
 

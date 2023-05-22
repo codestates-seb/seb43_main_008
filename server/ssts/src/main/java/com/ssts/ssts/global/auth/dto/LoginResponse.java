@@ -7,4 +7,10 @@ import lombok.Setter;
 @Setter
 public class LoginResponse {
     private String nickName;
+
+    public static LoginResponse of(String nickName){
+        LoginResponse response=new LoginResponse();
+        response.setNickName(nickName);
+        return response;
+    }
 }

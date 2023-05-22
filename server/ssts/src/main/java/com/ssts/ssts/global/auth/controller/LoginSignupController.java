@@ -1,13 +1,13 @@
 package com.ssts.ssts.global.auth.controller;
 
 import com.ssts.ssts.domain.member.dto.MemberSignUpAddInfoDto;
-import com.ssts.ssts.domain.member.entity.Member;
-import com.ssts.ssts.domain.member.service.MemberService;
-import com.ssts.ssts.global.auth.dto.OAuthTokenResponse;
+import com.ssts.ssts.global.auth.dto.AccessTokenResponse;
+import com.ssts.ssts.global.auth.dto.AuthenticationTokenResponse;
+import com.ssts.ssts.global.auth.dto.LoginResponse;
 import com.ssts.ssts.global.auth.service.OAuthService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,13 +22,15 @@ public class LoginSignupController {
     private final OAuthService oauthService;
 
     @GetMapping("/login/auth")
-    public void login(HttpServletResponse response) throws IOException {
-        OAuthTokenResponse tokenResponse=oauthService.login();
+    public ApiResponse<LoginResponse> login(HttpServletResponse response) throws IOException {
+        AuthenticationTokenResponse tokenResponse=oauthService.login();
         log.info("하늘/token response :\n"+
                 tokenResponse.toString());
 
         response.setHeader("authorization", "Bearer " + tokenResponse.getAccessToken());
         response.setHeader("refresh", tokenResponse.getRefreshToken());
+
+        return ApiResponse.ok(LoginResponse.of(tokenResponse.getNickName()));
     }
 
 
@@ -40,14 +42,15 @@ public class LoginSignupController {
     //FIXME [보안문제] 이거 휴대폰 인증 API안쓰면 그냥 번호가 노출되서 나중에 무조건 고쳐야한다.
     //https://lasbe.tistory.com/132
     @PostMapping("/signup")
-    public void signUp(HttpServletResponse response, @RequestBody MemberSignUpAddInfoDto memberSignUpAddInfoDto){
-        OAuthTokenResponse tokenResponse=oauthService.signup(memberSignUpAddInfoDto.getPhone(), memberSignUpAddInfoDto.getNickName());
+    public ApiResponse<LoginResponse> signUp(HttpServletResponse response, @RequestBody MemberSignUpAddInfoDto memberSignUpAddInfoDto){
+        AuthenticationTokenResponse tokenResponse=oauthService.signup(memberSignUpAddInfoDto.getPhone(), memberSignUpAddInfoDto.getNickName());
         log.info("하늘/token response :\n"+
                 tokenResponse.toString());
 
         response.setHeader("authorization", "Bearer " + tokenResponse.getAccessToken());
         response.setHeader("refresh", tokenResponse.getRefreshToken());
 
+        return ApiResponse.ok(LoginResponse.of(tokenResponse.getNickName()));
     }
 
 }
