@@ -1,28 +1,32 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { useParams } from "next/navigation";
-import { useEffect } from "react";
-import { GetVoteResult } from "../api/voteResult";
+import { GetVoteResult, VoteEnd, VoteNoEnd } from "../api/voteResult";
 
 export default function VoteResultContext() {
+  const [agree, setAgree] = useState(0);
+  const [disAgree, setDisAgree] = useState(0);
   const params = useParams();
 
   useEffect(() => {
     GetVoteResult(params.id).then((data) => {
-      console.log(data);
+      setAgree(data.data.voteAgree);
+      setDisAgree(data.data.voteDisagree);
     });
   }, []);
 
-  const MockData = "51 대 49";
   return (
     <ResultContextContainer>
-      <p>{`이전 투표 결과는 ${MockData}`}</p>
+      <p>{`이전 투표 결과는 ${agree} 대 ${disAgree}`}</p>
 
       <ButtonBox>
-        <Button>조금 더 써볼까요?</Button>
-        <Button>종료할게요(플라스틱 졸업시키기)</Button>
+        <Button onClick={() => VoteNoEnd(params.id)}>조금 더 써볼까요?</Button>
+        <Button onClick={() => VoteEnd(params.id)}>
+          종료할게요(플라스틱 졸업시키기)
+        </Button>
       </ButtonBox>
     </ResultContextContainer>
   );
