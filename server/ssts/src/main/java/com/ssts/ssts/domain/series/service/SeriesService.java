@@ -6,6 +6,7 @@ import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.constant.SeriesConstants;
+import com.ssts.ssts.domain.series.dto.SeriesDetailResponseDto;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
@@ -48,10 +49,11 @@ public class SeriesService {
     private final MemberRepository memberRepo;
     private final BookmarkRepository bookmarkRepo;
 
-    public PageResponseDto getSeriesList(Long memberId, int page, int size){
+    public PageResponseDto getSeriesList(String nickname, int page, int size){
         // 파라미터 체크
         Page<Series> seriesInfo;
         Member authMember = memberService.findMemberByToken();
+        long memberId = memberService.findMemberByNickName(nickname).getId();
 
         if(authMember.getId() == memberId) {
             seriesInfo = seriesRepository.findByMember_id(memberId, PageRequest.of(page, size,
@@ -68,6 +70,8 @@ public class SeriesService {
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
         //////////////
+
+
 
         return new PageResponseDto(list, seriesInfo);
     }
@@ -94,7 +98,7 @@ public class SeriesService {
         return new PageResponseDto(list, seriesInfo);
     }
 
-    public SeriesResponseDto getSeries(Long id){
+    public SeriesDetailResponseDto getSeries(Long id){
         memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(id);
 
@@ -109,6 +113,8 @@ public class SeriesService {
         //bookmark: 사용자의 해당 시리즈 북마크 여부
         Boolean isBookmarkedMember = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, id);
 
+
+
         //vote: 사용자가 조회할 때마다 마감 기간 계산하고, 그에 따른 투표 상태값 변경 (마감시 자동 상태값 변경)
         LocalDateTime currentTime = LocalDateTime.now();
 
@@ -121,15 +127,18 @@ public class SeriesService {
         }
 
         else if(series.getVoteCount()==1 && !currentTime.isAfter(series.getVoteEndAt())){ //마감기간 안지났을 때
-            return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
+            //return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
+            return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
         }
 
         else if(series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==null){ //결과가 null일때
-            return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
+            //return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
+            return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
         }
 
         else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==true){
-            return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
+            //return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
+            return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
         }
 
         //사용자가 재투표 연다는 선택을 하기 전, 자동으로 바뀌는 값
@@ -141,7 +150,8 @@ public class SeriesService {
             seriesRepository.save(series); //사용자가 재투표를 받을지 말지 선택하기 전까지 유지되는 상태값
         }
 
-        return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
+        //return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
+        return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
     }
 
 
@@ -249,6 +259,7 @@ public class SeriesService {
 
         return SeriesResponseDto.of(series.getId(),
                 series.getTitle(),
+                series.getImage(),
                 series.getDaylogCount(),
                 series.getCreatedAt(),
                 series.getModifiedAt(),
@@ -265,6 +276,16 @@ public class SeriesService {
                 series.getIsActive(),
                 isVotedMember,
                 isBookmarkedMember
+        );
+    }
+
+    @NotNull
+    private SeriesDetailResponseDto seriesToSeriesResponseDto(Series series, Boolean isBookmarkedMember) {
+        //선언부(메서드 시그니처)가 메소드 오버로드에 중심
+        //메소드의 이름이 같아도, 파라미터와 반환값이 다르면 얘가 알아서 분리해서 적용햅줌
+        //이걸로 오버로드를 사용해서 여러개의 파라미터를 받는 같은 메소드를 구현 가능
+
+        return SeriesDetailResponseDto.of(series.getId(), series.getTitle(), series.getImage(), isBookmarkedMember
         );
     }
 

@@ -6,6 +6,7 @@ import com.ssts.ssts.domain.daylog.dto.DaylogPostDto;
 import com.ssts.ssts.domain.daylog.dto.DaylogResponseDto;
 import com.ssts.ssts.domain.daylog.service.DaylogService;
 import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
+import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class DaylogController {
                                         @Positive @RequestParam(value = "page", defaultValue = "1") int page,
                                         @Positive @RequestParam(value = "size", defaultValue = "7") int size){
 
-        DaylogPageResponseDto response = daylogService.getDaylogList(id, page-1, size);
+        PageResponseDto response = daylogService.getDaylogList(id, page-1, size);
 
         return ApiResponse.ok(response);
     }
