@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import FetchToken from "../api/fetchToken";
