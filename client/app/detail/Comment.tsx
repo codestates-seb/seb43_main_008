@@ -6,19 +6,16 @@ import styled from "styled-components";
 
 import { Modal } from "./Modal";
 
-// pagedata.id = comment id 
-// pagedata.member.id = member id 
-// mine = true
 
 interface CommentProps {
-  id?: string
+  id?: string;
   comment: string;
-  member: { nickName: string }
+  member: { nickName: string, image: string };
   mine: boolean;
   handleEditComment: (id: string) => void;
-  setComment: React.Dispatch<React.SetStateAction<string>>
-  setUpdate: React.Dispatch<React.SetStateAction<boolean>>
-  update: boolean
+  handleDelete: (commentId: string) => void;
+  setComment: React.Dispatch<React.SetStateAction<string>>;
+
 }
 export const Comment: React.FC<CommentProps> = ({
   member,
@@ -26,12 +23,8 @@ export const Comment: React.FC<CommentProps> = ({
   comment,
   mine,
   handleEditComment,
-  setComment,
-  setUpdate,
-  update,
+  handleDelete,
 }) => {
-
-  // 댓글 날짜 추가하기(?)
 
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const HandleOpenModal = useCallback(() => {
@@ -42,9 +35,11 @@ export const Comment: React.FC<CommentProps> = ({
     <>
       <StyledComment>
         <li className="comment">
-          <div className="profile" />
           <div className="text-box">
-            <div className="user-name">{member.nickName}</div>
+            <div className='user-info'>
+              <div className="user-name">{member.nickName}</div>
+              {mine ? <div className='mine-tag'>내 댓글</div> : null}
+            </div>
             <div className="text">{comment}</div>
           </div>
           {mine ?
@@ -62,9 +57,7 @@ export const Comment: React.FC<CommentProps> = ({
           onClickModal={HandleOpenModal}
           commentId={id}
           handleEditComment={handleEditComment}
-          setComment={setComment}
-          setUpdate={setUpdate}
-          update={update}
+          handleDelete={handleDelete}
         />
       )}
     </>
@@ -88,10 +81,23 @@ const StyledComment = styled.div`
     border-radius: 50%;
     background-color: #757575;
   }
-  .user-name {
+  .user-info {
     font-size: 0.8rem;
     color: #757575;
     padding-bottom: 6px;
+
+    display: flex;
+    align-items: center;
+  }
+  .mine-tag {
+    margin-left: 5px;
+    padding: 1px 2px;
+
+    font-size: 0.45rem;
+    color: #3f910c;
+    background-color: #eff4e7;
+    border: solid 1px #3f910c;
+    border-radius: 6px;
   }
   .text-box {
     width: 100%;

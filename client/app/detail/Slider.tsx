@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { GetDaylog } from '../api/detailApi';
+import { GetDaylog } from "../api/detailApi";
 import { Slide } from "./Slide";
 export const Slider = (): JSX.Element => {
   // 🚨 렌더되기 전에 슬라이더 조작하면 에러남. 

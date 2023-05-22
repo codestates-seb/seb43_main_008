@@ -1,21 +1,36 @@
+"use client";
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 
-import { PostBookmark } from '../api/bookmarkApi';
+import { DeleteBookmark, GetSeriesBookmark, PostBookmark } from '../api/bookmarkApi';
 
-interface BookmarkButtonProps {
-  seriesId: string;
-}
 
-export const BookmarkButton = ({ seriesId }: BookmarkButtonProps) => {
+export const BookmarkButton = () => {
   const [isMarked, setIsMarked] = useState(false)
+  const params = useParams();
 
-  const bookmarkHandle = (seriesId: string) => {
-    setIsMarked(!isMarked)
+  useEffect(() => {
+    GetSeriesBookmark(params.id).then((data) => {
+      if (data) {
+        setIsMarked(data)
+      }
+    })
+  }, [])
+
+  const markHandle = (seriesId: string) => {
+    setIsMarked(true)
     PostBookmark(seriesId)
+  }
+  const unMarkHandle = (seriesId: string) => {
+    setIsMarked(false)
+    DeleteBookmark(seriesId)
   }
 
   return (
-    <div onClick={() => bookmarkHandle(seriesId)}>{isMarked ? <BsBookmarkFill /> : <BsBookmark />}</div>
+    <>
+      {isMarked ? <BsBookmarkFill onClick={() => unMarkHandle(params.id)} /> : <BsBookmark onClick={() => markHandle(params.id)} />}
+    </>
   )
 }
