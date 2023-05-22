@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .antMatchers("/test/**").permitAll()
                         .antMatchers("/test/signup").permitAll()
                         .antMatchers("/login/**").permitAll()
+                        .antMatchers(HttpMethod.GET,"/series/**").permitAll()
                         .anyRequest().authenticated()); //FIXME 인증 끌때 여기 주석처리하세요
                         //.anyRequest().permitAll());
 

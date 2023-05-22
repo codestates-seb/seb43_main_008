@@ -28,7 +28,7 @@ public class SeriesController {
 
 
     @GetMapping("/feed/series/{nick-name}")
-    public ApiResponse getSeriesList(@Positive @PathVariable("nick-name") String nickname,
+    public ApiResponse getSeriesList(@PathVariable("nick-name") String nickname,
                                      @Positive @RequestParam(value = "page", defaultValue = "1") int page,
                                      @Positive @RequestParam(value = "size", defaultValue = "12") int size){
 
