@@ -1,7 +1,7 @@
 package com.ssts.ssts.global.auth.controller;
 
 import com.ssts.ssts.global.auth.utils.TestConstants;
-import com.ssts.ssts.global.auth.dto.OAuthTokenResponse;
+import com.ssts.ssts.global.auth.dto.AccessTokenResponse;
 import com.ssts.ssts.global.auth.service.OAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +91,7 @@ public class OAuthController {
         log.info("하늘/oauth redirect callback :" +
                 "\ncode="+code);
 
-        OAuthTokenResponse tokenResponse=oauthService.accessResources(code, socialType);
+        AccessTokenResponse tokenResponse=oauthService.accessResources(code, socialType);
 
         log.info("하늘/oauth token response :\n"+
                 tokenResponse.toString());
@@ -103,7 +103,7 @@ public class OAuthController {
                     .queryParam("Access",tokenResponse.getAccessToken())
                     .build();
         }else{
-            uri = UriComponentsBuilder.fromUriString(TestConstants.FE_BASE_URL+"/register") //FIXME url 수정 필요
+            uri = UriComponentsBuilder.fromUriString(TestConstants.FE_BASE_URL+"/signup") //FIXME url 수정 필요
                     .queryParam("Access",tokenResponse.getAccessToken())
                     .queryParam("email",tokenResponse.getEmail())
                     .build();
