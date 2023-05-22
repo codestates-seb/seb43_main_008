@@ -1,20 +1,35 @@
 "use client";
 
+import { useRouter } from 'next/navigation'
 import styled from 'styled-components';
 
-interface Props {
-  type?: string
-}
-export const FollowButton: React.FC<Props> = ({ type }) => {
+
+export const FollowerButton = () => {
+
+  const router = useRouter();
+
   return (
-    <>
-      {type === "팔로워" ? <StyledFollowerButton>{type}</StyledFollowerButton> :
-        type === "팔로우" ? <StyledFollowButton>{type}</StyledFollowButton> :
-          <StyledUnFollowButton>{type}</StyledUnFollowButton>
-      }
-    </>
+    <StyledFollowerButton onClick={() => router.push("/follow")}>
+      팔로워
+    </StyledFollowerButton>
   )
 }
+
+interface Props {
+  isFollowed?: boolean
+}
+
+export const FollowingButton: React.FC<Props> = ({ isFollowed }) => {
+  return (
+    <>
+      {isFollowed ? (
+        <StyledFollowingButton>팔로우</StyledFollowingButton>
+      ) : (
+        <StyledUnFollowingButton>언팔로우</StyledUnFollowingButton>
+      )}
+    </>
+  );
+};
 
 const StyledFollowerButton = styled.button`
     cursor: pointer;
@@ -24,7 +39,7 @@ const StyledFollowerButton = styled.button`
     background-color: #eff4e7;
     color: #3f910c;
 `
-const StyledFollowButton = styled.button`
+const StyledFollowingButton = styled.button`
     cursor: pointer;
     height: 2rem;
     border-radius: 16px;
@@ -32,7 +47,7 @@ const StyledFollowButton = styled.button`
     background-color: #eff4e7;
     color: #3f910c;
 `
-const StyledUnFollowButton = styled.button`
+const StyledUnFollowingButton = styled.button`
     cursor: pointer;
     height: 2rem;
     border-radius: 16px;

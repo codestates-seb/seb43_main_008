@@ -1,5 +1,6 @@
 "use client";
-
+import { useParams } from 'next/navigation';
+// import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -9,19 +10,31 @@ import { DonePost } from "./DonePost";
 import { EmptyFeed } from "./EmptyFeed"
 import { VotingPost } from "./VotingPost";
 
+
 export const Feed = () => {
   const [post, setPost] = useState([])
+  const params = useParams();
+  const nickName = decodeURIComponent(params.nickName)
+  console.log(nickName)
 
   useEffect(() => {
-    // if (!authState) {
-    //   router.push("/login")
-    // }
-    GetFeed().then((data) => {
+    GetFeed(nickName).then((data) => {
       if (data) {
         setPost(data)
       }
     })
   }, [])
+
+  /*
+    const router = useRouter();
+  const HandleMoveToDetail = (id: number, title: string) => {
+    router.push(`/detail/${id}`);
+    sessionStorage.setItem("header", title);
+  }
+
+  onClick={HandleMoveToDetail(data.id, data.title)}
+  */
+
 
   return (
     <StyledFeed className='container'>
