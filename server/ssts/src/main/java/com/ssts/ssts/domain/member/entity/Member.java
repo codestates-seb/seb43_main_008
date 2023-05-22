@@ -3,6 +3,7 @@ package com.ssts.ssts.domain.member.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.domain.comment.Entity.Comment;
 import com.ssts.ssts.domain.common.BaseTimeEntity;
+import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.series.entity.Series;
 import lombok.Getter;
 import lombok.Setter;
@@ -61,6 +62,10 @@ public class Member extends BaseTimeEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Daylog> daylogs;
 
     // of 정적 팩토리 메서드 - 임시 회원가입
     public static Member of(String email,String nickName, String phone) {

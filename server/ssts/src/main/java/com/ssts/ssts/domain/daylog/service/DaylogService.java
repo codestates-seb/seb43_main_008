@@ -1,14 +1,16 @@
 package com.ssts.ssts.domain.daylog.service;
 
 
-import com.ssts.ssts.domain.daylog.dto.DaylogPageResponseDto;
+
 import com.ssts.ssts.domain.daylog.dto.DaylogPostDto;
 import com.ssts.ssts.domain.daylog.dto.DaylogResponseDto;
 import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.daylog.repository.DaylogRepository;
+import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.service.SeriesService;
+import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.global.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +40,7 @@ public class DaylogService {
     private final S3Uploader s3ImageUploader;
 
 
+
     @Transactional
     public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto){
         memberService.findMemberByToken();
@@ -55,7 +58,7 @@ public class DaylogService {
 
     @Transactional
     public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto,MultipartFile image) throws IOException {
-        memberService.findMemberByToken();
+        Member member = memberService.findMemberByToken();
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
         Series series = seriesService.findVerifiedSeries(seriesId);
 
@@ -63,10 +66,13 @@ public class DaylogService {
             String saveFileName = s3ImageUploader.upload(image,"daylog");
             daylog.setContentImg(saveFileName);
             series.setImage(saveFileName);
-            series.setDaylogCount(series.getDaylogCount()+1);
         }
+        series.setDaylogCount(series.getDaylogCount()+1);
+        daylog.setDaylogNumber(series.getDaylogCount());
 
         daylog.addSeries(series);
+        daylog.addMember(member);
+
         daylogRepository.save(daylog);
 
         return this.DaylogToDaylogResponseDto(daylog);
@@ -76,16 +82,19 @@ public class DaylogService {
 
 
 
-    public DaylogPageResponseDto getDaylogList(Long seriesId, int page, int size) {
-        memberService.findMemberByToken();
+    public PageResponseDto getDaylogList(Long seriesId, int page, int size) {
+
+
+        Member member = memberService.findMemberByToken();
         Page<Daylog> daylogsInfo = daylogRepository.findBySeries_id(seriesId,
                 PageRequest.of(page, size, Sort.by("id").descending()));
 
         List<Daylog> daylogList = daylogsInfo.getContent();
 
         List<DaylogResponseDto> list = this.seriesToSeriesListResponseDtos(daylogList);
+        List<DaylogResponseDto> responseDtos = this.isMineDaylog(list);
 
-        return new DaylogPageResponseDto(list, daylogsInfo);
+        return new PageResponseDto<>(responseDtos, daylogsInfo);
         }
 
 
@@ -95,8 +104,11 @@ public class DaylogService {
         return DaylogResponseDto.of(daylog.getId(),
                 daylog.getContent(),
                 daylog.getImage(),
+                daylog.getDaylogNumber(),
                 daylog.getCreatedAt(),
-                daylog.getSeries());
+                daylog.getSeries(),
+                daylog.getMember());
+
 
     }
 
@@ -118,7 +130,16 @@ public class DaylogService {
         //클래스 추가 , 책임 이전
     }
 
+    private List<DaylogResponseDto> isMineDaylog(List<DaylogResponseDto> daylogResponseDtosList){
 
+        for(DaylogResponseDto daylogResponseDto : daylogResponseDtosList){
+            if(daylogResponseDto.getMember().getId() == memberService.findMemberByToken().getId()){
+                daylogResponseDto.setMine(true);
+            }
+        }
+
+        return daylogResponseDtosList;
+    }
 
     }
 

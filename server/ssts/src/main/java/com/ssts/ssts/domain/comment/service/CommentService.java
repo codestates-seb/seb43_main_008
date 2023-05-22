@@ -46,7 +46,7 @@ public class CommentService {
 
         List<Comment> comments = commentInfo.getContent();
         List<CommentResponseDto> list = this.commentListToResponseDtoList(comments);
-        List<CommentResponseDto> responseDtos = this.isMine(list);
+        List<CommentResponseDto> responseDtos = this.isMineComment(list);
 
         return new PageResponseDto<>(responseDtos,commentInfo);
     }
@@ -114,7 +114,7 @@ public class CommentService {
         return list;
     }
 
-    private List<CommentResponseDto> isMine(List<CommentResponseDto> commentResponseDtoList){
+    private List<CommentResponseDto> isMineComment(List<CommentResponseDto> commentResponseDtoList){
 
         for(CommentResponseDto commentResponseDto : commentResponseDtoList){
             if(commentResponseDto.getMember().getId() == memberService.findMemberByToken().getId()){

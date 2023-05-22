@@ -1,6 +1,7 @@
 package com.ssts.ssts.domain.series.controller;
 
 
+import com.ssts.ssts.domain.series.dto.SeriesDetailResponseDto;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
@@ -26,12 +27,12 @@ public class SeriesController {
     private final SeriesService seriesService;
 
 
-    @GetMapping("/feed/series/{member-id}")
-    public ApiResponse getSeriesList(@Positive @PathVariable("member-id") Long memberid,
+    @GetMapping("/feed/series/{nick-name}")
+    public ApiResponse getSeriesList(@Positive @PathVariable("nick-name") String nickname,
                                      @Positive @RequestParam(value = "page", defaultValue = "1") int page,
                                      @Positive @RequestParam(value = "size", defaultValue = "12") int size){
 
-        PageResponseDto response = seriesService.getSeriesList(memberid,page-1, size);
+        PageResponseDto response = seriesService.getSeriesList(nickname,page-1, size);
 
         return ApiResponse.ok(response);
     }
@@ -52,7 +53,7 @@ public class SeriesController {
     @GetMapping("/series/{series-id}")
     public ApiResponse getSeries(@Positive @PathVariable("series-id") Long id){
 
-        SeriesResponseDto response = seriesService.getSeries(id);
+        SeriesDetailResponseDto response = seriesService.getSeries(id);
 
         return ApiResponse.ok(response);
     }
