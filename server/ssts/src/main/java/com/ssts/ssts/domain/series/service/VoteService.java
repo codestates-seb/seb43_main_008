@@ -261,6 +261,19 @@ public class VoteService {
 
     }
 
+    //투표 개별조회
+    public VoteResponse getVoteInfo(Long seriseId){
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
+
+        Series targetSeries = seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+
+        Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(memberId, seriseId);
+
+
+        return voteCountAddResponse(seriseId, targetSeries, isVotedMember);
+    }
+
 
 
     //로직: 마감기한 지났는지의 여부
@@ -319,5 +332,39 @@ public class VoteService {
         }
         return false;
     }
+
+
+    //내부 로직: 투표 횟수별 검증 메소드 (투표 개별 정보)
+    public VoteResponse voteCountAddResponse(Long seriesId, Series targetSeries, Boolean isVotedMember) {
+        //이제 voteCount++ 된 상태이기 때문에 여기서부터 최초투표인지 재투표인지 알 수 있음
+
+        if (targetSeries.getVoteCount() == 1) {
+            return VoteResponse.FirstVoteAddResponse.of(
+                    seriesId,
+                    targetSeries.getVoteCount(),
+                    targetSeries.getVoteResult(),
+                    targetSeries.getVoteAgree(),
+                    targetSeries.getVoteDisagree(),
+                    targetSeries.getVoteStatus(),
+                    targetSeries.getVoteCreatedAt(),
+                    targetSeries.getVoteEndAt(),
+                    isVotedMember
+            );
+
+        } else if (targetSeries.getVoteCount() == 2) {
+            return VoteResponse.RevoteAddResponse.of(
+                    seriesId,
+                    targetSeries.getVoteCount(),
+                    targetSeries.getRevoteResult(),
+                    targetSeries.getRevoteAgree(),
+                    targetSeries.getRevoteDisagree(),
+                    targetSeries.getVoteStatus(),
+                    targetSeries.getVoteCreatedAt(),
+                    targetSeries.getVoteEndAt(),
+                    isVotedMember
+            );
+        }else { throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND); }
+    }
+
 
 }
