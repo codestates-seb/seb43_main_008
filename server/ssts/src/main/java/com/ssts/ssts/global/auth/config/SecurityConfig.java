@@ -52,10 +52,6 @@ public class SecurityConfig {
                         .antMatchers("/login/**").permitAll()
                         .anyRequest().authenticated()); //FIXME 인증 끌때 여기 주석처리하세요
                         //.anyRequest().permitAll());
-//                .oauth2Login()
-//                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer))
-//                .failureHandler(new OAuth2MemberFailureHandler())
-//                .userInfoEndpoint().userService(new CustomOAuth2UserService(memberService, authorityUtils));
 
 
         return http.build();

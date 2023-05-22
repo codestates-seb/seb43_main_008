@@ -46,7 +46,7 @@ public class SecurityUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getCredentials()==null) {
-            throw new BusinessLogicException(ExceptionCode.SECURITY_NO_CREDENTIALS);
+            throw new BusinessLogicException(ExceptionCode.AUTH_NO_CREDENTIALS);
         }
 
         return authentication;

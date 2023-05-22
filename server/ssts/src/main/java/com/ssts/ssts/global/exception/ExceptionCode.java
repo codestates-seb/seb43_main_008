@@ -19,9 +19,9 @@ public enum ExceptionCode {
     NICKNAME_DUPLICATE(RtnHttpStatus.Validation,2008, "닉네임이 중복이예요."),
 
     //Auth 에러
-    SECURITY_TEST_LOGIN_NO_MEMBER(RtnHttpStatus.Validation,2009, "Test용 로그인 에러: 사용자 없음."),
-    SECURITY_GUEST_OBJECT_SERIALIZE_ERROR(RtnHttpStatus.Validation,2006, "GUEST객체 Json 직렬화 에러."),
-    SECURITY_NO_CREDENTIALS(RtnHttpStatus.Validation,2007,"해당 사용자의 정보가 없어요."),
+    AUTH_TEST_LOGIN_NO_MEMBER(RtnHttpStatus.Validation,2009, "Test용 로그인 에러: 사용자 없음."),
+    AUTH_NO_CREDENTIALS(RtnHttpStatus.Validation,2007,"해당 사용자의 정보가 없어요."),
+    AUTH_NOT_SUPPORTED_SOCIAL_TYPE(RtnHttpStatus.Validation, 2008, "지원하는 소셜 로그인이 아니예요."),
 
     //시리즈 에러
     SERIES_NOT_EXISTS(RtnHttpStatus.Validation, 2005, "시리즈를 찾을 수 없어요."),

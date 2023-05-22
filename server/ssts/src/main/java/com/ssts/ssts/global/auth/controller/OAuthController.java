@@ -21,6 +21,7 @@ public class OAuthController {
 
     private String googleUrl="https://accounts.google.com";
     private String kakaoUrl="https://kauth.kakao.com";
+    private String naverUrl="https://nid.naver.com";
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
@@ -28,13 +29,13 @@ public class OAuthController {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String kakaoClientId;
 
+    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
+    private String naverClientId;
+
     private String googleScope="email%20profile";
-    private String kakaoScope="account_email";
     private String redirectUrl="http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/";
-    //private String redirectUrl="http://localhost:8080/login/oauth2/code/";
 
     private final String responseType = "code";
-    //private String authRequestUrl;
 
     private final OAuthService oauthService;
 
@@ -66,6 +67,22 @@ public class OAuthController {
 
 
         response.sendRedirect(uri.toString());
+    }
+
+    @GetMapping("/login/naver")
+    public void redirectNaver(HttpServletResponse response) throws IOException {
+        log.info("하늘/oauth redirect : naver");
+
+
+        UriComponents uri = UriComponentsBuilder.fromUriString(naverUrl)
+                .pathSegment("oauth2.0", "authorize")
+                .queryParam("response_type", responseType)
+                .queryParam("client_id", naverClientId)
+                .queryParam("redirect_uri", TestConstants.REDIRECT_URL+"naver")
+                .build();
+
+        response.sendRedirect(uri.toString());
+
     }
 
 

@@ -2,11 +2,14 @@ package com.ssts.ssts.global.auth.service;
 
 import com.ssts.ssts.global.auth.dto.GoogleProfileResponse;
 import com.ssts.ssts.global.auth.dto.KakaoProfileResponse;
+import com.ssts.ssts.global.auth.dto.NaverProfileResponse;
 import com.ssts.ssts.global.auth.dto.OAuthTokenResponse;
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +26,7 @@ public class OAuthService {
 
     private final GoogleInfraService googleInfraService;
     private final KakaoInfraService kakaoInfraService;
+    private final NaverInfraService naverInfraService;
     private final MemberService memberService;
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
@@ -39,8 +43,11 @@ public class OAuthService {
         } else if ("kakao".equals(socialType)) {
             KakaoProfileResponse kakaoProfileResponse = kakaoInfraService.getKakaoAccount(kakaoInfraService.getAccessToken(code));
             email = kakaoProfileResponse.getEmail();
+        } else if ("naver".equals(socialType)){
+            NaverProfileResponse naverProfileResponse = naverInfraService.getNaverAccount(naverInfraService.getAccessToken(code));
+            email = naverProfileResponse.getEmail();
         } else{
-            email = "yunide073@gmail.com";
+            throw new BusinessLogicException(ExceptionCode.AUTH_NOT_SUPPORTED_SOCIAL_TYPE);
         }
 
         return resourceAccessTokenResponse(email);
@@ -71,7 +78,7 @@ public class OAuthService {
     }
 
     public OAuthTokenResponse authorizationTokenResponse(Member member){
-        List<String> authorityList = authorityUtils.createAuthorities(member.getRoles())
+        List<String> authorityList = authorityUtils.dbRolesToAuthorities(member.getRoles())
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
@@ -90,13 +97,13 @@ public class OAuthService {
 
         if(member.isPresent()){
             id = member.get().getId();
-            authorityList = authorityUtils.createAuthorities(List.of("AUTH"))
+            authorityList = authorityUtils.dbRolesToAuthorities(List.of("AUTH"))
                     .stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
         }
         else{
-            authorityList = authorityUtils.createAuthorities(List.of("GUEST"))
+            authorityList = authorityUtils.dbRolesToAuthorities(List.of("GUEST"))
                     .stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
