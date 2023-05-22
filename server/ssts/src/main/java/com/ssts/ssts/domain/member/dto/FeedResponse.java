@@ -9,43 +9,18 @@ import lombok.Setter;
 @Setter
 public class FeedResponse {
 
-    String nickName;
-    String image;
-    String introduce;
+    protected String nickName;
+    protected String image;
+    protected String introduce;
 
-    @JsonIgnore
-    Boolean isFollowedMember;
+    public static FeedResponse of(String nickName, String image, String introduce) {
+        FeedResponse feedResponse = new FeedResponse();
 
-    public static MemberFeedResponse of(String nickName, String image, String introduce) {
-        MemberFeedResponse memberFeedResponse = new MemberFeedResponse();
+        feedResponse.setNickName(nickName);
+        feedResponse.setImage(image);
+        feedResponse.setIntroduce(introduce);
 
-        memberFeedResponse.setNickName(nickName);
-        memberFeedResponse.setImage(image);
-        memberFeedResponse.setIntroduce(introduce);
-
-        return memberFeedResponse;
+        return feedResponse;
     }
 
-    @Setter
-    @Getter
-    public static class MemberFeedResponse extends FeedResponse{
-
-        Boolean isFollowedMember;
-
-        public static MemberFeedResponse of(
-                String nickName,
-                String image,
-                String introduce,
-                Boolean isFollowed)
-        {
-            MemberFeedResponse response=new MemberFeedResponse();
-
-            response.setNickName(nickName);
-            response.setImage(image);
-            response.setIntroduce(introduce);
-            response.setIsFollowedMember(isFollowed);
-
-            return response;
-        }
-    }
 }

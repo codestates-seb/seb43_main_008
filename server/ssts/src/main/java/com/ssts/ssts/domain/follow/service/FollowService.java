@@ -107,7 +107,8 @@ public class FollowService {
         List<FollowListResponse> responseList = pageinfo.getContent().stream()
                 .map(follow -> FollowListResponse.of(
                         follow.getFollowing().getNickName(),
-                        follow.getFollowing().getIntroduce()))
+                        follow.getFollowing().getIntroduce(),
+                        follow.getFollowing().getImage()))
                 .collect(Collectors.toList());
 
         return new PageResponseDto(responseList, pageinfo);
@@ -128,7 +129,8 @@ public class FollowService {
         List<FollowListResponse> responseList=pageinfo.getContent().stream()
                 .map(follow -> FollowListResponse.of(
                         follow.getFollower().getNickName(),
-                        follow.getFollower().getIntroduce()))
+                        follow.getFollower().getIntroduce(),
+                        follow.getFollower().getImage()))
                 .collect(Collectors.toList());
 
         return new PageResponseDto(responseList, pageinfo);

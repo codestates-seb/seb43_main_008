@@ -87,9 +87,9 @@ public class MemberController {
      * 권한 : USER, ADMIN
      * */
     @GetMapping("/feed/{nickName}")
-    public ApiResponse<FeedResponse.MemberFeedResponse> getMemberFeedInfo(@PathVariable String nickName) {
+    public ApiResponse<MemberFeedResponse> getMemberFeedInfo(@PathVariable String nickName) {
 
-        FeedResponse.MemberFeedResponse response = memberService.getMemberFeedInfo(nickName);
+        MemberFeedResponse response = memberService.getMemberFeedInfo(nickName);
 
         return ApiResponse.ok(response);
     }

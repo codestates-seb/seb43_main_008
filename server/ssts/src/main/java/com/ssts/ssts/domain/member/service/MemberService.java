@@ -3,6 +3,7 @@ package com.ssts.ssts.domain.member.service;
 import com.ssts.ssts.domain.follow.repository.FollowRepository;
 import com.ssts.ssts.domain.member.constant.MemberConstants;
 import com.ssts.ssts.domain.member.dto.FeedResponse;
+import com.ssts.ssts.domain.member.dto.MemberFeedResponse;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.global.exception.BusinessLogicException;
@@ -142,7 +143,7 @@ public class MemberService {
     }
 
 
-    public FeedResponse.MemberFeedResponse getMemberFeedInfo(String nickName){
+    public MemberFeedResponse getMemberFeedInfo(String nickName){
 
         Member target = memberRepository.findByNickName(nickName).
                 orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
@@ -151,10 +152,10 @@ public class MemberService {
         //FIXME -> followService 사용시 순환참조 발생!
         //boolean isFollowedMember= followService.isMemberFollowing(member.getId(), target.getId());
         boolean isFollowedMember=followRepository.existsByFollowerIdAndFollowingId(member.getId(), target.getId());
-        FeedResponse.MemberFeedResponse responseDto = FeedResponse.MemberFeedResponse.of(
-                member.getNickName(),
-                member.getImage(),
-                member.getIntroduce(),
+        MemberFeedResponse responseDto = MemberFeedResponse.of(
+                target.getNickName(),
+                target.getImage(),
+                target.getIntroduce(),
                 isFollowedMember);
 
         return responseDto;
