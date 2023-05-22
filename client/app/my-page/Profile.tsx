@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { AiOutlineSetting } from "react-icons/ai";
 import { BsAward } from "react-icons/bs";
@@ -20,12 +21,13 @@ export const Profile: React.FC<Props> = ({ type }) => {
     image: "",
     introduce: "",
   });
+  const params = useParams();
+  const nickName = decodeURIComponent(params.nickName)
 
   useEffect(() => {
-    GetProfile().then((data) => {
+    GetProfile(nickName).then((data) => {
       if (data) {
         setProfile(data);
-        sessionStorage.setItem("header", data.nickName)
       }
     });
   }, []);
@@ -34,7 +36,7 @@ export const Profile: React.FC<Props> = ({ type }) => {
     세션 스토리지 nickName === params.nickName: follow 버튼
     else: following 버튼 & isFollowed props
   */
-
+  console.log(profile.followedMember)
   return (
     <StyledProfile className="box">
       <div className="profile-box">
@@ -62,7 +64,7 @@ export const Profile: React.FC<Props> = ({ type }) => {
       </div>
       {type === "follower"
         ? <FollowerButton />
-        : <FollowingButton isFollowed={profile.isFollowed} />
+        : <FollowingButton followedMember={profile.followedMember} nickName={profile.nickName} />
       }
     </StyledProfile>
   );

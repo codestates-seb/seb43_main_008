@@ -14,9 +14,12 @@ import { VotingPost } from "./VotingPost";
 export const Feed = () => {
   const [post, setPost] = useState([])
   const params = useParams();
-  const nickName = decodeURIComponent(params.nickName)
+  let nickName = decodeURIComponent(params.nickName)
   console.log(nickName)
 
+  if (nickName === "undefined") {
+    nickName = "세션 스토리지에서 가져오기"
+  }
   useEffect(() => {
     GetFeed(nickName).then((data) => {
       if (data) {

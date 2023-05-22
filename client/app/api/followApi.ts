@@ -18,3 +18,21 @@ export const GetFollowing = async () => {
     throw error;
   }
 }
+
+export const PostFollowing = async (nickName: string) => {
+  try {
+    const response = await axiosInstance.post(`/follow/${nickName}`);
+    return response.data
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const DeleteUnFollowing = async (nickName: string) => {
+  try {
+    const response = await axiosInstance.delete(`/unfollow/${nickName}`);
+    return response.data
+  } catch (error) {
+    throw error;
+  }
+}

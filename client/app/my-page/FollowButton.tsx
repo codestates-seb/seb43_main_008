@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import styled from 'styled-components';
 
+import { DeleteUnFollowing, PostFollowing } from "../api/followApi"
 
 export const FollowerButton = () => {
 
@@ -16,16 +17,18 @@ export const FollowerButton = () => {
 }
 
 interface Props {
-  isFollowed?: boolean
+  followedMember?: boolean
+  nickName?: string
 }
 
-export const FollowingButton: React.FC<Props> = ({ isFollowed }) => {
+export const FollowingButton: React.FC<Props> = ({ followedMember, nickName }) => {
+  console.log(followedMember)
   return (
     <>
-      {isFollowed ? (
-        <StyledFollowingButton>팔로우</StyledFollowingButton>
+      {followedMember ? (
+        <StyledUnFollowingButton onClick={() => DeleteUnFollowing(nickName)}>언팔로우</StyledUnFollowingButton>
       ) : (
-        <StyledUnFollowingButton>언팔로우</StyledUnFollowingButton>
+        <StyledFollowingButton onClick={() => PostFollowing(nickName)}>팔로우</StyledFollowingButton>
       )}
     </>
   );

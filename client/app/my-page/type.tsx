@@ -22,5 +22,5 @@ export interface ProfileData {
   nickName: string;
   image: string;
   introduce: string;
-  isFollowed?: boolean
+  followedMember?: boolean
 }
