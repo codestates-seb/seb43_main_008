@@ -249,6 +249,7 @@ public class SeriesService {
 
         return SeriesResponseDto.of(series.getId(),
                 series.getTitle(),
+                series.getImage(),
                 series.getDaylogCount(),
                 series.getCreatedAt(),
                 series.getModifiedAt(),
