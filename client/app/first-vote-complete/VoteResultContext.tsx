@@ -2,7 +2,19 @@
 
 import styled from "styled-components";
 
+import { useParams } from "next/navigation";
+import { useEffect } from "react";
+import { GetVoteResult } from "../api/voteResult";
+
 export default function VoteResultContext() {
+  const params = useParams();
+
+  useEffect(() => {
+    GetVoteResult(params.id).then((data) => {
+      console.log(data);
+    });
+  }, []);
+
   const MockData = "51 대 49";
   return (
     <ResultContextContainer>
