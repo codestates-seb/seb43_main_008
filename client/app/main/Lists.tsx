@@ -45,7 +45,7 @@ export const Lists: React.FC = () => {
       sessionStorage.setItem("header", title);
     } else router.push("/login");
   };
-
+  console.log(list)
   return (
     <StyledLists className="list">
       <Filter filter={filter} setFilter={setFilter} />
@@ -65,9 +65,9 @@ export const Lists: React.FC = () => {
         <div
           onClick={() => moveHandler(data.id, data.title)}
           className="item"
-          key={data.id}
+          key={`main ${data.id}`}
         >
-          <Card key={data.id} {...data} />
+          <Card {...data} />
         </div>
 
       ))}
