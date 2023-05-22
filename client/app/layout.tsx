@@ -3,6 +3,7 @@ import "./font.css";
 
 import StyledComponentsRegistry from "./registry";
 
+
 export default async function RootLayout({
   children,
 }: {

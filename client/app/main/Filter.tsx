@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import FetchToken from "../api/fetchToken";
@@ -12,7 +12,6 @@ export const Filter: React.FC = () => {
     // Hide URL
     history.replaceState({}, null, location.pathname);
   }, []);
-
   const [filter, setFilter] = useState<string>("newest");
   FetchToken();
 

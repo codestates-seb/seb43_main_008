@@ -13,6 +13,7 @@ export const Lists: React.FC = () => {
   const [pageQuery, setPageQuery] = useState<number>(1);
   const [lastDataLength, setLastDataLength] = useState<number>(0);
 
+
   useEffect(() => {
     GetMain(pageQuery).then((data) => {
       if (data) {
@@ -25,7 +26,7 @@ export const Lists: React.FC = () => {
   // 사용자의 로그인 여부를 확인하기 위한 함수 & 로그인 여부에 따라 경로를 다르게 보냄
   const router = useRouter();
   const moveHandler = (id: number, title: string) => {
-    if (localStorage.getItem("accessToken")) {
+    if (localStorage.getItem("Authorization")) {
       // 📌(수정 필요) 로그인 되었는지 확인
       router.push(`/detail/${id}`);
       sessionStorage.setItem("header", title);
