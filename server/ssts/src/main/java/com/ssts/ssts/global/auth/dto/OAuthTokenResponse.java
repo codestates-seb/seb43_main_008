@@ -11,7 +11,6 @@ public class OAuthTokenResponse {
     String accessToken;
     String refreshToken;
     String email;
-    String redirectUrl;
     boolean isAuthenticated;
 
     public static OAuthTokenResponse of(String accessToken, String refreshToken) {
@@ -21,12 +20,10 @@ public class OAuthTokenResponse {
         return tokenResponse;
     }
 
-    //
-    public static OAuthTokenResponse of(String accessToken, String email, String redirectUrl, boolean isAuthenticated) {
+    public static OAuthTokenResponse of(String accessToken, String email, boolean isAuthenticated) {
         OAuthTokenResponse tokenResponse=new OAuthTokenResponse();
         tokenResponse.setAccessToken(accessToken);
         tokenResponse.setEmail(email);
-        tokenResponse.setRedirectUrl(redirectUrl);
         tokenResponse.setAuthenticated(isAuthenticated);
         return tokenResponse;
     }

@@ -1,22 +1,21 @@
 package com.ssts.ssts.global.auth.service;
 
-import com.ssts.ssts.global.auth.constansts.TestConstants;
 import com.ssts.ssts.global.auth.dto.GoogleProfileResponse;
-import com.ssts.ssts.global.auth.dto.OAuthResponse;
+import com.ssts.ssts.global.auth.dto.KakaoProfileResponse;
+import com.ssts.ssts.global.auth.dto.NaverProfileResponse;
 import com.ssts.ssts.global.auth.dto.OAuthTokenResponse;
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,16 +25,32 @@ import java.util.stream.Collectors;
 public class OAuthService {
 
     private final GoogleInfraService googleInfraService;
+    private final KakaoInfraService kakaoInfraService;
+    private final NaverInfraService naverInfraService;
     private final MemberService memberService;
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
 
-    public OAuthTokenResponse accessResources(String code) {
+    public OAuthTokenResponse accessResources(String code, String socialType) {
 
-        log.info("하늘/oauth service : access resources()");
-        GoogleProfileResponse googleProfileResponse=googleInfraService.getGoogleAccount(googleInfraService.getAccessToken(code));
+        log.info("하늘/oauth service : access resources()" +
+                        "\nsocialType="+socialType);
+        String email;
 
-        return resourceAccessTokenResponse(googleProfileResponse.getEmail());
+        if("google".equals(socialType)){
+            GoogleProfileResponse googleProfileResponse = googleInfraService.getGoogleAccount(googleInfraService.getAccessToken(code));
+            email = googleProfileResponse.getEmail();
+        } else if ("kakao".equals(socialType)) {
+            KakaoProfileResponse kakaoProfileResponse = kakaoInfraService.getKakaoAccount(kakaoInfraService.getAccessToken(code));
+            email = kakaoProfileResponse.getEmail();
+        } else if ("naver".equals(socialType)){
+            NaverProfileResponse naverProfileResponse = naverInfraService.getNaverAccount(naverInfraService.getAccessToken(code));
+            email = naverProfileResponse.getEmail();
+        } else{
+            throw new BusinessLogicException(ExceptionCode.AUTH_NOT_SUPPORTED_SOCIAL_TYPE);
+        }
+
+        return resourceAccessTokenResponse(email);
     }
 
     public OAuthTokenResponse login() {
@@ -63,7 +78,7 @@ public class OAuthService {
     }
 
     public OAuthTokenResponse authorizationTokenResponse(Member member){
-        List<String> authorityList = authorityUtils.createAuthorities(member.getRoles())
+        List<String> authorityList = authorityUtils.dbRolesToAuthorities(member.getRoles())
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
@@ -82,13 +97,13 @@ public class OAuthService {
 
         if(member.isPresent()){
             id = member.get().getId();
-            authorityList = authorityUtils.createAuthorities(List.of("AUTH"))
+            authorityList = authorityUtils.dbRolesToAuthorities(List.of("AUTH"))
                     .stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
         }
         else{
-            authorityList = authorityUtils.createAuthorities(List.of("GUEST"))
+            authorityList = authorityUtils.dbRolesToAuthorities(List.of("GUEST"))
                     .stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
@@ -104,7 +119,7 @@ public class OAuthService {
         log.info("하늘/oauth service : access resources" +
                 "\n발급한 access token Bearer {}", accessToken);
 
-        return OAuthTokenResponse.of(accessToken, email, TestConstants.GOOGLE_REDIRECT_URL, member.isPresent());
+        return OAuthTokenResponse.of(accessToken, email, member.isPresent());
     }
 
     //FIXME

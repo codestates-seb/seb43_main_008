@@ -14,8 +14,7 @@ public class GoogleProfileResponse implements OAuthResponse {
     @JsonCreator
     public GoogleProfileResponse(
             @JsonProperty("id") String id,
-            @JsonProperty("email") String email
-    ) {
+            @JsonProperty("email") String email) {
         this.id = id;
         this.email = email;
     }

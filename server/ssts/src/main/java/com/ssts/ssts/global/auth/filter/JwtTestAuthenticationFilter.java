@@ -51,7 +51,7 @@ public class JwtTestAuthenticationFilter extends UsernamePasswordAuthenticationF
             Map<String, Object> credentials=new HashMap<>();
             credentials.put("id",member.get().getId());
 
-            List<GrantedAuthority> authorityList=authorityUtils.createAuthorities(member.get().getRoles());
+            List<GrantedAuthority> authorityList=authorityUtils.dbRolesToAuthorities(member.get().getRoles());
 
             UsernamePasswordAuthenticationToken UserAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(member.get().getEmail(),credentials, authorityList);
@@ -60,7 +60,7 @@ public class JwtTestAuthenticationFilter extends UsernamePasswordAuthenticationF
 
         }else{
             // 비회원일 경우
-            List<GrantedAuthority> authorityList=authorityUtils.createAuthorities(List.of("GUEST"));
+            List<GrantedAuthority> authorityList=authorityUtils.dbRolesToAuthorities(List.of("GUEST"));
 
             UsernamePasswordAuthenticationToken GuestAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(testLoginDto.getEmail(),null, authorityList);

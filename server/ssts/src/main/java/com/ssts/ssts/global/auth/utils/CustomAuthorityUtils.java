@@ -13,41 +13,22 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CustomAuthorityUtils {
 
-    private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER");
-    private final List<String> USER_ROLES_STRING = List.of("USER");
-    private final List<String> GUEST_ROLES_STRING = List.of("GUEST");
-
-    // DB에 저장된 Role을 기반으로 권한 정보 생성
-    public List<GrantedAuthority> createAuthorities(List<String> roles) {
+    //[입력] USER (String)
+    //[출력] ROLE_USER (GrantedAuthority)
+    public List<GrantedAuthority> dbRolesToAuthorities(List<String> roles) {
         List<GrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
         return authorities;
     }
 
-
-    public List<String> grantedAuthorityStringToRoleString(List<String> grantedAuthorityStringList){
-        List<String> roles=new ArrayList<>();
-        for (int i = 0; i < grantedAuthorityStringList.size(); i++) {
-            String role = grantedAuthorityStringList.get(i).replaceFirst("\\[ROLE_(.*?)\\]", "$1").replaceFirst("ROLE_", "");;
-            log.info("하늘/security : role="+role);
-            roles.add(role);
-        }
-        return roles;
+    //[입력] ROLE_USER (String)
+    //[출력] ROLE_USER (GrantedAuthority)
+    public List<GrantedAuthority> stringRolesToAuthorities(List<String> roles) {
+        List<GrantedAuthority> authorities = roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role))
+                .collect(Collectors.toList());
+        return authorities;
     }
 
-    public List<String> createRoles(String email) {
-        if (isAdmin(email)) {
-            return ADMIN_ROLES_STRING;
-        }
-        return USER_ROLES_STRING;
-    }
-
-    private boolean isAdmin(String email){
-        if(email.contains("@ssts.com")){
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

@@ -1,14 +1,11 @@
 package com.ssts.ssts.global.auth.controller;
 
-import com.ssts.ssts.domain.member.dto.MemberSignUpAddInfoDto;
-import com.ssts.ssts.domain.member.entity.Member;
-import com.ssts.ssts.global.auth.constansts.TestConstants;
+import com.ssts.ssts.global.auth.utils.TestConstants;
 import com.ssts.ssts.global.auth.dto.OAuthTokenResponse;
 import com.ssts.ssts.global.auth.service.OAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,23 +20,22 @@ import java.io.IOException;
 public class OAuthController {
 
     private String googleUrl="https://accounts.google.com";
-    private String kakaoUrl="/oauth2/authorization/kakao";
+    private String kakaoUrl="https://kauth.kakao.com";
+    private String naverUrl="https://nid.naver.com";
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
-    //@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String kakaoClientId;
 
+    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
+    private String naverClientId;
+
     private String googleScope="email%20profile";
-    private String kakaoScope="account_email";
-    //private String redirectUrl="http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/";
-    //private String redirectUrl="http://localhost:8080/login/oauth2/code/";
-
-
+    private String redirectUrl="http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/";
 
     private final String responseType = "code";
-    //private String authRequestUrl;
 
     private final OAuthService oauthService;
 
@@ -51,19 +47,51 @@ public class OAuthController {
                 .pathSegment("o", "oauth2", "v2", "auth")
                 .queryParam("response_type", responseType)
                 .queryParam("client_id", googleClientId)
-                .queryParam("redirect_uri", TestConstants.SERVER_GOOGLE_REDIRECT_URL)
+                .queryParam("redirect_uri", TestConstants.REDIRECT_URL+"google")
                 .queryParam("scope", googleScope)
                 .build();
 
         response.sendRedirect(uri.toString());
     }
 
-    @GetMapping("/login/oauth2/code/google")
-    public void callbackGoogle(@RequestParam(name = "code") String code,HttpServletResponse response) throws IOException{
-        log.info("하늘/oauth redirect callback : google" +
+    @GetMapping("/login/kakao")
+    public void redirectKakao(HttpServletResponse response) throws IOException {
+        log.info("하늘/oauth redirect : kakao");
+
+        UriComponents uri = UriComponentsBuilder.fromUriString(kakaoUrl)
+                .pathSegment("oauth", "authorize")
+                .queryParam("response_type", responseType)
+                .queryParam("client_id", kakaoClientId)
+                .queryParam("redirect_uri", TestConstants.REDIRECT_URL+"kakao")
+                .build();
+
+
+        response.sendRedirect(uri.toString());
+    }
+
+    @GetMapping("/login/naver")
+    public void redirectNaver(HttpServletResponse response) throws IOException {
+        log.info("하늘/oauth redirect : naver");
+
+
+        UriComponents uri = UriComponentsBuilder.fromUriString(naverUrl)
+                .pathSegment("oauth2.0", "authorize")
+                .queryParam("response_type", responseType)
+                .queryParam("client_id", naverClientId)
+                .queryParam("redirect_uri", TestConstants.REDIRECT_URL+"naver")
+                .build();
+
+        response.sendRedirect(uri.toString());
+
+    }
+
+
+    @GetMapping("/login/oauth2/code/{socialType}")
+    public void callbackGoogle(HttpServletResponse response, @RequestParam(name = "code") String code, @PathVariable String socialType) throws IOException{
+        log.info("하늘/oauth redirect callback :" +
                 "\ncode="+code);
 
-        OAuthTokenResponse tokenResponse=oauthService.accessResources(code);
+        OAuthTokenResponse tokenResponse=oauthService.accessResources(code, socialType);
 
         log.info("하늘/oauth token response :\n"+
                 tokenResponse.toString());
@@ -75,7 +103,7 @@ public class OAuthController {
                     .queryParam("Access",tokenResponse.getAccessToken())
                     .build();
         }else{
-            uri = UriComponentsBuilder.fromUriString(TestConstants.FE_BASE_URL2) //FIXME url 수정 필요
+            uri = UriComponentsBuilder.fromUriString(TestConstants.FE_BASE_URL+"/register") //FIXME url 수정 필요
                     .queryParam("Access",tokenResponse.getAccessToken())
                     .queryParam("email",tokenResponse.getEmail())
                     .build();
@@ -86,20 +114,8 @@ public class OAuthController {
 
     }
 
-/*
-    @GetMapping("/login/kakao")
-    public void redirectKakao(HttpServletResponse response) throws IOException {
-        log.info("하늘/oauth redirect : kakao");
 
-        UriComponents uri = UriComponentsBuilder.fromUriString(kakaoUrl)
-                .pathSegment("oauth", "authorize")
-                .queryParam("response_type", responseType)
-                .queryParam("client_id", kakaoClientId)
-                .queryParam("redirect_uri", redirectUrl+"kakao")
-                .build();
 
-        response.sendRedirect(uri.toString());
-    }*/
 
 
 }

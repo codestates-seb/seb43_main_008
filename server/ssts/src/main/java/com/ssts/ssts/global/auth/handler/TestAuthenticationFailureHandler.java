@@ -19,7 +19,7 @@ public class TestAuthenticationFailureHandler implements AuthenticationFailureHa
         // 인증 실패 시, 에러 로그를 기록하거나 error response를 전송할 수 있다.
         log.error("하늘/security : test authentication failure", exception.getMessage());
 
-        throw new BusinessLogicException(ExceptionCode.SECURITY_TEST_LOGIN_NO_MEMBER);// (2)
+        throw new BusinessLogicException(ExceptionCode.AUTH_TEST_LOGIN_NO_MEMBER);// (2)
     }
 
 }
