@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { DeleteUnFollowing, PostFollowing } from "../api/followApi"
@@ -22,13 +23,24 @@ interface Props {
 }
 
 export const FollowingButton: React.FC<Props> = ({ followedMember, nickName }) => {
-  console.log(followedMember)
+  const [isFollowing, setIsFollowing] = useState<boolean>(null)
+
+  useEffect(() => {
+    setIsFollowing(followedMember)
+  }, [])
+
   return (
     <>
-      {followedMember ? (
-        <StyledUnFollowingButton onClick={() => DeleteUnFollowing(nickName)}>언팔로우</StyledUnFollowingButton>
+      {isFollowing === true ? (
+        <StyledUnFollowingButton onClick={() => {
+          DeleteUnFollowing(nickName)
+          setIsFollowing(false)
+        }}>언팔로우</StyledUnFollowingButton>
       ) : (
-        <StyledFollowingButton onClick={() => PostFollowing(nickName)}>팔로우</StyledFollowingButton>
+        <StyledFollowingButton onClick={() => {
+          PostFollowing(nickName)
+          setIsFollowing(true)
+        }}>팔로우</StyledFollowingButton>
       )}
     </>
   );
