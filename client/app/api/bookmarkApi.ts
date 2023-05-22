@@ -3,7 +3,7 @@ import axiosInstance from '../axiosInstance';
 export const GetPageBookmark = async (pageQuery: number) => {
   try {
     const response = await axiosInstance.get(`/bookmark?page=${pageQuery}`);
-    return response.data
+    return response.data.data
   } catch (error) {
     throw error;
   }
