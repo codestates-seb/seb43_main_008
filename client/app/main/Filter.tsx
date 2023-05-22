@@ -1,22 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import styled from "styled-components";
 
 import FetchToken from "../api/fetchToken";
 
-// import { useSWRConfig } from 'swr'
-
-export const Filter: React.FC = () => {
-  const [filter, setFilter] = useState<string>("newest");
+interface FilterProps {
+  filter: string;
+  setFilter: React.Dispatch<React.SetStateAction<string>>
+}
+export const Filter: React.FC<FilterProps> = ({ filter, setFilter }) => {
   FetchToken();
 
-  /*
-  // filter 값이 변경될 때, 데이터를 다시 요청하기 위해 mutate 함수 호출
-  useEffect(() => {
-    GetMainFilter(filter)
-  }, [filter, mutate]);
-  */
 
   return (
     <StyledFilter>

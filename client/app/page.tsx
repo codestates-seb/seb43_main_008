@@ -1,8 +1,6 @@
-import { Filter } from "./main/Filter";
 import { Header } from "./main/Header";
 import { Lists } from "./main/Lists";
 import styles from "./main/page.module.css";
-// import { Scroll } from "./main/Scroll";
 import Navbar from "./Navbar";
 
 export default function Main() {
@@ -10,7 +8,6 @@ export default function Main() {
     <>
       <main className={`${styles.container}`}>
         <Header />
-        <Filter />
         <Lists />
       </main>
       <Navbar />
