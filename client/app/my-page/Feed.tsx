@@ -1,6 +1,5 @@
 "use client";
 import { useParams } from 'next/navigation';
-// import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -27,16 +26,6 @@ export const Feed = () => {
       }
     })
   }, [])
-
-  /*
-    const router = useRouter();
-  const HandleMoveToDetail = (id: number, title: string) => {
-    router.push(`/detail/${id}`);
-    sessionStorage.setItem("header", title);
-  }
-
-  onClick={HandleMoveToDetail(data.id, data.title)}
-  */
 
 
   return (

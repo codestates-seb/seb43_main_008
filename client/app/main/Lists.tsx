@@ -45,6 +45,7 @@ export const Lists: React.FC = () => {
       sessionStorage.setItem("header", title);
     } else router.push("/login");
   };
+
   return (
     <StyledLists className="list">
       <Filter filter={filter} setFilter={setFilter} />
