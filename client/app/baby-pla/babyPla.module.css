@@ -1,0 +1,159 @@
+/* 헤더 */
+.start-page{
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+/* 헤더 디테일 */
+.start-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  padding: 5px;
+}
+
+/* 플라스틱 육아 시작하기 */
+.start-headerText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-Size: 14px;
+  margin-left: 10px;
+  position: fixed;
+  left: 114px;
+}
+
+/* 공개/비공개 아이콘 */
+.startHeader-lockIconBox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* 페이지 전체 레이아웃 */
+.start-body{
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* height: calc(100vh - 40px); */
+  box-sizing: border-box;
+  padding: 1px 24px;
+  max-width: 1024px;
+  margin: 0 auto;
+  min-height: 550px;
+  min-width: 320px;
+
+  @media screen and (max-width: 768px) {
+  }
+}
+
+/* ㅆㅆㄸㅆ 로고 스타일 */
+.start-logoImage{
+  margin-top: 120px;
+  margin-bottom: 50px;
+}
+
+/* '육아를~주세요' */
+.start-textBox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin-bottom: 30px;
+}
+/* 입양 완료 버튼 감싸는 박스 스타일 */
+.start-inputBox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+}
+
+/* 인풋창 스타일 */
+.start-input{
+  width: 100%;
+  height: 40px;
+  margin-bottom: 15px;
+  padding: 0px;
+  
+}
+.start-input::placeholder {
+  font-size: 13px;
+  text-align: center;
+}
+
+
+/* 입양 완료 버튼 스타일 */
+.start-button{
+  width: 100%;
+  height: 38px;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  margin-top: 7px;
+}
+.start-button:active {
+  transform: translateY(-2px);
+}
+
+/*-------------------------------- 모달 스타일 -----------------------------------*/
+/* 모달 전체창 스타일 */
+.start-modalBody{
+  width: 80vw;
+  height: 42%;
+  border: black 1px solid;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: white;
+  font-size: 15px;
+}
+
+/* 라디오 버튼 */
+.start-modalRadioBox{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 공개로~있어요~ */
+.start-modalTextBox{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  color : darkgray;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+/* 확인 버튼 */
+.start-modalButton{
+  height: 33px;
+  width: 80px;
+  background-color: #f5f2f0;
+  border: 1px #85858e solid;
+  border-radius: 5px;
+  border-radius: 16px;
+}
+.start-modalButton:hover {
+  border: solid 1px #3f910c;
+  background-color: #eff4e7;
+  color: #3f910c;
+}
+.start-modalButton:active {
+  transform: translateY(-1px);
+}

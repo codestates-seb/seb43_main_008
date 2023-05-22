@@ -71,7 +71,6 @@ export default function Header({
         isPublic={isPublic}
         setIsPublic={setIsPublic}
       />
-      {/* </HeaderContainer> */}
 
       <VoteModal
         isVoteModalOpen={isVoteModalOpen}
@@ -84,13 +83,16 @@ export default function Header({
 }
 
 const HeaderContainer = styled.header`
-  position: sticky;
+  /* position: sticky;
   top: 0;
+  z-index: 1; */
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   height: 44px;
+  padding: 5px;
   background-color: #ffffff;
-  z-index: 1;
 `;
 
 const BackArrowContainer = styled.div`
@@ -98,7 +100,7 @@ const BackArrowContainer = styled.div`
   align-items: center;
   height: 50px;
   width: 44px;
-  padding: 10px;
+  padding: 5px;
   position: relative;
   cursor: pointer; // 커서를 손가락 모양으로 변경
 `;
@@ -108,8 +110,7 @@ const HeaderText = styled.span`
   justify-content: center;
   align-items: center;
   height: 100%;
-  font-size: 13px;
-  margin-top: 3px;
+  font-size: 14px;
 `;
 
 const SecretButtonContainer = styled.div`

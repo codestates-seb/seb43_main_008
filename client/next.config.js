@@ -8,9 +8,9 @@ module.exports = withPWA({
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'ssts-img.s3.ap-northeast-2.amazonaws.com',
-        pathname: '/member/**'
+        protocol: "https",
+        hostname: "ssts-img.s3.ap-northeast-2.amazonaws.com",
+        pathname: "/member/**",
       },
     ],
   },

@@ -1,0 +1,123 @@
+.listPage{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #e3e3e3;
+  align-items: center;
+}
+
+.listHeader{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  height: 40px;
+  background-color: white;
+  width: 100vw;
+}
+
+.listHeaderVoteIconBox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*----------------------------------------몇 번 사용했는지 보는 박스-------------------------------------------*/
+
+.listUseCountBarBox{
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+  border-radius: 8px;
+  border: #e3e3e3 1px solid;
+  justify-content: center;
+  background-color: white;
+  margin-top: 20px;
+}
+
+.listUseCountBar{
+  align-items: center;
+  height: 50px;
+  border: black 1px solid;
+  border-radius: 4px;
+  margin: 10px;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}
+
+.listUseCountContainer{
+  margin-top: 5px;
+  display: inline-flex;
+}
+
+.ListEachTime{
+  height: 35px;
+  width: 35px;
+  background-color: #fff4cc;
+  border: #fff4cc 1px solid;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+/*----------------------------------------유저 컨텐츠 박스-------------------------------------------*/
+
+.listUseContentBarBox{
+  display: flex;
+  width: 90vw;
+  height: 75vh;
+  background-color: #e3e3e3;
+  margin-top: 20px;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}
+
+.listUseContentContainer{
+  margin-top: 5px;
+  display: inline-flex;
+}
+
+.ListEachContents{
+  width: 75vw;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.ListEachContentsImage{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  border: white 1px solid;
+}
+
+.ListEachContentsText{
+  display: block;
+  width: auto;
+  margin-right: 20px;
+  margin-left: 20px;
+  white-space: pre-wrap;
+  text-overflow: ellipsis;
+  word-break:break-all;
+  font-size: 18px;
+}
+
+.ListEachContentsDate{
+  margin-left: 20px;
+  margin-top: 10px;
+  font-size: 12px;
+  margin-right: auto;
+}
+
+.ListAddContentsBox{
+  width: 75vw;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+}

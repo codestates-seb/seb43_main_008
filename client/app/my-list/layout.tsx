@@ -1,5 +1,5 @@
 "use client";
-import Header from "../Header";
+// import Header from "../Header";
 import Navbar from "../Navbar";
 
 export default function SeriesLayout({
@@ -9,12 +9,12 @@ export default function SeriesLayout({
 }) {
   return (
     <>
-      <Header
+      {/* <Header
         backButton={true}
         textContent={"봉다리 세바스찬"}
         secretButton={false}
         voteButton={true}
-      />
+      /> */}
       {children}
       <Navbar />
     </>
