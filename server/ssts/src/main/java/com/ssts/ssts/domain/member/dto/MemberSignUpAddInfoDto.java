@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MemberSignUpAddInfoDto {
-    String phone;
-    String nickName;
+    private String phone;
+    private String nickName;
 }

@@ -5,19 +5,24 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MemberFeedResponse {
+public class MemberFeedResponse extends FeedResponse {
 
-    String nickName;
-    String image;
-    String introduce;
+    private boolean followedMember;
 
-    public static MemberFeedResponse of(String nickName, String image, String introduce) {
+    public static MemberFeedResponse of(String nickName,
+                                        String image,
+                                        String introduce,
+                                        boolean isFollowed) {
+
         MemberFeedResponse memberFeedResponse = new MemberFeedResponse();
 
         memberFeedResponse.setNickName(nickName);
         memberFeedResponse.setImage(image);
         memberFeedResponse.setIntroduce(introduce);
+        memberFeedResponse.setFollowedMember(isFollowed);
 
         return memberFeedResponse;
     }
+
+
 }

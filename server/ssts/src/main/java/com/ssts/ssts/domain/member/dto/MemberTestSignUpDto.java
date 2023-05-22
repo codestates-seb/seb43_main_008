@@ -8,8 +8,8 @@ import lombok.Setter;
 @Getter
 public class MemberTestSignUpDto {
     //테스트 용
-    String email;
-    String nickName;
-    String phone;
+    private String email;
+    private String nickName;
+    private String phone;
 
 }
