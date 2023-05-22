@@ -46,8 +46,9 @@ public class CommentService {
 
         List<Comment> comments = commentInfo.getContent();
         List<CommentResponseDto> list = this.commentListToResponseDtoList(comments);
+        List<CommentResponseDto> responseDtos = this.isMine(list);
 
-        return new PageResponseDto<>(list,commentInfo);
+        return new PageResponseDto<>(responseDtos,commentInfo);
     }
 
     @Transactional
@@ -111,6 +112,17 @@ public class CommentService {
         }
 
         return list;
+    }
+
+    private List<CommentResponseDto> isMine(List<CommentResponseDto> commentResponseDtoList){
+
+        for(CommentResponseDto commentResponseDto : commentResponseDtoList){
+            if(commentResponseDto.getMember().getId() == memberService.findMemberByToken().getId()){
+                commentResponseDto.setMine(true);
+            }
+        }
+
+        return commentResponseDtoList;
     }
 
     public Comment findVerifiedComment(Long commentId){

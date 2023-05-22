@@ -63,6 +63,8 @@ public class SecurityConfig {
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.addExposedHeader("authorization");
+        configuration.addExposedHeader("refresh");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

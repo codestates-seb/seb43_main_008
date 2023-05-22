@@ -109,4 +109,71 @@ public class VoteResponse {
 
     }
 
+    //voteGet API Response
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class FirstVoteAddResponse extends VoteResponse { //첫 투표 Response
+
+        int voteCount;
+        Boolean voteResult;
+        int voteAgree;
+        int voteDisagree;
+        LocalDateTime voteCreatedAt;
+        Boolean isVotedMember;
+
+
+
+        //최초 투표일 때의 투표 Response 변경
+        public static FirstVoteAddResponse of(Long seriesId, int voteCount, Boolean voteResult, int voteAgree,
+                                           int voteDisagree, Series.VoteStatus voteStatus, LocalDateTime voteCreatedAt, LocalDateTime voteEndAt,
+                                           Boolean isVotedMember) {
+            VoteResponse.FirstVoteAddResponse vote = new FirstVoteAddResponse();
+
+            vote.setSeriesId(seriesId);
+            vote.setVoteCount(voteCount);
+            vote.setVoteResult(voteResult);
+            vote.setVoteAgree(voteAgree);
+            vote.setVoteDisagree(voteDisagree);
+            vote.setVoteStatus(voteStatus);
+            vote.setVoteCreatedAt(voteCreatedAt);
+            vote.setVoteEndAt(voteEndAt);
+            vote.setIsVotedMember(isVotedMember);
+            return vote;
+        }
+    }
+
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RevoteAddResponse extends VoteResponse { //재투표 Response
+
+        int voteCount;
+        Boolean revoteResult;
+        int revoteAgree;
+        int revoteDisagree;
+        LocalDateTime voteCreatedAt;
+        Boolean isVotedMember;
+
+        public static RevoteAddResponse of(Long seriesId, int voteCount, Boolean revoteResult, int revoteAgree,
+                                        int revoteDisagree, Series.VoteStatus voteStatus, LocalDateTime voteCreatedAt, LocalDateTime voteEndAt, Boolean isVotedMember) {
+            VoteResponse.RevoteAddResponse revote = new RevoteAddResponse();
+
+
+            revote.setSeriesId(seriesId);
+            revote.setVoteCount(voteCount);
+            revote.setRevoteResult(revoteResult);
+            revote.setRevoteAgree(revoteAgree);
+            revote.setRevoteDisagree(revoteDisagree);
+            revote.setVoteStatus(voteStatus);
+            revote.setVoteCreatedAt(voteCreatedAt);
+            revote.setVoteEndAt(voteEndAt);
+            revote.setIsVotedMember(isVotedMember);
+            return revote;
+        }
+    }
+
 }

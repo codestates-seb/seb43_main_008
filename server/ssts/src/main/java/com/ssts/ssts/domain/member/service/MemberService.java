@@ -32,9 +32,6 @@ public class MemberService {
 
     private final S3Uploader s3ImageUploader;
 
-    //private final FollowService followService;
-
-
 
     /*
     * 토큰에서 id 가져와서 Member 반환

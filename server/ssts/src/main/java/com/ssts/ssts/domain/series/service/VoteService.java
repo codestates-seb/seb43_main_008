@@ -66,7 +66,7 @@ public class VoteService {
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
         //투표 마감기간 (2일) 할당
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusDays(2));
-        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(1));
+        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
         targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusHours(12));
         //ㄴ> 테스트 마감기간: 15초
 
@@ -117,7 +117,10 @@ public class VoteService {
             }
 
             //set vote Result
-            targetSeries.setVoteResult(voteResultCal(targetSeries.getVoteAgree(), targetSeries.getVoteDisagree()));
+            Boolean voteResult = voteResultCal(targetSeries.getVoteAgree(), targetSeries.getVoteDisagree());
+            targetSeries.setVoteResult(voteResult);
+            seriesRepo.save(targetSeries);
+
             //save mapping table
             voteMemberRepo.save(MemberVote.of(voteMember, targetSeries, isAgree));
 
@@ -137,7 +140,11 @@ public class VoteService {
             }
 
             //set revote Result
-            targetSeries.setRevoteResult(voteResultCal(targetSeries.getRevoteAgree(), targetSeries.getRevoteDisagree()));
+            Boolean revoteResult = voteResultCal(targetSeries.getRevoteAgree(), targetSeries.getRevoteDisagree());
+            targetSeries.setRevoteResult(revoteResult);
+            seriesRepo.save(targetSeries);
+
+
             //save mapping table
             voteMemberRepo.save(MemberVote.of(voteMember, targetSeries, isAgree));
 
@@ -204,6 +211,7 @@ public class VoteService {
             targetSeries.setIsEditable(true);
             targetSeries.setIsActive(true);
             targetSeries.setVoteStatus(Series.VoteStatus.SERIES_ACTIVE);
+            seriesRepo.save(targetSeries);
         }
 
         //걸러지는 경우 (2) / 최종: 투표를 더 안할게요 voteCount==1&&voteResult==false => 로직이 도는 대상 (isQuit==1)
@@ -211,6 +219,7 @@ public class VoteService {
         targetSeries.setIsEditable(false); //타이틀 수정 가능
         targetSeries.setIsActive(false); //활성 상태
         targetSeries.setVoteStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
+        seriesRepo.save(targetSeries);
         }
         return voteCountResponse(targetSeries.getId(), targetSeries);
     }
@@ -252,6 +261,19 @@ public class VoteService {
                 targetSeries.getVoteDisagree()
         );
 
+    }
+
+    //투표 개별조회
+    public VoteResponse getVoteInfo(Long seriseId){
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
+
+        Series targetSeries = seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+
+        Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(memberId, seriseId);
+
+
+        return voteCountAddResponse(seriseId, targetSeries, isVotedMember);
     }
 
 
@@ -312,5 +334,39 @@ public class VoteService {
         }
         return false;
     }
+
+
+    //내부 로직: 투표 횟수별 검증 메소드 (투표 개별 정보)
+    public VoteResponse voteCountAddResponse(Long seriesId, Series targetSeries, Boolean isVotedMember) {
+        //이제 voteCount++ 된 상태이기 때문에 여기서부터 최초투표인지 재투표인지 알 수 있음
+
+        if (targetSeries.getVoteCount() == 1) {
+            return VoteResponse.FirstVoteAddResponse.of(
+                    seriesId,
+                    targetSeries.getVoteCount(),
+                    targetSeries.getVoteResult(),
+                    targetSeries.getVoteAgree(),
+                    targetSeries.getVoteDisagree(),
+                    targetSeries.getVoteStatus(),
+                    targetSeries.getVoteCreatedAt(),
+                    targetSeries.getVoteEndAt(),
+                    isVotedMember
+            );
+
+        } else if (targetSeries.getVoteCount() == 2) {
+            return VoteResponse.RevoteAddResponse.of(
+                    seriesId,
+                    targetSeries.getVoteCount(),
+                    targetSeries.getRevoteResult(),
+                    targetSeries.getRevoteAgree(),
+                    targetSeries.getRevoteDisagree(),
+                    targetSeries.getVoteStatus(),
+                    targetSeries.getVoteCreatedAt(),
+                    targetSeries.getVoteEndAt(),
+                    isVotedMember
+            );
+        }else { throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND); }
+    }
+
 
 }
