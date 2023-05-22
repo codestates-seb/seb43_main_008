@@ -9,7 +9,7 @@ export const FollowerButton = () => {
   const router = useRouter();
 
   return (
-    <StyledFollowerButton onClick={() => router.push("/follow")}>
+    <StyledFollowerButton onClick={() => router.push("/follower")}>
       팔로워
     </StyledFollowerButton>
   )
