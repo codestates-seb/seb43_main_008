@@ -17,7 +17,7 @@ export const BookmarkButton = () => {
         setIsMarked(data)
       }
     })
-  }, [])
+  }, [isMarked])
 
   const markHandle = (seriesId: string) => {
     setIsMarked(true)

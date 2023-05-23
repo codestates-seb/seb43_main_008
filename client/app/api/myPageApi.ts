@@ -21,7 +21,7 @@ export const GetMyFeed = async () => {
 
 export const GetProfile = async (nickName: string) => {
   try {
-    const response = await axiosInstance.get(`/feed${nickName}`);
+    const response = await axiosInstance.get(`/feed/${nickName}`);
     sessionStorage.setItem("header", response.data.nickName);
     return response.data.data;
   } catch (error) {

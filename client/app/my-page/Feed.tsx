@@ -20,9 +20,6 @@ export const Feed: React.FC<Props> = ({ type }) => {
   let nickName = decodeURIComponent(params.nickName);
   console.log(nickName);
 
-  if (nickName === "undefined") {
-    nickName = "세션 스토리지에서 가져오기";
-  }
   useEffect(() => {
     if (type === "mine") {
       GetMyFeed().then((data) => {
