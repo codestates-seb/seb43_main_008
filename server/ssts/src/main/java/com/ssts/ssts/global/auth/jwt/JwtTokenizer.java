@@ -1,6 +1,9 @@
 package com.ssts.ssts.global.auth.jwt;
 
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -68,10 +71,12 @@ public class JwtTokenizer {
     public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
+
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(jws); //파싱
+
         return claims;
     }
 
@@ -79,10 +84,14 @@ public class JwtTokenizer {
     public void verifySignature(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
-        Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jws);
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jws);
+        } catch (ExpiredJwtException exception) {
+            throw new BusinessLogicException(ExceptionCode.JWT_TOKEN_EXPIRED);
+        }
     }
 
     public Date getTokenExpiration(int expirationMinutes) {
@@ -99,5 +108,16 @@ public class JwtTokenizer {
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return key;
+    }
+
+    public String getSubjectFromRefreshToken(String refreshToken, String base64EncodedSecretKey) {
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(refreshToken)
+                .getBody();
+
+        return claims.getSubject();
     }
 }

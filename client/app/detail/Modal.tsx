@@ -4,37 +4,25 @@ import { AiOutlineMinus } from "react-icons/ai";
 import { RiDeleteBinLine, RiEdit2Line } from "react-icons/ri";
 import styled from "styled-components";
 
+
 interface Props {
   onClickModal: () => void;
-  handleEditComment: (id: number) => void;
-  commentid: number;
-  setComment: React.Dispatch<React.SetStateAction<string>>
+  handleEditComment: (id: string) => void;
+  commentId?: string;
+  handleDelete: (commentId: string) => void;
 
 }
 
 export const Modal: React.FC<Props> = ({
   onClickModal,
   handleEditComment,
-  commentid,
-  setComment,
+  commentId,
+  handleDelete,
 }) => {
-  // const HandleEdit = () => {
-  //   /*
-  //   리덕스
-  //   수정 버튼 누르면 -> 스토어에서 수정 상태 true로 변경 & 수정할 댓글
-  //   Comments: 스토어에서 가져온 수정 상태가 true라면 value를 업데이트 타겟 데이터로 주기
-  //   */
-  // };
 
-  const HandleDelete = () => {
+  const handleEdit = () => {
     onClickModal();
-    setComment("")
-    console.log("서버에 삭제 요청 보내기");
-  };
-
-  const HandleEdit = () => {
-    onClickModal();
-    handleEditComment(commentid);
+    handleEditComment(commentId);
   };
 
   return (
@@ -46,16 +34,16 @@ export const Modal: React.FC<Props> = ({
         </div>
         <div className="edit">
           <RiEdit2Line className="icon" />
-          <div className="text" onClick={HandleEdit}>
+          <div className="text" onClick={handleEdit}>
             수정하기
           </div>
         </div>
-        <div className="delete" onClick={HandleDelete}>
+        <div className="delete" onClick={() => { handleDelete(commentId); onClickModal(); }}>
           <RiDeleteBinLine className="icon" />
           <div className="text">삭제하기</div>
         </div>
       </div>
-    </StyledModal>
+    </StyledModal >
   );
 };
 

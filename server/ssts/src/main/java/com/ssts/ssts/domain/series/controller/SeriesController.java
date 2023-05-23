@@ -1,6 +1,9 @@
 package com.ssts.ssts.domain.series.controller;
 
 
+import com.ssts.ssts.domain.series.dto.SeriesDetailResponseDto;
+import com.ssts.ssts.global.exception.ExceptionCode;
+import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.series.dto.SeriesPostDto;
 import com.ssts.ssts.domain.series.dto.SeriesResponseDto;
@@ -9,70 +12,79 @@ import com.ssts.ssts.domain.series.service.SeriesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+import javax.validation.constraints.Positive;
+
 @RestController
-@RequestMapping("/series")
 @RequiredArgsConstructor
+@Validated
 public class SeriesController {
 
 
     private final SeriesService seriesService;
 
 
-    @GetMapping("/members")
-    public ResponseEntity getSeriesList(@RequestParam(value = "page", defaultValue = "1") int page,
-                                        @RequestParam(value = "size", defaultValue = "12") int size){
+    @GetMapping("/feed/series/{nick-name}")
+    public ApiResponse getSeriesList(@PathVariable("nick-name") String nickname,
+                                     @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                     @Positive @RequestParam(value = "size", defaultValue = "12") int size){
 
-        PageResponseDto response = seriesService.getSeriesList(page-1, size);
+        PageResponseDto response = seriesService.getSeriesList(nickname,page-1, size);
 
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 
-    @GetMapping
-    public ResponseEntity getMainSeriesList(@RequestParam(value = "sort", defaultValue = "newest") String sort, @RequestParam(value = "page", defaultValue = "1") int page,
-                                        @RequestParam(value = "size", defaultValue = "12") int size){
+    @GetMapping("/series")
+    public ApiResponse<PageResponseDto> getMainSeriesList(@RequestParam(value = "sort", defaultValue = "newest") String sort,
+                                                          @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                                          @Positive @RequestParam(value = "size", defaultValue = "12") int size){
+
         if("votes".equals(sort)){
             PageResponseDto response = seriesService.getMainSeriesListByVotes(page-1, size);
+            return ApiResponse.ok(response);
         }
-
         PageResponseDto response = seriesService.getMainSeriesListByNewest(page-1, size);
-
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 
-    @GetMapping("/{series-id}")
-    public ResponseEntity getSeries(@PathVariable("series-id") Long id){
+    @GetMapping("/series/{series-id}")
+    public ApiResponse getSeries(@Positive @PathVariable("series-id") Long id){
 
-        SeriesResponseDto response = seriesService.getSeries(id);
+        SeriesDetailResponseDto response = seriesService.getSeries(id);
 
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 
 
-    @PostMapping
-    public ResponseEntity createSeries(@RequestBody SeriesPostDto seriesPostDto){
+    @PostMapping("/series")
+    public ApiResponse createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic,
+                                    @Validated @RequestBody SeriesPostDto seriesPostDto){
 
-        SeriesResponseDto response = seriesService.saveSeries(seriesPostDto);
+        SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
 
-        return new ResponseEntity(response, HttpStatus.CREATED);
+        return ApiResponse.create(response);
     }
 
-    @PatchMapping("/{series-id}")
-    public ResponseEntity updateSeries(@RequestBody
-    SeriesUpdateDto seriesUpdateDto){
 
-        SeriesResponseDto response = seriesService.updateSeries(seriesUpdateDto);
+    @PatchMapping("/series/{series-id}")
+    public ApiResponse updateSeries(@Positive @PathVariable("series-id") Long seriesId,
+                                    @Validated @RequestBody SeriesUpdateDto seriesUpdateDto){
 
-        return ResponseEntity.ok(response);
+        SeriesResponseDto response = seriesService.updateSeries(seriesId,seriesUpdateDto);
+
+        return ApiResponse.ok(response);
     }
 
-    @DeleteMapping("/{series-id}")
-    public ResponseEntity deleteSeries(@PathVariable("series-id") Long id){
+
+    @DeleteMapping("/series/{series-id}")
+    public ApiResponse deleteSeries(@Positive @PathVariable("series-id") Long id){
 
         seriesService.deleteSeries(id);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ApiResponse.ok();
     }
 
 }

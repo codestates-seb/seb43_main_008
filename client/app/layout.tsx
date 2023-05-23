@@ -1,7 +1,6 @@
 import "./global.css";
 import "./font.css";
 
-import Provider from "./Provider";
 import StyledComponentsRegistry from "./registry";
 
 export default async function RootLayout({
@@ -20,19 +19,17 @@ export default async function RootLayout({
           rel="apple-touch-startup-image"
           href="/images/splashscreens.png"
         />
-        <meta name="msapplication-TileColor" content="#D4E8D8" />
-        <meta name="theme-color" content="#D4E8D8" />
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, user-scalable=no"
         />
       </head>
       <body>
-        <Provider>
-          <StyledComponentsRegistry>
-            <div className="mainContainer">{children}</div>
-          </StyledComponentsRegistry>
-        </Provider>
+        <StyledComponentsRegistry>
+          <div className="main-container">{children}</div>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

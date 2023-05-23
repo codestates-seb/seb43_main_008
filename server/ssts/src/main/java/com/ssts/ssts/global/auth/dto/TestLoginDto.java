@@ -7,5 +7,5 @@ import lombok.Setter;
 @Getter
 public class TestLoginDto {
 
-    String email;
+    private String email;
 }

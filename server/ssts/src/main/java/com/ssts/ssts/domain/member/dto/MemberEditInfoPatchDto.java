@@ -7,10 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 public class MemberEditInfoPatchDto {
-    String nickName;
-    String introduce;
+    private String nickName;
+    private String introduce;
     private MultipartFile image;
-    //String password; //oauth로그인이라서 필요없다
-
-
 }

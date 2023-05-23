@@ -43,20 +43,15 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .apply(new CustomFilterConfigurer())
                 .and()
-//                .addFilterBefore(new JwtTestAuthenticationFilter(jwtTokenizer, authorityUtils,memberService), UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(new JwtVerificationFilter(jwtTokenizer, authorityUtils), JwtTestAuthenticationFilter.class)
                 .authorizeRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.PATCH,"/**/members/edit/**").hasRole("USER")
-                        .antMatchers("/login/**").permitAll()
-                        .antMatchers("/test/login").permitAll()
+                        .antMatchers(HttpMethod.GET,"/login/auth").hasAnyRole("AUTH","ADMIN")
+                        .antMatchers(HttpMethod.POST,"/signup").hasAnyRole("GUEST","ADMIN")
                         .antMatchers("/test/**").permitAll()
-                        .antMatchers("/test/signup").permitAll()
-                        //.anyRequest().authenticated()) //FIXME 인증 끌때 여기 주석처리하세요
-                        .anyRequest().permitAll());
-//                .oauth2Login()
-//                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer))
-//                .failureHandler(new OAuth2MemberFailureHandler())
-//                .userInfoEndpoint().userService(new CustomOAuth2UserService(memberService, authorityUtils));
+                        .antMatchers("/login/**").permitAll()
+                        .antMatchers(HttpMethod.GET,"/series/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/token/**").permitAll()
+                        .anyRequest().authenticated()); //FIXME 인증 끌때 여기 주석처리하세요
+                        //.anyRequest().permitAll());
 
 
         return http.build();
@@ -68,6 +63,8 @@ public class SecurityConfig {
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.addExposedHeader("authorization");
+        configuration.addExposedHeader("refresh");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -92,5 +89,7 @@ public class SecurityConfig {
 
         }
     }
+
+
 
 }

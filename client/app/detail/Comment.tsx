@@ -6,24 +6,25 @@ import styled from "styled-components";
 
 import { Modal } from "./Modal";
 
+
 interface CommentProps {
-  id: number;
-  member_id: number;
-  series_id: number;
+  id?: string;
   comment: string;
-  created_at: string;
-  handleEditComment: (id: number) => void;
-  setComment: React.Dispatch<React.SetStateAction<string>>
+  member: { nickName: string, image: string };
+  mine: boolean;
+  handleEditComment: (id: string) => void;
+  handleDelete: (commentId: string) => void;
+  setComment: React.Dispatch<React.SetStateAction<string>>;
+
 }
 export const Comment: React.FC<CommentProps> = ({
-  member_id,
-  comment,
+  member,
   id,
+  comment,
+  mine,
   handleEditComment,
-  setComment,
+  handleDelete,
 }) => {
-  // 댓글 날짜 추가하기
-  // 사용자 Id === 댓글 작성자 Id : edit-delete-button 활성화 하기
 
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const HandleOpenModal = useCallback(() => {
@@ -34,23 +35,29 @@ export const Comment: React.FC<CommentProps> = ({
     <>
       <StyledComment>
         <li className="comment">
-          <div className="profile" />
           <div className="text-box">
-            <div className="user-name">{member_id}</div>
+            <div className='user-info'>
+              <div className="user-name">{member.nickName}</div>
+              {mine ? <div className='mine-tag'>내 댓글</div> : null}
+            </div>
             <div className="text">{comment}</div>
           </div>
-          <MdMoreVert
-            className="edit-delete-button"
-            onClick={HandleOpenModal}
-          />
+          {mine ?
+            <MdMoreVert
+              className="edit-delete-button"
+              onClick={HandleOpenModal}
+            />
+            :
+            null
+          }
         </li>
       </StyledComment>
       {isOpenModal && (
         <Modal
           onClickModal={HandleOpenModal}
-          commentid={id}
+          commentId={id}
           handleEditComment={handleEditComment}
-          setComment={setComment}
+          handleDelete={handleDelete}
         />
       )}
     </>
@@ -74,10 +81,23 @@ const StyledComment = styled.div`
     border-radius: 50%;
     background-color: #757575;
   }
-  .user-name {
+  .user-info {
     font-size: 0.8rem;
     color: #757575;
     padding-bottom: 6px;
+
+    display: flex;
+    align-items: center;
+  }
+  .mine-tag {
+    margin-left: 5px;
+    padding: 1px 2px;
+
+    font-size: 0.45rem;
+    color: #3f910c;
+    background-color: #eff4e7;
+    border: solid 1px #3f910c;
+    border-radius: 6px;
   }
   .text-box {
     width: 100%;

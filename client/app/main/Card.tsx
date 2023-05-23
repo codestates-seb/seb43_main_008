@@ -1,9 +1,10 @@
 "use client";
 
-import Image from 'next/image';
+// import Image from 'next/image';
 import { FaRegCommentDots } from "react-icons/fa";
 import { MdOutlineHowToVote } from "react-icons/md";
 import styled from "styled-components";
+
 interface CardProps {
   id: number;
   title: string;
@@ -25,7 +26,6 @@ interface CardProps {
 }
 
 export default function Card({ ...data }: CardProps) {
-  console.log(data.image)
   return (
     <StyledCard>
       <div className="info">
@@ -33,13 +33,8 @@ export default function Card({ ...data }: CardProps) {
         <div className="usageCount">{data.daylogCount}번 사용</div>
       </div>
       {/* img 태그는  background 속성 적용 안됨 -> div 태그로 변경*/}
-      <Image
-        width={40}
-        height={40}
-        alt="프로필 사진"
+      <div
         className="image"
-        src=""
-        // src={data.image}
         style={{ backgroundImage: `url(${data.image})` }} />
       <div className="status">
         <div className="vote">

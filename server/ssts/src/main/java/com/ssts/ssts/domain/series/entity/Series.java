@@ -37,7 +37,7 @@ public class Series extends BaseTimeEntity {
     @Column
     private int voteCount;
 
-    @Column
+    @Column(name = "vote_result")
     private Boolean voteResult;
 
     @Column
@@ -45,6 +45,10 @@ public class Series extends BaseTimeEntity {
 
     @Column
     private int voteDisagree;
+
+    @ColumnDefault("0")
+    @Column
+    private int totalVote;
 
     @Column
     private Boolean revoteResult;
@@ -54,6 +58,7 @@ public class Series extends BaseTimeEntity {
 
     @Column
     private int revoteDisagree;
+
 
     @Enumerated(value = EnumType.STRING)
     @Column
@@ -110,6 +115,10 @@ public class Series extends BaseTimeEntity {
         this.voteAgree = voteAgree;
     }
 
+    public void setTotalVote(int totalVote) {
+        this.totalVote = totalVote;
+    }
+
     public void setVoteDisagree(int voteDisagree) {
         this.voteDisagree = voteDisagree;
     }
@@ -126,17 +135,18 @@ public class Series extends BaseTimeEntity {
         this.revoteDisagree = revoteDisagree;
     }
 
-    public void setSeriesStatus(VoteStatus seriesStatus) {
+    public void setVoteStatus(VoteStatus seriesStatus) {
         this.voteStatus = seriesStatus;
     }
 
-    public void setPublic(Boolean aPublic) {
+    public void setIsPublic(Boolean aPublic) {
         isPublic = aPublic;
     }
 
-    public void setEditable(Boolean editable) {
+    public void setIsEditable(Boolean editable) {
         isEditable = editable;
     }
+
 
     public void setDaylogCount(int daylogCount) {
         this.daylogCount = daylogCount;
@@ -146,7 +156,7 @@ public class Series extends BaseTimeEntity {
         this.voteResult = voteResult;
     }
 
-    public void setActive(Boolean active) {
+    public void setIsActive(Boolean active) {
         isActive = active;
     }
 
@@ -166,6 +176,16 @@ public class Series extends BaseTimeEntity {
         Series series = new Series();
 
         series.setTitle(title);
+
+        return series;
+
+    }
+
+    public static Series of(String title, Boolean isPublic){
+        Series series = new Series();
+
+        series.setTitle(title);
+        series.setIsPublic(isPublic);
 
         return series;
 

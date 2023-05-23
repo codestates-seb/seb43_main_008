@@ -13,7 +13,7 @@ public class BookmarkResponse {
     //Serise: seriseId, title, daylogCount, image
 
     Long seriseId;
-    String titile;
+    String title;
     int daylogCount;
     String image;
 
@@ -21,7 +21,7 @@ public class BookmarkResponse {
         BookmarkResponse bookmarkResponse = new BookmarkResponse();
 
         bookmarkResponse.setSeriseId(seriseId);
-        bookmarkResponse.setTitile(title);
+        bookmarkResponse.setTitle(title);
         bookmarkResponse.setDaylogCount(daylogCount);
         bookmarkResponse.setImage(image);
         return bookmarkResponse;

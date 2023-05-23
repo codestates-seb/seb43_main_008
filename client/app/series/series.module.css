@@ -1,0 +1,133 @@
+/* 시리즈 전체 기본 레이아웃 */
+.series-body{
+  /* height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 1px 24px;
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: #fafafa;
+  min-height: 550px;
+  min-width: 320px;
+
+  @media screen and (max-width: 768px) {
+  }
+}
+
+
+/* 사진 이미지 */
+.series-bodyBox{
+  height: 71vh;
+  margin: 3px;
+  border-radius: 5px;
+  box-shadow:0 5px 18px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.series-imageBox{
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 110px;
+}
+
+/* 사진 미리보기 */
+.series-imageShower{
+  border-radius: 5px;
+  height: 200px;
+}
+
+.series-input{
+  width: 300px;
+  height: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #222;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 14px;
+  padding: 2px;
+  overflow: hidden;
+  resize: none; /*텍스트 존 사이즈 고정*/
+  border: solid 1px #3f910c;
+  background-color: #eff4e7;
+}
+
+.series-input::placeholder {
+  font-size: 14px;
+  text-align: center;
+  text-align: "center";
+  line-height: 210px;
+  border-radius: 5px;
+  color: #3f910c;
+  background-color: #eff4e7;
+}
+
+.series-button{
+  margin-top: 10px;
+  margin-left: 6px;
+  margin-right: 20px;
+  height: 40px;
+  width: 98%;
+  border-radius: 8px;
+  border: #c4c4d3 1px solid;
+  background-color: #e3e3e3;
+  
+}
+
+/*-------------------------------- 모달 스타일 -----------------------------------*/
+
+.series-modalBody{
+  width: 84vw;
+  height: 45%;
+  border: #3f910c 1px solid;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: white;
+}
+
+.series-modalHeader{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px;
+  align-items: center;
+  background-attachment: fixed;
+  font-size: 15px;
+}
+
+.series-modalTextBox{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  color : darkgray;
+  margin-bottom: 20px;
+}
+
+.series-modalButton{
+  height: 30px;
+  width: 60px;
+  background-color: white;
+  border: 1px gray solid;
+  border-radius: 5px;
+  margin-top: 15px;
+}
