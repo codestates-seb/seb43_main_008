@@ -84,7 +84,7 @@ export default function BadgeDetail({
         <GetBadgeText>획득한 뱃지 List</GetBadgeText>
         <PlasticList>
           <ul className="list-wrapper">
-            {badgeList.badgeList.map((image) => (
+            {badgeList.badgeList.map((image: any) => (
               <PlasticItem
                 key={image.badgeId}
                 imageSrc={image.img}
@@ -146,14 +146,14 @@ const PlasticList = styled.div`
     }
 
     .plastic-circle {
-      width: 70px;
-      height: 70px;
+      width: 50px;
+      height: 50px;
       border-radius: 35px;
       display: flex;
       align-items: center;
       justify-content: center;
       background-color: #fff8de;
-      border: #3f910c 1px solid;
+      /* border: #3f910c 1px solid; */
     }
   }
 `;
