@@ -2,14 +2,15 @@ package com.ssts.ssts.domain.member.service;
 
 import com.ssts.ssts.domain.follow.repository.FollowRepository;
 import com.ssts.ssts.domain.member.constant.MemberConstants;
+import com.ssts.ssts.domain.member.constant.MemberStatus;
 import com.ssts.ssts.domain.member.dto.FeedResponse;
 import com.ssts.ssts.domain.member.dto.MemberFeedResponse;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.repository.MemberRepository;
+import com.ssts.ssts.global.auth.utils.SocialType;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import com.ssts.ssts.global.utils.S3Uploader;
-import com.ssts.ssts.global.utils.UpdateUtils;
 import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class MemberService {
         //null값 검사 : getMemberId는 long 타입 반환.
         long memberId = SecurityUtil.getMemberId();
 
-        Member member = memberRepository.findById(memberId).
+        Member member = memberRepository.findByIdAndMemberStatus(memberId, MemberStatus.ACTIVE).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         log.info("하늘/member service : token(id) -> member 조회" +
@@ -69,7 +70,6 @@ public class MemberService {
 
     public Member findMemberById(long memberId){
 
-        //null값 검사 : long 타입이라 null값 들어올 일 없음.
         Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
@@ -79,10 +79,23 @@ public class MemberService {
         return member;
     }
 
+    public Optional<Member> findMemberByEmailAndSocialType(String email, SocialType socialType){
+
+        if (email==null || email.isEmpty() || socialType==null )
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if(member.isPresent()){
+            if(member.get().getSocialType() != socialType)
+                throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATE);
+        }
+
+        return member;
+    }
+
     public Optional<Member> findMemberByEmail(String email){
 
-        //null값 검사
-        if (email.isEmpty())
+        if (email==null || email.isEmpty())
             throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
 
         Optional<Member> member = memberRepository.findByEmail(email);
@@ -96,7 +109,7 @@ public class MemberService {
     /*
     * DB에 멤버 등록 - test랑 실제 서비스 둘다 사용
     * */
-    public Member saveMember(String email, String nickName, String phone) {
+    public Member saveMember(String email, String nickName, String phone, SocialType socialType) {
 
         //null값 검사 : 세 변수 다 필수 입력값.
         if (email.isEmpty() || nickName.isEmpty() || phone.isEmpty())
@@ -116,6 +129,7 @@ public class MemberService {
         verifyExistsPhoneNumber(member.getPhone());
 
         member.setRoles(createRoles(member));
+        member.setSocialType(socialType);
 
         Member savedMember = memberRepository.save(member);
 
@@ -178,7 +192,7 @@ public class MemberService {
 
         Member member = findMemberByToken();
         member.setDeletedAt(LocalDateTime.now());
-        member.setStatus(Member.Status.WITHDRAW);
+        member.setMemberStatus(MemberStatus.WITHDRAW);
 
         log.info("하늘/member service : withdraw 탈퇴" +
                 "\nmemberid=" + member.getId() +
@@ -234,16 +248,37 @@ public class MemberService {
         return responseDto;
     }
 
-    public Member signUpMember(String phone, String nickName) {
+    public Member signUpMember(String phone, String nickName, String socialType) {
 
         //null값 검사 : 두 변수 다 필수 입력값.
         if (nickName.isEmpty() || phone.isEmpty())
             throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
 
         String email=SecurityUtil.getMemberEmail();
-        Member member=saveMember(email, nickName, phone);
+        Member member=saveMember(email, nickName, phone, SocialType.stringToSocialType(socialType.toLowerCase()));
 
         return member;
+    }
+
+
+    /*
+    * 탈퇴한 회원인지 반환한다.
+    * false 값일 경우 회원가입을 진행한다.
+    * FIXME 나중에 서버에서 DB를 관리할 때 6개월 이상된 데이터는 자동 삭제할 예정이라서 굳이 시간계산을 할 필요없다.
+    * */
+    private boolean verifyIsWithdrawMember(Member member){
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        if(member.getMemberStatus()==MemberStatus.WITHDRAW){
+            // 탈퇴한 시간 + 6개월 <= 현재시간
+            if(currentTime.isAfter(member.getDeletedAt().plusMonths(6))){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void verifyExistsEmail(String email) {

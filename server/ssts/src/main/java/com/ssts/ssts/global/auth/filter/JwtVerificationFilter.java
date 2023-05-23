@@ -67,6 +67,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         Map<String, Object> credentials=new HashMap<>();
         credentials.put("id",claims.get("id"));
+        credentials.put("socialType", claims.get("socialType"));
 
         List<GrantedAuthority> authorities = authorityUtils.stringRolesToAuthorities((List<String>)claims.get("roles"));
 

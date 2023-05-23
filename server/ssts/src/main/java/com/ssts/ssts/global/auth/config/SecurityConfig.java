@@ -4,6 +4,7 @@ import com.ssts.ssts.global.auth.filter.JwtTestAuthenticationFilter;
 import com.ssts.ssts.global.auth.filter.JwtVerificationFilter;
 import com.ssts.ssts.global.auth.handler.TestAuthenticationFailureHandler;
 import com.ssts.ssts.global.auth.handler.TestAuthenticationSuccessHandler;
+import com.ssts.ssts.global.auth.jwt.JwtCreator;
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.service.MemberService;
@@ -26,6 +27,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final JwtTokenizer jwtTokenizer;
+    private final JwtCreator jwtCreator;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
 
@@ -76,7 +78,7 @@ public class SecurityConfig {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
 
-            JwtTestAuthenticationFilter jwtAuthenticationFilter = new JwtTestAuthenticationFilter(jwtTokenizer, authorityUtils, memberService);
+            JwtTestAuthenticationFilter jwtAuthenticationFilter = new JwtTestAuthenticationFilter(jwtCreator, authorityUtils, memberService);
             jwtAuthenticationFilter.setFilterProcessesUrl("/test/login");
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new TestAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new TestAuthenticationFailureHandler());
