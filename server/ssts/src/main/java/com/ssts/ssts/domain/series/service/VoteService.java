@@ -66,7 +66,7 @@ public class VoteService {
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
         //투표 마감기간 (2일) 할당
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusDays(2));
-        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
+        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(40));
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusHours(12));
         targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(5));
         //ㄴ> 테스트 마감기간: 15초
@@ -118,8 +118,8 @@ public class VoteService {
             }
 
             //set vote Result
-            Boolean voteResult = voteResultCal(targetSeries.getVoteAgree(), targetSeries.getVoteDisagree());
-            targetSeries.setVoteResult(voteResult);
+            //Boolean voteResult = voteResultCal(targetSeries.getVoteAgree(), targetSeries.getVoteDisagree());
+            //targetSeries.setVoteResult(voteResult);
             seriesRepo.save(targetSeries);
 
             //save mapping table
@@ -141,8 +141,8 @@ public class VoteService {
             }
 
             //set revote Result
-            Boolean revoteResult = voteResultCal(targetSeries.getRevoteAgree(), targetSeries.getRevoteDisagree());
-            targetSeries.setRevoteResult(revoteResult);
+            //Boolean revoteResult = voteResultCal(targetSeries.getRevoteAgree(), targetSeries.getRevoteDisagree());
+            //targetSeries.setRevoteResult(revoteResult);
             seriesRepo.save(targetSeries);
 
 

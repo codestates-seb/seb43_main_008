@@ -48,6 +48,7 @@ public class SeriesService {
     private final MemberVoteRepository voteMemberRepo;
     private final MemberRepository memberRepo;
     private final BookmarkRepository bookmarkRepo;
+    private final VoteService voteService;
 
     public PageResponseDto getSeriesList(String nickname, int page, int size){
         // 파라미터 체크
@@ -139,6 +140,12 @@ public class SeriesService {
             series.setIsEditable(false); //타이틀 수정 불가능
             series.setIsActive(false); //활성 상태 끄기 (프론트 세피아처리)
             series.setVoteStatus(Series.VoteStatus.SERIES_QUIT); //투표에 할당
+
+            //투표 2회의 로직이 전부 끝난 이후에, 결과를 저장함
+            //set revote Result
+            Boolean revoteResult = voteService.voteResultCal(series.getRevoteAgree(), series.getRevoteDisagree());
+            series.setRevoteResult(revoteResult);
+
             seriesRepository.save(series);
         }
 
@@ -147,26 +154,36 @@ public class SeriesService {
             return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
         }
 
-        else if(series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==null){ //결과가 null일때
-            //return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
-            return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
-        }
 
-        else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==true){
-            //return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
-            return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
-        }
 
-        //사용자가 재투표 연다는 선택을 하기 전, 자동으로 바뀌는 값
-        //[마감기한이 지났지만, 재투표의 기회가 있는 경우의 상태 변경] => 활성 상태는 변경하지 않고, 수정이 자동으로 가능하도록 합니다.
-        else if (series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt()) && series.getVoteResult()==false){
+        //마감기간 지났을 때
+        //투표가 종료되고 나서 계산기를 돌리고 true면 그냥 내보내고 false면 상태값 변경
+
+        else if(series.getVoteCount()==1 && currentTime.isAfter(series.getVoteEndAt())){ //마감기간 지났을 때
+
+            //마감기간 지나고 난 뒤의 계산기를 돌려야 함
+            Boolean voteResult = voteService.voteResultCal(series.getVoteAgree(), series.getVoteDisagree());
+
+            //결과가 찬성일 경우: 그대로 변경없이 로직을 내보냄
+            if(voteResult){
+                series.setVoteResult(voteResult);
+                seriesRepository.save(series);
+                return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
+            }
+
+            //결과가 반대일 경우: 재투표의 기회가 있기 때문에 특정 값을 바꿔서 내보냄
+            else if(!voteResult){
+
             series.setIsEditable(false); //수정 불가능
             series.setIsActive(false);
             series.setVoteStatus(Series.VoteStatus.SERIES_SLEEP);
-            seriesRepository.save(series); //사용자가 재투표를 받을지 말지 선택하기 전까지 유지되는 상태값
-        }
 
-        //return this.seriesToSeriesResponseDto(series, isVotedMember, isBookmarkedMember);
+            series.setVoteResult(voteResult);
+
+            seriesRepository.save(series); //사용자가 재투표를 받을지 말지 선택하기 전까지 유지되는 상태값
+
+            }
+        }
         return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
     }
 
