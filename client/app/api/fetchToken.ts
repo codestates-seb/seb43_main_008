@@ -1,5 +1,3 @@
-"use clinet";
-
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 

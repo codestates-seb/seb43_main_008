@@ -66,6 +66,7 @@ export const DefaultImage = styled.div`
 export const ProfileEditContainer = styled.div`
   width: 100%;
   padding: 10px 24px;
+  margin-bottom: 88px;
 `;
 
 export const EditForm = styled.form`
