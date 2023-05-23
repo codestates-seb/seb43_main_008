@@ -46,6 +46,7 @@ public enum ExceptionCode {
     THIS_VOTE_RESULT_IS_TRUE(RtnHttpStatus.Validation,1007, "이 투표는 이미 졸업했어요!"),
     CAN_NOT_VOTE_VALUE(RtnHttpStatus.Validation,1008, "투표할 수 없는 값이예요."),
     NOT_SERISE_WRITER(RtnHttpStatus.Validation,1012, "시리즈를 작성한 본인이 아니라서 투표를 개설할 수 없어요."),
+    VOTE_RESULT_NOT_UPDATE(RtnHttpStatus.Validation,1014,"최초투표의 결과가 조회되지 않았어요"),
 
     //북마크 에러
     BOOKMARK_IS_DUPLICATION(RtnHttpStatus.Validation,1009, "이미 북마크한 시리즈예요."),

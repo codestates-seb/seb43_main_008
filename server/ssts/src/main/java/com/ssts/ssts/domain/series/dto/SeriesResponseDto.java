@@ -83,7 +83,7 @@ public class SeriesResponseDto {
         seriesResponseDto.setVoteResult(voteResult);
         seriesResponseDto.setVoteAgree(voteAgree);
         seriesResponseDto.setVoteDisagree(voteDisagree);
-        seriesResponseDto.setVoteResult(revoteResult);
+        seriesResponseDto.setRevoteResult(revoteResult);
         seriesResponseDto.setRevoteAgree(revoteAgree);
         seriesResponseDto.setRevoteDisagree(revoteDisagree);
         seriesResponseDto.setSeriesStatus(voteStatus);
