@@ -52,7 +52,7 @@ export const Lists: React.FC = () => {
   return (
     <StyledLists className="list">
       <Filter filter={filter} setFilter={setFilter} />
-      {/* {list.map((data) => (
+      {list.map((data) => (
         data.seriesStatus !== "SERIES_ACTIVE" ? (
           <div
             onClick={() => moveHandler(data.id, data.title)}
@@ -62,8 +62,8 @@ export const Lists: React.FC = () => {
             <Card key={data.id} {...data} />
           </div>
         ) : null
-      ))} */}
-
+      ))}
+      {/* 
       {list.map((data) => (
         <div
           onClick={() => moveHandler(data.id, data.title)}
@@ -72,8 +72,9 @@ export const Lists: React.FC = () => {
         >
           <Card {...data} />
         </div>
-
       ))}
+*/}
+
 
       {/* 이전에 받아온 데이터가 12개 미만이라면 무한 스크롤 차단 */}
       {lastDataLength >= 12 && (

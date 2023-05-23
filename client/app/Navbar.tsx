@@ -11,15 +11,14 @@ export default function Navbar() {
 
   // 로그인 리다엑트 함수
   const router = useRouter();
-  const moveToLoginHandle = () => {
-    if (!localStorage.getItem("Authorization")) {
-      router.push("/login");
-    }
+  const moveToLoginHandle = (url: string) => {
+    if (localStorage.getItem("Authorization")) {
+      router.push(`/${url}`);
+    } else router.push("/login");
   }
 
   // 선택된 메뉴 관리를 위한 함수
   const params = useParams();
-  console.log(params)
   const menuSelect = (key: string): boolean => {
     return (
       params.hasOwnProperty(key)
@@ -53,10 +52,12 @@ export default function Navbar() {
           )}
           <div className="text">홈</div>
         </Link>
-        <Link
-          href="follow"
-          className="follow menu"
-          onClick={() => moveToLoginHandle()}
+        <div
+          className={`follow menu`}
+
+          onClick={() => {
+            moveToLoginHandle("follow")
+          }}
         >
           {menuSelect("follow") ? (
             <Image
@@ -76,22 +77,25 @@ export default function Navbar() {
             />
           )}
           <div className="text">팔로우</div>
-        </Link>
-        <Link href="/dodo/series" className="plus-button">
+        </div>
+        <div
+          onClick={() => {
+            moveToLoginHandle("series")
+          }}
+          className="plus-button">
           <BsPlusLg />
-        </Link>
+        </div>
         <div
           className={`add-series menu`}
-          onClick={() => moveToLoginHandle()}
         >
           <div className="icon" />
           <div className="text">새글쓰기</div>
         </div>
-        <Link
-          href="bookmark"
+        <div
           className={`book-mark menu`}
-          onClick={() => moveToLoginHandle()}
-        >
+          onClick={() => {
+            moveToLoginHandle("bookmark")
+          }}        >
           {menuSelect("bookmark") ? (
             <Image
               className='icon'
@@ -110,11 +114,12 @@ export default function Navbar() {
             />
           )}
           <div className="text">북마크</div>
-        </Link>
-        <Link
-          href="my-page"
+        </div>
+        <div
           className={`my-page menu`}
-          onClick={() => moveToLoginHandle()}
+          onClick={() => {
+            moveToLoginHandle("my-page")
+          }}
         >
           {menuSelect("my-page") ? (
             <Image
@@ -134,7 +139,7 @@ export default function Navbar() {
             />
           )}
           <div className="text">마이일지</div>
-        </Link>
+        </div>
       </div>
     </StyledNavbar>
   );
