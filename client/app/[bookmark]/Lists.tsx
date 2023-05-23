@@ -33,15 +33,19 @@ export const Lists: React.FC = () => {
   };
   return (
     <StyledLists className="list">
-      {list.map((data) => (
-        <div
-          onClick={() => moveHandler(data.seriseId, data.title)}
-          className="item"
-          key={data.id}
-        >
-          <Card key={data.id} {...data} />
-        </div>
-      ))}
+      {list.length > 0 ? (
+        list.map((data) => (
+          <div
+            onClick={() => moveHandler(data.seriseId, data.title)}
+            className="item"
+            key={data.id}
+          >
+            <Card key={data.id} {...data} />
+          </div>
+        ))
+      ) : (
+        <div className='empty-box'>북마크함이 비어있습니다.</div>
+      )}
       {/* api 호출중이거나 이전에 받아온 데이터가 12개 미만이라면 무한 스크롤 차단 */}
       {lastDataLength >= 12 && (
         <Scroll
@@ -52,6 +56,7 @@ export const Lists: React.FC = () => {
         />
       )}
     </StyledLists>
+
   );
 };
 
@@ -70,5 +75,8 @@ const StyledLists = styled.section`
     display: flex;
     justify-content: center;
     width: 100%;
+  }
+  .empty-box {
+    text-align: center;
   }
 `;

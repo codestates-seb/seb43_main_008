@@ -142,7 +142,7 @@ export default function Navbar() {
 
 const StyledNavbar = styled.nav`
   z-index: 10;
-  height: 70px;
+  height: 85px;
   max-height: 70px;
   width: 100vw;
   max-width: 1024px;
@@ -153,6 +153,7 @@ const StyledNavbar = styled.nav`
   background-color: white;
   border-radius: 25px 25px 0 0;
   box-shadow: rgba(0, 0, 0, 0.08) 0px -10px 15px;
+
 
   color: #222;
   a {
