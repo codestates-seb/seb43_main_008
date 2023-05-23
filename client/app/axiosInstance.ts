@@ -2,7 +2,8 @@ import axios from "axios";
 
 const Authorization =
   typeof window !== "undefined" ? localStorage.getItem("Authorization") : null;
-
+const RefreshToken =
+  typeof window !== "undefined" ? localStorage.getItem("RefreshToken") : null;
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
@@ -14,24 +15,39 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     try {
-      // 여기서 token의 유효성을 검사합니다.
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/token/check`,
         {
           headers: { Authorization: Authorization },
         }
       );
-      console.log(response);
 
+      if (response.data.code === 410) {
+        try {
+          const refreshTokenResponse = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_URL}/token/reissue`,
+            {
+              headers: { Authorization: RefreshToken },
+            }
+          );
+          if (refreshTokenResponse.data.code === 410) {
+            localStorage.removeItem("Authorization");
+            localStorage.removeItem("RefreshToken");
+            window.location.href = "/login";
+          } else {
+            const loginToken = refreshTokenResponse.headers["authorization"];
+            localStorage.setItem("Authorization", loginToken);
+          }
+        } catch (error) {
+          throw error;
+        }
+      }
       return config;
     } catch (error) {
-      // 여기서 에러 처리를 합니다.
-      console.error(error);
       throw error;
     }
   },
   (error) => {
-    // 요청에 대한 에러를 처리합니다.
     return Promise.reject(error);
   }
 );

@@ -39,3 +39,14 @@ export async function MemberImageEdit(image: File) {
     throw error;
   }
 }
+
+export async function WithdrawlMember() {
+  try {
+    await axiosInstance.delete(`/members`);
+    localStorage.removeItem("Authorization");
+    localStorage.removeItem("RefreshToken");
+    window.location.href = "/";
+  } catch (error) {
+    throw error;
+  }
+}
