@@ -3,14 +3,19 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { GetFeed } from "../api/myPageApi";
-import { ActivePost } from "./ActivePost";
+import { GetFeed, GetMyFeed } from "../api/myPageApi"
+import { ActivePost } from './ActivePost';
 import { DonePost } from "./DonePost";
 import { EmptyFeed } from "./EmptyFeed";
 import { VotingPost } from "./VotingPost";
 
-export const Feed = () => {
-  const [post, setPost] = useState([]);
+
+interface Props {
+  type?: string
+}
+
+export const Feed: React.FC<Props> = ({ type }) => {
+  const [post, setPost] = useState([])
   const params = useParams();
   let nickName = decodeURIComponent(params.nickName);
   console.log(nickName);
@@ -19,7 +24,14 @@ export const Feed = () => {
     nickName = "세션 스토리지에서 가져오기";
   }
   useEffect(() => {
-    GetFeed(nickName).then((data) => {
+    if (type === "mine") {
+      GetMyFeed().then((data) => {
+        if (data) {
+          setPost(data);
+        }
+      });
+    }
+    else GetFeed(nickName).then((data) => {
       if (data) {
         setPost(data);
       }

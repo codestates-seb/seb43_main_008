@@ -1,37 +1,39 @@
 "use client";
 import Image from 'next/image';
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useParams } from 'next/navigation';
 import { BsPlusLg } from "react-icons/bs";
 import styled from "styled-components";
 
 export default function Navbar() {
 
-  const params = useParams();
-  console.log(params)
 
-  // 클릭 메뉴 관리 함수
-  const menuClickHandle = (menuName: string) => {
-    sessionStorage.setItem("menu", menuName)
-  };
-
-  let selectedMenu = "홈"
-  if (typeof window !== "undefined") {
-    selectedMenu = sessionStorage.getItem("menu")
+  // 로그인 리다엑트 함수
+  const router = useRouter();
+  const moveToLoginHandle = (url: string) => {
+    if (localStorage.getItem("Authorization")) {
+      router.push(`/${url}`);
+    } else router.push("/login");
   }
 
+  // 선택된 메뉴 관리를 위한 함수
+  const params = useParams();
+  const menuSelect = (key: string): boolean => {
+    return (
+      params.hasOwnProperty(key)
+    )
+  }
 
   return (
-    // <StyledNavbar style={{ display: isNavOn ? "block" : "none" }}>
     <StyledNavbar>
 
       <div className="container">
         <Link
           href="/"
-          className={`home menu ${selectedMenu === "홈" ? "selectedMenu" : ""}`}
-          onClick={() => menuClickHandle("홈")}
+          className={`home menu`}
         >
-          {selectedMenu === "홈" ? (
+          {menuSelect("") ? (
             <Image
               className='icon'
               src="/icons/HomeFill.svg"
@@ -50,12 +52,14 @@ export default function Navbar() {
           )}
           <div className="text">홈</div>
         </Link>
-        <Link
-          href="follow"
-          className={`follow menu ${selectedMenu === "팔로우" ? "selectedMenu" : ""}`}
-          onClick={() => menuClickHandle("팔로우")}
+        <div
+          className={`follow menu`}
+
+          onClick={() => {
+            moveToLoginHandle("follow")
+          }}
         >
-          {selectedMenu === "팔로우" ? (
+          {menuSelect("follow") ? (
             <Image
               className='icon'
               src="/icons/HeartFill.svg"
@@ -73,25 +77,26 @@ export default function Navbar() {
             />
           )}
           <div className="text">팔로우</div>
-        </Link>
-        <Link href="/dodo/series" className="plus-button">
-          <BsPlusLg />
-        </Link>
+        </div>
         <div
-          className={`add-series menu ${selectedMenu === "시리즈 작성" ? "selectedMenu" : ""
-            }`}
-          onClick={() => menuClickHandle("시리즈 작성")}
+          onClick={() => {
+            moveToLoginHandle("series")
+          }}
+          className="plus-button">
+          <BsPlusLg />
+        </div>
+        <div
+          className={`add-series menu`}
         >
           <div className="icon" />
           <div className="text">새글쓰기</div>
         </div>
-        <Link
-          href="bookmark"
-          className={`book-mark menu ${selectedMenu === "북마크" ? "selectedMenu" : ""
-            }`}
-          onClick={() => menuClickHandle("북마크")}
-        >
-          {selectedMenu === "북마크" ? (
+        <div
+          className={`book-mark menu`}
+          onClick={() => {
+            moveToLoginHandle("bookmark")
+          }}        >
+          {menuSelect("bookmark") ? (
             <Image
               className='icon'
               src="/icons/BookmarkFill.svg"
@@ -109,14 +114,14 @@ export default function Navbar() {
             />
           )}
           <div className="text">북마크</div>
-        </Link>
-        <Link
-          href="my-page"
-          className={`my-page menu ${selectedMenu === "마이일지" ? "selectedMenu" : ""
-            }`}
-          onClick={() => menuClickHandle("마이일지")}
+        </div>
+        <div
+          className={`my-page menu`}
+          onClick={() => {
+            moveToLoginHandle("my-page")
+          }}
         >
-          {selectedMenu === "마이일지" ? (
+          {menuSelect("my-page") ? (
             <Image
               className='icon'
               src="/icons/MyFill.svg"
@@ -134,7 +139,7 @@ export default function Navbar() {
             />
           )}
           <div className="text">마이일지</div>
-        </Link>
+        </div>
       </div>
     </StyledNavbar>
   );
@@ -142,8 +147,8 @@ export default function Navbar() {
 
 const StyledNavbar = styled.nav`
   z-index: 10;
-  height: 70px;
-  max-height: 70px;
+  height: 85px;
+  max-height: 85px;
   width: 100vw;
   max-width: 1024px;
 
@@ -153,6 +158,7 @@ const StyledNavbar = styled.nav`
   background-color: white;
   border-radius: 25px 25px 0 0;
   box-shadow: rgba(0, 0, 0, 0.08) 0px -10px 15px;
+
 
   color: #222;
   a {
@@ -199,7 +205,7 @@ const StyledNavbar = styled.nav`
       z-index: 1000;
       position: absolute;
       left: 50%;
-      transform: translate(-50%, -75%);
+      transform: translate(-50%, -105%);
       bottom: 0;
 
       width: 3.0625rem;
