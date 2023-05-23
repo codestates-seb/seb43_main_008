@@ -11,8 +11,9 @@ export default function SeriesLayout({
     <>
       <Header
         backButton={true}
-        textContent={"플라스틱 육아 시작하기"}
-        secretButton={true}
+        textContent={"봉다리 세바스찬"}
+        // secretButton={false}
+        voteButton={true}
       />
       {children}
       <Navbar />

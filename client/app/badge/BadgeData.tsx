@@ -83,13 +83,13 @@ const badgeLists = [
     subText: "Image 1 Sub Text",
     isAcquired: false,
   },
-  // { src: "/badgeIcon/dog.svg", alt: "강아지뱃지" },
-  // { src: "/badgeIcon/shopping.svg", alt: "쇼핑뱃지" },
-  // { src: "/badgeIcon/dog.svg", alt: "강아지뱃지" },
-  // { src: "/badgeIcon/shopping.svg", alt: "쇼핑뱃지" },
-  // { src: "/badgeIcon/dog.svg", alt: "강아지뱃지" },
-  // { src: "/badgeIcon/dog.svg", alt: "강아지뱃지" },
-  // 필요한 만큼 추가
 ];
 
 export default badgeLists;
+
+// 기존에는 badgeLists를 직접 import해서 사용했지만, 이제는 부모 컴포넌트에서 API로 가져온 badgeList를 사용합
+
+// 코드를 실행하려면 BadgeData 파일에 해당하는 데이터를 서버에서 받아와야 합니다. 이것은 실제 서버와 클라이언트 간에 데이터가 어떻게 교환되는지에 따라 달라짐
+// badgeList는 일련의 뱃지 이미지에 대한 정보를 담은 객체의 배열이어야 함
+
+// 각 객체는 이미지 소스 URL(src), 대체 텍스트(alt), 메인 텍스트(mainText), 부 텍스트(subText), 그리고 뱃지 획득 여부(isAcquired)를 포함해야 함
