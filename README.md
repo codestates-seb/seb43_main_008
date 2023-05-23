@@ -24,14 +24,14 @@
 
 | <img src="https://github.com/jiin9999.png" width="200px" height="200px"> | <img src="https://github.com/Aroma-oh.png" width="200px" height="200px"> | <img src="https://github.com/jungsoonhyun.png" width="200px" height="200px"> |
 | :----------------------------------------------------------------------: | :----------------------------------------------------------------------: | :--------------------------------------------------------------------------: |
-|          [천지인(LEAD)<br/>(@jiin9999)](https://github.com/jiin9999)           |          [오아름<br/>(@Aroma-oh)](https://github.com/Aroma-oh)           |        [정순현<br/>(@qwerty00ui88)](https://github.com/jungsoonhyun)         |
+|          [천지인(LEAD)<br/>(@jiin9999)](https://github.com/jiin9999)           |          [오아름<br/>(@Aroma-oh)](https://github.com/Aroma-oh)           |        [정순현<br/>(@jungsoonhyun)](https://github.com/jungsoonhyun)         |
 | <p align="left">- 로그인 페이지<br/> - 회원가입 페이지<br/> - 회원 정보 수정 페이지<br/> - 회원가입 축하 페이지<br/> - 투표 완료 페이지</p>| <p align="left">- 북마크 페이지<br/> - 시리즈 상세 페이지</br> - 팔로우 페이지</br> - 메인 페이지</br> - 마이 페이지</br></p> | <p align="left">- 뱃지 페이지<br/> - 시리즈 작성페이지<br/> - 일지 작성 페이지</br>- 일지 상세페이지</br></p>| 
 
 ### Back-end
 
 | <img src="https://github.com/mewluee.png" width="200px" height="200px"> | <img src="https://github.com/NewfileDOTpy.png" width="200px" height="200px"> | <img src="https://github.com/digital-hamster.png" width="200px" height="200px"> |
 | :---------------------------------------------------------------------: | :--------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: |
-|           [진하늘(LEAD)<br/>(@mewluee)](https://github.com/mewluee)           |         [김대현<br/>(@sanggur591)](https://github.com/NewfileDOTpy)          |       [안윤아<br/>(@digital-hamster)](https://github.com/digital-hamster)       |
+|           [진하늘(LEAD)<br/>(@mewluee)](https://github.com/mewluee)           |         [김대현<br/>(@NewfileDOTpy)](https://github.com/NewfileDOTpy)          |       [안윤아<br/>(@digital-hamster)](https://github.com/digital-hamster)       |
 | <p align="left">- 기능 1</br> - 기능 2 </p>| <p align="left">- 기능 1</br> - 기능 2 </p>| <p align="left">- 기능 1</br> - 기능 2 </p>|
 
 <br/>
