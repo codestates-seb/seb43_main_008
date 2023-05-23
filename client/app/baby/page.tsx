@@ -1,5 +1,5 @@
 "use client";
-// import axios from "axios";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -17,10 +17,9 @@ export default function Page() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   //---------------------------------------------------------콘솔 테스트 중---------------------------------------------
-  useEffect(() => {
-    console.log("hello");
-    // console.log(process.env.NEXT_PUBLIC_API_URL);
-  }, []);
+  // useEffect(() => {
+  //   console.log("hello");
+  // }, []);
   //---------------------------------------------------------함수는 아래 여기에 생성--------------------------------------
 
   // 아래는 플라스틱 이름 인풋 관련 함수
@@ -32,13 +31,37 @@ export default function Page() {
     }
   }, [title]);
 
+  // const sendData = async () => {
+  //   try {
+  //     const result = await axiosInstance.post(`/series?public=${isPublic}`, {
+  //       title: title,
+  //     });
+  //     console.log(result.data.data.id);
+  //     localStorage.setItem("plastic", result.data.data.id);
+  //   } catch (err) {
+  //     console.log(err);
+  //     return false;
+  //   }
+  //   return true;
+  // };
   const sendData = async () => {
     try {
-      const result = await axiosInstance.post(`/series?public=${isPublic}`, {
-        title: title,
-      });
+      let result;
+      if (isPublic) {
+        // When it's public
+        result = await axiosInstance.post(`/series`, {
+          title: title,
+          public: false,
+        });
+        localStorage.setItem("plastic", result.data.data.id);
+      } else {
+        result = await axiosInstance.post(`/series`, {
+          title: title,
+          public: true,
+        });
+        localStorage.setItem("plastic", result.data.data.id);
+      }
       console.log(result.data.data.id);
-      localStorage.setItem("plastic", result.data.data.id);
     } catch (err) {
       console.log(err);
       return false;
@@ -63,7 +86,7 @@ export default function Page() {
     if (result === false) {
       console.log("Error");
     } else {
-      router.push("/series"); /////////////////////////////// 시리즈로 넘어가라 쫌 제발 쫌 쫌 쫌
+      router.push("/series");
     }
   };
 
@@ -119,7 +142,7 @@ export default function Page() {
           {/*----------------------------------------------아래는 입양 완료 버튼----------------------------------------------*/}
           <button
             onClick={() => {
-              nestStep(); ///////////////////////////// 이거 왜 도대체 시리즈로 안넘어가지는 거임????????? 나니???????
+              nestStep();
             }}
             ref={buttonRef}
             className={`${styles["start-button"]}`}
