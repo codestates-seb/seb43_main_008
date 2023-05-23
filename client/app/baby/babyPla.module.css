@@ -36,7 +36,7 @@
 
 /* 페이지 전체 레이아웃 */
 .start-body{
-  background-color: #fafafa;
+  background-color: #ffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -98,6 +98,7 @@
   margin-bottom: 15px;
   border-radius: 3px;
   margin-top: 7px;
+  border: none;
 }
 .start-button:active {
   transform: translateY(-2px);

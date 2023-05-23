@@ -7,7 +7,7 @@
   padding: 1px 24px;
   max-width: 1024px;
   margin: 0 auto;
-  background-color: #fafafa;
+  background-color: #ffffff;
   min-height: 550px;
   min-width: 320px;
 
@@ -18,10 +18,10 @@
 
 /* 사진 이미지 */
 .series-bodyBox{
-  height: 71vh;
+  height: 67vh;
   margin: 3px;
   border-radius: 5px;
-  box-shadow:0 5px 18px rgba(0, 0, 0, 0.8);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,23 +29,23 @@
 }
 
 .series-imageBox{
-  height: 140px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 110px;
+  margin-top: 80px;
 }
 
 /* 사진 미리보기 */
 .series-imageShower{
   border-radius: 5px;
-  height: 200px;
+  height: 180px;
 }
 
 .series-input{
-  width: 300px;
-  height: 230px;
+  width: 280px;
+  height: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,28 +57,28 @@
   padding: 2px;
   overflow: hidden;
   resize: none; /*텍스트 존 사이즈 고정*/
-  border: solid 1px #3f910c;
-  background-color: #eff4e7;
+  border: none;
+  background-color: #f2f2f2;
 }
 
 .series-input::placeholder {
   font-size: 14px;
   text-align: center;
   text-align: "center";
-  line-height: 210px;
+  line-height: 155px;
   border-radius: 5px;
-  color: #3f910c;
-  background-color: #eff4e7;
+  color:black;
+  background-color: #f2f2f2;
 }
 
 .series-button{
-  margin-top: 10px;
+  margin-top: 16px;
   margin-left: 6px;
   margin-right: 20px;
   height: 40px;
   width: 98%;
   border-radius: 8px;
-  border: #c4c4d3 1px solid;
+  border: none;;
   background-color: #e3e3e3;
   
 }

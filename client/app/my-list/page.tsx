@@ -45,8 +45,6 @@ export default function Page() {
     }
   };
 
-  // const gotoVote = () => {};
-
   const RoundUse = ({ count }: any) => {
     const elements = [];
 
@@ -98,16 +96,26 @@ export default function Page() {
             key={useCount + 1}
             className={`${styles["List-addContentsBox"]}`}
           >
-            {/* <Link href="/series">
-              <a> */}
             <Image
               src={"/plus.svg"}
               alt={"글을 하나 더 써봐요"}
               width={50}
               height={50}
             />
-            {/* </a>
-            </Link> */}
+
+            {/* <div
+          onClick={() => {
+            moveToLoginHandle("series")
+          }}
+          className="plus-button">
+          <BsPlusLg />
+        </div>
+        <div
+          className={`add-series menu`}
+        >
+          <div className="icon" />
+          <div className="text">새글쓰기</div>
+        </div> */}
           </div>
           {contentList.map((el, index) => {
             return (

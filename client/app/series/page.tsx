@@ -79,7 +79,7 @@ export default function Page() {
               ref={showRef}
               src={"/image.svg"}
               alt={"이미지 업로드"}
-              width={300}
+              width={275}
               height={100}
               onClick={handleClick}
             />
