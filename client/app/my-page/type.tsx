@@ -16,6 +16,7 @@ export interface PostData {
   revoteResult?: any | null;
   revoteAgree?: number;
   revoteDisagree?: number;
+  type?: string
 }
 
 export interface ProfileData {

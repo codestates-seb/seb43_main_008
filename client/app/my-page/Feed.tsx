@@ -42,7 +42,7 @@ export const Feed: React.FC<Props> = ({ type }) => {
           {post.map((data) => {
             if (data.seriesStatus === "SERIES_ACTIVE") {
               // active: 투표전
-              return <ActivePost key={data.id} {...data} />;
+              return <ActivePost key={data.id} {...data} type={type} />;
             }
             if (data.seriesStatus === "SERIES_SLEEP") {
               // sleep: 투표 중
@@ -57,6 +57,7 @@ export const Feed: React.FC<Props> = ({ type }) => {
       ) : (
         <EmptyFeed />
       )}
+
     </StyledFeed>
   );
 };
