@@ -1,37 +1,40 @@
 "use client";
 import Image from 'next/image';
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useParams } from 'next/navigation';
 import { BsPlusLg } from "react-icons/bs";
 import styled from "styled-components";
 
 export default function Navbar() {
 
-  const params = useParams();
-  console.log(params)
 
-  // 클릭 메뉴 관리 함수
-  const menuClickHandle = (menuName: string) => {
-    sessionStorage.setItem("menu", menuName)
-  };
-
-  let selectedMenu = "홈"
-  if (typeof window !== "undefined") {
-    selectedMenu = sessionStorage.getItem("menu")
+  // 로그인 리다엑트 함수
+  const router = useRouter();
+  const moveToLoginHandle = () => {
+    if (!localStorage.getItem("Authorization")) {
+      router.push("/login");
+    }
   }
 
+  // 선택된 메뉴 관리를 위한 함수
+  const params = useParams();
+  console.log(params)
+  const menuSelect = (key: string): boolean => {
+    return (
+      params.hasOwnProperty(key)
+    )
+  }
 
   return (
-    // <StyledNavbar style={{ display: isNavOn ? "block" : "none" }}>
     <StyledNavbar>
 
       <div className="container">
         <Link
           href="/"
-          className={`home menu ${selectedMenu === "홈" ? "selectedMenu" : ""}`}
-          onClick={() => menuClickHandle("홈")}
+          className={`home menu`}
         >
-          {selectedMenu === "홈" ? (
+          {menuSelect("") ? (
             <Image
               className='icon'
               src="/icons/HomeFill.svg"
@@ -52,10 +55,10 @@ export default function Navbar() {
         </Link>
         <Link
           href="follow"
-          className={`follow menu ${selectedMenu === "팔로우" ? "selectedMenu" : ""}`}
-          onClick={() => menuClickHandle("팔로우")}
+          className="follow menu"
+          onClick={() => moveToLoginHandle()}
         >
-          {selectedMenu === "팔로우" ? (
+          {menuSelect("follow") ? (
             <Image
               className='icon'
               src="/icons/HeartFill.svg"
@@ -78,20 +81,18 @@ export default function Navbar() {
           <BsPlusLg />
         </Link>
         <div
-          className={`add-series menu ${selectedMenu === "시리즈 작성" ? "selectedMenu" : ""
-            }`}
-          onClick={() => menuClickHandle("시리즈 작성")}
+          className={`add-series menu`}
+          onClick={() => moveToLoginHandle()}
         >
           <div className="icon" />
           <div className="text">새글쓰기</div>
         </div>
         <Link
           href="bookmark"
-          className={`book-mark menu ${selectedMenu === "북마크" ? "selectedMenu" : ""
-            }`}
-          onClick={() => menuClickHandle("북마크")}
+          className={`book-mark menu`}
+          onClick={() => moveToLoginHandle()}
         >
-          {selectedMenu === "북마크" ? (
+          {menuSelect("bookmark") ? (
             <Image
               className='icon'
               src="/icons/BookmarkFill.svg"
@@ -112,11 +113,10 @@ export default function Navbar() {
         </Link>
         <Link
           href="my-page"
-          className={`my-page menu ${selectedMenu === "마이일지" ? "selectedMenu" : ""
-            }`}
-          onClick={() => menuClickHandle("마이일지")}
+          className={`my-page menu`}
+          onClick={() => moveToLoginHandle()}
         >
-          {selectedMenu === "마이일지" ? (
+          {menuSelect("my-page") ? (
             <Image
               className='icon'
               src="/icons/MyFill.svg"
