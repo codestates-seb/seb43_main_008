@@ -1,41 +1,48 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { AiOutlineSetting } from "react-icons/ai";
 import { BsAward } from "react-icons/bs";
 import styled from "styled-components";
 
-import { GetProfile } from "../api/myPageApi";
-import { FollowButton } from "./FollowButton";
+import { GetProfile } from "../api/myPageApi"
+import { FollowerButton, FollowingButton } from "./FollowButton";
 import { ProfileData } from "./type";
 
-export const Profile = () => {
+interface Props {
+  type?: string
+}
+
+export const Profile: React.FC<Props> = ({ type }) => {
   const [profile, setProfile] = useState<ProfileData>({
     nickName: "",
     image: "",
     introduce: "",
   });
+  const params = useParams();
+  const nickName = decodeURIComponent(params.nickName)
 
   useEffect(() => {
-    // if (!authState) {
-    //   router.push("/login")
-    // }
-    GetProfile().then((data) => {
+    GetProfile(nickName).then((data) => {
       if (data) {
         setProfile(data);
       }
     });
   }, []);
+
+  /* 📌 추가 필요
+    세션 스토리지 nickName === params.nickName: follow 버튼
+    else: following 버튼 & isFollowed props
+  */
+
   return (
     <StyledProfile className="box">
       <div className="profile-box">
         <Image
           className="image"
-          // https://ssts-img.s3.ap-northeast-2.amazonaws.com/series/series-image.png
-          src=""
-          // src={profile.image}
-          style={{ backgroundImage: `url(${profile.image})` }}
+          src={profile.image}
           width={40}
           height={40}
           alt="프로필 사진"
@@ -55,7 +62,10 @@ export const Profile = () => {
           </Link>
         </div>
       </div>
-      <FollowButton type={"팔로워"} />
+      {type === "follower"
+        ? <FollowerButton />
+        : <FollowingButton followedMember={profile.followedMember} nickName={profile.nickName} />
+      }
     </StyledProfile>
   );
 };

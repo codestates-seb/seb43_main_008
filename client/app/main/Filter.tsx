@@ -1,26 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 import FetchToken from "../api/fetchToken";
 
-// import { useSWRConfig } from 'swr'
+interface FilterProps {
+  filter: string;
+  setFilter: React.Dispatch<React.SetStateAction<string>>;
+}
 
-export const Filter: React.FC = () => {
+export const Filter: React.FC<FilterProps> = ({ filter, setFilter }) => {
   useEffect(() => {
     // Hide URL
     history.replaceState({}, null, location.pathname);
   }, []);
-  const [filter, setFilter] = useState<string>("newest");
-  FetchToken();
 
-  /*
-  // filter 값이 변경될 때, 데이터를 다시 요청하기 위해 mutate 함수 호출
-  useEffect(() => {
-    GetMainFilter(filter)
-  }, [filter, mutate]);
-  */
+  FetchToken();
 
   return (
     <StyledFilter>
@@ -32,8 +28,8 @@ export const Filter: React.FC = () => {
           새로운 게시글
         </div>
         <div
-          className={filter === "voteCount" ? "selected tag" : "tag"}
-          onClick={() => setFilter("voteCount")}
+          className={filter === "votes" ? "selected tag" : "tag"}
+          onClick={() => setFilter("votes")}
         >
           인기 게시글
         </div>

@@ -1,8 +1,8 @@
-"use client";
 import Header from "../Header";
 import Navbar from "../Navbar";
 
-export default function SeriesLayout({
+
+export default function MemberEditLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -11,9 +11,8 @@ export default function SeriesLayout({
     <>
       <Header
         backButton={true}
-        textContent={"봉다리 세바스찬"}
+        textContent={"북마크"}
         secretButton={false}
-        voteButton={true}
       />
       {children}
       <Navbar />

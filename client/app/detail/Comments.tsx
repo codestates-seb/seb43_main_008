@@ -4,56 +4,65 @@ import React, { useEffect, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import styled from "styled-components";
 
-import { GetComment, PatchComment, PostComment } from "../api/commentApi"
+import { DeleteComment, GetComment, PatchComment, PostComment } from "../api/commentApi"
 import { StyledCard } from "./Card";
 import { Comment } from "./Comment";
 export const Comments: React.FC = () => {
-
-  // 댓글 <생성, 수정, 삭제>시 댓글 리스트 업데이트를 위한 함수
-  const [update, setUpdate] = useState<boolean>(false);
 
   // 서버에서 받아오는 댓글 리스트
   const [commentList, setCommentList] = useState([]);
   const params = useParams();
 
   useEffect(() => {
-    console.log("GetComment 요청")
-    console.log(`GetComment : ${update}`)
     GetComment(params.id).then((data) => {
       if (data) {
         setCommentList((data))
-        console.log(data)
       }
     })
-  }, [update]) // 📌 상태는 변경되는데 GetComment는 한템포 늦음
+  }, [])
 
-  // 댓글 입력 및 서버 전달을 위한 상태 & 함수
   const [comment, setComment] = useState<string>("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
 
-  const handleSubmit = (
+  // 서버에 댓글 수정 or 생성 요청을 보내는 함수
+  const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement | HTMLTextAreaElement>
   ) => {
     e.preventDefault();
-    if (editCommentId !== undefined && comment.length > 2) {
-      PatchComment(params.id, editCommentId, comment) // 댓글 수정 요청 보내기
-      setEditCommentId(undefined) // 수정 댓글 id 리셋하기
-      GetComment(params.id) // 📌 왜 update 상태만으로 안되지? 
-      setUpdate(!update)
-      setComment("");
-    }
-    else if (comment.length > 2) { // 두글자 초과 입력시에만 댓글 저장 가능
-      PostComment(params.id, comment) // 새로운 댓글 보내기
-      // GetComment(params.id) // 📌 왜 update 상태만으로 안되지? 
-      setUpdate(!update)
-      setComment("");
-      console.log(`handleSubmit : ${update}`)
+
+    if (comment.length > 2) {
+      if (editCommentId !== undefined) {
+        await PatchComment(params.id, editCommentId, comment); // 댓글 수정
+      } else {
+        await PostComment(params.id, comment); // 댓글 생성
+      }
+
+      GetComment(params.id).then((data) => {
+        if (data) {
+          setCommentList(data);
+          setEditCommentId(undefined);
+          setComment("");
+        }
+      });
     }
   };
 
+  // 댓글 삭제 핸들러: Comments -> Commnet -> Modal에서 조작한다. 
+  const handleDelete = async (commentId: string) => {
+    await DeleteComment(params.id, commentId)
+    GetComment(params.id).then((data) => {
+      if (data) {
+        setCommentList(data);
+        setComment("");
+      }
+    });
+  }
+
+
+  // 📌 작동 안함
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       handleSubmit(e);
@@ -65,31 +74,28 @@ export const Comments: React.FC = () => {
     undefined
   );
 
-  console.log(editCommentId)
-
   const handleEditComment = (id: string) => {
-    setEditCommentId(id);
+    setEditCommentId(id); // (1) Modal 컴포넌트에서 editCommentData를 보내주면 
   };
 
   const editCommentData = commentList.find((data) =>
-    data.id === Number(editCommentId)
+    data.id === Number(editCommentId) // (2) editCommentId와 일치하는 데이터를 찾아 저장한다. 
   );
 
   useEffect(() => {
-    setComment(editCommentData?.comment);
+    setComment(editCommentData?.comment); // (3) 댓글 상태도 업데이트 한다.
   }, [editCommentData]);
 
   return (
     <StyledComments>
       <div className="title">
         <h3 className="sub-title">댓글</h3>
-        <div className="sub-text"> 30개</div>
+        <div className="sub-text"> {commentList.length}개</div>
       </div>
 
       <StyledCard>
         <div className="content">
           <form className="add-comment" onSubmit={handleSubmit}>
-            <div className="profile" />
             <textarea
               className="input"
               placeholder="댓글 추가"
@@ -111,8 +117,7 @@ export const Comments: React.FC = () => {
                   {...data}
                   handleEditComment={handleEditComment}
                   setComment={setComment}
-                  setUpdate={setUpdate}
-                  update={update}
+                  handleDelete={handleDelete}
                 />
               ))
               : <div> 작성된 댓글이 없습니다. </div>}

@@ -30,7 +30,6 @@ export const Scroll: React.FC<ScrollProps> = ({ setPageQuery, pageQuery, countNu
       if (entry.isIntersecting && lastDataLength >= 12) {
         console.log(`서버에 다음 페이지 요청 보내기 ${pageQuery}`);
         setPageQuery((prev) => prev + 1)
-        observer.unobserve(entry.target); // 타겟 요소 관측 중지: 중복 호출 방지
       }
     });
   };
