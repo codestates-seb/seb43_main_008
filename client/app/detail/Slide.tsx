@@ -1,32 +1,52 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 
 import { BookmarkButton } from "./BookmarkButton"
 
 interface SlideProps {
-  id: number;
   content: string;
   contentImg: string;
+  daylogNumber: string;
   series: {
     title: string,
     id: string
   },
+  member: {
+    nickName: string,
+  }
   count: number
 }
 const Slide = ({
-  id,
   contentImg,
   content,
   series,
+  daylogNumber,
+  member,
 }: SlideProps) => {
+  const router = useRouter();
+
+  const moveToMypageHandler = (nickName: string) => {
+    router.push(`my-page/${nickName}`)
+    sessionStorage.setItem("header", nickName);
+  }
+
   return (
     <StyledSlide>
       <div className="slide">
         <div className="info">
-          <div className="nickName">{series.title} | </div>
-          <div className="usageCount">{id}번째 사용</div>
-          <BookmarkButton seriesId={series.id} />
+          <div className='left-box' onClick={() => moveToMypageHandler(member.nickName)}>
+            <div className='user-info'>{member.nickName}</div>
+            <div className='series-info'>
+              <div className="nickName">{series.title} | </div>
+              <div className="usageCount">{daylogNumber}번째 사용</div>
+            </div>
+
+          </div>
+          <div className='right-box'>
+            <BookmarkButton />
+          </div>
         </div>
 
         <div className="image" style={{ backgroundImage: `url(${contentImg})` }} />
@@ -53,11 +73,34 @@ const StyledSlide = styled.div`
   .info {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
     font-size: 0.75rem;
     color: #757575;
     margin-bottom: 0.6rem;
+    .left-box {
+      display: flex;
+      flex-direction: column;
+    }
+    .user-info {
+      cursor: pointer;
+      padding: 2px 4px;
+      margin-bottom: 4px;
+      width: fit-content;
+      color: #3f910c;
+      background-color: #eff4e7;
+      border: solid 1px #3f910c;
+      border-radius: 8px;
+    }
+    .series-info {
+      display: flex;
+    }
     .nickName {
       margin-right: 0.1rem;
+    }
+    .right-box{
+      font-size: 1.1rem;
+      cursor: pointer;
     }
   }
   .image {

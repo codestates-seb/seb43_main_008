@@ -8,7 +8,7 @@ export default function MemberEditLayout({
 }) {
   return (
     <>
-      <Header backButton={true} textContent={"내 정보"} secretButton={false} />
+      <Header backButton={true} textContent={"팔로워"} secretButton={false} />
       {children}
       <Navbar />
     </>

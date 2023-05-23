@@ -1,5 +1,5 @@
 "use client";
-
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -9,19 +9,24 @@ import { DonePost } from "./DonePost";
 import { EmptyFeed } from "./EmptyFeed"
 import { VotingPost } from "./VotingPost";
 
+
 export const Feed = () => {
   const [post, setPost] = useState([])
+  const params = useParams();
+  let nickName = decodeURIComponent(params.nickName)
+  console.log(nickName)
 
+  if (nickName === "undefined") {
+    nickName = "세션 스토리지에서 가져오기"
+  }
   useEffect(() => {
-    // if (!authState) {
-    //   router.push("/login")
-    // }
-    GetFeed().then((data) => {
+    GetFeed(nickName).then((data) => {
       if (data) {
         setPost(data)
       }
     })
   }, [])
+
 
   return (
     <StyledFeed className='container'>

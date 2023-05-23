@@ -1,20 +1,60 @@
 "use client";
 
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-interface Props {
-  type?: string
-}
-export const FollowButton: React.FC<Props> = ({ type }) => {
+import { DeleteUnFollowing, PostFollowing } from "../api/followApi"
+
+export const FollowerButton = () => {
+
+  const router = useRouter();
+
   return (
-    <>
-      {type === "팔로워" ? <StyledFollowerButton>{type}</StyledFollowerButton> :
-        type === "팔로우" ? <StyledFollowButton>{type}</StyledFollowButton> :
-          <StyledUnFollowButton>{type}</StyledUnFollowButton>
-      }
-    </>
+    <StyledFollowerButton onClick={() => router.push("/follower")}>
+      팔로워
+    </StyledFollowerButton>
   )
 }
+
+interface Props {
+  followedMember?: boolean
+  nickName?: string
+}
+
+export const FollowingButton: React.FC<Props> = ({ followedMember, nickName }) => {
+  const [isFollowing, setIsFollowing] = useState<boolean>(followedMember || false)
+
+  useEffect(() => {
+    setIsFollowing(followedMember || false);
+  }, [followedMember]);
+
+  console.log(isFollowing)
+
+  return (
+    <>
+      {isFollowing === true ? (
+        <StyledUnFollowingButton
+          onClick={() => {
+            DeleteUnFollowing(nickName)
+            setIsFollowing(false)
+          }}
+        >
+          언팔로우
+        </StyledUnFollowingButton>
+      ) : (
+        <StyledFollowingButton
+          onClick={() => {
+            PostFollowing(nickName)
+            setIsFollowing(true)
+          }}
+        >
+          팔로우
+        </StyledFollowingButton>
+      )}
+    </>
+  );
+};
 
 const StyledFollowerButton = styled.button`
     cursor: pointer;
@@ -24,7 +64,7 @@ const StyledFollowerButton = styled.button`
     background-color: #eff4e7;
     color: #3f910c;
 `
-const StyledFollowButton = styled.button`
+const StyledFollowingButton = styled.button`
     cursor: pointer;
     height: 2rem;
     border-radius: 16px;
@@ -32,7 +72,7 @@ const StyledFollowButton = styled.button`
     background-color: #eff4e7;
     color: #3f910c;
 `
-const StyledUnFollowButton = styled.button`
+const StyledUnFollowingButton = styled.button`
     cursor: pointer;
     height: 2rem;
     border-radius: 16px;

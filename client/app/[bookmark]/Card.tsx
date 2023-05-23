@@ -1,25 +1,28 @@
 "use client";
 
+// import Image from 'next/image';
 import { FaRegCommentDots } from "react-icons/fa";
 import { MdOutlineHowToVote } from "react-icons/md";
 import styled from "styled-components";
 
-// 📌 매번 타입 지정하는게 맞나?
 interface CardProps {
-  nickName: string;
+  id: number;
+  title: string;
   image: string;
-  usageCount: number;
+  daylogCount?: number;
 }
 
-export default function Card({ nickName, image, usageCount }: CardProps) {
+export default function Card({ ...data }: CardProps) {
   return (
     <StyledCard>
       <div className="info">
-        <div className="nickName">{nickName} | </div>
-        <div className="usageCount">{usageCount}번 사용</div>
+        <div className="nickName">{data.title} | </div>
+        <div className="usageCount">{data.daylogCount}번 사용</div>
       </div>
       {/* img 태그는  background 속성 적용 안됨 -> div 태그로 변경*/}
-      <div className="image" style={{ backgroundImage: `url(${image})` }} />
+      <div
+        className="image"
+        style={{ backgroundImage: `url(${data.image})` }} />
       <div className="status">
         <div className="vote">
           <div className="text">투표하기</div>

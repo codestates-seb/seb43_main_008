@@ -1,42 +1,26 @@
 "use client";
 
-import { useParams } from 'next/navigation';
 import { AiOutlineMinus } from "react-icons/ai";
 import { RiDeleteBinLine, RiEdit2Line } from "react-icons/ri";
 import styled from "styled-components";
 
-import { DeleteComment } from "../api/commentApi"
 
 interface Props {
   onClickModal: () => void;
   handleEditComment: (id: string) => void;
   commentId?: string;
-  setComment: React.Dispatch<React.SetStateAction<string>>
-  setUpdate: React.Dispatch<React.SetStateAction<boolean>>
-  update: boolean
+  handleDelete: (commentId: string) => void;
+
 }
 
 export const Modal: React.FC<Props> = ({
   onClickModal,
   handleEditComment,
   commentId,
-  setComment,
-  setUpdate,
-  update,
+  handleDelete,
 }) => {
 
-  const series = useParams();
-
-
-  const HandleDelete = () => {
-    onClickModal();
-    setComment("")
-    DeleteComment(series.id, commentId)
-    setUpdate(!update)
-    console.log(update)
-  };
-
-  const HandleEdit = () => {
+  const handleEdit = () => {
     onClickModal();
     handleEditComment(commentId);
   };
@@ -50,16 +34,16 @@ export const Modal: React.FC<Props> = ({
         </div>
         <div className="edit">
           <RiEdit2Line className="icon" />
-          <div className="text" onClick={HandleEdit}>
+          <div className="text" onClick={handleEdit}>
             수정하기
           </div>
         </div>
-        <div className="delete" onClick={HandleDelete}>
+        <div className="delete" onClick={() => { handleDelete(commentId); onClickModal(); }}>
           <RiDeleteBinLine className="icon" />
           <div className="text">삭제하기</div>
         </div>
       </div>
-    </StyledModal>
+    </StyledModal >
   );
 };
 
