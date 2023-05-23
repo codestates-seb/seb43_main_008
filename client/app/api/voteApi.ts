@@ -12,7 +12,6 @@ export const GetVote = async (seriesId: string) => {
 export const PutVote = async (seriesId: string, voting: string) => {
   try {
     const response = await axiosInstance.put(`/series/votes/${seriesId}/${voting}`);
-    console.log(response.data)
     return response.data.message
   } catch (error) {
     throw error;

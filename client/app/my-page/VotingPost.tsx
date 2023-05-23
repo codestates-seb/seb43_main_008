@@ -13,11 +13,22 @@ export const VotingPost = ({ ...data }: PostData) => {
     router.push(`/detail/${id}`);
     sessionStorage.setItem("header", title);
   }
+  const HandleMoveToMoreUsing = (id: number) => {
+    router.push(`/first-vote-complete/${id}`);
+  }
 
   return (
     <StyledVoting onClick={() => HandleMoveToDetail(data.id, data.title)}>
       <div className='box'>
-        <div className="image" style={{ backgroundImage: `url(${data.image})` }}> {data.voteResult === false ? <div className='voting'>투표완료</div> : <div className='voting'>투표중</div>}</div>
+        <div className="image" style={{ backgroundImage: `url(${data.image})` }}> {
+          data.voteResult === false
+            ? <div
+              onClick={() => HandleMoveToMoreUsing(data.id)}
+              className='voting'>투표완료</div>
+            :
+            <div
+              onClick={() => HandleMoveToDetail(data.id, data.title)}
+              className='voting'>투표중</div>}</div>
       </div>
       <div className='text'> {data.title} </div>
       {data.voteResult ? <Medal /> : null}
