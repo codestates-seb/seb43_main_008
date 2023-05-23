@@ -2,7 +2,7 @@
 import Header from "../Header";
 import Navbar from "../Navbar";
 
-export default function MemberEditLayout({
+export default function SeriesLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -11,8 +11,9 @@ export default function MemberEditLayout({
     <>
       <Header
         backButton={true}
-        textContent={"시리즈 작성"}
-        voteButton={false}
+        textContent={"봉다리 세바스찬"}
+        // secretButton={false}
+        voteButton={true}
       />
       {children}
       <Navbar />

@@ -1,19 +1,19 @@
 "use client";
-import Header from "../Header";
+// import Header from "../Header";
 import Navbar from "../Navbar";
 
-export default function MemberEditLayout({
+export default function SeriesLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <>
-      <Header
+      {/* <Header
         backButton={true}
-        textContent={"시리즈 작성"}
-        voteButton={false}
-      />
+        textContent={"플라스틱 육아 시작하기"}
+        secretButton={true}
+      /> */}
       {children}
       <Navbar />
     </>

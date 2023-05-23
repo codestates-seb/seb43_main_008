@@ -1,0 +1,117 @@
+.list-page{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fafafa;
+  /* height: calc(100vh - 40px); */
+  box-sizing: border-box;
+  padding: 1px 24px;
+  max-width: 1024px;
+  margin: 0 auto;
+  min-height: 550px;
+  min-width: 320px;
+
+  @media screen and (max-width: 768px) {
+  }
+}
+
+/*----------------------------------------몇 번 사용했는지 보는 카운터 박스-------------------------------------------*/
+
+.list-useCountBarBox{
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+  border-radius: 8px;
+  border: #eff4e7 1px solid;
+  justify-content: center;
+  background-color: #eff4e7;
+  margin-top: 7px;
+}
+
+.list-useCountBar{
+  align-items: center;
+  height: 50px;
+  border: #3f910c 1px solid;
+  border-radius: 4px;
+  margin: 10px;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}
+
+.list-useCountContainer{
+  margin-top: 5px;
+  display: inline-flex;
+}
+
+.List-eachTime{
+  height: 35px;
+  width: 35px;
+  background-color: #fff4cc;
+  border: #fff4cc 1px solid;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+/*----------------------------------------유저 컨텐츠 박스-------------------------------------------*/
+
+.list-useContentBarBox{
+  display: flex;
+  width: 90vw;
+  height: 63vh;
+  background-color: #e3e3e3;
+  margin-top: 10px;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}
+
+.list-useContentContainer{
+  margin-top: 5px;
+  display: inline-flex;
+}
+
+.List-eachContents{
+  width: 75vw;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.List-eachContentsImage{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  border: white 1px solid;
+}
+
+.List-eachContentsText{
+  display: block;
+  width: auto;
+  margin-right: 20px;
+  margin-left: 20px;
+  white-space: pre-wrap;
+  text-overflow: ellipsis;
+  word-break:break-all;
+  font-size: 18px;
+}
+
+.List-eachContentsDate{
+  margin-left: 20px;
+  margin-top: 10px;
+  font-size: 12px;
+  margin-right: auto;
+}
+
+.List-addContentsBox{
+  width: 75vw;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+}

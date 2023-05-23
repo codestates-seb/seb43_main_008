@@ -34,12 +34,12 @@ const BadgeCircle: React.FC<BadgeCircleProps> = ({ image, isAcquired }) => {
 
 // 중앙부 획득 뱃지 콘텐츠
 const BadgeImgContents = styled.div`
-  border: 1px solid #9b9ba0;
-  width: 240px;
-  height: 240px;
+  border: 1px solid #3f910c;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   background-color: #fff8de;
-  margin-top: 25px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;

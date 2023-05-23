@@ -44,8 +44,8 @@ interface BadgeDetailProps {
   >;
   setMainText: Dispatch<SetStateAction<string>>;
   setSubText: Dispatch<SetStateAction<string>>;
-
   setIsAcquired: Dispatch<SetStateAction<boolean>>;
+  badgeList: any[]; // from the parent component
 }
 
 interface ImageData {
@@ -61,6 +61,7 @@ export default function BadgeDetail({
   setMainText,
   setSubText,
   setIsAcquired,
+  badgeList,
 }: BadgeDetailProps) {
   const [, setSelectedImage] = useState<ImageData | null>(null);
 
@@ -73,7 +74,7 @@ export default function BadgeDetail({
     setSubText(image.subText);
 
     // 뱃지가 획득되었는지 결정
-    // 여기서는 badgeLists에 이미 획득한 뱃지의 정보를 추가해야 합니다.
+    // 여기서는 badgeLists에 이미 획득한 뱃지의 정보를 추가
     setIsAcquired(badgeLists.includes(image));
   };
 
@@ -83,7 +84,7 @@ export default function BadgeDetail({
         <GetBadgeText>획득한 뱃지 List</GetBadgeText>
         <PlasticList>
           <ul className="list-wrapper">
-            {badgeLists.map((image, index) => (
+            {badgeList.map((image, index) => (
               <PlasticItem
                 key={index}
                 imageSrc={image.src}
@@ -109,57 +110,50 @@ const CountCardContainer = styled.div`
   padding: 5px;
   border-radius: 10px;
   align-items: flex-start;
-  margin-top: 10px;
+  border: #3f910c 1px solid;
 `;
 const GetBadgeText = styled.div`
   /* all: unset; */
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   margin-bottom: 5px;
-  margin-left: 7px;
-  margin-top: 10px;
+  margin-left: 5px;
+  align-self: flex-start;
+  color: #222;
 `;
 
 const PlasticList = styled.div`
-  border: 1px solid #9b9ba0;
-  padding: 5px;
-  border-radius: 5px;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 5px;
+  height: 180px;
+  overflow-y: scroll;
+  display: flex;
+  justify-content: center;
 
   .list-wrapper {
-    margin-top: 300px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    width: 100%;
+    padding: 0;
     list-style: none;
-    margin: 5px;
-    display: flex;
-    gap: 7px;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    max-width: calc(40px * 10 + 40px * 4);
-  }
+    background-color: #eff4e7;
 
-  .my-plastic {
-    display: flex;
-    align-items: center;
-    margin: 5px 0;
-    justify-content: space-between;
-    flex-direction: column;
-  }
+    .my-plastic {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  .plastic-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #fff8de;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    .plastic-circle {
+      width: 70px;
+      height: 70px;
+      border-radius: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff8de;
+      border: #3f910c 1px solid;
+    }
   }
 `;
