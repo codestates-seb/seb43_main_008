@@ -3,20 +3,24 @@
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-// import Router from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import { GrLock, GrUnlock } from "react-icons/gr";
 
 import styles from "./babyPla.module.css";
 export default function Page() {
-  //--------------------------------------------------------- 상태, 상수는 여기에 설정---------------------------------
+  //--------------------------------------------------------- 상태, 상수는 아래 여기에 설정---------------------------------
   const [title, setTitle] = useState<string>(""); // 초기값 빈문자열의 플라스틱 이름 인풋 상태 관리
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
-  //--------------------------------------------------------- 함수는 여기에 생성--------------------------------------
+  //---------------------------------------------------------콘솔 테스트 중---------------------------------------------
+  useEffect(() => {
+    console.log("hello");
+    // console.log(process.env.NEXT_PUBLIC_API_URL);
+  }, []);
+  //---------------------------------------------------------함수는 아래 여기에 생성--------------------------------------
 
   // 아래는 플라스틱 이름 인풋 관련 함수
   useEffect(() => {
@@ -59,10 +63,6 @@ export default function Page() {
     setIsOpen(true);
   };
 
-  // const closeModalOutSide = () => {
-  //   setIsOpen(false);
-  // };
-
   const nestStep = async () => {
     console.log(title, isPublic);
     let result = await sendData();
@@ -70,7 +70,7 @@ export default function Page() {
     if (result === false) {
       console.log("Error");
     } else {
-      router.push("/series");
+      router.push("/series"); /////////////////////////////// 시리즈로 넘어가라 쫌 제발 쫌 쫌 쫌
     }
   };
 
@@ -125,10 +125,11 @@ export default function Page() {
           />
           {/*----------------------------------------------아래는 입양 완료 버튼----------------------------------------------*/}
           <button
-            onClick={nestStep}
+            onClick={() => {
+              nestStep(); ///////////////////////////// 이거 왜 도대체 시리즈로 안넘어가지는 거임????????? 나니???????
+            }}
             ref={buttonRef}
             className={`${styles["start-button"]}`}
-            disabled
             style={
               title.length > 0
                 ? {

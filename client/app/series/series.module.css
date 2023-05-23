@@ -19,7 +19,7 @@
 /* 사진 이미지 */
 .series-bodyBox{
   height: 71vh;
-  margin: 5px;
+  margin: 3px;
   border-radius: 5px;
   box-shadow:0 5px 18px rgba(0, 0, 0, 0.8);
   display: flex;
@@ -29,61 +29,66 @@
 }
 
 .series-imageBox{
-  height: 100px;
+  height: 140px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 18vh;
+  margin-top: 110px;
 }
 
 /* 사진 미리보기 */
 .series-imageShower{
   border-radius: 5px;
+  height: 200px;
 }
 
 .series-input{
-  width: 310px;
-  height: 250px;
+  width: 300px;
+  height: 230px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: #222;
   font-weight: bold;
-  margin-top: 25px;
-  margin-bottom: 5px;
-  font-size: 15px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  padding: 2px;
+  overflow: hidden;
+  resize: none; /*텍스트 존 사이즈 고정*/
+  border: solid 1px #3f910c;
+  background-color: #eff4e7;
 }
 
 .series-input::placeholder {
   font-size: 14px;
   text-align: center;
-  color: rgb(152, 146, 146);
   text-align: "center";
   line-height: 210px;
   border-radius: 5px;
+  color: #3f910c;
+  background-color: #eff4e7;
 }
 
 .series-button{
   margin-top: 10px;
-  margin-left: 10px;
+  margin-left: 6px;
   margin-right: 20px;
   height: 40px;
-  width: 95%;
+  width: 98%;
   border-radius: 8px;
-  border: darkgray 1px solid;
+  border: #c4c4d3 1px solid;
   background-color: #e3e3e3;
   
 }
 
 /*-------------------------------- 모달 스타일 -----------------------------------*/
 
-
-.seriesModalBody{
-  width: 80vw;
-  height: 30%;
-  border: black 1px solid;
+.series-modalBody{
+  width: 84vw;
+  height: 45%;
+  border: #3f910c 1px solid;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -91,23 +96,25 @@
   justify-content: center;
   z-index: 10;
   position: fixed;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
   background-color: white;
 }
 
-.seriesModalHeader{
+.series-modalHeader{
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 20px;
+  padding: 15px;
   align-items: center;
+  background-attachment: fixed;
+  font-size: 15px;
 }
 
-.seriesModalTextBox{
+.series-modalTextBox{
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -116,10 +123,11 @@
   margin-bottom: 20px;
 }
 
-.seriesModalButton{
+.series-modalButton{
   height: 30px;
   width: 60px;
   background-color: white;
   border: 1px gray solid;
   border-radius: 5px;
+  margin-top: 15px;
 }

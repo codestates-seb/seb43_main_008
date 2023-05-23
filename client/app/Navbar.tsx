@@ -1,6 +1,6 @@
 "use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 import Link from "next/link";
 import { BsPlusLg } from "react-icons/bs";
 import styled from "styled-components";
@@ -8,19 +8,17 @@ import styled from "styled-components";
 export default function Navbar() {
   // 클릭 메뉴 관리 함수
   const menuClickHandle = (menuName: string) => {
-    sessionStorage.setItem("menu", menuName)
+    sessionStorage.setItem("menu", menuName);
   };
 
-  let selectedMenu = "홈"
+  let selectedMenu = "홈";
   if (typeof window !== "undefined") {
-    selectedMenu = sessionStorage.getItem("menu")
+    selectedMenu = sessionStorage.getItem("menu");
   }
-
 
   return (
     // <StyledNavbar style={{ display: isNavOn ? "block" : "none" }}>
     <StyledNavbar>
-
       <div className="container">
         <Link
           href="/"
@@ -29,7 +27,7 @@ export default function Navbar() {
         >
           {selectedMenu === "홈" ? (
             <Image
-              className='icon'
+              className="icon"
               src="/icons/HomeFill.svg"
               width={26}
               height={26}
@@ -37,7 +35,7 @@ export default function Navbar() {
             />
           ) : (
             <Image
-              className='icon'
+              className="icon"
               src="/icons/Home.svg"
               width={26}
               height={26}
@@ -48,12 +46,14 @@ export default function Navbar() {
         </Link>
         <Link
           href="follow"
-          className={`follow menu ${selectedMenu === "팔로우" ? "selectedMenu" : ""}`}
+          className={`follow menu ${
+            selectedMenu === "팔로우" ? "selectedMenu" : ""
+          }`}
           onClick={() => menuClickHandle("팔로우")}
         >
           {selectedMenu === "팔로우" ? (
             <Image
-              className='icon'
+              className="icon"
               src="/icons/HeartFill.svg"
               width={26}
               height={26}
@@ -61,7 +61,7 @@ export default function Navbar() {
             />
           ) : (
             <Image
-              className='icon'
+              className="icon"
               src="/icons/Heart.svg"
               width={26}
               height={26}
@@ -70,12 +70,13 @@ export default function Navbar() {
           )}
           <div className="text">팔로우</div>
         </Link>
-        <Link href="/dodo/series" className="plus-button">
+        <Link href="/baby" className="plus-button">
           <BsPlusLg />
         </Link>
         <div
-          className={`add-series menu ${selectedMenu === "시리즈 작성" ? "selectedMenu" : ""
-            }`}
+          className={`add-series menu ${
+            selectedMenu === "시리즈 작성" ? "selectedMenu" : ""
+          }`}
           onClick={() => menuClickHandle("시리즈 작성")}
         >
           <div className="icon" />
@@ -83,13 +84,14 @@ export default function Navbar() {
         </div>
         <Link
           href="bookmark"
-          className={`book-mark menu ${selectedMenu === "북마크" ? "selectedMenu" : ""
-            }`}
+          className={`book-mark menu ${
+            selectedMenu === "북마크" ? "selectedMenu" : ""
+          }`}
           onClick={() => menuClickHandle("북마크")}
         >
           {selectedMenu === "북마크" ? (
             <Image
-              className='icon'
+              className="icon"
               src="/icons/BookmarkFill.svg"
               width={26}
               height={26}
@@ -97,7 +99,7 @@ export default function Navbar() {
             />
           ) : (
             <Image
-              className='icon'
+              className="icon"
               src="/icons/Bookmark.svg"
               width={26}
               height={26}
@@ -108,13 +110,14 @@ export default function Navbar() {
         </Link>
         <Link
           href="my-page"
-          className={`my-page menu ${selectedMenu === "마이일지" ? "selectedMenu" : ""
-            }`}
+          className={`my-page menu ${
+            selectedMenu === "마이일지" ? "selectedMenu" : ""
+          }`}
           onClick={() => menuClickHandle("마이일지")}
         >
           {selectedMenu === "마이일지" ? (
             <Image
-              className='icon'
+              className="icon"
               src="/icons/MyFill.svg"
               width={26}
               height={26}
@@ -122,7 +125,7 @@ export default function Navbar() {
             />
           ) : (
             <Image
-              className='icon'
+              className="icon"
               src="/icons/My.svg"
               width={26}
               height={26}
@@ -152,9 +155,9 @@ const StyledNavbar = styled.nav`
 
   color: #222;
   a {
-  color: inherit;
-  text-decoration: none;
-}
+    color: inherit;
+    text-decoration: none;
+  }
   .container {
     display: flex;
     flex-direction: row;
@@ -224,8 +227,7 @@ const StyledNavbar = styled.nav`
   }
 `;
 
-
-  // 스크롤 이벤트 감지 함수
+// 스크롤 이벤트 감지 함수
 /*
 const [isNavOn, setIsNavOn] = useState<boolean>(true);
 

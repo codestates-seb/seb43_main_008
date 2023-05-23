@@ -1,56 +1,50 @@
-.listPage{
+.list-page{
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #e3e3e3;
   align-items: center;
+  background-color: #fafafa;
+  /* height: calc(100vh - 40px); */
+  box-sizing: border-box;
+  padding: 1px 24px;
+  max-width: 1024px;
+  margin: 0 auto;
+  min-height: 550px;
+  min-width: 320px;
+
+  @media screen and (max-width: 768px) {
+  }
 }
 
-.listHeader{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  height: 40px;
-  background-color: white;
-  width: 100vw;
-}
+/*----------------------------------------몇 번 사용했는지 보는 카운터 박스-------------------------------------------*/
 
-.listHeaderVoteIconBox{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/*----------------------------------------몇 번 사용했는지 보는 박스-------------------------------------------*/
-
-.listUseCountBarBox{
+.list-useCountBarBox{
   display: flex;
   flex-direction: column;
   width: 90vw;
   border-radius: 8px;
-  border: #e3e3e3 1px solid;
+  border: #eff4e7 1px solid;
   justify-content: center;
-  background-color: white;
-  margin-top: 20px;
+  background-color: #eff4e7;
+  margin-top: 7px;
 }
 
-.listUseCountBar{
+.list-useCountBar{
   align-items: center;
   height: 50px;
-  border: black 1px solid;
+  border: #3f910c 1px solid;
   border-radius: 4px;
   margin: 10px;
   flex-wrap: nowrap;
   overflow-x: scroll;
 }
 
-.listUseCountContainer{
+.list-useCountContainer{
   margin-top: 5px;
   display: inline-flex;
 }
 
-.ListEachTime{
+.List-eachTime{
   height: 35px;
   width: 35px;
   background-color: #fff4cc;
@@ -64,22 +58,22 @@
 
 /*----------------------------------------유저 컨텐츠 박스-------------------------------------------*/
 
-.listUseContentBarBox{
+.list-useContentBarBox{
   display: flex;
   width: 90vw;
-  height: 75vh;
+  height: 63vh;
   background-color: #e3e3e3;
-  margin-top: 20px;
+  margin-top: 10px;
   flex-wrap: nowrap;
   overflow-x: scroll;
 }
 
-.listUseContentContainer{
+.list-useContentContainer{
   margin-top: 5px;
   display: inline-flex;
 }
 
-.ListEachContents{
+.List-eachContents{
   width: 75vw;
   display: flex;
   flex-direction: column;
@@ -88,14 +82,14 @@
   margin-right: 20px;
 }
 
-.ListEachContentsImage{
+.List-eachContentsImage{
   margin-top: 20px;
   margin-bottom: 20px;
   border-radius: 3px;
   border: white 1px solid;
 }
 
-.ListEachContentsText{
+.List-eachContentsText{
   display: block;
   width: auto;
   margin-right: 20px;
@@ -106,14 +100,14 @@
   font-size: 18px;
 }
 
-.ListEachContentsDate{
+.List-eachContentsDate{
   margin-left: 20px;
   margin-top: 10px;
   font-size: 12px;
   margin-right: auto;
 }
 
-.ListAddContentsBox{
+.List-addContentsBox{
   width: 75vw;
   display: flex;
   flex-direction: column;

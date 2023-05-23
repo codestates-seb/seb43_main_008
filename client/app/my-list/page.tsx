@@ -1,21 +1,22 @@
 "use client";
 
 import axios from "axios";
-import FormData from "form-data";
+// import FormData from "form-data";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+// import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-import styles from "./style.module.css";
+import styles from "./myList.module.css";
 
 export default function Page() {
-  //--------------------------------------------------------- 상태, 상수는 여기에 설정---------------------------------
+  //--------------------------------------------------------- 상태, 상수는 여기에 설정-------------------------------------------------------------
 
   const token =
     "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjMxLCJzdWIiOiJib3Jpc0BuYXZlci5jb20iLCJpYXQiOjE2ODQ2NjcyODYsImV4cCI6MTY4NDY2OTA4Nn0.9y5yPhyzEVcbMlAqr2tEA33bXOS2F3cGtyntpVZSc7IqU4Kc5iNRTAOXPEI5TXwm";
   const [useCount, setUseCount] = useState<number>(0);
   const [contentList, setContentList] = useState<any[]>([]);
 
-  //--------------------------------------------------------- 함수는 여기에 생성--------------------------------------
+  //--------------------------------------------------------- 함수는 여기에 생성------------------------------------------------------------------
 
   useEffect(() => {
     const seriesID = localStorage.getItem("plastic");
@@ -67,75 +68,58 @@ export default function Page() {
     }
   };
 
-  const gotoVote = () => {};
+  // const gotoVote = () => {};
 
   const RoundUse = ({ count }: any) => {
     const elements = [];
 
     for (let i = count; i > 0; i--) {
       elements.push(
-        <div className="ListEachTime" key={i}>
+        <div className={`${styles["List-eachTime"]}`} key={i}>
           <span>{i}</span>
         </div>
       );
     }
 
-    return <div className="listUseCountContainer">{elements}</div>;
+    return (
+      <div className={`${styles["list-useCountContainer"]}`}>{elements}</div>
+    );
   };
 
-  const ContentsCard = ({ count }: any) => {
-    const elements = [];
+  // const ContentsCard = ({ count }: any) => {
+  //   const elements = [];
 
-    for (let i = count; i > 0; i--) {
-      elements.push(
-        <div className={`${styles.ListEachTime}`} key={i}>
-          <span>{i}</span>
-        </div>
-      );
-    }
+  //   for (let i = count; i > 0; i--) {
+  //     elements.push(
+  //       <div className={`${styles.ListEachTime}`} key={i}>
+  //         <span>{i}</span>
+  //       </div>
+  //     );
+  //   }
 
-    return <div className={`${styles.listUseCountContainer}`}>{elements}</div>;
-  };
+  //   return (
+  //     <div className={`${styles["list-useCountContainer"]}`}>{elements}</div>
+  //   );
+  // };
 
   return (
-    <div className={`${styles.listPage}`}>
-      {/*위의 헤더 입니다*/}
-      <div className={`${styles.listHeader}`}>
-        <div>
-          <Image
-            style={{ marginTop: 5 }}
-            src={"/back.svg"}
-            alt={"뒤로가기 버튼 입니다"}
-            width={20}
-            height={30}
-          />
-        </div>
-        <div>플라스틱 육아 시작하기</div>
-        <div className={`${styles.listHeaderVoteIconBox}`} onClick={gotoVote}>
-          <Image
-            src={"/vote.svg"}
-            alt={"투표 버튼입니다"}
-            width={20}
-            height={20}
-          />
-          <div style={{ fontSize: 10 }}>투표가기</div>
-        </div>
-      </div>
-
+    <div className={`${styles["list-page"]}`}>
       {/*사용 횟수*/}
-      <div className={`${styles.listUseCountBarBox}`}>
-        <div style={{ marginLeft: 10, marginTop: 5 }}>사용 횟수</div>
-        <div className={`${styles.listUseCountBar}`}>
+      <div className={`${styles["list-useCountBarBox"]}`}>
+        <div style={{ marginLeft: "10px", marginTop: "5px", color: "#222" }}>
+          사용 횟수
+        </div>
+        <div className={`${styles["list-useCountBar"]}`}>
           <RoundUse count={useCount} />
         </div>
       </div>
 
       {/*카드*/}
-      <div className={`${styles.listUseContentBarBox}`}>
-        <div className={`${styles.listUseContentContainer}`}>
+      <div className={`${styles["list-useContentBarBox"]}`}>
+        <div className={`${styles["list-useContentContainer"]}`}>
           {contentList.map((el, index) => {
             return (
-              <div key={index} className={`${styles.ListEachContents}`}>
+              <div key={index} className={`${styles["List-eachContents"]}`}>
                 {/* <Image
                   className={`${styles.ListEachContentsImage}`}
                   src={el.contentImg}
@@ -143,16 +127,19 @@ export default function Page() {
                   width={250}
                   height={200}
                 /> */}
-                <div className={`${styles.ListEachContentsText}`}>
+                <div className={`${styles["List-eachContentsText"]}`}>
                   {el.content}
                 </div>
-                <div className={`${styles.ListEachContentsDate}`}>
+                <div className={`${styles["List-eachContentsDate"]}`}>
                   {el.createdAt.split("T")[0]}
                 </div>
               </div>
             );
           })}
-          <div key={useCount + 1} className={`${styles.ListAddContentsBox}`}>
+          <div
+            key={useCount + 1}
+            className={`${styles["List-addContentsBox"]}`}
+          >
             <Image
               src={"/plus.svg"}
               alt={"글을 하나 더 써봐요"}

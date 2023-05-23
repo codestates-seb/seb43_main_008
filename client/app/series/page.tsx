@@ -7,11 +7,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-// import { SlPicture } from "react-icons/sl";
-import styles from "./style.module.css";
+import styles from "./series.module.css";
 
 export default function Page() {
-  //--------------------------------------------------------- 상태, 상수는 여기에 설정---------------------------------------------------------------------
+  //---------------------------------------------------------상태, 상수는 아래 여기에 설정---------------------------------------------------------------------
 
   const [imageFile, setImageFile] = useState<any>(""); // 이미지 파일을 담는 상태
   const [userText, setUserText] = useState<any>(""); // 텍스트를 담는 상태
@@ -19,9 +18,13 @@ export default function Page() {
   const fileRef = useRef<HTMLInputElement>(null); // 이미지 input을 참고하는 ref 객체
   const showRef = useRef<any>(null); // 업로드한 이미지를 보여주는 Image 태그를 참조하는 Ref 객체
   const buttonRef = useRef<any>(null);
+  //---------------------------------------------------------콘솔 테스트 중----------------------------------------------------------------------------------
 
-  //--------------------------------------------------------- 함수는 여기에 생성--------------------------------------------------------------------------
+  useEffect(() => {
+    console.log("하아이이이이");
+  }, []);
 
+  //---------------------------------------------------------함수는 아래 여기에 생성--------------------------------------------------------------------------
   useEffect(() => {
     if (imageFile === "" || userText === "") {
       buttonRef.current.disabled = true;
@@ -77,7 +80,7 @@ export default function Page() {
               src={"/image.svg"}
               alt={"이미지 업로드"}
               width={300}
-              height={150}
+              height={100}
               onClick={handleClick}
             />
           </div>
@@ -144,9 +147,10 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
     setIsOpen(false);
   };
 
+  // 리스트 페이지로 이동합시다.
   const nextStep = async () => {
     await sendData();
-    router.push("/mylist");
+    router.push("/my-list");
   };
 
   const sendData = async () => {
@@ -179,17 +183,21 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
   return (
     <div className={`${styles["series-modalBody"]}`}>
       <div className={`${styles["series-modalHeader"]}`}>
-        <div>아래의 안내 내용을 확인해 주세요</div>
+        <div style={{ marginLeft: "25px", color: "#3f910c" }}>
+          아래 안내 내용을 확인해 주세요!
+        </div>
         <Image
           src={"/close.svg"}
-          width={20}
-          height={20}
+          width={13}
+          height={13}
           alt={"취소버튼"}
           onClick={closeModal}
         />
       </div>
 
-      <div>안내 내용 좀 우리 모두 같이 정해보아용~ 데헷데헷</div>
+      <div style={{ fontSize: "14px" }}>
+        작성된 시리즈는 수정이나 삭제를 할 수 없습니다.
+      </div>
 
       <div style={{ marginTop: 20, marginBottom: 20 }}>
         <div>
@@ -201,9 +209,9 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
           />
           <label
             htmlFor="findCheck"
-            style={{ marginLeft: 20, marginBottom: 40 }}
+            style={{ marginLeft: 10, marginBottom: 40, fontSize: "14px" }}
           >
-            안내 내용을 확인하였습니다
+            안내 내용을 확인하였습니다.
           </label>
         </div>
         <div>
@@ -213,17 +221,34 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
             name="agree"
             onChange={clickAgree}
           />
-          <label htmlFor="agree" style={{ marginLeft: 20, marginBottom: 10 }}>
-            안내에 동의 합니다
+          <label
+            htmlFor="agree"
+            style={{ marginLeft: 10, marginBottom: 10, fontSize: "14px" }}
+          >
+            안내에 동의 합니다.
           </label>
         </div>
       </div>
 
-      <div>체크 박스 두개 다 체크해야 확인 버튼을 누를 수 있습니다!</div>
+      <div style={{ fontSize: "14px", color: "#7d7d83 " }}>
+        체크 박스 두개에 다 체크해야{" "}
+      </div>
+      <div style={{ fontSize: "14px", color: "#7d7d83 " }}>
+        확인 버튼을 누를 수 있습니다!
+      </div>
       <button
         className={`${styles["series-modalButton"]}`}
         ref={ModalButton}
         onClick={nextStep}
+        style={
+          check && agree
+            ? {
+                backgroundColor: "#eff4e7",
+                color: "#3f910c",
+                border: "solid 1px #3f910c",
+              }
+            : {}
+        }
       >
         확인
       </button>
