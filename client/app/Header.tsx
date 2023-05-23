@@ -10,7 +10,6 @@ import VoteModal from "./VoteModal";
 export default function Header({
   backButton,
   textContent,
-
   voteButton,
 }: {
   backButton: boolean;
