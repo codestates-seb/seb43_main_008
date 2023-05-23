@@ -1,13 +1,14 @@
 "use client";
-
-import axios from "axios";
+// import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import { GrLock, GrUnlock } from "react-icons/gr";
 
+import axiosInstance from "../axiosInstance";
 import styles from "./babyPla.module.css";
+
 export default function Page() {
   //--------------------------------------------------------- 상태, 상수는 아래 여기에 설정---------------------------------
   const [title, setTitle] = useState<string>(""); // 초기값 빈문자열의 플라스틱 이름 인풋 상태 관리
@@ -33,17 +34,9 @@ export default function Page() {
 
   const sendData = async () => {
     try {
-      const result = await axios.post(
-        `http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/series?public=${isPublic}`,
-        { title: title },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjI2LCJzdWIiOiJhbDAwZmhhQG5hdmVyLmNvbSIsImlhdCI6MTY4NDU4NDIxOSwiZXhwIjoxNjg0NTg2MDE5fQ.KUxmnc--qVV3ic9fudNTSTzamamXtXBNQjaHYSCEdbmsa5ijKKkVJVhMKUy_M-EL",
-          },
-        }
-      );
+      const result = await axiosInstance.post(`/series?public=${isPublic}`, {
+        title: title,
+      });
       console.log(result.data.data.id);
       localStorage.setItem("plastic", result.data.data.id);
     } catch (err) {

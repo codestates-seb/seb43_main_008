@@ -119,7 +119,7 @@ export default function Page() {
 
 const Modal = ({ imageFile, userText, setIsOpen }: any) => {
   const token =
-    "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjMxLCJzdWIiOiJib3Jpc0BuYXZlci5jb20iLCJpYXQiOjE2ODQ2NjI4MDgsImV4cCI6MTY4NDY2NDYwOH0.vZhJVPp61t1v5OJ4K7t-VmajWKoK6Skb7Hhd5cDs7idJ3wExdym-7Oy67XxffYua";
+    "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX0dVRVNUIl0sInN1YiI6ImdvZDk5OUBuYXZlci5jb20iLCJpYXQiOjE2ODQ4MjY4NDksImV4cCI6MTY4NDgzMDQ0OX0.n_DngS5AjMN4e7OW2uKpBgd7_W7HJPRtK5N9B5noyQHqPBMoaxDwU_0GxqtwLBAT";
   const [check, setCheck] = useState(false); // 확인 체크를 담아 놓는 상태
   const [agree, setAgree] = useState(false); // 동의 체크를 담아 놓는 상태
   const ModalButton = useRef<any>(null); // 모달의 확인 버튼

@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-// import FormData from "form-data";
+import FormData from "form-data";
 import Image from "next/image";
 // import { useEffect, useRef, useState } from "react";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ export default function Page() {
   //--------------------------------------------------------- 상태, 상수는 여기에 설정-------------------------------------------------------------
 
   const token =
-    "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjMxLCJzdWIiOiJib3Jpc0BuYXZlci5jb20iLCJpYXQiOjE2ODQ2NjcyODYsImV4cCI6MTY4NDY2OTA4Nn0.9y5yPhyzEVcbMlAqr2tEA33bXOS2F3cGtyntpVZSc7IqU4Kc5iNRTAOXPEI5TXwm";
+    "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX0dVRVNUIl0sInN1YiI6ImdvZDk5OUBuYXZlci5jb20iLCJpYXQiOjE2ODQ4MjY4NDksImV4cCI6MTY4NDgzMDQ0OX0.n_DngS5AjMN4e7OW2uKpBgd7_W7HJPRtK5N9B5noyQHqPBMoaxDwU_0GxqtwLBAT";
   const [useCount, setUseCount] = useState<number>(0);
   const [contentList, setContentList] = useState<any[]>([]);
 
@@ -86,21 +86,21 @@ export default function Page() {
     );
   };
 
-  // const ContentsCard = ({ count }: any) => {
-  //   const elements = [];
+  const ContentsCard = ({ count }: any) => {
+    const elements = [];
 
-  //   for (let i = count; i > 0; i--) {
-  //     elements.push(
-  //       <div className={`${styles.ListEachTime}`} key={i}>
-  //         <span>{i}</span>
-  //       </div>
-  //     );
-  //   }
+    for (let i = count; i > 0; i--) {
+      elements.push(
+        <div className={`${styles.ListEachTime}`} key={i}>
+          <span>{i}</span>
+        </div>
+      );
+    }
 
-  //   return (
-  //     <div className={`${styles["list-useCountContainer"]}`}>{elements}</div>
-  //   );
-  // };
+    return (
+      <div className={`${styles["list-useCountContainer"]}`}>{elements}</div>
+    );
+  };
 
   return (
     <div className={`${styles["list-page"]}`}>
@@ -120,13 +120,13 @@ export default function Page() {
           {contentList.map((el, index) => {
             return (
               <div key={index} className={`${styles["List-eachContents"]}`}>
-                {/* <Image
+                <Image
                   className={`${styles.ListEachContentsImage}`}
                   src={el.contentImg}
                   alt={"각각의 이미지에요"}
                   width={250}
                   height={200}
-                /> */}
+                />
                 <div className={`${styles["List-eachContentsText"]}`}>
                   {el.content}
                 </div>
