@@ -16,17 +16,19 @@ export const Slider = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const params = useParams();
-
+  console.log(pageNumber)
   useEffect(() => {
     GetDaylog(params.id, pageNumber).then((data) => {
       if (data) {
         setSlides((prevList) => [...prevList, ...data])
         setLastDataLength(data.length)
         setIsLoading(false)
+        console.log(`params.id: ${params.id}`)
+        console.log(`pageNumber: ${pageNumber}`)
       }
     })
     setIsLoading(true)
-  }, [pageNumber])
+  }, [params.id, pageNumber])
 
 
   // 마우스 스크롤로 슬라이드 이동을 위해 DOM에 접근한다.

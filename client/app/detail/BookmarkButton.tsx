@@ -14,7 +14,7 @@ export const BookmarkButton = () => {
   useEffect(() => {
     GetSeriesBookmark(params.id).then((data) => {
       if (data) {
-        setIsMarked(data)
+        setIsMarked(data.isBookmarked)
       }
     })
   }, [isMarked])

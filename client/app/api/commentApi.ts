@@ -3,7 +3,6 @@ import axiosInstance from '../axiosInstance';
 export const GetComment = async (seriesID: string) => {
   try {
     const response = await axiosInstance.get(`comments/${seriesID}`);
-    console.log(response.data)
     return response.data.data.pagedata;
   } catch (error) {
     throw error;
