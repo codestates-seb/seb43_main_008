@@ -4,8 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiFillCamera } from "react-icons/ai";
 
-// import { memberEdit } from "../api/memberEdit";
-import { GetProfile } from "../api/myPageApi";
+import { GetProfile, MemberEdit, MemberImageEdit } from "../api/memberEdit";
 import * as S from "./ProfileEditStyle";
 
 export default function ProfileEdit() {
@@ -31,14 +30,25 @@ export default function ProfileEdit() {
         setImage(reader.result as string);
       };
       reader.readAsDataURL(file);
+      MemberImageEdit(file)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
-  // const onSubmit = (nickName: string, introduce: string) => {
-  //   memberEdit(nickName, introduce).then((res) => {
-  //     console.log(res);
-  //   });
-  // };
+  const memberEditClcik = async (nickName: string, introduce: string) => {
+    try {
+      const res = await MemberEdit(nickName, introduce);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
 
   return (
     <>
@@ -78,7 +88,12 @@ export default function ProfileEdit() {
             value={introduce}
             onChange={(e) => setIntroduce(e.target.value)}
           />
-          <S.SubmitButton type="button">수정하기</S.SubmitButton>
+          <S.SubmitButton
+            type="button"
+            onClick={() => memberEditClcik(nickName, introduce)}
+          >
+            수정하기
+          </S.SubmitButton>
         </form>
       </S.ProfileEditContainer>
     </>

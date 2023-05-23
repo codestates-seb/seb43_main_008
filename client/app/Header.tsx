@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 // import { AiOutlineLock } from "react-icons/ai";
@@ -26,9 +27,10 @@ export default function Header({
 
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
   const [isVotePublic, setIsVotePublic] = useState(false);
+  const router = useRouter();
 
   return (
-    <HeaderContainer>
+    <HeaderContainer onClick={() => router.back()}>
       {backButton ? (
         <BackArrowContainer>
           <AiOutlineLeft size="18" />
