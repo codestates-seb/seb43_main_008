@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiFillCamera } from "react-icons/ai";
 
@@ -13,7 +14,7 @@ export default function ProfileEdit() {
   const [image, setImage] = useState<string | null>(null);
   const [nickName, setNickName] = useState<string>("");
   const [introduce, setIntroduce] = useState<string>("");
-
+  const router = useRouter();
   useEffect(() => {
     GetProfile().then((res) => {
       setImage(res.image);
@@ -42,8 +43,8 @@ export default function ProfileEdit() {
 
   const memberEditClcik = async (nickName: string, introduce: string) => {
     try {
-      const res = await MemberEdit(nickName, introduce);
-      console.log(res);
+      await MemberEdit(nickName, introduce);
+      router.push("/my-page");
     } catch (error) {
       console.error(error);
       throw error;
