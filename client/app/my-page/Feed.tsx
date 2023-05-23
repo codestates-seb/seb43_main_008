@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 import { GetFeed, GetMyFeed } from "../api/myPageApi"
 import { ActivePost } from './ActivePost';
-
 import { DonePost } from "./DonePost";
 import { EmptyFeed } from "./EmptyFeed";
 import { VotingPost } from "./VotingPost";
