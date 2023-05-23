@@ -2,6 +2,7 @@ package com.ssts.ssts.global.auth.filter;
 
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
+import com.ssts.ssts.global.auth.utils.TestConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,8 +42,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
+        String requestUri=request.getRequestURI();
         log.info("하늘/security : jwt verification filter -> 사전 검사 ");
-        return authorization == null || !authorization.startsWith("Bearer");
+        return authorization == null || !authorization.startsWith("Bearer")
+                || TestConstants.TOKEN_CHECK_URI.equals(requestUri)
+                || TestConstants.TOKEN_REISSUE_URI.equals(requestUri);
     }
 
     //JWT 검증 1. 서명 검증

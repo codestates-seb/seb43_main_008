@@ -9,4 +9,8 @@ public final class TestConstants {
     public static final String BE_BASE_URL="http://localhost:8080";
 
     public static final String FE_BASE_URL="http://localhost:3000";
+
+    public static final String TOKEN_CHECK_URI="/token/check";
+
+    public static final String TOKEN_REISSUE_URI="/token/reissue";
 }

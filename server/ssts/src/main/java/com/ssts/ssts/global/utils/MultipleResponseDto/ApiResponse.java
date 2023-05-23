@@ -22,6 +22,14 @@ public class ApiResponse<T> {
         );
     }
 
+    public static <T> ApiResponse<T> ok(String message) {
+        return new ApiResponse<> (
+                message,
+                200,
+                null
+        );
+    }
+
     public static <T> ApiResponse<T> ok(T data) {
         return new ApiResponse<> (
                 "성공",
