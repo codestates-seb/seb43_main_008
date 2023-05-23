@@ -67,7 +67,8 @@ public class VoteService {
         //투표 마감기간 (2일) 할당
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusDays(2));
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
-        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusHours(12));
+        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusHours(12));
+        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(5));
         //ㄴ> 테스트 마감기간: 15초
 
         //재투표시에 memberVote 초기화 (중복 제거)
