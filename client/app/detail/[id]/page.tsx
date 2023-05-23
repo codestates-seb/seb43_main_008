@@ -6,11 +6,7 @@ import { Vote } from "../Vote";
 export default function Detail() {
   return (
     <>
-      <Header
-        backButton={true}
-        textContent={true}
-        secretButton={false}
-      />
+      <Header backButton={true} textContent={true} voteButton={false} />
       <Slider />
       <Vote />
       <Comments />

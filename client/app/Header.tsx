@@ -13,7 +13,7 @@ import VoteModal from "./VoteModal";
 export default function Header({
   backButton,
   textContent,
-  secretButton,
+
   voteButton,
 }: {
   backButton: boolean;
@@ -21,9 +21,6 @@ export default function Header({
   secretButton: boolean; // secretButton을 optional로 변경
   voteButton?: boolean; // voteButton을 optional로 변경
 }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPublic, setIsPublic] = useState(false);
-
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
   const [isVotePublic, setIsVotePublic] = useState(false);
   const router = useRouter();
@@ -48,32 +45,22 @@ export default function Header({
         </HeaderText>
       ) : null}
 
-      <SecretButtonContainer>
-        {secretButton && (
-          <SecretButton onClick={() => setIsModalOpen(true)}>
-            <SecretButtonContent>
-              <AiOutlineLock size="15" />
-              <SecretButtonText>공개 설정</SecretButtonText>
-            </SecretButtonContent>
-          </SecretButton>
-        )}
+      <VoteButtonContainer>
         {voteButton && (
-          <SecretButton onClick={() => setIsVoteModalOpen(true)}>
-            <SecretButtonContent>
-              <BiArchiveOut size="15" />
-              <SecretButtonText>투표 가기</SecretButtonText>
-            </SecretButtonContent>
-          </SecretButton>
+          <VoteButton onClick={() => setIsVoteModalOpen(true)}>
+            <VoteButtonContent>
+              <Image
+                src={"/vote.svg"}
+                alt={"투표 버튼입니다"}
+                width={20}
+                height={20}
+              />
+
+              <VoteButtonText>투표 신청</VoteButtonText>
+            </VoteButtonContent>
+          </VoteButton>
         )}
       </SecretButtonContainer>
-
-      <HeaderModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        isPublic={isPublic}
-        setIsPublic={setIsPublic}
-      />
-      {/* </HeaderContainer> */}
 
       <VoteModal
         isVoteModalOpen={isVoteModalOpen}
