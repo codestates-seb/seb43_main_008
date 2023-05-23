@@ -120,7 +120,7 @@ public class OAuthService {
     }
 
     //FIXME
-    private String delegateAccessToken(Long id, String email, List<String> authorities) {
+    public String delegateAccessToken(Long id, String email, List<String> authorities) {
 
         // 1.subject = email (principal)
         String subject = email;
@@ -148,7 +148,7 @@ public class OAuthService {
         return accessToken;
     }
 
-    private String delegateRefreshToken(String email) {
+    public String delegateRefreshToken(String email) {
 
         String subject = email;
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());

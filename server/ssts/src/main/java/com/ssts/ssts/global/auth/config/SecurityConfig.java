@@ -46,11 +46,10 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .antMatchers(HttpMethod.GET,"/login/auth").hasAnyRole("AUTH","ADMIN")
                         .antMatchers(HttpMethod.POST,"/signup").hasAnyRole("GUEST","ADMIN")
-                        .antMatchers("/test/login").permitAll()
                         .antMatchers("/test/**").permitAll()
-                        .antMatchers("/test/signup").permitAll()
                         .antMatchers("/login/**").permitAll()
                         .antMatchers(HttpMethod.GET,"/series/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/token/**").permitAll()
                         .anyRequest().authenticated()); //FIXME 인증 끌때 여기 주석처리하세요
                         //.anyRequest().permitAll());
 
