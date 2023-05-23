@@ -3,8 +3,11 @@ import Image from "next/image";
 import styled from "styled-components";
 
 export default function NaverLogin() {
+  const naverLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/login/naver`;
+  };
   return (
-    <NaverLoginButton>
+    <NaverLoginButton onClick={() => naverLogin()}>
       <NaverLogoBox>
         <Image
           src="/socialLoginButton/naverLogo.png"

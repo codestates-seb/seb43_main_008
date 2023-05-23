@@ -1,6 +1,6 @@
-import Header from "../Header";
-import Navbar from "../Navbar";
-import VoteResultContext from "./VoteResultContext";
+import Header from "../../Header";
+import Navbar from "../../Navbar";
+import VoteResultContext from "../VoteResultContext";
 
 export default function MemberEdit() {
   return (
