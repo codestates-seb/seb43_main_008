@@ -1,38 +1,71 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useParams } from 'next/navigation';
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import slides from "./list";
+import { GetDaylog } from "../api/detailApi";
 import { Slide } from "./Slide";
 export const Slider = (): JSX.Element => {
   // 🚨 렌더되기 전에 슬라이더 조작하면 에러남. 
+
+  // api 요청 함수
+  const [slides, setSlides] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1)
+  const [lastDataLength, setLastDataLength] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  const params = useParams();
+
+  useEffect(() => {
+    GetDaylog(params.id, pageNumber).then((data) => {
+      if (data) {
+        setSlides((prevList) => [...prevList, ...data])
+        setLastDataLength(data.length)
+        setIsLoading(false)
+      }
+    })
+    setIsLoading(true)
+  }, [pageNumber])
+
+
   // 마우스 스크롤로 슬라이드 이동을 위해 DOM에 접근한다.
   const scrollRef = useRef<HTMLUListElement>(null);
   const [isDrag, setIsDrag] = useState<boolean>(false);
   const [startX, setStartX] = useState<number>();
 
-  const onDragStart = (e: React.MouseEvent<HTMLUListElement>) => {
+  // 터치 이벤트인지 확인하는 함수
+  const isTouchEvent = (event: React.MouseEvent<HTMLUListElement> | React.TouchEvent<HTMLUListElement>): event is React.TouchEvent<HTMLUListElement> => {
+    return "touches" in event;
+  };
+
+  const onDragStart = (e: React.MouseEvent<HTMLUListElement> | React.TouchEvent<HTMLUListElement>) => {
     e.preventDefault();
+
+    // 터치 이벤트인 경우에는 터치 좌표를 가져온다. 
+    const pageX = isTouchEvent(e) ? e.touches[0].pageX : e.pageX;
+
     setIsDrag(true);
-    setStartX(e.pageX + scrollRef.current?.scrollLeft);
+    setStartX(pageX + (scrollRef.current?.scrollLeft || 0));
   };
 
   const onDragEnd = () => {
     setIsDrag(false);
   };
 
-  const onDragMove = (e: React.MouseEvent<HTMLUListElement>) => {
+  const onDragMove = (e: React.MouseEvent<HTMLUListElement> | React.TouchEvent<HTMLUListElement>) => {
     if (isDrag) {
       const { scrollWidth, clientWidth, scrollLeft } = scrollRef.current;
 
-      scrollRef.current.scrollLeft = startX - e.pageX;
-      console.log("함수 실행중")
+      // 터치 이벤트인 경우에는 터치 좌표를 가져온다. 
+      const pageX = isTouchEvent(e) ? e.touches[0].pageX : e.pageX;
 
-      if (scrollWidth <= Math.ceil(clientWidth + scrollLeft)) {
-        console.log("서버에 다음 페이지 요청하기 & 요청중이라면 재요청 안보내기")
+      scrollRef.current.scrollLeft = startX - pageX;
+      // 추가 api 요청은 pageNumber에 의존한다.
+      // 마지막에 들어온 데이터 길이가 7개 미만이면 pageNumber 변경을 차단시켜 무한 스크롤을 멈춘다. 
+      if (isLoading && scrollWidth === Math.ceil(clientWidth + scrollLeft) && lastDataLength >= 7) {
+        setPageNumber((prev) => prev + 1)
       }
-
     }
   };
 
@@ -57,21 +90,27 @@ export const Slider = (): JSX.Element => {
   const delay = 10;
   const onThrottleDragMove = throttle(onDragMove, delay);
 
+
+
   return (
     <StyledSlider>
       <section className="container">
         <ul
           className="slider-container"
           ref={scrollRef}
+          // 데스크탑 클릭
           onMouseDown={onDragStart}
           onMouseMove={onThrottleDragMove}
           onMouseUp={onDragEnd}
           onMouseLeave={onDragEnd}
+          // 모바일 터치
+          onTouchStart={onDragStart}
+          onTouchMove={onThrottleDragMove}
+          onTouchEnd={onDragEnd}
+          onTouchCancel={onDragEnd}
         >
           {slides.map((data) => (
-            <li key={data.id}>
-              <Slide {...data} />
-            </li>
+            <Slide key={data.id} {...data} />
           ))}
         </ul>
       </section>

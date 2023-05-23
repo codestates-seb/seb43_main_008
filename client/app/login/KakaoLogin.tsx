@@ -3,12 +3,15 @@ import Image from "next/image";
 import styled from "styled-components";
 
 export default function KakaoLogin() {
+  const kakaoLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/login/kakao`;
+  };
   return (
-    <KakaoLoginButton>
+    <KakaoLoginButton onClick={() => kakaoLogin()}>
       <KakaoLogoBox>
         <Image
           src="/socialLoginButton/kakaoLogo.png"
-          alt="Kakao Logo for Kakao Login"
+          alt="카카오 로고"
           width="24"
           height="24"
         />

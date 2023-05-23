@@ -1,5 +1,3 @@
-
-
 import Header from "../Header";
 import Navbar from "../Navbar";
 
@@ -10,10 +8,9 @@ export default function MemberEditLayout({
 }) {
   return (
     <>
-      <Header backButton={true} textContent={"팔로워"} saveButton={false} />
+      <Header backButton={true} textContent={"팔로우"} voteButton={true} />
       {children}
       <Navbar />
     </>
   );
 }
-
