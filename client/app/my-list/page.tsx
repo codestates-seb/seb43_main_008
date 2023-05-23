@@ -2,7 +2,7 @@
 
 // import FormData from "form-data";
 import Image from "next/image";
-// import Link from "next/link";
+import Link from "next/link";
 // import { useEffect, useRef, useState } from "react";
 import { useEffect, useState } from "react";
 
@@ -80,10 +80,11 @@ export default function Page() {
   return (
     <div className={`${styles["list-page"]}`}>
       {/*사용 횟수*/}
+
+      <div style={{ marginRight: "240px", marginTop: "10px", color: "#222" }}>
+        사용 횟수
+      </div>
       <div className={`${styles["list-useCountBarBox"]}`}>
-        <div style={{ marginLeft: "10px", marginTop: "5px", color: "#222" }}>
-          사용 횟수
-        </div>
         <div className={`${styles["list-useCountBar"]}`}>
           <RoundUse count={useCount} />
         </div>
@@ -96,14 +97,17 @@ export default function Page() {
             key={useCount + 1}
             className={`${styles["List-addContentsBox"]}`}
           >
-            <Image
-              src={"/plus.svg"}
-              alt={"글을 하나 더 써봐요"}
-              width={50}
-              height={50}
-            />
+            <Link href="/series">
+              <Image
+                src={"/plus.svg"}
+                alt={"글을 하나 더 써봐요"}
+                width={50}
+                height={50}
+              />
+            </Link>
+          </div>
 
-            {/* <div
+          {/* <div
           onClick={() => {
             moveToLoginHandle("series")
           }}
@@ -116,16 +120,15 @@ export default function Page() {
           <div className="icon" />
           <div className="text">새글쓰기</div>
         </div> */}
-          </div>
           {contentList.map((el, index) => {
             return (
               <div key={index} className={`${styles["List-eachContents"]}`}>
                 <Image
-                  className={`${styles.ListEachContentsImage}`}
+                  className={`${styles["List-eachContentsImage"]}`}
                   src={el.contentImg}
                   alt={"각각의 이미지에요"}
-                  width={250}
-                  height={200}
+                  width={300}
+                  height={300}
                 />
                 <div className={`${styles["List-eachContentsText"]}`}>
                   {el.content}
