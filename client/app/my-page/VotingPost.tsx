@@ -18,7 +18,7 @@ export const VotingPost = ({ ...data }: PostData) => {
   }
 
   return (
-    <StyledVoting onClick={() => HandleMoveToDetail(data.id, data.title)}>
+    <StyledVoting>
       <div className='box'>
         <div className="image" style={{ backgroundImage: `url(${data.image})` }}> {
           data.voteResult === false

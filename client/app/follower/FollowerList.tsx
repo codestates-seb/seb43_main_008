@@ -35,5 +35,6 @@ const StylePage = styled.div`
   margin-bottom: 100px;
 
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
 `

@@ -206,7 +206,7 @@ const StyledComments = styled.div`
   }
 
   .empty-comment{
-    padding: 0 21px;
+    padding: 0 18px;
     font-size: 0.9rem;
     color: #757575;
   }
