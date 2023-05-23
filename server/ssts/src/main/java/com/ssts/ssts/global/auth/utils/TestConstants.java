@@ -12,5 +12,5 @@ public final class TestConstants {
 
     public static final String TOKEN_CHECK_URI="/token/check";
 
-    public static final String TOKEN_REISSUE_URI="token/reissue";
+    public static final String TOKEN_REISSUE_URI="/token/reissue";
 }
