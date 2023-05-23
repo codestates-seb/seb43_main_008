@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -40,17 +40,25 @@ export default function RegisterForm() {
           },
         }
       );
-      console.log(response);
-      const loginToken = response.headers["authorization"];
-      const refreshToken = response.headers["refresh"];
-      localStorage.setItem("Authorization", loginToken);
-      localStorage.setItem("RefreshToken", refreshToken);
-      router.push("/signup-congratulations");
+      if (response.data.message === "닉네임이 중복이예요.") {
+        setnickNameDuplicate("닉네임이 중복이예요.");
+      } else if (response.data.message === "휴대폰 번호가 중복이예요.") {
+        setnickNameDuplicate("");
+        setPhoneDuplicate("휴대폰 번호가 중복이예요.");
+      } else {
+        const loginToken = response.headers["authorization"];
+        const refreshToken = response.headers["refresh"];
+        localStorage.setItem("Authorization", loginToken);
+        localStorage.setItem("RefreshToken", refreshToken);
+        router.push("/signup-congratulations");
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
+  const [nickNameDuplicate, setnickNameDuplicate] = useState("");
+  const [phoneDuplicate, setPhoneDuplicate] = useState("");
   const watchedNickname = watch("nickName");
   const watchedPhoneNumber = watch("phone");
   const searchParams = useSearchParams();
@@ -79,6 +87,7 @@ export default function RegisterForm() {
       {watchedNickname && errors.nickName && (
         <ErrorSpan>2글자 이상, 10글자 이하로 작성해주세요.</ErrorSpan>
       )}
+      {nickNameDuplicate && <ErrorSpan>{nickNameDuplicate}</ErrorSpan>}
 
       <InputContainer>
         <Label htmlFor="phone">휴대전화 번호</Label>
@@ -98,6 +107,7 @@ export default function RegisterForm() {
       {watchedPhoneNumber && errors.phone && (
         <ErrorSpan>휴대폰 번호 형식이 일치하지 않습니다.</ErrorSpan>
       )}
+      {phoneDuplicate && <ErrorSpan>{phoneDuplicate}</ErrorSpan>}
       <SubmitButtonContainer>
         <SubmitButton type="submit" isValid={isValid} disabled={!isValid} />
       </SubmitButtonContainer>

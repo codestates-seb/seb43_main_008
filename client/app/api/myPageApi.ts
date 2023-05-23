@@ -1,4 +1,4 @@
-import axiosInstance from '../axiosInstance';
+import axiosInstance from "../axiosInstance";
 
 export const GetProfile = async (nickName: string) => {
   try {
@@ -13,9 +13,8 @@ export const GetProfile = async (nickName: string) => {
 export const GetFeed = async (nickName: string) => {
   try {
     const response = await axiosInstance.get(`/feed/series/${nickName}`);
-    return response.data.data.pagedata
+    return response.data.data.pagedata;
   } catch (error) {
     throw error;
   }
 };
-
