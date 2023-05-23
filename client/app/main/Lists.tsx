@@ -15,6 +15,8 @@ export const Lists: React.FC = () => {
   const [lastDataLength, setLastDataLength] = useState<number>(0);
   const [filter, setFilter] = useState<string>("newest");
 
+
+
   // 문제: 최초 렌더링시 api 호출 두번됨
   // 페이지네이션: 데이터를 적재한다. 
   useEffect(() => {
@@ -46,7 +48,7 @@ export const Lists: React.FC = () => {
       sessionStorage.setItem("menu", null);
     } else router.push("/login");
   };
-  console.log(list)
+
   return (
     <StyledLists className="list">
       <Filter filter={filter} setFilter={setFilter} />

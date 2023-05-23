@@ -22,8 +22,8 @@ export const Filter: React.FC<FilterProps> = ({ filter, setFilter }) => {
           새로운 게시글
         </div>
         <div
-          className={filter === "voteCount" ? "selected tag" : "tag"}
-          onClick={() => setFilter("voteCount")}
+          className={filter === "votes" ? "selected tag" : "tag"}
+          onClick={() => setFilter("votes")}
         >
           인기 게시글
         </div>

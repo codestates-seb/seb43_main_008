@@ -1,11 +1,15 @@
 "use client";
-
 import Image from 'next/image';
 import Link from "next/link";
+import { useParams } from 'next/navigation';
 import { BsPlusLg } from "react-icons/bs";
 import styled from "styled-components";
 
 export default function Navbar() {
+
+  const params = useParams();
+  console.log(params)
+
   // 클릭 메뉴 관리 함수
   const menuClickHandle = (menuName: string) => {
     sessionStorage.setItem("menu", menuName)
