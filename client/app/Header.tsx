@@ -1,25 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
-import { AiOutlineLock } from "react-icons/ai";
-import { BiArchiveOut } from "react-icons/bi";
 import styled from "styled-components";
 
-import HeaderModal from "./HeaderModal";
 import VoteModal from "./VoteModal";
 
 export default function Header({
   backButton,
   textContent,
-
   voteButton,
 }: {
   backButton: boolean;
   textContent: boolean | string;
-  secretButton: boolean; // secretButton을 optional로 변경
-  voteButton?: boolean; // voteButton을 optional로 변경
+  voteButton: boolean; // voteButton을 optional로 변경
 }) {
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
   const [isVotePublic, setIsVotePublic] = useState(false);
@@ -60,7 +56,7 @@ export default function Header({
             </VoteButtonContent>
           </VoteButton>
         )}
-      </SecretButtonContainer>
+      </VoteButtonContainer>
 
       <VoteModal
         isVoteModalOpen={isVoteModalOpen}
@@ -101,7 +97,7 @@ const HeaderText = styled.span`
   margin-top: 3px;
 `;
 
-const SecretButtonContainer = styled.div`
+const VoteButtonContainer = styled.div`
   display: flex;
   align-items: center;
   height: 50px;
@@ -110,7 +106,7 @@ const SecretButtonContainer = styled.div`
   margin-top: 3px;
 `;
 
-const SecretButton = styled.button`
+const VoteButton = styled.button`
   height: 100%;
   width: 100%;
   background: inherit;
@@ -119,7 +115,7 @@ const SecretButton = styled.button`
   padding: 0;
 `;
 
-const SecretButtonContent = styled.div`
+const VoteButtonContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -128,6 +124,6 @@ const SecretButtonContent = styled.div`
   width: 100%;
 `;
 
-const SecretButtonText = styled.span`
+const VoteButtonText = styled.span`
   font-size: 6px;
 `;
