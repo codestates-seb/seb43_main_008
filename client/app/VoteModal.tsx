@@ -15,7 +15,8 @@ export default function VoteModal({
   setIsVoteModalOpen,
 }: VoteModalProps) {
   const router = useRouter();
-  const seriesId = localStorage.getItem("plastic");
+  const seriesId =
+    typeof window !== "undefined" ? localStorage.getItem("plastic") : null;
 
   const modalClick = async (seriesId: string) => {
     try {
