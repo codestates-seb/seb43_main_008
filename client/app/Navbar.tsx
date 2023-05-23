@@ -143,7 +143,7 @@ export default function Navbar() {
 const StyledNavbar = styled.nav`
   z-index: 10;
   height: 85px;
-  max-height: 70px;
+  max-height: 85px;
   width: 100vw;
   max-width: 1024px;
 
@@ -200,7 +200,7 @@ const StyledNavbar = styled.nav`
       z-index: 1000;
       position: absolute;
       left: 50%;
-      transform: translate(-50%, -75%);
+      transform: translate(-50%, -105%);
       bottom: 0;
 
       width: 3.0625rem;
