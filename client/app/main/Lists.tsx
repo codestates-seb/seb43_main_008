@@ -30,6 +30,7 @@ export const Lists: React.FC = () => {
 
   // 필터링: 데이터를 초기화하고 새로 불러온다. 
   useEffect(() => {
+    setPageQuery(1)
     GetMain(pageQuery, filter).then((data) => {
       if (data) {
         setList(data);

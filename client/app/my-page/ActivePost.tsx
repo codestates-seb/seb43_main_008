@@ -9,9 +9,9 @@ import { PostData } from "./type"
 export const ActivePost = ({ ...data }: PostData) => {
   const router = useRouter();
   const HandleMoveToDetail = (id: number, title: string) => {
-    router.push(`/detail/${id}`);
+    router.push(`/my-list`);
     sessionStorage.setItem("header", title);
-    sessionStorage.setItem("menu", null);
+    localStorage.setItem("plastic", id.toString())
   }
 
   return (
