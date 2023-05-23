@@ -37,4 +37,10 @@ const StylePage = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
+
+  .empty-box{
+    height: 50vh;
+    text-align: center;
+    padding-top: 5vh;
+  }
 `
