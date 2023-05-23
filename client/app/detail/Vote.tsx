@@ -40,7 +40,7 @@ export const Vote = () => {
             <div className="text">네!</div>
             <FaRegThumbsUp className="icon" />
           </div>
-          <div className="vote" onClick={() => handleVoting("2")}>
+          <div className="vote" onClick={() => handleVoting("0")}>
             <FaRegThumbsDown className="icon" />
             <div className="text">안돼요</div>
             {voted?.isVotedMember || voted?.voteStatus === "SERIES_QUIT" ? <div className="sub-text no">{voted.voteCount === 1 ? voted.voteDisagree : voted.revoteDisagree}</div> : null}
