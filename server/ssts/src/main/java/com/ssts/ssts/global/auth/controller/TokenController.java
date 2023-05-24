@@ -38,7 +38,6 @@ public class TokenController {
         AuthenticationTokenResponse tokenResponse=tokenService.checkRefreshToken(refresh);
 
         response.setHeader("authorization", "Bearer " + tokenResponse.getAccessToken());
-        response.setHeader("refresh", tokenResponse.getRefreshToken());
 
         response.setStatus(HttpServletResponse.SC_OK);
 

@@ -21,8 +21,13 @@ public class LoginSignupController {
 
     private final OAuthService oauthService;
 
+    /*
+     * 로그인
+     * 권한 : AUTH, ADMIN
+     * */
     @GetMapping("/login/auth")
     public ApiResponse<LoginResponse> login(HttpServletResponse response) throws IOException {
+
         AuthenticationTokenResponse tokenResponse=oauthService.login();
         log.info("하늘/token response :\n"+
                 tokenResponse.toString());
@@ -36,13 +41,14 @@ public class LoginSignupController {
 
     /*
      * 회원가입
-     * 권한 : USER, ADMIN
+     * 권한 : GUEST, ADMIN
      * */
     //FIXME 핸드폰번호,이메일,닉네임이.. 다 넘어와야 하는데..어..
     //FIXME [보안문제] 이거 휴대폰 인증 API안쓰면 그냥 번호가 노출되서 나중에 무조건 고쳐야한다.
     //https://lasbe.tistory.com/132
     @PostMapping("/signup")
     public ApiResponse<LoginResponse> signUp(HttpServletResponse response, @RequestBody MemberSignUpAddInfoDto memberSignUpAddInfoDto){
+
         AuthenticationTokenResponse tokenResponse=oauthService.signup(memberSignUpAddInfoDto.getPhone(), memberSignUpAddInfoDto.getNickName());
         log.info("하늘/token response :\n"+
                 tokenResponse.toString());
