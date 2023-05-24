@@ -55,6 +55,11 @@ public class VoteService {
 
         }
 
+        if(targetSeries.getVoteCount()==1 && targetSeries.getVoteResult() == null){
+            throw new BusinessLogicException(ExceptionCode.VOTE_RESULT_NOT_UPDATE);
+            //최초투표의 결과가 조회되지 않았어요
+        }
+
         //투표에 따른 상태값 변경 //of를 쓴 게 아닌데 일단은 냅 두기 / 리팩토링 대상
         targetSeries.setIsPublic(true); //시리즈 공개
         targetSeries.setIsEditable(false); //타이틀 수정 불가
@@ -66,7 +71,7 @@ public class VoteService {
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
         //투표 마감기간 (2일) 할당
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusDays(2));
-        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
+        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(40));
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusHours(12));
         targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(5));
         //ㄴ> 테스트 마감기간: 15초
@@ -118,8 +123,8 @@ public class VoteService {
             }
 
             //set vote Result
-            Boolean voteResult = voteResultCal(targetSeries.getVoteAgree(), targetSeries.getVoteDisagree());
-            targetSeries.setVoteResult(voteResult);
+            //Boolean voteResult = voteResultCal(targetSeries.getVoteAgree(), targetSeries.getVoteDisagree());
+            //targetSeries.setVoteResult(voteResult);
             seriesRepo.save(targetSeries);
 
             //save mapping table
@@ -141,8 +146,8 @@ public class VoteService {
             }
 
             //set revote Result
-            Boolean revoteResult = voteResultCal(targetSeries.getRevoteAgree(), targetSeries.getRevoteDisagree());
-            targetSeries.setRevoteResult(revoteResult);
+            //Boolean revoteResult = voteResultCal(targetSeries.getRevoteAgree(), targetSeries.getRevoteDisagree());
+            //targetSeries.setRevoteResult(revoteResult);
             seriesRepo.save(targetSeries);
 
 
