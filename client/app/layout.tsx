@@ -25,6 +25,10 @@ export default async function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, user-scalable=no"
         />
+        <meta
+          http-equiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
       </head>
       <body>
         <StyledComponentsRegistry>
