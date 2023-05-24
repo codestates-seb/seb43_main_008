@@ -1,9 +1,9 @@
 .list-page{
-  height: 100vh;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #fafafa;
+  background-color: #ffff;
   /* height: calc(100vh - 40px); */
   box-sizing: border-box;
   padding: 1px 24px;
@@ -21,22 +21,23 @@
 .list-useCountBarBox{
   display: flex;
   flex-direction: column;
-  width: 90vw;
+  width: 85vw;
   border-radius: 8px;
-  border: #eff4e7 1px solid;
+  border: none;
   justify-content: center;
-  background-color: #eff4e7;
-  margin-top: 7px;
+  background-color: #ffff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  margin-top: 10px;
 }
 
 .list-useCountBar{
   align-items: center;
   height: 50px;
-  border: #3f910c 1px solid;
+  /* border: #3f910c 1px solid; */
   border-radius: 4px;
-  margin: 10px;
+  margin: 3px;
   flex-wrap: nowrap;
-  overflow-x: scroll;
+  overflow-x: none;
 }
 
 .list-useCountContainer{
@@ -45,48 +46,68 @@
 }
 
 .List-eachTime{
-  height: 35px;
-  width: 35px;
-  background-color: #fff4cc;
-  border: #fff4cc 1px solid;
+  height: 30px;
+  width: 30px;
+  background-color: #eff4e7;
+  /* border: #3f910c 1px solid; */
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: 10px;
+  color: #3f910c;
+  font-size: 0.85rem;
+  margin-top: 6px;
 }
 
 /*----------------------------------------유저 컨텐츠 박스-------------------------------------------*/
 
 .list-useContentBarBox{
   display: flex;
-  width: 90vw;
-  height: 63vh;
-  background-color: #e3e3e3;
+  width: 85vw;
+  /* height: 61vh; */
+  height: fit-content;
   margin-top: 10px;
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
   overflow-x: scroll;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  
+
 }
 
 .list-useContentContainer{
-  margin-top: 5px;
+  margin-top: 7px;
   display: inline-flex;
+  
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .List-eachContents{
-  width: 75vw;
+  width: 70vw;
   display: flex;
   flex-direction: column;
   background-color: white;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 18px;
+  border-radius: 10px;
+ overflow: auto;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  padding: 6px 8px;
+  height: fit-content;
 }
 
 .List-eachContentsImage{
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border-radius: 3px;
+  /* margin-top: 20px;
+  margin-bottom: 20px;*/
+  border-radius: 13px;
   border: white 1px solid;
+  margin-top: 10px;
+  height: 45vw;
+    width: 90%;
+    margin-bottom: 0.73rem;
+    background-position: center;
+    background-size: cover;
+    border-radius: 5px;
 }
 
 .List-eachContentsText{
@@ -97,21 +118,42 @@
   white-space: pre-wrap;
   text-overflow: ellipsis;
   word-break:break-all;
-  font-size: 18px;
+  font-size: 16px;
+  height: 27vh;
+  overflow: hidden;
+  /* height: 100px; */
 }
+/* /////////////////////////////////////////////////// */
+ /* .List-eachContentsText::-webkit-scrollbar {
+  width: 8px;} /* 스크롤바 너비 조정 가능 */
+
+/* .List-eachContentsText::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px; } */
+  /* 스크롤바 모서리 둥글게 조정 가능 */
+
+/* .List-eachContentsText::-webkit-scrollbar-track {
+  background-color: #f1f1f1; } */
+  /* 스크롤바 트랙 색상 설정 */
+  /* /////////////////////////////////////////////////// */
 
 .List-eachContentsDate{
   margin-left: 20px;
-  margin-top: 10px;
+  /* margin-top: 130px; */
   font-size: 12px;
   margin-right: auto;
+  color: #6d6c6c;
+  position: sticky;
+  margin-top: 7px;
 }
 
 .List-addContentsBox{
-  width: 75vw;
+  width: 70vw;
   display: flex;
   flex-direction: column;
   background-color: white;
   align-items: center;
   justify-content: center;
+  border: 100px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }

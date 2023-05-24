@@ -1,29 +1,34 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import styled from "styled-components";
 
 import VoteModal from "./VoteModal";
+import WithdrawlModal from "./WithdrawlModal";
 
 export default function Header({
   backButton,
   textContent,
   voteButton,
+  withdrawalButton,
 }: {
   backButton: boolean;
   textContent: boolean | string;
   // secretButton: boolean; // secretButton을 optional로 변경
   voteButton: boolean; // voteButton을 optional로 변경
+  withdrawalButton?: boolean;
 }) {
+  const [isWithdrawlModalOpen, setIsWithdrawlModalOpen] = useState(false);
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
-  const [isVotePublic, setIsVotePublic] = useState(false);
+  const router = useRouter();
 
   return (
     <HeaderContainer>
       {backButton ? (
-        <BackArrowContainer>
+        <BackArrowContainer onClick={() => router.back()}>
           <AiOutlineLeft size="18" />
         </BackArrowContainer>
       ) : (
@@ -55,13 +60,21 @@ export default function Header({
             </VoteButtonContent>
           </VoteButton>
         )}
+        {withdrawalButton && (
+          <VoteButton onClick={() => setIsWithdrawlModalOpen(true)}>
+            탈퇴
+          </VoteButton>
+        )}
       </VoteButtonContainer>
 
       <VoteModal
         isVoteModalOpen={isVoteModalOpen}
         setIsVoteModalOpen={setIsVoteModalOpen}
-        isVotePublic={isVotePublic}
-        setIsVotePublic={setIsVotePublic}
+      />
+
+      <WithdrawlModal
+        isWithdrawlModalOpen={isWithdrawlModalOpen}
+        setIsWithdrawlModalOpen={setIsWithdrawlModalOpen}
       />
     </HeaderContainer>
   );

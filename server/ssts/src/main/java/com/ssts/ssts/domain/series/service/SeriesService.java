@@ -51,6 +51,8 @@ public class SeriesService {
 
     public PageResponseDto getSeriesList(String nickname, int page, int size){
         // 파라미터 체크
+        if(nickname.isEmpty()) throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+
         Page<Series> seriesInfo;
         Member authMember = memberService.findMemberByToken();
         long memberId = memberService.findMemberByNickName(nickname).getId();
@@ -66,11 +68,25 @@ public class SeriesService {
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
-        /////////////////
+
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
-        //////////////
 
+        return new PageResponseDto(list, seriesInfo);
+    }
+
+    public PageResponseDto getMySeriesList(int page, int size){
+        // 파라미터 체크
+
+        Page<Series> seriesInfo;
+        Member authMember = memberService.findMemberByToken();
+
+        seriesInfo = seriesRepository.findByMember_id(authMember.getId(), PageRequest.of(page, size,
+                    Sort.by("id").descending()));
+
+
+        List<Series> seriesList = seriesInfo.getContent();
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
 
 
         return new PageResponseDto(list, seriesInfo);
@@ -78,7 +94,7 @@ public class SeriesService {
 
     public PageResponseDto getMainSeriesListByNewest(int page, int size){
 
-        Page<Series> seriesInfo = seriesRepository.findAllByIsPublic(true, PageRequest.of(page, size,
+        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteCreatedAtIsNotNull(true, PageRequest.of(page, size,
                 Sort.by("voteCreatedAt")));
 
         List<Series> seriesList = seriesInfo.getContent();
@@ -89,7 +105,7 @@ public class SeriesService {
 
     public PageResponseDto getMainSeriesListByVotes(int page, int size){
 
-        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteStatus(true, Series.VoteStatus.SERIES_SLEEP,PageRequest.of(page, size,
+        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteStatusAndTotalVoteNot(true, Series.VoteStatus.SERIES_SLEEP,0, PageRequest.of(page, size,
                 Sort.by("totalVote").descending()));
 
         List<Series> seriesList = seriesInfo.getContent();

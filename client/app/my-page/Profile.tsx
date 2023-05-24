@@ -7,7 +7,7 @@ import { AiOutlineSetting } from "react-icons/ai";
 import { BsAward } from "react-icons/bs";
 import styled from "styled-components";
 
-import { GetProfile } from "../api/myPageApi"
+import { GetMyProfile, GetProfile } from "../api/myPageApi"
 import { FollowerButton, FollowingButton } from "./FollowButton";
 import { ProfileData } from "./type";
 
@@ -25,17 +25,19 @@ export const Profile: React.FC<Props> = ({ type }) => {
   const nickName = decodeURIComponent(params.nickName)
 
   useEffect(() => {
-    GetProfile(nickName).then((data) => {
+    if (type === "mine") {
+      GetMyProfile().then((data) => {
+        if (data) {
+          setProfile(data);
+        }
+      });
+    }
+    else GetProfile(nickName).then((data) => {
       if (data) {
         setProfile(data);
       }
     });
   }, []);
-
-  /* 📌 추가 필요
-    세션 스토리지 nickName === params.nickName: follow 버튼
-    else: following 버튼 & isFollowed props
-  */
 
   return (
     <StyledProfile className="box">
@@ -51,8 +53,8 @@ export const Profile: React.FC<Props> = ({ type }) => {
           <div className="nick-name">{profile.nickName}</div>
           <div className="user-info">{profile.introduce}</div>
         </div>
-        <div className="button-box">
-          <Link href="/dodo/badge" className="badge">
+        {type === "mine" ? <div className="button-box">
+          <Link href="/badge" className="badge">
             <BsAward className="icon" />
             <div className="text">뱃지 보러가기</div>
           </Link>
@@ -60,9 +62,9 @@ export const Profile: React.FC<Props> = ({ type }) => {
             <AiOutlineSetting className="icon" />
             <div className="text">정보 수정하기</div>
           </Link>
-        </div>
+        </div> : null}
       </div>
-      {type === "follower"
+      {type === "mine"
         ? <FollowerButton />
         : <FollowingButton followedMember={profile.followedMember} nickName={profile.nickName} />
       }

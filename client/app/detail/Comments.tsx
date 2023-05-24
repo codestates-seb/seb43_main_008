@@ -50,6 +50,18 @@ export const Comments: React.FC = () => {
     }
   };
 
+  // 📌 작동 안함
+  /*
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+      console.log(editCommentId)
+    }
+  };
+  */
+
+
   // 댓글 삭제 핸들러: Comments -> Commnet -> Modal에서 조작한다. 
   const handleDelete = async (commentId: string) => {
     await DeleteComment(params.id, commentId)
@@ -60,14 +72,6 @@ export const Comments: React.FC = () => {
       }
     });
   }
-
-
-  // 📌 작동 안함
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      handleSubmit(e);
-    }
-  };
 
   // 댓글 수정을 위한 함수
   const [editCommentId, setEditCommentId] = useState<string | undefined>(
@@ -98,10 +102,10 @@ export const Comments: React.FC = () => {
           <form className="add-comment" onSubmit={handleSubmit}>
             <textarea
               className="input"
-              placeholder="댓글 추가"
+              placeholder="댓글 추가 (3글자 이상 입력해주세요)"
               value={comment}
               onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
+            // onKeyDown={handleKeyDown}
             />
             <button className="submit" type="submit">
               <BsSend />
@@ -120,7 +124,7 @@ export const Comments: React.FC = () => {
                   handleDelete={handleDelete}
                 />
               ))
-              : <div> 작성된 댓글이 없습니다. </div>}
+              : <div className='empty-comment'> 작성된 댓글이 없습니다. </div>}
 
           </ul>
         </div>
@@ -192,10 +196,18 @@ const StyledComments = styled.div`
 
   .submit {
     margin-top: 6px;
+    margin-left: 14px;
+
     border: none;
     background-color: white;
     font-size: 1rem;
 
     cursor: pointer;
+  }
+
+  .empty-comment{
+    padding: 0 18px;
+    font-size: 0.9rem;
+    color: #757575;
   }
 `;

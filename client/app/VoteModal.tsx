@@ -1,35 +1,31 @@
 // import axios from "axios";
 import Image from "next/image";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
+
+import { PostVote } from "./api/voteApi";
 
 interface VoteModalProps {
   isVoteModalOpen: boolean;
   setIsVoteModalOpen: (value: boolean) => void;
-  isVotePublic: boolean;
-  setIsVotePublic: (value: boolean) => void;
 }
 
 export default function VoteModal({
   isVoteModalOpen,
   setIsVoteModalOpen,
-  isVotePublic,
-  setIsVotePublic,
 }: VoteModalProps) {
-  // const router = useRouter();
+  const router = useRouter();
+  const seriesId =
+    typeof window !== "undefined" ? localStorage.getItem("plastic") : null;
 
-  // // For demonstration purposes. Replace this with actual series ID.
-  // const seriesId = "123";
-
-  // const handleConfirm = async () => {
-  //   setIsVoteModalOpen(false);
-
-  //   // Perform POST request with series ID
-  //   await axios.post("엔드포인트", { seriesId넣기 });
-
-  //   // Route to '/series/votes' page
-  //   router.push("/series/votes");
-  // };
+  const modalClick = async (seriesId: string) => {
+    try {
+      await PostVote(seriesId);
+      router.push(`/detail/${seriesId}`);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const handleClose = () => {
     setIsVoteModalOpen(false);
@@ -69,8 +65,9 @@ export default function VoteModal({
           >
             더 이상 이 시리즈를 작성하실 수 없어요.
           </p>
-          {/* <ConfirmButton onClick={handleConfirm}>확인</ConfirmButton> */}
-          <ConfirmButton>확인</ConfirmButton>
+          <ConfirmButton onClick={() => modalClick(seriesId)}>
+            확인
+          </ConfirmButton>
         </ModalContent>
       </Modal>
     )

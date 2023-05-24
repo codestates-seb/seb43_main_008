@@ -2,14 +2,14 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components'
 
-import { GetFollowing } from "../api/followApi"
+import { GetFollower } from "../api/followApi"
 import { Follow } from './Follower';
 export const FollowList = () => {
   const [followingList, setFollowingList] = useState([])
 
 
   useEffect(() => {
-    GetFollowing().then((data) => {
+    GetFollower().then((data) => {
       if (data) {
         setFollowingList((data))
       }
@@ -35,5 +35,12 @@ const StylePage = styled.div`
   margin-bottom: 100px;
 
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
+
+  .empty-box{
+    height: 50vh;
+    text-align: center;
+    padding-top: 5vh;
+  }
 `

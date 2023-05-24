@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 import BadgeCircle from "./BadgeCircle";
 import BadgeDetail from "./BadgeDetail";
+// import { BadgeType } from "./page";
 
-export default function Badge() {
+export default function Badge(badgeList: any) {
   // 뱃지 아이콘 관리
   const [selectedImageDetail, setSelectedImageDetail] = useState<{
     src: string;
@@ -28,14 +29,14 @@ export default function Badge() {
   const [isAcquired, setIsAcquired] = useState(true); // 초기 이미지는 세피아 처리 안함
 
   // Badge list 상태
-  const [badgeList, setBadgeList] = useState([]);
+  // const [badgeList] = useState([]);
 
-  // API 호출
-  useEffect(() => {
-    fetch("엔드포인트URL")
-      .then((res) => res.json())
-      .then((data) => setBadgeList(data));
-  }, []);
+  // // API 호출
+  // useEffect(() => {
+  //   fetch("엔드포인트URL")
+  //     .then((res) => res.json())
+  //     .then((data) => setBadgeList(data));
+  // }, []);
 
   return (
     <>

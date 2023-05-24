@@ -7,7 +7,7 @@ export default function LoginLayout({
 }) {
   return (
     <>
-      <Header backButton={true} textContent={null} voteButton={true} />
+      <Header backButton={true} textContent={null} voteButton={false} />
       {children}
     </>
   );

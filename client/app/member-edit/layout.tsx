@@ -8,7 +8,12 @@ export default function MemberEditLayout({
 }) {
   return (
     <>
-      <Header backButton={true} textContent={null} voteButton={true} />
+      <Header
+        backButton={true}
+        textContent={null}
+        voteButton={false}
+        withdrawalButton={true}
+      />
       {children}
       <Navbar />
     </>

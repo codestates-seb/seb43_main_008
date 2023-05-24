@@ -36,17 +36,17 @@ export const Vote = () => {
       <StyledCard style={{ alignItems: "center" }}>
         <div className="vote-box">
           <div className="vote" onClick={() => handleVoting("1")}>
-            {voted?.isVotedMember || voted?.voteStatus === "SERISES_QUIT" ? <div className="sub-text yes">{voted.voteCount === 1 ? voted.voteAgree : voted.revoteAgree}</div> : null}
+            {voted?.isVotedMember || voted?.voteStatus === "SERIES_QUIT" ? <div className="sub-text yes">{voted.voteCount === 1 ? voted.voteAgree : voted.revoteAgree}</div> : null}
             <div className="text">네!</div>
             <FaRegThumbsUp className="icon" />
           </div>
-          <div className="vote" onClick={() => handleVoting("2")}>
+          <div className="vote" onClick={() => handleVoting("0")}>
             <FaRegThumbsDown className="icon" />
             <div className="text">안돼요</div>
-            {voted?.isVotedMember || voted?.voteStatus === "SERISES_QUIT" ? <div className="sub-text no">{voted.voteCount === 1 ? voted.voteDisagree : voted.revoteDisagree}</div> : null}
+            {voted?.isVotedMember || voted?.voteStatus === "SERIES_QUIT" ? <div className="sub-text no">{voted.voteCount === 1 ? voted.voteDisagree : voted.revoteDisagree}</div> : null}
           </div>
         </div>
-        {voted?.isVotedMember || voted?.voteStatus === "SERISES_QUIT" ? (
+        {voted?.isVotedMember || voted?.voteStatus === "SERIES_QUIT" ? (
           <div className="sub-text message">
             더 이상의 투표는 불가능해요.
           </div>

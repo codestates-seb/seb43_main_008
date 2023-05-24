@@ -5,23 +5,26 @@ import styled from 'styled-components'
 import { StyledPost } from "./StyledPost"
 import { PostData } from "./type"
 
+export const ActivePost = ({ type, ...data }: PostData) => {
 
-export const ActivePost = ({ ...data }: PostData) => {
   const router = useRouter();
   const HandleMoveToDetail = (id: number, title: string) => {
-    router.push(`/detail/${id}`);
+    router.push(`/my-list`);
     sessionStorage.setItem("header", title);
-    sessionStorage.setItem("menu", null);
+    localStorage.setItem("plastic", id.toString())
   }
 
   return (
-    <StyledActive onClick={() => HandleMoveToDetail(data.id, data.title)}>
-      <div className='box'>
-        <div className="image" style={{ backgroundImage: `url(${data.image})` }} />
-      </div>
-      <div className='text'> {data.title} </div>
-    </StyledActive>
-  )
+    <>
+      <StyledActive onClick={type === "mine" ? () => HandleMoveToDetail(data.id, data.title) : null}>
+        <div className='box'>
+          <div className="image" style={{ backgroundImage: `url(${data.image})` }} />
+        </div>
+        <div className='text'>{data.title}</div>
+      </StyledActive>
+
+    </>
+  );
 }
 
 const StyledActive = styled(StyledPost)`
@@ -32,3 +35,4 @@ const StyledActive = styled(StyledPost)`
     box-shadow: 6px 6px #e4fabf, -6px 6px #e4fabf, 6px -6px #e4fabf, -6px -6px #e4fabf;
   }
 `
+

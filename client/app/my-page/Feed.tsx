@@ -1,56 +1,71 @@
 "use client";
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
-import { GetFeed } from "../api/myPageApi"
+import { GetFeed, GetMyFeed } from "../api/myPageApi"
 import { ActivePost } from './ActivePost';
 import { DonePost } from "./DonePost";
-import { EmptyFeed } from "./EmptyFeed"
+import { EmptyFeed } from "./EmptyFeed";
 import { VotingPost } from "./VotingPost";
 
 
-export const Feed = () => {
+interface Props {
+  type?: string
+}
+
+export const Feed: React.FC<Props> = ({ type }) => {
   const [post, setPost] = useState([])
   const params = useParams();
-  let nickName = decodeURIComponent(params.nickName)
-  console.log(nickName)
+  let nickName = decodeURIComponent(params.nickName);
+  console.log(nickName);
 
-  if (nickName === "undefined") {
-    nickName = "세션 스토리지에서 가져오기"
-  }
   useEffect(() => {
-    GetFeed(nickName).then((data) => {
+    if (type === "mine") {
+      GetMyFeed().then((data) => {
+        if (data) {
+          setPost(data);
+        }
+      });
+    }
+    else GetFeed(nickName).then((data) => {
       if (data) {
-        setPost(data)
+        setPost(data);
       }
-    })
-  }, [])
-
+    });
+  }, []);
 
   return (
-    <StyledFeed className='container'>
-      {post.length > 0 ?
-        (
-          <div className='feed'>
-            {post.map((data) => {
-              if (data.seriesStatus === "SERIES_ACTIVE") { // active: 투표전
-                return <ActivePost key={data.id}  {...data} />
+    <StyledFeed className="container">
+      {post.length > 0 ? (
+        <div className="feed">
+          {post.map((data) => {
+            if (data.seriesStatus === "SERIES_ACTIVE") {
+              // active: 투표전
+              return <ActivePost key={data.id} {...data} type={type} />;
+            }
+            if (data.seriesStatus === "SERIES_SLEEP") {
+              // sleep: 투표 중
+              if (data.voteResult) {
+                return <DonePost key={data.id} {...data} />; // 1차 투표에서 통과하면 바로 done ui 생성
+              } else {
+                return <VotingPost key={data.id} {...data} />;
               }
-              if (data.seriesStatus === "SERIES_SLEEP") { // sleep: 투표 중
-                return <VotingPost key={data.id} {...data} />
-              }
-              if (data.seriesStatus === "SERIES_QUIET") { // quiet: 투표 종료
-                return <DonePost key={data.id} {...data} />
-              }
-            })}
-          </div>
-        ) : <EmptyFeed />}
-
-
+            }
+            if (data.seriesStatus === "SERIES_QUIET") {
+              // quiet: 투표 종료
+              return <DonePost key={data.id} {...data} />;
+            }
+            return null; // 추가: 다른 경우에는 null을 반환하여 렌더링되지 않도록 함
+          })}
+        </div>
+      ) : (
+        <EmptyFeed />
+      )}
     </StyledFeed>
-  )
-}
+
+  );
+};
 
 const StyledFeed = styled.div`
   width: 100%;
@@ -66,7 +81,7 @@ const StyledFeed = styled.div`
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
 
-    grid-gap: 4vw
+    grid-gap: 4vw;
   }
 
   @media screen and (min-width: 1024px) {
@@ -76,6 +91,4 @@ const StyledFeed = styled.div`
       font-size: 46px;
     }
   }
-`
-
-
+`;
