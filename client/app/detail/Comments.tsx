@@ -124,7 +124,7 @@ export const Comments: React.FC = () => {
                   handleDelete={handleDelete}
                 />
               ))
-              : <div> 작성된 댓글이 없습니다. </div>}
+              : <div className='empty-comment'> 작성된 댓글이 없습니다. </div>}
 
           </ul>
         </div>
@@ -196,10 +196,18 @@ const StyledComments = styled.div`
 
   .submit {
     margin-top: 6px;
+    margin-left: 14px;
+
     border: none;
     background-color: white;
     font-size: 1rem;
 
     cursor: pointer;
+  }
+
+  .empty-comment{
+    padding: 0 18px;
+    font-size: 0.9rem;
+    color: #757575;
   }
 `;

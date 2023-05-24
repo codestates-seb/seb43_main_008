@@ -9,7 +9,7 @@ import styled from "styled-components";
 export default function Navbar() {
 
 
-  // 로그인 리다엑트 함수
+  // 로그인 리다이렉트 함수
   const router = useRouter();
   const moveToLoginHandle = (url: string) => {
     if (localStorage.getItem("Authorization")) {
@@ -80,7 +80,7 @@ export default function Navbar() {
         </div>
         <div
           onClick={() => {
-            moveToLoginHandle("series")
+            moveToLoginHandle("baby")
           }}
           className="plus-button">
           <BsPlusLg />

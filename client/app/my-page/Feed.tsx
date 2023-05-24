@@ -20,9 +20,6 @@ export const Feed: React.FC<Props> = ({ type }) => {
   let nickName = decodeURIComponent(params.nickName);
   console.log(nickName);
 
-  if (nickName === "undefined") {
-    nickName = "세션 스토리지에서 가져오기";
-  }
   useEffect(() => {
     if (type === "mine") {
       GetMyFeed().then((data) => {
@@ -45,22 +42,28 @@ export const Feed: React.FC<Props> = ({ type }) => {
           {post.map((data) => {
             if (data.seriesStatus === "SERIES_ACTIVE") {
               // active: 투표전
-              return <ActivePost key={data.id} {...data} />;
+              return <ActivePost key={data.id} {...data} type={type} />;
             }
             if (data.seriesStatus === "SERIES_SLEEP") {
               // sleep: 투표 중
-              return <VotingPost key={data.id} {...data} />;
+              if (data.voteResult) {
+                return <DonePost key={data.id} {...data} />; // 1차 투표에서 통과하면 바로 done ui 생성
+              } else {
+                return <VotingPost key={data.id} {...data} />;
+              }
             }
             if (data.seriesStatus === "SERIES_QUIET") {
               // quiet: 투표 종료
               return <DonePost key={data.id} {...data} />;
             }
+            return null; // 추가: 다른 경우에는 null을 반환하여 렌더링되지 않도록 함
           })}
         </div>
       ) : (
         <EmptyFeed />
       )}
     </StyledFeed>
+
   );
 };
 

@@ -39,11 +39,6 @@ export const Profile: React.FC<Props> = ({ type }) => {
     });
   }, []);
 
-  /* 📌 추가 필요
-    세션 스토리지 nickName === params.nickName: follow 버튼
-    else: following 버튼 & isFollowed props
-  */
-
   return (
     <StyledProfile className="box">
       <div className="profile-box">
@@ -59,7 +54,7 @@ export const Profile: React.FC<Props> = ({ type }) => {
           <div className="user-info">{profile.introduce}</div>
         </div>
         {type === "mine" ? <div className="button-box">
-          <Link href="/dodo/badge" className="badge">
+          <Link href="/badge" className="badge">
             <BsAward className="icon" />
             <div className="text">뱃지 보러가기</div>
           </Link>

@@ -76,7 +76,9 @@ const StyledLists = styled.section`
     justify-content: center;
     width: 100%;
   }
-  .empty-box {
+  .empty-box{
+    height: 50vh;
     text-align: center;
+    padding-top: 5vh;
   }
 `;

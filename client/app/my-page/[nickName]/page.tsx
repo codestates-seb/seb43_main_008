@@ -8,7 +8,7 @@ export default function MyPage() {
 
   return (
     <div className={`${styles.container}`}>
-      <Header backButton={true} textContent={"마이페이지"} voteButton={false} />
+      <Header backButton={true} textContent={true} voteButton={false} />
       <Profile />
       <Feed />
     </div>
