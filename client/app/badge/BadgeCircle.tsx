@@ -1,14 +1,20 @@
 "use client";
 
 import Image from "next/image";
+// import { useState } from "react";
 import styled from "styled-components";
 
 interface BadgeCircleProps {
   image: { src: string; alt: string } | null;
   isAcquired: boolean;
+  clickedImage: any;
 }
 
-const BadgeCircle: React.FC<BadgeCircleProps> = ({ image, isAcquired }) => {
+const BadgeCircle: React.FC<BadgeCircleProps> = ({
+  image,
+  isAcquired,
+  clickedImage,
+}) => {
   return (
     <>
       <BadgeImgContents
@@ -16,17 +22,28 @@ const BadgeCircle: React.FC<BadgeCircleProps> = ({ image, isAcquired }) => {
           backgroundColor: isAcquired ? "#eff4e7;" : "#b5b5ba",
         }}
       >
-        {image && (
-          <Image
-            src={image.src}
-            alt={image.alt}
-            width={170}
-            height={170}
-            style={{
-              filter: isAcquired ? "none" : "grayscale(100%)",
-            }}
-          />
-        )}
+        {image &&
+          (clickedImage === null ? (
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={170}
+              height={170}
+              style={{
+                filter: isAcquired ? "none" : "grayscale(100%)",
+              }}
+            />
+          ) : (
+            <Image
+              src={clickedImage}
+              alt={image.alt}
+              width={170}
+              height={170}
+              style={{
+                filter: isAcquired ? "none" : "grayscale(100%)",
+              }}
+            />
+          ))}
       </BadgeImgContents>
     </>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import BadgeCircle from "./BadgeCircle";
@@ -21,6 +21,11 @@ export default function Badge(badgeList: any) {
 
   // 뱃지 세피아 처리
   const [isAcquired, setIsAcquired] = useState(true); // 초기 이미지는 세피아 처리 안함
+  const [clickedImage, setClickedImage] = useState(null);
+
+  useEffect(() => {
+    console.log(clickedImage);
+  }, [clickedImage]);
 
   return (
     <>
@@ -29,7 +34,11 @@ export default function Badge(badgeList: any) {
           <Highlight>쓰쓰또쓰</Highlight> {mainText}
         </MainText>
         <SubText>{subText}</SubText>
-        <BadgeCircle image={selectedImageDetail} isAcquired={isAcquired} />
+        <BadgeCircle
+          image={selectedImageDetail}
+          isAcquired={isAcquired}
+          clickedImage={clickedImage}
+        />
       </MainContainer>
       <BadgeDetail
         badgeList={badgeList}
@@ -37,6 +46,7 @@ export default function Badge(badgeList: any) {
         setMainText={setMainText}
         setSubText={setSubText}
         setIsAcquired={setIsAcquired}
+        setClickedImage={setClickedImage}
       />
     </>
   );

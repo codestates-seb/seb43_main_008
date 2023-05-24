@@ -46,6 +46,7 @@ interface BadgeDetailProps {
   setSubText: Dispatch<SetStateAction<string>>;
   setIsAcquired: Dispatch<SetStateAction<boolean>>;
   badgeList: any; // from the parent component
+  setClickedImage: any;
 }
 
 interface ImageData {
@@ -54,6 +55,7 @@ interface ImageData {
   mainText: string;
   subText: string;
   isAcquired: boolean;
+  img?: string;
 }
 
 export default function BadgeDetail({
@@ -62,6 +64,7 @@ export default function BadgeDetail({
   setSubText,
   setIsAcquired,
   badgeList,
+  setClickedImage,
 }: BadgeDetailProps) {
   const [, setSelectedImage] = useState<ImageData | null>(null);
 
@@ -76,6 +79,9 @@ export default function BadgeDetail({
     // 뱃지가 획득되었는지 결정
     // 여기서는 badgeLists에 이미 획득한 뱃지의 정보를 추가
     // setIsAcquired(badgeLists.includes(image));
+
+    setClickedImage(image.img);
+    console.log(image);
   };
 
   return (
@@ -89,7 +95,9 @@ export default function BadgeDetail({
                 key={image.badgeId}
                 imageSrc={image.img}
                 altText={"badge"}
-                onClick={() => handleClick(image)}
+                onClick={() => {
+                  handleClick(image);
+                }}
                 isAcquired={image.isAcquired}
               />
             ))}
