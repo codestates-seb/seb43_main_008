@@ -1,6 +1,6 @@
 package com.ssts.ssts.global.auth.utils;
 
-public final class TestConstants {
+public final class AuthConsts {
 
     //http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080
 

@@ -6,6 +6,7 @@ import com.ssts.ssts.global.auth.handler.TestAuthenticationFailureHandler;
 import com.ssts.ssts.global.auth.handler.TestAuthenticationSuccessHandler;
 import com.ssts.ssts.global.auth.jwt.JwtCreator;
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
+import com.ssts.ssts.global.auth.service.TokenService;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final JwtCreator jwtCreator;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
+    private final TokenService tokenService;
 
 
     @Bean
@@ -83,7 +85,7 @@ public class SecurityConfig {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new TestAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new TestAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, tokenService);
 
             builder
                     .addFilter(jwtAuthenticationFilter)

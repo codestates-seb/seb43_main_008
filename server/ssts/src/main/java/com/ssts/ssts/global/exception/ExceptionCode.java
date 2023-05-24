@@ -26,6 +26,7 @@ public enum ExceptionCode {
     //jwt
     JWT_TOKEN_EXPIRED(RtnHttpStatus.Validation, 2010,"토큰이 만료됐어요."),
     JWT_NO_TOKEN(RtnHttpStatus.Validation, 2011, "토큰이 없어요."),
+    JWT_NOT_VALID(RtnHttpStatus.Validation, 2012, "토큰이 유효하지 않아요."),
 
     //시리즈 에러
     SERIES_NOT_EXISTS(RtnHttpStatus.Validation, 2005, "시리즈를 찾을 수 없어요."),

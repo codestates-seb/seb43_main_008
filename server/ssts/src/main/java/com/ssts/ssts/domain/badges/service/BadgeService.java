@@ -69,6 +69,24 @@ public class BadgeService {
         memberBadgeRepo.save(MemberBadge.of(member, badge));
     }
 
+    @Transactional
+    public void signupBadge(Long badgeId, String nickName){
+        //사용자 검증
+        Member member = memberService.findMemberByNickName(nickName);
+        long memberId = member.getId();
+
+        Badge badge = badgeRepo.findById(badgeId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.BADGE_NOT_FOUND));
+
+        Boolean isBadge = memberBadgeRepo.existsByMember_IdAndBadgeId(memberId, badgeId);
+        if(isBadge){throw new BusinessLogicException(ExceptionCode.ALREADY_HAVE_BADGE);}
+
+        //해당 뱃지를 해당 유저가 보유하고 있다고 뱃지의 값을 바꿔줌
+        // badge.setIsAcquired(true);
+
+        //멤버와 뱃지를 맵핑 테이브에 등록
+        memberBadgeRepo.save(MemberBadge.of(member, badge));
+    }
 
     //뱃지 상세조회
     public BadgeResponse findBadge(Long badgeId){

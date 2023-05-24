@@ -81,12 +81,11 @@ public class JwtTokenizer {
         return claims;
     }
 
-    public void verifySignature(String jws, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+    public void verifySignature(String jws) {
 
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(key)
+                    .setSigningKey(getKey())
                     .build()
                     .parseClaimsJws(jws);
         } catch (ExpiredJwtException exception) {
@@ -102,6 +101,16 @@ public class JwtTokenizer {
         return expiration;
     }
 
+    public Long getAccessTokenExpiration(String accessToken) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(accessToken)
+                .getBody();
+
+        Date expirationDate = claims.getExpiration();
+        return expirationDate.getTime();
+    }
+
     private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
         Key key = Keys.hmacShaKeyFor(keyBytes);
@@ -109,14 +118,20 @@ public class JwtTokenizer {
         return key;
     }
 
-    public String getSubjectFromRefreshToken(String refreshToken, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+    public String getSubjectFromToken(String token) {
 
         Claims claims = Jwts.parser()
-                .setSigningKey(key)
-                .parseClaimsJws(refreshToken)
+                .setSigningKey(getKey())
+                .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
+    }
+
+    private Key getKey(){
+
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+
+        return getKeyFromBase64EncodedKey(base64EncodedSecretKey);
     }
 }

@@ -15,6 +15,11 @@
 #          show_sql: true
 #          format_sql: true
 spring:
+
+  redis:
+    host: localhost
+    port: 6379
+
   datasource:
     #url: jdbc:mysql://ssts.coxwgsn7huq2.ap-northeast-2.rds.amazonaws.com:3306/testsstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
     url: jdbc:mysql://ssts.coxwgsn7huq2.ap-northeast-2.rds.amazonaws.com:3306/sstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
@@ -92,6 +97,7 @@ server:
     session:
       cookie:
         same-site: none
+
 jwt:
   key:
     secret: ${JWT_SECRET_KEY}
