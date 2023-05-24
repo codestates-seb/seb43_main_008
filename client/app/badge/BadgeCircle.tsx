@@ -13,7 +13,7 @@ const BadgeCircle: React.FC<BadgeCircleProps> = ({ image, isAcquired }) => {
     <>
       <BadgeImgContents
         style={{
-          backgroundColor: isAcquired ? "#fff8de" : "#b5b5ba",
+          backgroundColor: isAcquired ? "#eff4e7;" : "#b5b5ba",
         }}
       >
         {image && (
@@ -38,13 +38,13 @@ const BadgeImgContents = styled.div`
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background-color: #fff8de;
+  background-color: #eff4e7;
   margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 20px;
+  padding: 18px;
 `;
 
 export default BadgeCircle;

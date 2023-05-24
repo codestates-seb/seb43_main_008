@@ -22,7 +22,7 @@ const PlasticItem: React.FC<PlasticItemProps> = ({
     <div
       className="plastic-circle"
       style={{
-        backgroundColor: isAcquired ? "#fff8de" : "#757575",
+        backgroundColor: isAcquired ? "#fff8de" : "#b2b2b2",
       }}
     >
       <Image
@@ -80,8 +80,8 @@ export default function BadgeDetail({
 
   return (
     <>
+      <GetBadgeText>획득한 뱃지 List</GetBadgeText>
       <CountCardContainer>
-        <GetBadgeText>획득한 뱃지 List</GetBadgeText>
         <PlasticList>
           <ul className="list-wrapper">
             {badgeList.badgeList.map((image: any) => (
@@ -107,24 +107,26 @@ const CountCardContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 5px;
+  padding: 7px;
   border-radius: 10px;
   align-items: flex-start;
-  /* border: #3f910c 1px solid; */
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  width: 280px;
+
+  margin-left: 20px;
 `;
 const GetBadgeText = styled.div`
   /* all: unset; */
   font-size: 15px;
-  font-weight: bold;
-  margin-bottom: 5px;
-  margin-left: 5px;
+  /* font-weight: bold; */
+  margin-left: 27px;
   align-self: flex-start;
   color: #222;
 `;
 
 const PlasticList = styled.div`
   width: 100%;
-  height: 180px;
+  height: 175px;
   overflow-y: scroll;
   display: flex;
   justify-content: center;
@@ -132,8 +134,8 @@ const PlasticList = styled.div`
   .list-wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-gap: 10px;
-    width: 100%;
+    grid-gap: 11px;
+    width: 95%;
     padding: 0;
     list-style: none;
     background-color: 3;
@@ -152,7 +154,7 @@ const PlasticList = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #fff8de;
+      background-color: #eff4e7;
       /* border: #3f910c 1px solid; */
     }
   }
