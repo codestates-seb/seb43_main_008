@@ -1,11 +1,11 @@
 {
-    "short_name": "아뉴나 화나따",
-    "name": "아뉴나 화나따",
-    "description": "APP의 설명을 적어주세요",
+    "short_name": "쓰쓰또쓰",
+    "name": "쓰쓰또쓰",
+    "description": "쓰쓰또쓰는 사용자가 플라스틱 재사용 회차별 사진과 함께 글을 지속적으로 기록하는 일지 제공 서비스입니다.",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
-    "theme_color": "#D4E8D8",
+    "theme_color": "#ffffff",
     "background_color": "#ffffff",
 	"icons": [
 		{

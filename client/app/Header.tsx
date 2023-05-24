@@ -23,7 +23,6 @@ export default function Header({
 }) {
   const [isWithdrawlModalOpen, setIsWithdrawlModalOpen] = useState(false);
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
-  const [isVotePublic, setIsVotePublic] = useState(false);
   const router = useRouter();
 
   return (
@@ -71,8 +70,6 @@ export default function Header({
       <VoteModal
         isVoteModalOpen={isVoteModalOpen}
         setIsVoteModalOpen={setIsVoteModalOpen}
-        isVotePublic={isVotePublic}
-        setIsVotePublic={setIsVotePublic}
       />
 
       <WithdrawlModal
