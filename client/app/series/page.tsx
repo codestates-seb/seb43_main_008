@@ -1,12 +1,12 @@
 "use client";
 // Remove the server-side injected CSS.
 
-import axios from "axios";
 import FormData from "form-data";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
+import axiosInstance from "../axiosInstance";
 import styles from "./series.module.css";
 
 export default function Page() {
@@ -79,7 +79,7 @@ export default function Page() {
               ref={showRef}
               src={"/image.svg"}
               alt={"이미지 업로드"}
-              width={300}
+              width={275}
               height={100}
               onClick={handleClick}
             />
@@ -118,8 +118,8 @@ export default function Page() {
 //---------------------------------------------------------- 아래는 모달 컴포넌트------------------------------------------------------
 
 const Modal = ({ imageFile, userText, setIsOpen }: any) => {
-  const token =
-    "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjMxLCJzdWIiOiJib3Jpc0BuYXZlci5jb20iLCJpYXQiOjE2ODQ2NjI4MDgsImV4cCI6MTY4NDY2NDYwOH0.vZhJVPp61t1v5OJ4K7t-VmajWKoK6Skb7Hhd5cDs7idJ3wExdym-7Oy67XxffYua";
+  // const token =
+  //   "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX0dVRVNUIl0sInN1YiI6ImdvZDk5OUBuYXZlci5jb20iLCJpYXQiOjE2ODQ4MjY4NDksImV4cCI6MTY4NDgzMDQ0OX0.n_DngS5AjMN4e7OW2uKpBgd7_W7HJPRtK5N9B5noyQHqPBMoaxDwU_0GxqtwLBAT";
   const [check, setCheck] = useState(false); // 확인 체크를 담아 놓는 상태
   const [agree, setAgree] = useState(false); // 동의 체크를 담아 놓는 상태
   const ModalButton = useRef<any>(null); // 모달의 확인 버튼
@@ -153,6 +153,33 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
     router.push("/my-list");
   };
 
+  // const sendData = async () => {
+  //   console.log("받은 이미지", imageFile);
+
+  //   let formData = new FormData();
+
+  //   formData.append("image", imageFile);
+  //   formData.append("content", userText);
+  //   let id = localStorage.getItem("plastic");
+  //   try {
+  //     const result = await axios.post(
+  //       `http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/series/${id}/daylog`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log("요청 성공", result.data.data.id);
+  //   } catch (err) {
+  //     console.log("에러 발생", err);
+  //     return false;
+  //   }
+  //   return true;
+  // };
+
   const sendData = async () => {
     console.log("받은 이미지", imageFile);
 
@@ -162,17 +189,16 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
     formData.append("content", userText);
     let id = localStorage.getItem("plastic");
     try {
-      const result = await axios.post(
-        `http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/series/${id}/daylog`,
+      const result = await axiosInstance.post(
+        `/series/${id}/daylog`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log("요청 성공", result.data.data.id);
+      console.log("요청 성공", result.data.series.id);
     } catch (err) {
       console.log("에러 발생", err);
       return false;

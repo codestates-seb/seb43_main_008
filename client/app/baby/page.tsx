@@ -1,13 +1,14 @@
 "use client";
 
-import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import { GrLock, GrUnlock } from "react-icons/gr";
 
+import axiosInstance from "../axiosInstance";
 import styles from "./babyPla.module.css";
+
 export default function Page() {
   //--------------------------------------------------------- 상태, 상수는 아래 여기에 설정---------------------------------
   const [title, setTitle] = useState<string>(""); // 초기값 빈문자열의 플라스틱 이름 인풋 상태 관리
@@ -16,10 +17,9 @@ export default function Page() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   //---------------------------------------------------------콘솔 테스트 중---------------------------------------------
-  useEffect(() => {
-    console.log("hello");
-    // console.log(process.env.NEXT_PUBLIC_API_URL);
-  }, []);
+  // useEffect(() => {
+  //   console.log("hello");
+  // }, []);
   //---------------------------------------------------------함수는 아래 여기에 생성--------------------------------------
 
   // 아래는 플라스틱 이름 인풋 관련 함수
@@ -31,21 +31,37 @@ export default function Page() {
     }
   }, [title]);
 
+  // const sendData = async () => {
+  //   try {
+  //     const result = await axiosInstance.post(`/series?public=${isPublic}`, {
+  //       title: title,
+  //     });
+  //     console.log(result.data.data.id);
+  //     localStorage.setItem("plastic", result.data.data.id);
+  //   } catch (err) {
+  //     console.log(err);
+  //     return false;
+  //   }
+  //   return true;
+  // };
   const sendData = async () => {
     try {
-      const result = await axios.post(
-        `http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/series?public=${isPublic}`,
-        { title: title },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWQiOjI2LCJzdWIiOiJhbDAwZmhhQG5hdmVyLmNvbSIsImlhdCI6MTY4NDU4NDIxOSwiZXhwIjoxNjg0NTg2MDE5fQ.KUxmnc--qVV3ic9fudNTSTzamamXtXBNQjaHYSCEdbmsa5ijKKkVJVhMKUy_M-EL",
-          },
-        }
-      );
+      let result;
+      if (isPublic) {
+        // When it's public
+        result = await axiosInstance.post(`/series`, {
+          title: title,
+          public: false,
+        });
+        localStorage.setItem("plastic", result.data.data.id);
+      } else {
+        result = await axiosInstance.post(`/series`, {
+          title: title,
+          public: true,
+        });
+        localStorage.setItem("plastic", result.data.data.id);
+      }
       console.log(result.data.data.id);
-      localStorage.setItem("plastic", result.data.data.id);
     } catch (err) {
       console.log(err);
       return false;
@@ -70,7 +86,7 @@ export default function Page() {
     if (result === false) {
       console.log("Error");
     } else {
-      router.push("/series"); /////////////////////////////// 시리즈로 넘어가라 쫌 제발 쫌 쫌 쫌
+      router.push("/series");
     }
   };
 
@@ -126,7 +142,7 @@ export default function Page() {
           {/*----------------------------------------------아래는 입양 완료 버튼----------------------------------------------*/}
           <button
             onClick={() => {
-              nestStep(); ///////////////////////////// 이거 왜 도대체 시리즈로 안넘어가지는 거임????????? 나니???????
+              nestStep();
             }}
             ref={buttonRef}
             className={`${styles["start-button"]}`}

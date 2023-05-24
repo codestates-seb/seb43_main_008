@@ -7,7 +7,6 @@ import styled from "styled-components";
 import { GetDaylog } from "../api/detailApi";
 import { Slide } from "./Slide";
 export const Slider = (): JSX.Element => {
-  // 🚨 렌더되기 전에 슬라이더 조작하면 에러남. 
 
   // api 요청 함수
   const [slides, setSlides] = useState([]);
@@ -18,15 +17,17 @@ export const Slider = (): JSX.Element => {
   const params = useParams();
 
   useEffect(() => {
+    setIsLoading(false)
     GetDaylog(params.id, pageNumber).then((data) => {
       if (data) {
         setSlides((prevList) => [...prevList, ...data])
         setLastDataLength(data.length)
-        setIsLoading(false)
+        setIsLoading(true)
       }
     })
-    setIsLoading(true)
   }, [pageNumber])
+
+  console.log(isLoading)
 
 
   // 마우스 스크롤로 슬라이드 이동을 위해 DOM에 접근한다.
@@ -63,7 +64,7 @@ export const Slider = (): JSX.Element => {
       scrollRef.current.scrollLeft = startX - pageX;
       // 추가 api 요청은 pageNumber에 의존한다.
       // 마지막에 들어온 데이터 길이가 7개 미만이면 pageNumber 변경을 차단시켜 무한 스크롤을 멈춘다. 
-      if (isLoading && scrollWidth === Math.ceil(clientWidth + scrollLeft) && lastDataLength >= 7) {
+      if (scrollWidth === Math.ceil(clientWidth + scrollLeft) && lastDataLength >= 7 && isLoading) {
         setPageNumber((prev) => prev + 1)
       }
     }
@@ -110,7 +111,7 @@ export const Slider = (): JSX.Element => {
           onTouchCancel={onDragEnd}
         >
           {slides.map((data) => (
-            <Slide key={data.id} {...data} />
+            <Slide key={`detail ${data.id}`} {...data} />
           ))}
         </ul>
       </section>

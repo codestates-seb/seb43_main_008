@@ -5,15 +5,20 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 
 module.exports = withPWA({
   reactStrictMode: false,
+  // images: {
+  //   remotePatterns: [
+  //     {
+  //       protocol: 'https',
+  //       hostname: 'ssts-img.s3.ap-northeast-2.amazonaws.com',
+  //       pathname: '/member/**'
+  //     },
+  //   ],
+  // },
+
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'ssts-img.s3.ap-northeast-2.amazonaws.com',
-        pathname: '/member/**'
-      },
-    ],
+    domains: ["ssts-img.s3.ap-northeast-2.amazonaws.com"],
   },
+
   experimental: {
     appDir: true,
   },

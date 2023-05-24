@@ -1,4 +1,3 @@
-import Header from "../Header";
 import Navbar from "../Navbar";
 
 export default function MemberEditLayout({
@@ -8,7 +7,6 @@ export default function MemberEditLayout({
 }) {
   return (
     <>
-      <Header backButton={true} textContent={true} voteButton={true} />
       {children}
       <Navbar />
     </>

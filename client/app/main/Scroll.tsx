@@ -34,7 +34,6 @@ export const Scroll: React.FC<ScrollProps> = ({ setPageQuery, pageQuery, countNu
     });
   };
   useEffect(() => {
-    console.log(`서버에 다음 페이지 요청 보내기 ${pageQuery}`);
   }, [])
 
   useEffect(() => {
