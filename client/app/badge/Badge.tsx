@@ -22,10 +22,15 @@ export default function Badge(badgeList: any) {
   // 뱃지 세피아 처리
   const [isAcquired, setIsAcquired] = useState(true); // 초기 이미지는 세피아 처리 안함
   const [clickedImage, setClickedImage] = useState(null);
+  const [myBadge, setMyBadge] = useState(null);
 
   useEffect(() => {
     console.log(clickedImage);
   }, [clickedImage]);
+
+  useEffect(() => {
+    console.log(myBadge);
+  });
 
   return (
     <>
@@ -47,6 +52,7 @@ export default function Badge(badgeList: any) {
         setSubText={setSubText}
         setIsAcquired={setIsAcquired}
         setClickedImage={setClickedImage}
+        setMyBadge={setMyBadge}
       />
     </>
   );

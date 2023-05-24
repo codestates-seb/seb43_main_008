@@ -3,6 +3,8 @@ import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 
+import axiosInstance from "../axiosInstance";
+
 // import badgeLists from "./BadgeData";
 
 interface PlasticItemProps {
@@ -47,6 +49,7 @@ interface BadgeDetailProps {
   setIsAcquired: Dispatch<SetStateAction<boolean>>;
   badgeList: any; // from the parent component
   setClickedImage: any;
+  setMyBadge: any;
 }
 
 interface ImageData {
@@ -56,6 +59,7 @@ interface ImageData {
   subText: string;
   isAcquired: boolean;
   img?: string;
+  badgeId?: string;
 }
 
 export default function BadgeDetail({
@@ -65,6 +69,7 @@ export default function BadgeDetail({
   setIsAcquired,
   badgeList,
   setClickedImage,
+  setMyBadge,
 }: BadgeDetailProps) {
   const [, setSelectedImage] = useState<ImageData | null>(null);
 
@@ -84,6 +89,20 @@ export default function BadgeDetail({
     console.log(image);
   };
 
+  const getInfo = async (image: ImageData) => {
+    setClickedImage(image.img);
+    console.log(image);
+    try {
+      const response = await axiosInstance.get(
+        `/members/badge/${image.badgeId}`
+      );
+      console.log(response.data.data);
+      setMyBadge(response.data.data);
+    } catch (error) {
+      console.error("Error fetching badge list:", error);
+    }
+  };
+
   return (
     <>
       <GetBadgeText>획득한 뱃지 List</GetBadgeText>
@@ -97,6 +116,7 @@ export default function BadgeDetail({
                 altText={"badge"}
                 onClick={() => {
                   handleClick(image);
+                  getInfo(image);
                 }}
                 isAcquired={image.isAcquired}
               />
