@@ -6,8 +6,10 @@ import com.ssts.ssts.domain.badges.service.BadgeService;
 import com.ssts.ssts.domain.member.dto.*;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.global.auth.utils.SocialType;
 import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +38,8 @@ public class MemberController {
         Member member = memberService.saveMember(
                 memberTestSignUpDto.getEmail(),
                 memberTestSignUpDto.getNickName(),
-                memberTestSignUpDto.getPhone());
+                memberTestSignUpDto.getPhone(),
+                SocialType.TEST_SSTS);
 
         return ApiResponse.ok(member);
     }
@@ -64,8 +67,6 @@ public class MemberController {
 
         Member member=memberService.changeMemberStatusWithdraw();
 
-        //return ResponseEntity.status(HttpStatus.OK).body(member.getDeletedAt()+"에 정상적으로 탈퇴처리되셨습니다. " +
-        //        "정책에 따라 6개월 보관 하겠습니다 :) ");
         return ApiResponse.ok(member.getDeletedAt()+"에 정상적으로 탈퇴처리되셨습니다. " +
                         "정책에 따라 6개월 보관 하겠습니다 :) ");
     }
@@ -100,7 +101,7 @@ public class MemberController {
     * 권한 : USER, ADMIN
     * */
     @PatchMapping("/feed")
-    public ApiResponse<FeedResponse> updateMyFeedInfo(@ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
+    public ApiResponse<FeedResponse> updateMyFeedInfo(@Validated @ModelAttribute MemberEditInfoPatchDto memberEditInfoPatchDto,
                                                             @RequestPart(value = "image", required = false) Optional<MultipartFile> image) throws IOException{
 
 

@@ -21,9 +21,9 @@
   justify-content: center;
   align-items: center;
   font-Size: 14px;
-  margin-left: 10px;
   position: fixed;
-  left: 116px;
+  left:10px;
+  width: 100%;
 }
 
 /* 공개/비공개 아이콘 */
@@ -104,6 +104,7 @@
   transform: translateY(-2px);
 }
 
+
 /*-------------------------------- 모달 스타일 -----------------------------------*/
 /* 모달 전체창 스타일 */
 .start-modalBody{
@@ -150,7 +151,7 @@
   height: 33px;
   width: 80px;
   background-color: #f5f2f0;
-  border: 1px #85858e solid;
+  border: 1px #9b9ba0 solid;
   border-radius: 5px;
   border-radius: 16px;
 }

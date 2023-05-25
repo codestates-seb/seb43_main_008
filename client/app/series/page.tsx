@@ -1,5 +1,4 @@
 "use client";
-// Remove the server-side injected CSS.
 
 import FormData from "form-data";
 import Image from "next/image";
@@ -20,13 +19,21 @@ export default function Page() {
   const buttonRef = useRef<any>(null);
   //---------------------------------------------------------콘솔 테스트 중----------------------------------------------------------------------------------
 
-  useEffect(() => {
-    console.log("하아이이이이");
-  }, []);
+  // useEffect(() => {
+  //   console.log("하아이이이이");
+  // }, []);
 
   //---------------------------------------------------------함수는 아래 여기에 생성--------------------------------------------------------------------------
+  // useEffect(() => {
+  //   if (imageFile === "" || userText() === "") {
+  //     buttonRef.current.disabled = true;
+  //   } else {
+  //     buttonRef.current.disabled = false;
+  //   }
+  // }, [imageFile, userText]);
+
   useEffect(() => {
-    if (imageFile === "" || userText === "") {
+    if (imageFile === "" || userText.trim() === "") {
       buttonRef.current.disabled = true;
     } else {
       buttonRef.current.disabled = false;
@@ -100,7 +107,7 @@ export default function Page() {
         ref={buttonRef}
         onClick={openChange}
         style={
-          imageFile !== "" && userText !== ""
+          imageFile !== "" && userText.trim() !== ""
             ? {
                 backgroundColor: "#eff4e7",
                 color: "#3f910c",
@@ -118,8 +125,6 @@ export default function Page() {
 //---------------------------------------------------------- 아래는 모달 컴포넌트------------------------------------------------------
 
 const Modal = ({ imageFile, userText, setIsOpen }: any) => {
-  // const token =
-  //   "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX0dVRVNUIl0sInN1YiI6ImdvZDk5OUBuYXZlci5jb20iLCJpYXQiOjE2ODQ4MjY4NDksImV4cCI6MTY4NDgzMDQ0OX0.n_DngS5AjMN4e7OW2uKpBgd7_W7HJPRtK5N9B5noyQHqPBMoaxDwU_0GxqtwLBAT";
   const [check, setCheck] = useState(false); // 확인 체크를 담아 놓는 상태
   const [agree, setAgree] = useState(false); // 동의 체크를 담아 놓는 상태
   const ModalButton = useRef<any>(null); // 모달의 확인 버튼
@@ -153,33 +158,6 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
     router.push("/my-list");
   };
 
-  // const sendData = async () => {
-  //   console.log("받은 이미지", imageFile);
-
-  //   let formData = new FormData();
-
-  //   formData.append("image", imageFile);
-  //   formData.append("content", userText);
-  //   let id = localStorage.getItem("plastic");
-  //   try {
-  //     const result = await axios.post(
-  //       `http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/series/${id}/daylog`,
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     console.log("요청 성공", result.data.data.id);
-  //   } catch (err) {
-  //     console.log("에러 발생", err);
-  //     return false;
-  //   }
-  //   return true;
-  // };
-
   const sendData = async () => {
     console.log("받은 이미지", imageFile);
 
@@ -209,9 +187,6 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
   return (
     <div className={`${styles["series-modalBody"]}`}>
       <div className={`${styles["series-modalHeader"]}`}>
-        <div style={{ marginLeft: "25px", color: "#3f910c" }}>
-          아래 안내 내용을 확인해 주세요!
-        </div>
         <Image
           src={"/close.svg"}
           width={13}
@@ -220,7 +195,11 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
           onClick={closeModal}
         />
       </div>
-
+      <div
+        style={{ marginBottom: "28px", marginLeft: "25px", color: "#3f910c" }}
+      >
+        아래 안내 내용을 확인해 주세요!
+      </div>
       <div style={{ fontSize: "14px" }}>
         작성된 시리즈는 수정이나 삭제를 할 수 없습니다.
       </div>

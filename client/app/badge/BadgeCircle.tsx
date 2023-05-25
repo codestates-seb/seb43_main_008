@@ -1,32 +1,49 @@
 "use client";
 
 import Image from "next/image";
+// import { useState } from "react";
 import styled from "styled-components";
 
 interface BadgeCircleProps {
   image: { src: string; alt: string } | null;
   isAcquired: boolean;
+  clickedImage: any;
 }
 
-const BadgeCircle: React.FC<BadgeCircleProps> = ({ image, isAcquired }) => {
+const BadgeCircle: React.FC<BadgeCircleProps> = ({
+  image,
+  isAcquired,
+  clickedImage,
+}) => {
   return (
     <>
       <BadgeImgContents
         style={{
-          backgroundColor: isAcquired ? "#fff8de" : "#b5b5ba",
+          backgroundColor: isAcquired ? "#eff4e7;" : "#b5b5ba",
         }}
       >
-        {image && (
-          <Image
-            src={image.src}
-            alt={image.alt}
-            width={170}
-            height={170}
-            style={{
-              filter: isAcquired ? "none" : "grayscale(100%)",
-            }}
-          />
-        )}
+        {image &&
+          (clickedImage === null ? (
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={170}
+              height={170}
+              style={{
+                filter: isAcquired ? "none" : "grayscale(100%)",
+              }}
+            />
+          ) : (
+            <Image
+              src={clickedImage}
+              alt={image.alt}
+              width={170}
+              height={170}
+              style={{
+                filter: isAcquired ? "none" : "grayscale(100%)",
+              }}
+            />
+          ))}
       </BadgeImgContents>
     </>
   );
@@ -38,13 +55,13 @@ const BadgeImgContents = styled.div`
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background-color: #fff8de;
+  background-color: #eff4e7;
   margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 20px;
+  padding: 18px;
 `;
 
 export default BadgeCircle;

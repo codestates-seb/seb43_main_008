@@ -11,6 +11,7 @@ public enum ExceptionCode {
 
     INPUT_NULL(RtnHttpStatus.Validation, 500, "입력값이 없어요."),
     IS_NULL(RtnHttpStatus.System, 501, "null값이예요."),
+    INPUT_IS_NOT_ALLOWED(RtnHttpStatus.System, 502, "허용되지 않는 요청값이에요"),
 
     //사용자 관련 에러
     MEMBER_NOT_FOUND(RtnHttpStatus.System, 2000, "사용자를 찾을 수 없어요."),
@@ -26,6 +27,7 @@ public enum ExceptionCode {
     //jwt
     JWT_TOKEN_EXPIRED(RtnHttpStatus.Validation, 2010,"토큰이 만료됐어요."),
     JWT_NO_TOKEN(RtnHttpStatus.Validation, 2011, "토큰이 없어요."),
+    JWT_NOT_VALID(RtnHttpStatus.Validation, 2012, "토큰이 유효하지 않아요."),
 
     //시리즈 에러
     SERIES_NOT_EXISTS(RtnHttpStatus.Validation, 2005, "시리즈를 찾을 수 없어요."),
@@ -46,6 +48,7 @@ public enum ExceptionCode {
     THIS_VOTE_RESULT_IS_TRUE(RtnHttpStatus.Validation,1007, "이 투표는 이미 졸업했어요!"),
     CAN_NOT_VOTE_VALUE(RtnHttpStatus.Validation,1008, "투표할 수 없는 값이예요."),
     NOT_SERISE_WRITER(RtnHttpStatus.Validation,1012, "시리즈를 작성한 본인이 아니라서 투표를 개설할 수 없어요."),
+    VOTE_RESULT_NOT_UPDATE(RtnHttpStatus.Validation,1014,"최초투표의 결과가 조회되지 않았어요"),
 
     //북마크 에러
     BOOKMARK_IS_DUPLICATION(RtnHttpStatus.Validation,1009, "이미 북마크한 시리즈예요."),

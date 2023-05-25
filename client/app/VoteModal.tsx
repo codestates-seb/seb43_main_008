@@ -46,9 +46,10 @@ export default function VoteModal({
           </CloseButton>
           <p
             style={{
+              marginTop: "10px",
               marginBottom: "3px",
               marginLeft: "10px",
-              fontSize: "15px",
+              fontSize: "14px",
               color: "#222",
             }}
           >
@@ -59,7 +60,7 @@ export default function VoteModal({
               marginBottom: "4px",
               marginTop: "10px",
               marginLeft: "13px",
-              fontSize: "15px",
+              fontSize: "14px",
               color: "#222",
             }}
           >
@@ -77,13 +78,14 @@ export default function VoteModal({
 const Modal = styled.div`
   position: fixed;
   z-index: 1;
-  right: 48px;
-  top: 190px;
   overflow: none;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ModalContent = styled.div`
@@ -91,7 +93,7 @@ const ModalContent = styled.div`
   padding: 10px;
   border: 1px solid #3f910c;
   width: 280px;
-  height: 200px;
+  height: 240px;
   border-radius: 10px;
   gap: 5px;
   display: flex;
@@ -104,9 +106,10 @@ const ConfirmButton = styled.button`
   height: 33px;
   width: 80px;
   background-color: #f5f2f0;
-  border: 1px #85858e solid;
+  border: 1px #9b9ba0 solid;
   border-radius: 16px;
   margin-top: 25px;
+  margin-bottom: 20px;
   cursor: pointer;
 
   &:hover {
@@ -121,11 +124,12 @@ const ConfirmButton = styled.button`
 `;
 
 const CloseButton = styled.button`
-  position: absolute;
-  right: 10px;
-  top: 7px;
+  /* position: absolute; */
+  /* right: 1px; */
+  top: 1px;
   background: transparent;
   border: none;
+  margin-left: 230px;
   font-size: 1.2em;
-  color: #9b9ba0;
+  margin-bottom: 15px;
 `;
