@@ -29,7 +29,6 @@ public class OAuthController {
     private String naverClientId;
 
     private String googleScope="email%20profile";
-    private String redirectUrl="http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/";
 
     private final String responseType = "code";
 
