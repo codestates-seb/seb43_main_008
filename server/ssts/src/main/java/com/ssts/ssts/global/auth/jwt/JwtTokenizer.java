@@ -54,12 +54,14 @@ public class JwtTokenizer {
                 .compact();
     }
 
-    public String generateRefreshToken(String subject,
+    public String generateRefreshToken(Map<String, Object> claims,
+                                       String subject,
                                        Date expiration,
                                        String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
@@ -67,7 +69,6 @@ public class JwtTokenizer {
                 .compact();
     }
 
-    // 검증 후, Claims을 반환하는 용도 >> 이게뭔ㄷ- >> JwtVerificationFilter 작업에서 쓴다.
     public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
@@ -75,18 +76,16 @@ public class JwtTokenizer {
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(jws); //파싱
+                .parseClaimsJws(jws); //파싱(검증)
 
         return claims;
     }
 
-    // 단순히 검증만 하는 용도로 쓰일 경우
-    public void verifySignature(String jws, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+    public void verifySignature(String jws) {
 
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(key)
+                    .setSigningKey(getKey())
                     .build()
                     .parseClaimsJws(jws);
         } catch (ExpiredJwtException exception) {
@@ -102,7 +101,16 @@ public class JwtTokenizer {
         return expiration;
     }
 
-    // jwt 서명에 사용할 secret key를 생성하는 메서드 ( string<base64> -> key )
+    public Long getAccessTokenExpiration(String accessToken) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(accessToken)
+                .getBody();
+
+        Date expirationDate = claims.getExpiration();
+        return expirationDate.getTime();
+    }
+
     private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
         Key key = Keys.hmacShaKeyFor(keyBytes);
@@ -110,14 +118,20 @@ public class JwtTokenizer {
         return key;
     }
 
-    public String getSubjectFromRefreshToken(String refreshToken, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+    public String getSubjectFromToken(String token) {
 
         Claims claims = Jwts.parser()
-                .setSigningKey(key)
-                .parseClaimsJws(refreshToken)
+                .setSigningKey(getKey())
+                .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
+    }
+
+    private Key getKey(){
+
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+
+        return getKeyFromBase64EncodedKey(base64EncodedSecretKey);
     }
 }

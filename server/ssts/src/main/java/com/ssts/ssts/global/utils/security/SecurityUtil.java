@@ -20,9 +20,17 @@ public class SecurityUtil {
 
         Map<String, Object> credentials = (Map<String, Object>)roadAuthentication().getCredentials();
         Integer integerId=(Integer)credentials.get("id");
-        //Long id=new Long(credentials.get("id").longValue());
         long longId = new Long(integerId.longValue());
         return longId;
+    }
+
+
+    public static String getSocialType(){
+
+        Map<String, Object> credentials = (Map<String, Object>)roadAuthentication().getCredentials();
+        String socialType=(String)credentials.get("socialType");
+        //Long id=new Long(credentials.get("id").longValue());
+        return socialType;
     }
 
     public static String getMemberEmail(){

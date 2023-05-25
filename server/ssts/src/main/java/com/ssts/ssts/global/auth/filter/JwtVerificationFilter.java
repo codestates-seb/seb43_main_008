@@ -1,8 +1,11 @@
 package com.ssts.ssts.global.auth.filter;
 
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
+import com.ssts.ssts.global.auth.service.TokenService;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
-import com.ssts.ssts.global.auth.utils.TestConstants;
+import com.ssts.ssts.global.auth.utils.AuthConsts;
+import com.ssts.ssts.global.exception.BusinessLogicException;
+import com.ssts.ssts.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,16 +30,25 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final TokenService tokenService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         log.info("하늘/security : jwt verification filter -> 동작");
-        Map<String, Object> claims = verifyJws(request);
-        setAuthenticationToContext(claims);
+        String jws = request.getHeader("Authorization").replace("Bearer ", "");
 
-        filterChain.doFilter(request, response);
+        if(tokenService.validationToken(jws)){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write(ExceptionCode.JWT_NOT_VALID.getMessage());
+
+        }else{
+            Map<String, Object> claims = verifyJws(jws);
+            setAuthenticationToContext(claims);
+
+            filterChain.doFilter(request, response);
+        }
     }
 
     @Override
@@ -45,13 +57,12 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         String requestUri=request.getRequestURI();
         log.info("하늘/security : jwt verification filter -> 사전 검사 ");
         return authorization == null || !authorization.startsWith("Bearer")
-                || TestConstants.TOKEN_CHECK_URI.equals(requestUri)
-                || TestConstants.TOKEN_REISSUE_URI.equals(requestUri);
+                || AuthConsts.TOKEN_CHECK_URI.equals(requestUri)
+                || AuthConsts.TOKEN_REISSUE_URI.equals(requestUri);
     }
 
     //JWT 검증 1. 서명 검증
-    private Map<String, Object> verifyJws(HttpServletRequest request) {
-        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+    private Map<String, Object> verifyJws(String jws) {
 
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
@@ -67,6 +78,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         Map<String, Object> credentials=new HashMap<>();
         credentials.put("id",claims.get("id"));
+        credentials.put("socialType", claims.get("socialType"));
 
         List<GrantedAuthority> authorities = authorityUtils.stringRolesToAuthorities((List<String>)claims.get("roles"));
 
