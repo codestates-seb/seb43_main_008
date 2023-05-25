@@ -25,7 +25,7 @@ export default function Badge(badgeList: any) {
   const [myBadge, setMyBadge] = useState(null);
 
   useEffect(() => {
-    console.log(clickedImage);
+    // console.log(clickedImage);
   }, [clickedImage]);
 
   useEffect(() => {

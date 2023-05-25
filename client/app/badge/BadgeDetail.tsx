@@ -86,7 +86,7 @@ export default function BadgeDetail({
     // setIsAcquired(badgeLists.includes(image));
 
     setClickedImage(image.img);
-    console.log(image);
+    // console.log(image);
   };
 
   const getInfo = async (image: ImageData) => {
