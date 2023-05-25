@@ -19,10 +19,6 @@ import java.io.IOException;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class OAuthController {
 
-    private String googleUrl="https://accounts.google.com";
-    private String kakaoUrl="https://kauth.kakao.com";
-    private String naverUrl="https://nid.naver.com";
-
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
@@ -43,7 +39,7 @@ public class OAuthController {
     public void redirectGoogle(HttpServletResponse response) throws IOException {
         log.info("하늘/oauth redirect : google");
 
-        UriComponents uri = UriComponentsBuilder.fromUriString(googleUrl)
+        UriComponents uri = UriComponentsBuilder.fromUriString(AuthConsts.GOOGLE_URL)
                 .pathSegment("o", "oauth2", "v2", "auth")
                 .queryParam("response_type", responseType)
                 .queryParam("client_id", googleClientId)
@@ -58,7 +54,7 @@ public class OAuthController {
     public void redirectKakao(HttpServletResponse response) throws IOException {
         log.info("하늘/oauth redirect : kakao");
 
-        UriComponents uri = UriComponentsBuilder.fromUriString(kakaoUrl)
+        UriComponents uri = UriComponentsBuilder.fromUriString(AuthConsts.KAKAO_URL)
                 .pathSegment("oauth", "authorize")
                 .queryParam("response_type", responseType)
                 .queryParam("client_id", kakaoClientId)
@@ -73,7 +69,7 @@ public class OAuthController {
     public void redirectNaver(HttpServletResponse response) throws IOException {
         log.info("하늘/oauth redirect : naver");
 
-        UriComponents uri = UriComponentsBuilder.fromUriString(naverUrl)
+        UriComponents uri = UriComponentsBuilder.fromUriString(AuthConsts.NAVER_URL)
                 .pathSegment("oauth2.0", "authorize")
                 .queryParam("response_type", responseType)
                 .queryParam("client_id", naverClientId)
