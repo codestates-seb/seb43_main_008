@@ -24,14 +24,14 @@ const PlasticItem: React.FC<PlasticItemProps> = ({
     <div
       className="plastic-circle"
       style={{
-        backgroundColor: isAcquired ? "#fff8de" : "#b2b2b2",
+        backgroundColor: isAcquired ? "#eff4e7" : "#b2b2b2",
       }}
     >
       <Image
         src={imageSrc}
         alt={altText}
         width={35}
-        height={35}
+        height={60}
         style={{
           filter: isAcquired ? "none" : "grayscale(100%)",
         }}
@@ -184,6 +184,7 @@ const PlasticList = styled.div`
       justify-content: center;
       background-color: #eff4e7;
       /* border: #3f910c 1px solid; */
+      object-fit: "cover";
     }
   }
 `;

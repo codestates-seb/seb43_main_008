@@ -21,9 +21,9 @@
   justify-content: center;
   align-items: center;
   font-Size: 14px;
-  margin-left: 10px;
   position: fixed;
-  left: 116px;
+  left:10px;
+  width: 100%;
 }
 
 /* 공개/비공개 아이콘 */
@@ -103,6 +103,7 @@
 .start-button:active {
   transform: translateY(-2px);
 }
+
 
 /*-------------------------------- 모달 스타일 -----------------------------------*/
 /* 모달 전체창 스타일 */

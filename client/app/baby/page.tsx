@@ -22,11 +22,20 @@ export default function Page() {
   // }, []);
   //---------------------------------------------------------함수는 아래 여기에 생성--------------------------------------
 
-  // 아래는 플라스틱 이름 인풋 관련 함수
+  // 아래는 플라스틱 이름 인풋 관련 함수 초안
+  // useEffect(() => {
+  //   if (title.length === 0 && buttonRef.current !== null) {
+  //     buttonRef.current.disabled = true;
+  //   } else if (title.length > 0 && buttonRef.current !== null) {
+  //     buttonRef.current.disabled = false;
+  //   }
+  // }, [title]);
+
+  // 아래는 플라스틱 이름 인풋 관련 함수 -> 공백으로 이름 짓기 방지 수정
   useEffect(() => {
-    if (title.length === 0 && buttonRef.current !== null) {
+    if (title.trim().length === 0 && buttonRef.current !== null) {
       buttonRef.current.disabled = true;
-    } else if (title.length > 0 && buttonRef.current !== null) {
+    } else if (title.trim().length > 0 && buttonRef.current !== null) {
       buttonRef.current.disabled = false;
     }
   }, [title]);
@@ -44,11 +53,11 @@ export default function Page() {
   //   }
   //   return true;
   // };
+
   const sendData = async () => {
     try {
       let result;
       if (isPublic) {
-        // When it's public
         result = await axiosInstance.post(`/series`, {
           title: title,
           public: false,
@@ -61,9 +70,9 @@ export default function Page() {
         });
         localStorage.setItem("plastic", result.data.data.id);
       }
-      console.log(result.data.data.id);
+      // console.log(result.data.data.id);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return false;
     }
     return true;
@@ -72,7 +81,7 @@ export default function Page() {
   // 아래는 플라스틱 이름 title 상태 업데이트 관련 함수
   const typingInput = (e: any) => {
     setTitle(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   const openModal = () => {
@@ -80,11 +89,11 @@ export default function Page() {
   };
 
   const nestStep = async () => {
-    console.log(title, isPublic);
+    // console.log(title, isPublic);
     let result = await sendData();
-    console.log(result);
+    // console.log(result);
     if (result === false) {
-      console.log("Error");
+      // console.log("Error");
     } else {
       router.push("/series");
     }
@@ -139,7 +148,7 @@ export default function Page() {
             type="text"
             placeholder="귀여운 재활용품의 이름을 정해주세요❤️"
           />
-          {/*----------------------------------------------아래는 입양 완료 버튼----------------------------------------------*/}
+          {/*----------------------------------------------아래는 육아 시작 버튼----------------------------------------------*/}
           <button
             onClick={() => {
               nestStep();
@@ -147,7 +156,8 @@ export default function Page() {
             ref={buttonRef}
             className={`${styles["start-button"]}`}
             style={
-              title.length > 0
+              // title.length > 0
+              title.trim().length > 0
                 ? {
                     backgroundColor: "#eff4e7",
                     color: "#3f910c",
