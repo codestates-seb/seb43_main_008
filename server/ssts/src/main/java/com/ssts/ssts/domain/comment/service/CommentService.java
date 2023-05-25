@@ -38,7 +38,7 @@ public class CommentService {
     private final UpdateUtils<Comment> updateUtils;
 
     public PageResponseDto getCommentList(Long seriesId, int page, int size){
-
+        seriesService.findVerifiedSeries(seriesId);
         Member findMember = memberService.findMemberByToken();
 
         Page<Comment> commentInfo = commentRepository.findBySeries_id(seriesId, PageRequest.of(page, size,
@@ -53,6 +53,10 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto saveComment(Long seriesId, CommentPostDto commentPostDto){
+        seriesService.findVerifiedSeries(seriesId);
+        if(commentPostDto.getComment().isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
+        }
         Comment comment = Comment.of(commentPostDto.getComment());
         Series findSeries = seriesService.findVerifiedSeries(seriesId);
         Member findMember = memberService.findMemberByToken();
@@ -68,6 +72,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto updateComment(Long seriesId, Long commentId, CommentUpdateDto commentUpdateDto){
+        seriesService.findVerifiedSeries(seriesId);
         Comment descComment = this.findVerifiedComment(commentId);
         Comment comment = Comment.of(commentUpdateDto.getComment());
 

@@ -11,6 +11,7 @@ public enum ExceptionCode {
 
     INPUT_NULL(RtnHttpStatus.Validation, 500, "입력값이 없어요."),
     IS_NULL(RtnHttpStatus.System, 501, "null값이예요."),
+    INPUT_IS_NOT_ALLOWED(RtnHttpStatus.System, 502, "허용되지 않는 요청값이에요"),
 
     //사용자 관련 에러
     MEMBER_NOT_FOUND(RtnHttpStatus.System, 2000, "사용자를 찾을 수 없어요."),

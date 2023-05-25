@@ -27,7 +27,7 @@ public class DaylogController {
 
     @PostMapping("/{series-id}/daylog")
     public ApiResponse createSeries(@Positive @PathVariable("series-id") Long seriesId,
-                                    @Validated @ModelAttribute DaylogPostDto daylogPostDto,
+                                    @ModelAttribute DaylogPostDto daylogPostDto,
                                     @RequestPart(value = "image") MultipartFile image) throws IOException {
 
         DaylogResponseDto responseDto = daylogService.saveDaylog(seriesId, daylogPostDto, image);

@@ -48,6 +48,10 @@ public class DaylogService {
 
     @Transactional
     public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto){
+        if (daylogPostDto.getContent().isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+        }
+
         memberService.findMemberByToken();
 
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
@@ -63,6 +67,10 @@ public class DaylogService {
 
     @Transactional
     public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto,MultipartFile image) throws IOException {
+        if (daylogPostDto.getContent().isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+        }
+
         Member member = memberService.findMemberByToken();
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
         Series series = seriesService.findVerifiedSeries(seriesId);
@@ -75,6 +83,8 @@ public class DaylogService {
             String saveFileName = s3ImageUploader.upload(image,"daylog");
             daylog.setContentImg(saveFileName);
             series.setImage(saveFileName);
+        }else {
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
         }
         series.setDaylogCount(series.getDaylogCount()+1);
         daylog.setDaylogNumber(series.getDaylogCount());
@@ -92,7 +102,6 @@ public class DaylogService {
 
 
     public PageResponseDto getDaylogList(Long seriesId, int page, int size) {
-
 
         Member member = memberService.findMemberByToken();
         Page<Daylog> daylogsInfo = daylogRepository.findBySeries_id(seriesId,

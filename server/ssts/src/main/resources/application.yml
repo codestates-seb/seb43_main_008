@@ -97,6 +97,14 @@ server:
     session:
       cookie:
         same-site: none
+#  ssl:
+#    key-store-password: ${SSL_PASSWORD}
+#    key-store-type: PKCS12
+#    key-store: classpath:.keystores
+#    enabled: true
+#  port: 8443
+
+
 
 jwt:
   key:
