@@ -25,6 +25,12 @@ export default async function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, user-scalable=no"
         />
+
+        {/* 오픈그래프 설정 */}
+        <meta property="og:title" content="쓰쓰또쓰" />
+        <meta property="og:description" content="쓰고 쓰고 또 쓰자 &lt;br/&gt; 플라스틱 재사용 과정을 공유하는 서비스입니다." />
+        <meta property="og:image" content="../public/icons/icon-128x128.png" />
+
       </head>
       <body>
         <StyledComponentsRegistry>
