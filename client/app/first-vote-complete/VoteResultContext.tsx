@@ -43,7 +43,7 @@ export default function VoteResultContext() {
   return (
     <ResultContextContainer>
       <ResultContext>이전 투표 결과는</ResultContext>
-      <ResultContext>{`찬성 ${agree}표 대 반대 ${disAgree}표`}</ResultContext>
+      <ResultContext>{`찬성 ${agree}표 반대 ${disAgree}표 입니다 :)`}</ResultContext>
 
       <ButtonBox>
         <EndButton onClick={onClickVoteNoEnd}>조금 더 써볼까요?</EndButton>
