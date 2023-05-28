@@ -17,7 +17,6 @@ export async function VoteEnd(seriesId: string) {
     const response = await axiosInstance.patch(
       `/series/votes/graduation/${seriesId}?isQuit=false`
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;
@@ -30,7 +29,6 @@ export async function VoteNoEnd(seriesId: string) {
     const response = await axiosInstance.patch(
       `/series/votes/graduation/${seriesId}?isQuit=true`
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;
