@@ -27,8 +27,6 @@ export const Slider = (): JSX.Element => {
     })
   }, [pageNumber])
 
-  console.log(isLoading)
-
 
   // 마우스 스크롤로 슬라이드 이동을 위해 DOM에 접근한다.
   const scrollRef = useRef<HTMLUListElement>(null);
@@ -111,16 +109,13 @@ export const Slider = (): JSX.Element => {
           onTouchCancel={onDragEnd}
         >
           {slides.map((data) => {
-            if (slides.length === 1) {
-              return <Slide key={`detail ${data.id}`} {...data} style={{ width: '90vw' }} />;
-            }
-            return null;
+
+            return <Slide key={`detail ${data.id}`} {...data} className={slides.length <= 1 ? "one-slide" : ""} />;
           })}
         </ul>
       </section>
     </StyledSlider>
   );
-
 };
 
 const StyledSlider = styled.div`

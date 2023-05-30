@@ -32,6 +32,7 @@ const Slide = ({
     sessionStorage.setItem("header", nickName);
   }
 
+
   return (
     <StyledSlide>
       <div className="slide">
@@ -117,6 +118,10 @@ const StyledSlide = styled.div`
     width: 70vw;
     height: 40vh;
     overflow: auto;
+  }
+
+  .one-slide {
+    width: 80vw;
   }
 
   .p {
