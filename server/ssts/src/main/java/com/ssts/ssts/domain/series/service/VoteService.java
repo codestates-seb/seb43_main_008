@@ -42,6 +42,8 @@ public class VoteService {
         if(memberId != targetSeries.getMember().getId()){ throw new BusinessLogicException(ExceptionCode.NOT_SERISE_WRITER); }
 
 
+        if(targetSeries.getVoteCount()==0){throw new BusinessLogicException(ExceptionCode.VOTE_NOT_CREATE_DAYLOG);}
+
         //(voteCount>2) 더이상 투표를 개설할 수 없습니다
         if (targetSeries.getVoteCount()==2){ throw new BusinessLogicException(ExceptionCode.CAN_NOT_MAKE_VOTE); }
 
