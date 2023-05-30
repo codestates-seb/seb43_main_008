@@ -81,7 +81,6 @@ export default function Page() {
   // 아래는 플라스틱 이름 title 상태 업데이트 관련 함수
   const typingInput = (e: any) => {
     setTitle(e.target.value);
-    // console.log(e.target.value);
   };
 
   const openModal = () => {
@@ -89,7 +88,7 @@ export default function Page() {
   };
 
   const nestStep = async () => {
-    // console.log(title, isPublic);
+    console.log(title, isPublic);
     let result = await sendData();
     console.log(result);
     if (result === false) {
