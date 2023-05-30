@@ -16,7 +16,8 @@ interface SlideProps {
   member: {
     nickName: string,
   }
-  count: number
+  count: number,
+  len: number
 }
 const Slide = ({
   contentImg,
@@ -24,6 +25,7 @@ const Slide = ({
   series,
   daylogNumber,
   member,
+  len,
 }: SlideProps) => {
   const router = useRouter();
 
@@ -31,10 +33,11 @@ const Slide = ({
     router.push(`my-page/${nickName}`)
     sessionStorage.setItem("header", nickName);
   }
+  console.log
 
   return (
     <StyledSlide>
-      <div className="slide">
+      <div className={len <= 1 ? "one-slide" : "slide"}>
         <div className="info">
           <div className='left-box' onClick={() => moveToMypageHandler(member.nickName)}>
             <div className='user-info'>{member.nickName}</div>
@@ -117,6 +120,10 @@ const StyledSlide = styled.div`
     width: 70vw;
     height: 40vh;
     overflow: auto;
+  }
+
+  .one-slide {
+    width: 76vw;
   }
 
   .p {
