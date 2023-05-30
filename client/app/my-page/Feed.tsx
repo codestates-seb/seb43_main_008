@@ -18,7 +18,6 @@ export const Feed: React.FC<Props> = ({ type }) => {
   const [post, setPost] = useState([])
   const params = useParams();
   let nickName = decodeURIComponent(params.nickName);
-  console.log(nickName);
 
   useEffect(() => {
     if (type === "mine") {
@@ -49,7 +48,7 @@ export const Feed: React.FC<Props> = ({ type }) => {
               if (data.voteResult) {
                 return <DonePost key={data.id} {...data} />; // 1차 투표에서 통과하면 바로 done ui 생성
               } else {
-                return <VotingPost key={data.id} {...data} />;
+                return <VotingPost key={data.id} {...data} type={type} />;
               }
             }
             if (data.seriesStatus === "SERIES_QUIET") {
