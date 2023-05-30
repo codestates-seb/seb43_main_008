@@ -174,7 +174,7 @@ public class SeriesService {
                 seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_QUIT);
             }
 
-            //최초투표: 마감기간이 지나고 결과가 true
+            //최초투표: 마감기간이 지나고 결과가 true => 이 경우에 별거 건들지 않음
             else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==true){
                 seriesList.get(i).setVoteResult(
                         voteService.voteResultCal(seriesList.get(i).getVoteAgree(), seriesList.get(i).getVoteDisagree())
@@ -182,6 +182,7 @@ public class SeriesService {
             }
 
             //최초투표: 마감기간이 지나고 결과가 false
+            //[마감기한이 지났지만, 재투표의 기회가 있는 경우의 상태 변경] => 활성 상태는 변경하지 않고, 수정이 불가능
             else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false){
                 seriesList.get(i).setIsEditable(false);
                 seriesList.get(i).setIsActive(false);
