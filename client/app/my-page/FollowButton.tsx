@@ -12,7 +12,7 @@ export const FollowerButton = () => {
 
   return (
     <StyledFollowerButton onClick={() => router.push("/follower")}>
-      팔로워
+      팔로워 보러가기
     </StyledFollowerButton>
   )
 }
