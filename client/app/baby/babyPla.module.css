@@ -82,6 +82,8 @@
   padding: 1px;
   margin-top: 1px;
   border: #3f910c 1px solid;
+  /* text-align: center;
+  caret-color: transparent; */
   
 }
 .start-input::placeholder {

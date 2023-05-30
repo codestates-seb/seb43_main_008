@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import styled from "styled-components";
 
-// FaThumbsDown, FaThumbsUp 
 import { GetVote, PutVote } from "../api/voteApi"
 import { StyledCard } from "./Card";
 

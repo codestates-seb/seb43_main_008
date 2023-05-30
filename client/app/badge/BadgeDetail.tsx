@@ -4,8 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 
 import axiosInstance from "../axiosInstance";
-
-// import badgeLists from "./BadgeData";
+import badgeLists from "./BadgeData"; // 목데이터임 백에서 받아오게 되면 주석 처리 해야지 !
 
 interface PlasticItemProps {
   imageSrc: string;
@@ -86,7 +85,7 @@ export default function BadgeDetail({
     // setIsAcquired(badgeLists.includes(image));
 
     setClickedImage(image.img);
-    // console.log(image);
+    console.log(image);
   };
 
   const getInfo = async (image: ImageData) => {
@@ -96,7 +95,7 @@ export default function BadgeDetail({
       const response = await axiosInstance.get(
         `/members/badge/${image.badgeId}`
       );
-      console.log(response.data.data);
+      // console.log(response.data.data);
       setMyBadge(response.data.data);
     } catch (error) {
       console.error("Error fetching badge list:", error);
@@ -109,7 +108,8 @@ export default function BadgeDetail({
       <CountCardContainer>
         <PlasticList>
           <ul className="list-wrapper">
-            {badgeList.badgeList.map((image: any) => (
+            {/* {badgeList.badgeList.map((image: any) => ( //////////////오오오오오오오오*/}
+            {badgeLists.map((image: any) => (
               <PlasticItem
                 key={image.badgeId}
                 imageSrc={image.img}
