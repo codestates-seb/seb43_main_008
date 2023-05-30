@@ -15,9 +15,14 @@
 #          show_sql: true
 #          format_sql: true
 spring:
+
+  redis:
+    host: localhost
+    port: 6379
+
   datasource:
-    url: jdbc:mysql://ssts.coxwgsn7huq2.ap-northeast-2.rds.amazonaws.com:3306/testsstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
-    #url: jdbc:mysql://ssts.coxwgsn7huq2.ap-northeast-2.rds.amazonaws.com:3306/sstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
+    #url: jdbc:mysql://ssts.coxwgsn7huq2.ap-northeast-2.rds.amazonaws.com:3306/testsstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
+    url: jdbc:mysql://ssts.coxwgsn7huq2.ap-northeast-2.rds.amazonaws.com:3306/sstsDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -92,11 +97,20 @@ server:
     session:
       cookie:
         same-site: none
+#  ssl:
+#    key-store-password: ${SSL_PASSWORD}
+#    key-store-type: PKCS12
+#    key-store: classpath:.keystores
+#    enabled: true
+#  port: 8443
+
+
+
 jwt:
   key:
-    secret: ${JWT_SECRET_KEY}               # 민감한 정보는 시스템 환경 변수에서 로드한다.
+    secret: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 60
-  refresh-token-expiration-minutes: 360
+  refresh-token-expiration-minutes: 360 #분 단위
 
 
 cloud:

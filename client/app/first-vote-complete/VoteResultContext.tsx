@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -10,6 +10,7 @@ export default function VoteResultContext() {
   const [agree, setAgree] = useState(0);
   const [disAgree, setDisAgree] = useState(0);
   const params = useParams();
+  const router = useRouter();
 
   useEffect(() => {
     GetVoteResult(params.id).then((data) => {
@@ -18,15 +19,35 @@ export default function VoteResultContext() {
     });
   }, []);
 
+  const onClickVoteNoEnd = async () => {
+    try {
+      await VoteNoEnd(params.id);
+      localStorage.setItem("plastic", params.id);
+      router.push("/my-list");
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+  const onClickVoteEnd = async () => {
+    try {
+      await VoteEnd(params.id);
+      router.push("/my-page");
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
   return (
     <ResultContextContainer>
-      <ResultContext>{`이전 투표 결과는 ${agree} 대 ${disAgree}`}</ResultContext>
+      <ResultContext>이전 투표 결과는</ResultContext>
+      <ResultContext>{`찬성 ${agree}표 반대 ${disAgree}표 입니다 :)`}</ResultContext>
 
       <ButtonBox>
-        <EndButton onClick={() => VoteNoEnd(params.id)}>
-          조금 더 써볼까요?
-        </EndButton>
-        <NoEndButton onClick={() => VoteEnd(params.id)}>
+        <EndButton onClick={onClickVoteNoEnd}>조금 더 써볼까요?</EndButton>
+        <NoEndButton onClick={onClickVoteEnd}>
           종료할게요(플라스틱 졸업시키기)
         </NoEndButton>
       </ButtonBox>

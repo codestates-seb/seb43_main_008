@@ -16,14 +16,10 @@ public class TestAuthenticationSuccessHandler implements AuthenticationSuccessHa
                                         Authentication authentication) throws IOException {
 
         log.error("하늘/security : test authentication success");
-        if(authentication.getAuthorities().toString().equals("[ROLE_GUEST]")){
 
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().write("test 로그인 성공 -> 게스트 토큰 발급");
-        }else{
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().write("test 로그인 성공 -> 유저 토큰 발급");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write("test 로그인 성공 -> access/refresh 토큰 발급했어요.");
 
-        }
+
     }
 }

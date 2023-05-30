@@ -1,13 +1,11 @@
 package com.ssts.ssts.domain.series.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.domain.comment.Entity.Comment;
 import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.member.entity.Member;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;

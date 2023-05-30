@@ -2,10 +2,12 @@ package com.ssts.ssts.global.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssts.ssts.global.auth.dto.TestLoginDto;
+import com.ssts.ssts.global.auth.jwt.JwtCreator;
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
+import com.ssts.ssts.global.auth.utils.SocialType;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtTestAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final JwtTokenizer jwtTokenizer;
+    //private final JwtTokenizer jwtTokenizer;
+    private final JwtCreator jwtCreator;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
 
@@ -41,6 +44,7 @@ public class JwtTestAuthenticationFilter extends UsernamePasswordAuthenticationF
         // 클라이언트 -> 서버 역직렬화(json->object)
         ObjectMapper objectMapper = new ObjectMapper();
         TestLoginDto testLoginDto = objectMapper.readValue(request.getInputStream(), TestLoginDto.class);
+
         // ServletInputStream -> TestLoginDto(역직렬화)
         log.info("하늘 security : 입력 email="+testLoginDto.getEmail());
         Optional<Member> member = memberService.findMemberByEmail(testLoginDto.getEmail());
@@ -50,6 +54,7 @@ public class JwtTestAuthenticationFilter extends UsernamePasswordAuthenticationF
 
             Map<String, Object> credentials=new HashMap<>();
             credentials.put("id",member.get().getId());
+            credentials.put("socialType",member.get().getSocialType().toString());
 
             List<GrantedAuthority> authorityList=authorityUtils.dbRolesToAuthorities(member.get().getRoles());
 
@@ -80,102 +85,42 @@ public class JwtTestAuthenticationFilter extends UsernamePasswordAuthenticationF
         log.info("하늘/security : jwt test authentication filter -> success ");
 
         String email = (String) authResult.getPrincipal();
-        log.info("email="+email);
 
         List<String> authorities = authResult.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        log.info("email=" + email +
+                "\nauthorities=" + authorities.get(0));
+
         if(authResult.getCredentials()!=null){
 
             Map<String, Object> credentials =  (Map<String, Object>)authResult.getCredentials();
+
+            String socialType=(String)credentials.get("socialType");
             long id =(long)credentials.get("id");
-            log.info("id="+id);
 
-            String accessToken = delegateUserAccessToken(id, email, authorities);
-            String refreshToken = delegateUserRefreshToken(email);
+            String accessToken = jwtCreator.delegateUserAccessToken(id, email, socialType, authorities);
+            String refreshToken = jwtCreator.delegateUserRefreshToken(email, socialType);
 
-            log.info("하늘/security : Bearer " + accessToken);
-            response.setHeader("Authorization", "Bearer " + accessToken);
-            response.setHeader("Refresh", refreshToken);
+            response.setHeader("authorization", "Bearer " + accessToken);
+            response.setHeader("refresh", refreshToken);
 
-            //Security Configuration에서 .setAuthenticationSuccessHandler 핸들러를 설정한다.
-            //핸들러의 메서드 호출한다.
             this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
+
         }else{
 
-            String accessToken = delegateGuestAccessToken(email, authorities);
+           /* String accessToken = jwtCreator.delegateLoginAndSignupAccessToken(email, socialType, authorities);
 
-            log.info("하늘/security : Bearer " + accessToken);
-            response.setHeader("Authorization", "Bearer " + accessToken);
+            response.setHeader("authorization", "Bearer " + accessToken);
 
-            //Security Configuration에서 .setAuthenticationSuccessHandler 핸들러를 설정한다.
-            //핸들러의 메서드 호출한다.
-            this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
+            this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);*/
+
+
+            this.getFailureHandler().onAuthenticationFailure(request, response, null);
         }
 
     }
 
-    private String delegateGuestAccessToken(String email, List<String> authorities){
-        // 1.subject = email (principal)
-        String subject = email;
-
-        // 2.claim = roles
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", authorities);
-
-        // claims 구성 확인
-        // FIXME 나중에 스트림으로 처리하기
-        String claimsStr="";
-        Iterator<String> keys=claims.keySet().iterator();
-        while(keys.hasNext()){
-            String key=keys.next();
-            claimsStr+="["+key+"]="+claims.get(key).toString()+"\n";
-        }
-        log.info("하늘/jwt(username password) : claims=\n"+ claimsStr);
-
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-
-        return accessToken;
-    }
-
-    private String delegateUserAccessToken(long id, String email, List<String> authorities) {
-
-        // 1.subject = email (principal)
-        String subject = email;
-
-        // 2.claim = id, roles
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("id", id);
-        claims.put("roles", authorities);
-
-        // claims 구성 확인
-        // FIXME 나중에 스트림으로 처리하기
-        String claimsStr="";
-        Iterator<String> keys=claims.keySet().iterator();
-        while(keys.hasNext()){
-            String key=keys.next();
-            claimsStr+="["+key+"]="+claims.get(key).toString()+"\n";
-        }
-        log.info("하늘/jwt(username password) : claims=\n"+ claimsStr);
-
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-
-        return accessToken;
-    }
-
-    private String delegateUserRefreshToken(String email) {
-
-        String subject = email;
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
-
-        return refreshToken;
-    }
 }

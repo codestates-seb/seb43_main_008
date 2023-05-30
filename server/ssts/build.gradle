@@ -47,6 +47,7 @@ dependencies {
 
 	implementation platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.5")
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	//jsonwebtoken
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
