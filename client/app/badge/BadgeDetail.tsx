@@ -33,6 +33,7 @@ const PlasticItem: React.FC<PlasticItemProps> = ({
         height={60}
         style={{
           filter: isAcquired ? "none" : "grayscale(100%)",
+          borderRadius: "50%",
         }}
       />
     </div>
@@ -79,6 +80,7 @@ export default function BadgeDetail({
     // 뱃지에 따라 원하는 텍스트로 변경
     setMainText(image.mainText);
     setSubText(image.subText);
+    setIsAcquired(image.isAcquired);
 
     // 뱃지가 획득되었는지 결정
     // 여기서는 badgeLists에 이미 획득한 뱃지의 정보를 추가
