@@ -242,7 +242,7 @@ public class VoteService {
     }
 
 
-    //1차 투표 결과
+    //1차 투표 결과 //
     public VoteResponse.VoteAttendResponse getStartVote(Long seriseId){
         Member member = memberService.findMemberByToken();
         long memberId = member.getId();
