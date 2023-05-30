@@ -112,3 +112,15 @@ export const SubmitButton = styled.button`
   cursor: "pointer";
   transition: all ease-out 1.2s;
 `;
+
+export const LogoutButton = styled.button`
+  height: 50px;
+  width: 100%;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  background-color: #b6b6b8;
+  color: #ffffff;
+  margin-top: 10px;
+  cursor: "pointer";
+`;

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import javax.websocket.server.PathParam;
 
 @RestController
@@ -22,7 +23,7 @@ public class VoteController {
 
     //투표함 만들기 (voteStatus가 "투표중"이 명시되면, 찬성, 반대의 버튼을 보여줍니다)
     @PostMapping("/{series_id}")
-    public ApiResponse<VoteResponse> postVote(@PathVariable("series_id") Long seriesId){
+    public ApiResponse<VoteResponse> postVote(@NotNull @PathVariable("series_id") Long seriesId){
 
         VoteResponse response = (VoteResponse) voteService.createVote(seriesId);
 
@@ -34,7 +35,7 @@ public class VoteController {
     //@PutMapping("/{series_id}/{votes}/{member_id}")
     @PutMapping("/{series_id}/{votes}") //TODO 토큰시에 켜기
     //public ResponseEntity patchVote(@PathVariable("series_id") Long seriesId, @PathVariable("votes") @Max(1)int isAgree, @PathVariable("member_id")Long memberId){
-    public ApiResponse<VoteResponse> patchVote(@PathVariable("series_id") Long seriesId, @PathVariable("votes") @Max(1)int isAgree){ //TODO 토큰 테스트시에 주석 풀기
+    public ApiResponse<VoteResponse> patchVote(@NotNull @PathVariable("series_id") Long seriesId, @PathVariable("votes") @Max(1)int isAgree){ //TODO 토큰 테스트시에 주석 풀기
         //Excetption: isAgree의 값이 0과 1이 아닌 경우 Exception
 
         //Series response = voteService.attendVote(seriesId, isAgree);
@@ -49,7 +50,7 @@ public class VoteController {
     //@PatchMapping("/quit/{series_id}/{member_id}")
     @PatchMapping("/graduation/{series_id}")
     //public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathVariable("member_id") Long memberId, @PathParam("isQuit") Boolean isQuit){ //프론트가 boolean으로 보내야
-    public ApiResponse<VoteResponse> QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathParam("isQuit") Boolean isQuit){
+    public ApiResponse<VoteResponse> QuitVoteControl(@NotNull @PathVariable("series_id") Long seriesId, @PathParam("isQuit") Boolean isQuit){
 
         //VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
         VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, isQuit);
@@ -60,7 +61,7 @@ public class VoteController {
 
     //1차 투표 결과 확인
     @GetMapping("/graduation/{series_id}")
-    public ApiResponse<VoteResponse.VoteAttendResponse> getStartVote(@PathVariable("series_id") Long seriesId){
+    public ApiResponse<VoteResponse.VoteAttendResponse> getStartVote(@NotNull @PathVariable("series_id") Long seriesId){
 
         //VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
         VoteResponse.VoteAttendResponse response = (VoteResponse.VoteAttendResponse) voteService.getStartVote(seriesId);
@@ -70,7 +71,7 @@ public class VoteController {
 
     //시리즈 투표 개별조회
     @GetMapping("{series_id}")
-    public ApiResponse getVoteInfo(@PathVariable("series_id") Long seriesId){
+    public ApiResponse getVoteInfo(@NotNull @PathVariable("series_id") Long seriesId){
         VoteResponse response = (VoteResponse) voteService.getVoteInfo(seriesId);
         return ApiResponse.ok(response);
     }

@@ -37,10 +37,11 @@ const BadgeCircle: React.FC<BadgeCircleProps> = ({
             <Image
               src={clickedImage}
               alt={image.alt}
-              width={170}
-              height={170}
+              width={180}
+              height={180}
               style={{
                 filter: isAcquired ? "none" : "grayscale(100%)",
+                borderRadius: "50%",
               }}
             />
           ))}

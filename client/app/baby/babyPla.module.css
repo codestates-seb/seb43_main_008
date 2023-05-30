@@ -82,10 +82,13 @@
   padding: 1px;
   margin-top: 1px;
   border: #3f910c 1px solid;
-  /* text-align: center;
-  caret-color: transparent; */
-  
+  text-align: center;
+  caret-color: transparent;
 }
+
+.start-input:focus::placeholder {
+  color:transparent;
+    }
 .start-input::placeholder {
   font-size: 13px;
   text-align: center;
