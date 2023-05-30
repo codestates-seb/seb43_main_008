@@ -109,8 +109,7 @@ export const Slider = (): JSX.Element => {
           onTouchCancel={onDragEnd}
         >
           {slides.map((data) => {
-
-            return <Slide key={`detail ${data.id}`} {...data} className={slides.length <= 1 ? "one-slide" : ""} />;
+            return <Slide key={`detail ${data.id}`} {...data} len={slides.length} />;
           })}
         </ul>
       </section>
