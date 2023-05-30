@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 
 import axiosInstance from "../axiosInstance";
-import badgeLists from "./BadgeData"; // 목데이터임 백에서 받아오게 되면 주석 처리 해야지 !
+// import badgeLists from "./BadgeData"; // 목데이터임 백에서 받아오게 되면 주석 처리 해야지 !
 
 interface PlasticItemProps {
   imageSrc: string;
@@ -110,19 +110,23 @@ export default function BadgeDetail({
       <CountCardContainer>
         <PlasticList>
           <ul className="list-wrapper">
-            {/* {badgeList.badgeList.map((image: any) => ( //////////////오오오오오오오오*/}
-            {badgeLists.map((image: any) => (
-              <PlasticItem
-                key={image.badgeId}
-                imageSrc={image.img}
-                altText={"badge"}
-                onClick={() => {
-                  handleClick(image);
-                  getInfo(image);
-                }}
-                isAcquired={image.isAcquired}
-              />
-            ))}
+            {badgeList.badgeList.map(
+              (
+                image: any //////////////오오오오오오오오
+              ) => (
+                // {badgeLists.map((image: any) => (
+                <PlasticItem
+                  key={image.badgeId}
+                  imageSrc={image.img}
+                  altText={"badge"}
+                  onClick={() => {
+                    handleClick(image);
+                    getInfo(image);
+                  }}
+                  isAcquired={image.isAcquired}
+                />
+              )
+            )}
           </ul>
         </PlasticList>
       </CountCardContainer>

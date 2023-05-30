@@ -18,11 +18,9 @@ const BadgeCircle: React.FC<BadgeCircleProps> = ({
   return (
     <>
       <BadgeImgContents
-        style={
-          {
-            // backgroundColor: isAcquired ? "#eff4e7;" : "#b5b5ba",
-          }
-        }
+        style={{
+          backgroundColor: isAcquired ? "#eff4e7;" : "#b5b5ba",
+        }}
       >
         {image &&
           (clickedImage === null ? (
