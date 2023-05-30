@@ -11,6 +11,7 @@ public enum ExceptionCode {
 
     INPUT_NULL(RtnHttpStatus.Validation, 500, "입력값이 없어요."),
     IS_NULL(RtnHttpStatus.System, 501, "null값이예요."),
+    INPUT_IS_NOT_ALLOWED(RtnHttpStatus.System, 502, "허용되지 않는 요청값이에요"),
 
     //사용자 관련 에러
     MEMBER_NOT_FOUND(RtnHttpStatus.System, 2000, "사용자를 찾을 수 없어요."),
@@ -26,6 +27,7 @@ public enum ExceptionCode {
     //jwt
     JWT_TOKEN_EXPIRED(RtnHttpStatus.Validation, 2010,"토큰이 만료됐어요."),
     JWT_NO_TOKEN(RtnHttpStatus.Validation, 2011, "토큰이 없어요."),
+    JWT_NOT_VALID(RtnHttpStatus.Validation, 2012, "토큰이 유효하지 않아요."),
 
     //시리즈 에러
     SERIES_NOT_EXISTS(RtnHttpStatus.Validation, 2005, "시리즈를 찾을 수 없어요."),

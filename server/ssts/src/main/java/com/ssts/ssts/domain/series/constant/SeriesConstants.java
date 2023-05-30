@@ -7,7 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SeriesConstants {
 
-    FILE_NAME("series/series-image.png");
+    FILE_DiRECTORY("series/series-image.png"),
+
+    BUCKET_NAME("ssts-img");
 
     final String SeriesConstant;
 

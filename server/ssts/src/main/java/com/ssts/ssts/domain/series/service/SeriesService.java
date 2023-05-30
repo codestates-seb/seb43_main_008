@@ -130,7 +130,8 @@ public class SeriesService {
 
     @Transactional
     public PageResponseDto getMySeriesList(int page, int size) {
-        // 파라미터 체크
+
+
 
         Page<Series> seriesInfo;
         Member authMember = memberService.findMemberByToken();
@@ -178,8 +179,6 @@ public class SeriesService {
                 seriesList.get(i).setVoteResult(
                         voteService.voteResultCal(seriesList.get(i).getVoteAgree(), seriesList.get(i).getVoteDisagree())
                 );
-
-
             }
 
             //최초투표: 마감기간이 지나고 결과가 false
@@ -200,11 +199,19 @@ public class SeriesService {
 
     public PageResponseDto getMainSeriesListByNewest(int page, int size){
 
+        long beforeTime = System.currentTimeMillis(); //코드 실행 전에 시간 받아오기
+
+
+
         Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteCreatedAtIsNotNull(true, PageRequest.of(page, size,
-                Sort.by("voteCreatedAt")));
+                Sort.by("voteCreatedAt").descending()));
 
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+
+        long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
+        long secDiffTime = (afterTime - beforeTime)/1000; //두 시간에 차 계산
+        System.out.println("시간차이(m) : "+secDiffTime);
 
         return new PageResponseDto(list, seriesInfo);
     }
@@ -242,8 +249,10 @@ public class SeriesService {
 
     @Transactional
     public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto){
-        // 파라미터 체크
-
+        // 파라미터 체크 완료
+        if(seriesPostDto.getTitle().isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
+        }
 
         Member authMember = memberService.findMemberByToken();
         Series series = Series.of(seriesPostDto.getTitle());
@@ -255,10 +264,13 @@ public class SeriesService {
 
         if("true".equals(isPublic)){
             series.setIsPublic(true);
-            // 예외처리
+        }else if("false".equals(isPublic)){
+            series.setIsPublic(false);
+        }else {
+            throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
         }
 
-        series.setImage(s3Uploader.getS3("ssts-img", SeriesConstants.FILE_NAME.getSeriesConstant())); // 상수 선언
+        series.setImage(s3Uploader.getS3(SeriesConstants.BUCKET_NAME.getSeriesConstant(), SeriesConstants.FILE_DiRECTORY.getSeriesConstant())); // 상수 선언
         series.addMember(member);
         seriesRepository.save(series);
 
@@ -267,12 +279,14 @@ public class SeriesService {
 
     @Transactional
     public SeriesResponseDto updateSeries(Long seriesId, SeriesUpdateDto seriesUpdateDto){
-        // 파라미터 체크
+        // 파라미터 체크 완료
+
+
         Member member = memberService.findMemberByToken();
         Series descSeries = this.findVerifiedSeries(seriesId);
         Series series = Series.of(seriesUpdateDto.getTitle(), seriesUpdateDto.getIsPublic());
 
-        if(descSeries.getIsEditable().equals(false)){ // 반대로 false.equ~
+        if(descSeries.getIsEditable().equals(false)){
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
         if(descSeries.getMember().getId() != member.getId()){ // 스트링값 equal로비교

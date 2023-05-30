@@ -3,7 +3,7 @@ package com.ssts.ssts.global.auth.service;
 
 import com.ssts.ssts.global.auth.api.GoogleApi;
 import com.ssts.ssts.global.auth.api.GoogleAuthApi;
-import com.ssts.ssts.global.auth.utils.TestConstants;
+import com.ssts.ssts.global.auth.utils.AuthConsts;
 import com.ssts.ssts.global.auth.dto.GoogleProfileResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class GoogleInfraService {
 
     //요청 보내기
     public String getAccessToken(String code) {
-        String str=googleAuthApi.getAccessToken(code, clientId, clientSecret, TestConstants.REDIRECT_URL+"google", "authorization_code", EMPTY_STRING).getAccessToken();
+        String str=googleAuthApi.getAccessToken(code, clientId, clientSecret, AuthConsts.REDIRECT_URL+"google", "authorization_code", EMPTY_STRING).getAccessToken();
         log.info("하늘/oauth google infra service -> get access token() : \n"+
                 "access token="+str);
         return str;

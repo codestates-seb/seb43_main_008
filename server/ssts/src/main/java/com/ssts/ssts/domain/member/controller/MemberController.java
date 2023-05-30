@@ -23,8 +23,6 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
-
-    //badgeFeed
     private final BadgeService badgeService;
 
 
@@ -107,7 +105,6 @@ public class MemberController {
 
         FeedResponse response = memberService.updateMyFeedInfo(memberEditInfoPatchDto.getNickName(), image,memberEditInfoPatchDto.getIntroduce());
 
-        //변경됬으니까 변경된 입력값을 알려줘야 한다.
         return ApiResponse.ok(response);
     }
 

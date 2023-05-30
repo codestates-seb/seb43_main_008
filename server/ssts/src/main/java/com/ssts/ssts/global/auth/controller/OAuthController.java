@@ -1,6 +1,6 @@
 package com.ssts.ssts.global.auth.controller;
 
-import com.ssts.ssts.global.auth.utils.TestConstants;
+import com.ssts.ssts.global.auth.utils.AuthConsts;
 import com.ssts.ssts.global.auth.dto.AccessTokenResponse;
 import com.ssts.ssts.global.auth.service.OAuthService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,6 @@ import java.io.IOException;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class OAuthController {
 
-    private String googleUrl="https://accounts.google.com";
-    private String kakaoUrl="https://kauth.kakao.com";
-    private String naverUrl="https://nid.naver.com";
-
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
@@ -33,7 +29,6 @@ public class OAuthController {
     private String naverClientId;
 
     private String googleScope="email%20profile";
-    private String redirectUrl="http://ec2-3-37-46-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/";
 
     private final String responseType = "code";
 
@@ -43,11 +38,11 @@ public class OAuthController {
     public void redirectGoogle(HttpServletResponse response) throws IOException {
         log.info("하늘/oauth redirect : google");
 
-        UriComponents uri = UriComponentsBuilder.fromUriString(googleUrl)
+        UriComponents uri = UriComponentsBuilder.fromUriString(AuthConsts.GOOGLE_URL)
                 .pathSegment("o", "oauth2", "v2", "auth")
                 .queryParam("response_type", responseType)
                 .queryParam("client_id", googleClientId)
-                .queryParam("redirect_uri", TestConstants.REDIRECT_URL+"google")
+                .queryParam("redirect_uri", AuthConsts.REDIRECT_URL+"google")
                 .queryParam("scope", googleScope)
                 .build();
 
@@ -58,11 +53,11 @@ public class OAuthController {
     public void redirectKakao(HttpServletResponse response) throws IOException {
         log.info("하늘/oauth redirect : kakao");
 
-        UriComponents uri = UriComponentsBuilder.fromUriString(kakaoUrl)
+        UriComponents uri = UriComponentsBuilder.fromUriString(AuthConsts.KAKAO_URL)
                 .pathSegment("oauth", "authorize")
                 .queryParam("response_type", responseType)
                 .queryParam("client_id", kakaoClientId)
-                .queryParam("redirect_uri", TestConstants.REDIRECT_URL+"kakao")
+                .queryParam("redirect_uri", AuthConsts.REDIRECT_URL+"kakao")
                 .build();
 
 
@@ -73,12 +68,11 @@ public class OAuthController {
     public void redirectNaver(HttpServletResponse response) throws IOException {
         log.info("하늘/oauth redirect : naver");
 
-
-        UriComponents uri = UriComponentsBuilder.fromUriString(naverUrl)
+        UriComponents uri = UriComponentsBuilder.fromUriString(AuthConsts.NAVER_URL)
                 .pathSegment("oauth2.0", "authorize")
                 .queryParam("response_type", responseType)
                 .queryParam("client_id", naverClientId)
-                .queryParam("redirect_uri", TestConstants.REDIRECT_URL+"naver")
+                .queryParam("redirect_uri", AuthConsts.REDIRECT_URL+"naver")
                 .build();
 
         response.sendRedirect(uri.toString());
@@ -99,11 +93,11 @@ public class OAuthController {
         UriComponents uri;
 
         if (tokenResponse.isAuthenticated()) {
-            uri = UriComponentsBuilder.fromUriString(TestConstants.FE_BASE_URL) //FIXME url 수정 필요
+            uri = UriComponentsBuilder.fromUriString(AuthConsts.FE_BASE_URL) //FIXME url 수정 필요
                     .queryParam("Access",tokenResponse.getAccessToken())
                     .build();
         }else{
-            uri = UriComponentsBuilder.fromUriString(TestConstants.FE_BASE_URL+"/signup") //FIXME url 수정 필요
+            uri = UriComponentsBuilder.fromUriString(AuthConsts.FE_BASE_URL+"/signup") //FIXME url 수정 필요
                     .queryParam("Access",tokenResponse.getAccessToken())
                     .queryParam("email",tokenResponse.getEmail())
                     .build();

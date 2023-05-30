@@ -122,7 +122,7 @@ public class MemberService {
 
         Member member = Member.of(email, nickName, phone);
 
-        member.setImage(s3ImageUploader.getS3("ssts-img", "member/default.png"));
+        member.setImage(s3ImageUploader.getS3(MemberConstants.BUCKET_NAME.getConstant(), MemberConstants.FILE_NAME.getConstant()));
 
         verifyExistsEmail(member.getEmail());
         verifyExistsNickName(member.getNickName());

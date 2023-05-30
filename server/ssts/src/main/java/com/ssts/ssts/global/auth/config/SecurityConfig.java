@@ -6,6 +6,7 @@ import com.ssts.ssts.global.auth.handler.TestAuthenticationFailureHandler;
 import com.ssts.ssts.global.auth.handler.TestAuthenticationSuccessHandler;
 import com.ssts.ssts.global.auth.jwt.JwtCreator;
 import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
+import com.ssts.ssts.global.auth.service.TokenService;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,11 +33,14 @@ public class SecurityConfig {
     private final JwtCreator jwtCreator;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
+    private final TokenService tokenService;
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                //.requiresChannel().anyRequest().requiresSecure()
+                //.and()
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable()
@@ -83,7 +89,7 @@ public class SecurityConfig {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new TestAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new TestAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, tokenService);
 
             builder
                     .addFilter(jwtAuthenticationFilter)
