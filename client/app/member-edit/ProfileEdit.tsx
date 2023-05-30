@@ -9,7 +9,7 @@ import {
   GetProfile,
   MemberEdit,
   MemberImageEdit,
-  memberLogoutClick,
+  memberLogoutClick
 } from "../api/memberEdit";
 import * as S from "./ProfileEditStyle";
 
