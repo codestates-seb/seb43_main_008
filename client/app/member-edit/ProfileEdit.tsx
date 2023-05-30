@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiFillCamera } from "react-icons/ai";
 
-import { GetProfile, MemberEdit, MemberImageEdit } from "../api/memberEdit";
+import {
+  GetProfile,
+  MemberEdit,
+  MemberImageEdit,
+  memberLogoutClick,
+} from "../api/memberEdit";
 import * as S from "./ProfileEditStyle";
 
 export default function ProfileEdit() {
@@ -57,7 +62,7 @@ export default function ProfileEdit() {
         <S.EditDescriptionContainer>
           <S.EditDescriptionH1>내 정보를 변경합니다.</S.EditDescriptionH1>
           <S.EditDescription>
-            이름은 <b>공백없이</b> 12자 이하,
+            이름은 <b>공백없이</b> 10자 이하,
           </S.EditDescription>
           <S.EditDescription>기호는 -_.만 사용 가능합니다.</S.EditDescription>
         </S.EditDescriptionContainer>
@@ -84,6 +89,8 @@ export default function ProfileEdit() {
             type="text"
             value={nickName}
             onChange={(e) => setNickName(e.target.value)}
+            minLength={2}
+            maxLength={10}
           />
           <S.MemberDescriptionTextarea
             value={introduce}
@@ -96,6 +103,9 @@ export default function ProfileEdit() {
             수정하기
           </S.SubmitButton>
         </form>
+        <S.LogoutButton onClick={() => memberLogoutClick()}>
+          로그아웃
+        </S.LogoutButton>
       </S.ProfileEditContainer>
     </>
   );
