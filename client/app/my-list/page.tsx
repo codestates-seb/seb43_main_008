@@ -12,8 +12,6 @@ import styles from "./myList.module.css";
 export default function Page() {
   //--------------------------------------------------------- 상태, 상수는 여기에 설정-------------------------------------------------------------
 
-  // const token =
-  //   "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX0dVRVNUIl0sInN1YiI6ImdvZDk5OUBuYXZlci5jb20iLCJpYXQiOjE2ODQ4MjY4NDksImV4cCI6MTY4NDgzMDQ0OX0.n_DngS5AjMN4e7OW2uKpBgd7_W7HJPRtK5N9B5noyQHqPBMoaxDwU_0GxqtwLBAT";
   const [useCount, setUseCount] = useState<number>(0);
   const [contentList, setContentList] = useState<any[]>([]);
 

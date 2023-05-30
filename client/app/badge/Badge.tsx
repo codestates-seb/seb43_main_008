@@ -33,13 +33,22 @@ export default function Badge(badgeList: any) {
     // console.log(myBadge);
   });
   console.log(mainText);
+  console.log(isAcquired);
+
   return (
     <>
       <MainContainer>
-        <MainText>
-          <Highlight>쓰쓰또쓰</Highlight> {mainText}
-        </MainText>
-        <SubText>{subText}</SubText>
+        {isAcquired ? (
+          <>
+            <MainText>{mainText}</MainText>
+            <SubText>{subText}</SubText>
+          </>
+        ) : (
+          <>
+            <MainText>쓰쓰또쓰</MainText>
+            <SubText>다양한 뱃지를 획득해보세요! </SubText>
+          </>
+        )}
         <BadgeCircle
           image={selectedImageDetail}
           isAcquired={isAcquired}
@@ -74,6 +83,7 @@ const MainText = styled.p`
   align-items: center;
   justify-content: center;
   color: #222;
+  color: #3f910c;
 `;
 
 const SubText = styled.p`
@@ -83,8 +93,4 @@ const SubText = styled.p`
   align-items: center;
   justify-content: center;
   color: #222;
-`;
-
-const Highlight = styled.span`
-  color: #3f910c;
 `;

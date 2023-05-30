@@ -50,3 +50,14 @@ export async function WithdrawlMember() {
     throw error;
   }
 }
+
+export async function memberLogoutClick() {
+  try {
+    await axiosInstance.get(`/delete/token`);
+    localStorage.removeItem("Authorization");
+    localStorage.removeItem("RefreshToken");
+    window.location.href = "/";
+  } catch (error) {
+    throw error;
+  }
+}

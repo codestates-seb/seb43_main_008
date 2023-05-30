@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 
 import axiosInstance from "../axiosInstance";
-import badgeLists from "./BadgeData"; // 목데이터임 백에서 받아오게 되면 주석 처리 해야지 !
+// import badgeLists from "./BadgeData"; // 목데이터임 백에서 받아오게 되면 주석 처리 해야지 !
 
 interface PlasticItemProps {
   imageSrc: string;
@@ -33,6 +33,7 @@ const PlasticItem: React.FC<PlasticItemProps> = ({
         height={60}
         style={{
           filter: isAcquired ? "none" : "grayscale(100%)",
+          borderRadius: "50%",
         }}
       />
     </div>
@@ -79,6 +80,7 @@ export default function BadgeDetail({
     // 뱃지에 따라 원하는 텍스트로 변경
     setMainText(image.mainText);
     setSubText(image.subText);
+    setIsAcquired(image.isAcquired);
 
     // 뱃지가 획득되었는지 결정
     // 여기서는 badgeLists에 이미 획득한 뱃지의 정보를 추가
@@ -108,19 +110,23 @@ export default function BadgeDetail({
       <CountCardContainer>
         <PlasticList>
           <ul className="list-wrapper">
-            {/* {badgeList.badgeList.map((image: any) => ( //////////////오오오오오오오오*/}
-            {badgeLists.map((image: any) => (
-              <PlasticItem
-                key={image.badgeId}
-                imageSrc={image.img}
-                altText={"badge"}
-                onClick={() => {
-                  handleClick(image);
-                  getInfo(image);
-                }}
-                isAcquired={image.isAcquired}
-              />
-            ))}
+            {badgeList.badgeList.map(
+              (
+                image: any //////////////오오오오오오오오
+              ) => (
+                // {badgeLists.map((image: any) => (
+                <PlasticItem
+                  key={image.badgeId}
+                  imageSrc={image.img}
+                  altText={"badge"}
+                  onClick={() => {
+                    handleClick(image);
+                    getInfo(image);
+                  }}
+                  isAcquired={image.isAcquired}
+                />
+              )
+            )}
           </ul>
         </PlasticList>
       </CountCardContainer>

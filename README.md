@@ -33,9 +33,7 @@
 | <img src="https://github.com/mewluee.png" width="200px" height="200px"> | <img src="https://github.com/NewfileDOTpy.png" width="200px" height="200px"> | <img src="https://github.com/digital-hamster.png" width="200px" height="200px"> |
 | :---------------------------------------------------------------------: | :--------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: |
 |        [진하늘(LEAD)<br/>(@mewluee)](https://github.com/mewluee)        |        [김대현<br/>(@NewfileDOTpy)](https://github.com/NewfileDOTpy)         |       [안윤아<br/>(@digital-hamster)](https://github.com/digital-hamster)       |
-|               <p align="left">- 기능 1</br> - 기능 2 </p>               |                 <p align="left">- 기능 1</br> - 기능 2 </p>                  |                   <p align="left">- 기능 1</br> - 기능 2 </p>                   |
-
-<br/>
+|               <p align="left">- 회원 도메인 CRUD</br> - 팔로우 도메인 CRUD</br> - OAuth2 로그인</br> - Spring Security + JWT</br> - 보안 </p>               |                 <p align="left">- 시리즈 도메인 CRUD</br> - 코멘트 도메인 CRUD</br> - 데이로그 도메인 CRUD</br> - CD/CI</br> - 이미지 파일 처리</br> - 이미지 파일 처리</p>       |                   <p align="left">- 뱃지 도메인 CRUD</br> - 북마크 도메인 CRUD</br> - 투표 도메인 CRUD</br> - Database Administrator</br> - NginX </p>                   |
 
 ## FE 기술 스택
 
@@ -58,10 +56,31 @@
 
 ## BE 기술 스택
 
--   Spring
-    -   설명
+-   Spring boot
+    -   Java 기반의 웹 애플리케이션을 개발하기 위해 spring 프레임워크를 사용했습니다.
 -   Spring Security
-    -   설명2
+    -   사용자 인증과 권한 부여 그리고 보안 구성을 위해 사용했습니다.
+-   MySQL
+    -   사용자의 데이터를 담을 수 있는 데이터베이스 서버를 만들어 MySQL로 구현했습니다.
+-   Postman
+    -   REST API의 테스트를 위해 이용했습니다.
+-   Linux
+    -   원격 서버 가동을 위해 사용했습니다.
+-   Gradle
+    -   외부 라이브러리 및 프레임워크를 쉽게 적용하여 프로젝트를 빌드하기 위해 사용했습니다.
+-   JPA
+    -   DB를 로직 안에서 구현하기 위해 RDS를 이용하여 JPA로 구현했습니다.
+-   Oauth2
+    -   oauth2를 사용하여 사용자가 편리하게 회원가입과 로그인을 하도록 지원했습니다.
+-   AWS Web Service
+    -   EC2, CodeDeploy, S3 Bucket, RDS 를 통해 어플의 배포 및 관리를 하였습니다. 또한 IAM을 통해 협업 할 수 있었습니다.
+-   JWT
+    -   보안을 위해 사용자의 권한 정보를 담은 JWT를 발급해 리소스 접근에 제한을 두었습니다.
+-   Github Action
+    -   깃허브 의존성이 높고, 비용적 한계가 있는 프로젝트의 상황을 고려하여 CD/CI를 선정하였으며 Gighub push / merger 를 통해 간편하게 배포된 어플리케이션을 유지/ 보수 할 수 있도록 했습니다.
+-   S3 imageBucket
+    -   DB에 이미지 저장 시 가해지는 용량 및 부하를 줄이기 위하여 큰 스토리지용량을 지원하는 S3 imageBucket 사용했습니다.
+
 
 <br/>
 
@@ -70,12 +89,10 @@
 <details>
 <summary><b>천지인</b></summary><br/>
   
-- 로그인 페이지
-  - 이런 이유로 이런 이런 기술을 적용해서 이렇게 만들어 보았습니다.
-- 회원가입 페이지
-  - 이런 이유로 이런 이런 기술을 적용해서 이렇게 만들어 보았습니다.
-- 회원 정보 수정 페이지
-  - 이런 이유로 이런 이런 기술을 적용해서 이렇게 만들어 보았습니다.
+- 프로젝트 초기 세팅: Next13의 실험적 기능인 app 디렉토리 폴더 구조를 이용해 프로젝트를 구축하였습니다.
+- PWA: PC보다는 모바일에 집중한 사이트의 특성을 고려해 홈 화면에 추가하여 사용자가 네이티브 앱처럼 사용할 수 있도록 했습니다.
+- 회원가입: React-hook-form을 사용해 컴포넌트 리렌더링 최적화를 진행했습니다.
+- 회원정보 수정: 사용자가 프로필 이미지를 등록하면 미리보기가 렌더되고, 서버에 바로 저장될 수 있도록 구현하였습니다.
   
 </details>
 
