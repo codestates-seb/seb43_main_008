@@ -11,7 +11,7 @@ export default function SeriesLayout({
     <>
       <Header
         backButton={true}
-        textContent={"시리즈 상세 조회"}
+        textContent={"시리즈 조회"}
         // secretButton={false}
         voteButton={true}
       />

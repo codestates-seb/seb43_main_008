@@ -1,6 +1,7 @@
 const badgeLists = [
   {
-    img: "https://ssts-img.s3.ap-northeast-2.amazonaws.com/badge/signUp.svg",
+    // img: "https://ssts-img.s3.ap-northeast-2.amazonaws.com/badge/signUp.svg",
+    img: "/1.png",
     alt: "가입 뱃지",
     mainText: "가입 축하 기념 뱃지 획득!",
     subText: "10%를 달성하여 아래 뱃지를 획득해보세요~",
