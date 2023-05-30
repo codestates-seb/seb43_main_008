@@ -41,7 +41,7 @@ public class VoteService {
 
         if(memberId != targetSeries.getMember().getId()){ throw new BusinessLogicException(ExceptionCode.NOT_SERISE_WRITER); }
 
-
+        //데이로그가 0개면 예외 발생
         if(targetSeries.getDaylogCount()==0){throw new BusinessLogicException(ExceptionCode.VOTE_NOT_CREATE_DAYLOG);}
 
         //(voteCount>2) 더이상 투표를 개설할 수 없습니다
@@ -199,6 +199,11 @@ public class VoteService {
             throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
         }
 
+        //강제 투표 종료 중복 방지 => 프론트가 만들어달라 할 때 해당 로직을 풉니다
+//        if(targetSeries.getVoteStatus()== Series.VoteStatus.SERIES_QUIT){
+//            throw new BusinessLogicException(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE);
+//        }
+
 
         //[리팩토링 진입점: voteCount는 2부터 걸러지기 때문에, 1밖에 안들어옴. 조건에 1이 달릴 이유가 있나?]
         if(targetSeries.getVoteResult()==null){
@@ -237,7 +242,7 @@ public class VoteService {
     }
 
 
-    //1차 투표 결과
+    //1차 투표 결과 //
     public VoteResponse.VoteAttendResponse getStartVote(Long seriseId){
         Member member = memberService.findMemberByToken();
         long memberId = member.getId();
