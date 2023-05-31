@@ -6,12 +6,12 @@ import { Metadata } from 'next';
 import StyledComponentsRegistry from "./registry";
 
 export const metadata: Metadata = {
-  title: '쓰쓰또쓰',
+  title: '쓰쓰또쓰 - 플라스틱 재사용 과정을 공유하는 커뮤니티 서비스',
   description: '플라스틱 재사용 과정을 공유합니다',
   keywords: ["재활용", "플라스틱", "업사이클", "커뮤니티"],
   openGraph: {
     title: '쓰쓰또쓰',
-    description: "쓰고 쓰고 또 쓰자는 플라스틱 재사용 과정을 공유하는 커뮤니티 서비스입니다.",
+    description: "쓰쓰또쓰(쓰고 쓰고 또 쓰자)는 플라스틱 재사용 과정을 공유하는 커뮤니티 서비스입니다.",
     url: "https://ssdss.vercel.app/",
     siteName: "쓰쓰또쓰(쓰고 쓰고 또 쓰자)",
     images: [
