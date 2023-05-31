@@ -42,6 +42,8 @@ public class VoteService {
         if(memberId != targetSeries.getMember().getId()){ throw new BusinessLogicException(ExceptionCode.NOT_SERISE_WRITER); }
 
 
+        if(targetSeries.getDaylogCount()==0){throw new BusinessLogicException(ExceptionCode.VOTE_NOT_CREATE_DAYLOG);}
+
         //(voteCount>2) 더이상 투표를 개설할 수 없습니다
         if (targetSeries.getVoteCount()==2){ throw new BusinessLogicException(ExceptionCode.CAN_NOT_MAKE_VOTE); }
 
@@ -70,10 +72,8 @@ public class VoteService {
         //투표 생성시간 할당
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
         //투표 마감기간 (2일) 할당
-        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusDays(2));
-        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(300));
-        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusHours(12));
         targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(5));
+        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
         //ㄴ> 테스트 마감기간: 15초
 
 
@@ -108,6 +108,11 @@ public class VoteService {
 
         //사용자가 존재하지 않습니다
         Member voteMember = memberRepo.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));;
+
+        //이미 종료된 투표입니다
+        if(!isVotedNotEntAt(targetSeries)){
+            throw new BusinessLogicException(ExceptionCode.VOTE_ALREADY_FINISH);
+        }
 
         //투표하기 로직
         //최초투표

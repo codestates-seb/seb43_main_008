@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-// import { useState } from "react";
 import styled from "styled-components";
 
 interface BadgeCircleProps {
@@ -19,7 +18,7 @@ const BadgeCircle: React.FC<BadgeCircleProps> = ({
     <>
       <BadgeImgContents
         style={{
-          backgroundColor: isAcquired ? "#eff4e7;" : "#b5b5ba",
+          backgroundColor: isAcquired ? "#eff4e7;" : "#eff4e7",
         }}
       >
         {image &&
