@@ -72,8 +72,9 @@ public class VoteService {
         //투표 생성시간 할당
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
         //투표 마감기간 (2일) 할당
-        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(5));
+        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(5));
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
+        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusHours(3));
         //ㄴ> 테스트 마감기간: 15초
 
 
