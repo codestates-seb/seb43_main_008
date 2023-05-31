@@ -46,7 +46,7 @@ const MainSeriesContainer = styled.div`
   padding: 1px 24px;
   max-width: 1024px;
   margin: 0 auto;
-  background-color: #ffff;
+  background-color: white;
   min-height: 550px;
   min-width: 320px;
   @media screen and (max-width: 768px) {

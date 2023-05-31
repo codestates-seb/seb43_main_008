@@ -149,29 +149,32 @@ const CountCardContainer = styled.div`
 `;
 const GetBadgeText = styled.div`
   /* all: unset; */
-  font-size: 15px;
-  margin-left: 27px;
-  align-self: flex-start;
+  font-size: 14px;
+  margin-right: 170px;
+  margin-bottom: 2px;
+  /* align-self: flex-start; */
   color: #222;
 `;
 
 const PlasticList = styled.div`
   width: 100%;
   height: 175px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   display: flex;
   justify-content: center;
   display: flex;
   align-items: center;
+  flex-direction: column;
 
   .list-wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 11px;
     width: 95%;
-    padding: 0;
+    padding: 1px;
     list-style: none;
     background-color: 3;
+    /* background-color: red; */
 
     .my-plastic {
       cursor: pointer;
