@@ -225,7 +225,8 @@ public class VoteService {
         }
 
         //걸려지는 경우 (1) 투표를 더 한다고 선택 ( && voteCount==1)
-        if(!isQuit){ //(isQuit==false)
+        // isQuit==false: 졸럽 / true: 재투표 > 최종: 얘는 졸업하는 애가 되어야 함
+        if(isQuit){ //(isQuit==false)
             targetSeries.setIsEditable(true);
             targetSeries.setIsActive(true);
             targetSeries.setVoteStatus(Series.VoteStatus.SERIES_ACTIVE);
@@ -233,6 +234,7 @@ public class VoteService {
         }
 
         //걸러지는 경우 (2) / 최종: 투표를 더 안할게요 voteCount==1&&voteResult==false => 로직이 도는 대상 (isQuit==1)
+        //얘는 졸업 안하는 걸로 바뀌어야 함
         else {
         targetSeries.setIsEditable(false); //타이틀 수정 가능
         targetSeries.setIsActive(false); //활성 상태
