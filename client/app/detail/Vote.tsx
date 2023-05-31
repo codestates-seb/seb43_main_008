@@ -10,12 +10,18 @@ import { StyledCard } from "./Card";
 
 export const Vote = () => {
   const [voted, setVoted] = useState<any>(null)
+  const [isVoteEnded, setIsVoteEnded] = useState(false);
+
   const series = useParams();
 
   useEffect(() => {
     GetVote(series.id).then((data) => {
       if (data) {
         setVoted(data)
+        // 투표가 종료되었는지를 확인하기 위한 코드
+        const currentTime: Date = new Date();
+        const voteEndAt: Date = new Date(data.voteEndAt);
+        setIsVoteEnded(currentTime > voteEndAt);
       }
     })
   }, [series.id]);
@@ -35,17 +41,17 @@ export const Vote = () => {
       <StyledCard style={{ alignItems: "center" }}>
         <div className="vote-box">
           <div className="vote" onClick={() => handleVoting("1")}>
-            {voted?.isVotedMember || voted?.voteStatus === "SERIES_QUIT" ? <div className="sub-text yes">{voted.voteCount === 1 ? voted.voteAgree : voted.revoteAgree}</div> : null}
+            {voted?.isVotedMember || isVoteEnded ? <div className="sub-text yes">{voted.voteCount === 1 ? voted.voteAgree : voted.revoteAgree}</div> : null}
             <div className="text">네!</div>
             <FaRegThumbsUp className="icon" />
           </div>
           <div className="vote" onClick={() => handleVoting("0")}>
             <FaRegThumbsDown className="icon" />
             <div className="text">안돼요</div>
-            {voted?.isVotedMember || voted?.voteStatus === "SERIES_QUIT" ? <div className="sub-text no">{voted.voteCount === 1 ? voted.voteDisagree : voted.revoteDisagree}</div> : null}
+            {voted?.isVotedMember || isVoteEnded ? <div className="sub-text no">{voted.voteCount === 1 ? voted.voteDisagree : voted.revoteDisagree}</div> : null}
           </div>
         </div>
-        {voted?.isVotedMember || voted?.voteStatus === "SERIES_QUIT" ? (
+        {voted?.isVotedMember || voted?.voteStatus === "SERIES_QUIT" || isVoteEnded ? (
           <div className="sub-text message">
             더 이상의 투표는 불가능해요.
           </div>

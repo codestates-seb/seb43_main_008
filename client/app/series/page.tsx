@@ -159,7 +159,7 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
   };
 
   const sendData = async () => {
-    console.log("받은 이미지", imageFile);
+    // console.log("받은 이미지", imageFile);
 
     let formData = new FormData();
 
@@ -178,7 +178,7 @@ const Modal = ({ imageFile, userText, setIsOpen }: any) => {
       );
       console.log("요청 성공", result.data.series.id);
     } catch (err) {
-      console.log("에러 발생", err);
+      // console.log("에러 발생", err);
       return false;
     }
     return true;
