@@ -69,7 +69,7 @@ public class VoteService {
         targetSeries.setVoteStatus(Series.VoteStatus.SERIES_SLEEP); //투표중 할당
         targetSeries.setVoteCount(targetSeries.getVoteCount() + 1); //최초투표이든, 아니든 +1 //투표함을 만들 때, voteCount가 증가
 
-        //투표 생성시간 할당
+        //투표 생성시간 할당 //
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
         //투표 마감기간 (2일) 할당
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(5));
