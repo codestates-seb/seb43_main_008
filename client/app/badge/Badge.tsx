@@ -32,8 +32,8 @@ export default function Badge(badgeList: any) {
   useEffect(() => {
     // console.log(myBadge);
   });
-  console.log(mainText);
-  console.log(isAcquired);
+  // console.log(mainText);
+  // console.log(isAcquired);
 
   return (
     <>
@@ -45,8 +45,8 @@ export default function Badge(badgeList: any) {
           </>
         ) : (
           <>
-            <MainText>쓰쓰또쓰</MainText>
-            <SubText>다양한 뱃지를 획득해보세요! </SubText>
+            <MainText>쓰쓰또쓰 뱃지 모아줘잉~</MainText>
+            <SubText>잃어버린 뱃지의 색깔을 찾아서!</SubText>
           </>
         )}
         <BadgeCircle
@@ -78,7 +78,6 @@ const MainContainer = styled.div`
 
 const MainText = styled.p`
   font-size: 15px;
-  /* margin-top: 7px; */
   display: flex;
   align-items: center;
   justify-content: center;

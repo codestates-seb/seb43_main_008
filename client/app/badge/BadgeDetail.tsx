@@ -22,9 +22,9 @@ const PlasticItem: React.FC<PlasticItemProps> = ({
   <li className="my-plastic" onClick={onClick}>
     <div
       className="plastic-circle"
-      style={{
-        backgroundColor: isAcquired ? "#eff4e7" : "#b2b2b2",
-      }}
+      // style={{
+      //   backgroundColor: isAcquired ? "#eff4e7" : "#b2b2b2",
+      // }}
     >
       <Image
         src={imageSrc}
@@ -87,12 +87,12 @@ export default function BadgeDetail({
     // setIsAcquired(badgeLists.includes(image));
 
     setClickedImage(image.img);
-    console.log(image);
+    // console.log(image);
   };
 
   const getInfo = async (image: ImageData) => {
     setClickedImage(image.img);
-    console.log(image);
+    // console.log(image);
     try {
       const response = await axiosInstance.get(
         `/members/badge/${image.badgeId}`
@@ -100,45 +100,45 @@ export default function BadgeDetail({
       // console.log(response.data.data);
       setMyBadge(response.data.data);
     } catch (error) {
-      console.error("Error fetching badge list:", error);
+      // console.error("Error fetching badge list:", error);
     }
   };
 
   return (
     <>
-      <GetBadgeText>획득한 뱃지 List</GetBadgeText>
-      <CountCardContainer>
-        <PlasticList>
-          <ul className="list-wrapper">
-            {badgeList.badgeList.map(
-              (
-                image: any //////////////오오오오오오오오
-              ) => (
-                // {badgeLists.map((image: any) => (
-                <PlasticItem
-                  key={image.badgeId}
-                  imageSrc={image.img}
-                  altText={"badge"}
-                  onClick={() => {
-                    handleClick(image);
-                    getInfo(image);
-                  }}
-                  isAcquired={image.isAcquired}
-                />
-              )
-            )}
-          </ul>
-        </PlasticList>
-      </CountCardContainer>
+      <BadgeDetailContainer>
+        <GetBadgeText>획득한 뱃지 List</GetBadgeText>
+        <CountCardContainer>
+          <PlasticList>
+            <ul className="list-wrapper">
+              {badgeList.badgeList.map(
+                (
+                  image: any //////////////오오오오오오오오
+                ) => (
+                  // {badgeLists.map((image: any) => (
+                  <PlasticItem
+                    key={image.badgeId}
+                    imageSrc={image.img}
+                    altText={"badge"}
+                    onClick={() => {
+                      handleClick(image);
+                      getInfo(image);
+                    }}
+                    isAcquired={image.isAcquired}
+                  />
+                )
+              )}
+            </ul>
+          </PlasticList>
+        </CountCardContainer>
+      </BadgeDetailContainer>
     </>
   );
 }
 
 const CountCardContainer = styled.div`
   flex: 1;
-  color: #222;
   background-color: white;
-  display: flex;
   align-items: center;
   flex-direction: column;
   padding: 7px;
@@ -146,13 +146,10 @@ const CountCardContainer = styled.div`
   align-items: flex-start;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   width: 280px;
-
-  margin-left: 20px;
 `;
 const GetBadgeText = styled.div`
   /* all: unset; */
   font-size: 15px;
-  /* font-weight: bold; */
   margin-left: 27px;
   align-self: flex-start;
   color: #222;
@@ -164,6 +161,8 @@ const PlasticList = styled.div`
   overflow-y: scroll;
   display: flex;
   justify-content: center;
+  display: flex;
+  align-items: center;
 
   .list-wrapper {
     display: grid;
@@ -193,4 +192,11 @@ const PlasticList = styled.div`
       object-fit: "cover";
     }
   }
+`;
+
+const BadgeDetailContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;

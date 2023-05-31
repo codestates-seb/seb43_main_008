@@ -20,26 +20,26 @@ export default function Page() {
   useEffect(() => {
     const seriesID = localStorage.getItem("plastic");
     if (seriesID !== null) {
-      console.log("seriesID : ", seriesID);
+      // console.log("seriesID : ", seriesID);
       const asyncGetDta = async () => {
         // await getUseCount(seriesID);
         await getContentsList(seriesID);
       };
       asyncGetDta();
     } else {
-      console.log("시리즈 아이디가 없어요");
+      // console.log("시리즈 아이디가 없어요");
     }
   }, []);
 
   const getContentsList = async (seriesID: string) => {
     try {
       const result = await axiosInstance.get(`/series/${seriesID}/daylog`);
-      console.log("받은 배열 : ", result.data.data.pagedata);
+      // console.log("받은 배열 : ", result.data.data.pagedata);
       setContentList(result.data.data.pagedata);
       setUseCount(result.data.data.pagedata.length);
-      console.log(result.data.data.pagedata);
+      // console.log(result.data.data.pagedata);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 

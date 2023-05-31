@@ -19,10 +19,10 @@ export default function Page() {
     const fetchBadgeList = async () => {
       try {
         const response = await axiosInstance.get(`/members/badge`);
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setBadgeList(response.data.data);
       } catch (error) {
-        console.error("Error fetching badge list:", error);
+        // console.error("Error fetching badge list:", error);
       }
     };
 

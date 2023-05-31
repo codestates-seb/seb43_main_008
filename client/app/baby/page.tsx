@@ -70,9 +70,9 @@ export default function Page() {
         });
         localStorage.setItem("plastic", result.data.data.id);
       }
-      console.log(result.data.data.id);
+      // console.log(result.data.data.id);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return false;
     }
     return true;
@@ -88,11 +88,11 @@ export default function Page() {
   };
 
   const nestStep = async () => {
-    console.log(title, isPublic);
+    // console.log(title, isPublic);
     let result = await sendData();
-    console.log(result);
+    // console.log(result);
     if (result === false) {
-      console.log("Error");
+      // console.log("Error");
     } else {
       router.push("/series");
     }

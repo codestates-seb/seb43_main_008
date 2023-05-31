@@ -11,7 +11,7 @@ export default function MemberEditLayout({
     <>
       <Header
         backButton={true}
-        textContent={"획득한 뱃지 관람"}
+        textContent={"획득한 뱃지 열람"}
         voteButton={false}
       />
       {children}
