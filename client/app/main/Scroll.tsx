@@ -28,7 +28,6 @@ export const Scroll: React.FC<ScrollProps> = ({ setPageQuery, pageQuery, countNu
   const callback: IntersectionObserverCallback = (entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting && lastDataLength >= 12) {
-        console.log(`서버에 다음 페이지 요청 보내기 ${pageQuery}`);
         setPageQuery((prev) => prev + 1)
       }
     });
