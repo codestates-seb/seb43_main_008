@@ -9,13 +9,14 @@ import { DonePost } from "./DonePost";
 import { EmptyFeed } from "./EmptyFeed";
 import { VotingPost } from "./VotingPost";
 
-
 interface Props {
   type?: string
 }
 
 export const Feed: React.FC<Props> = ({ type }) => {
   const [post, setPost] = useState([])
+  const [isVoteEnded, setIsVoteEnded] = useState(false);
+
   const params = useParams();
   let nickName = decodeURIComponent(params.nickName);
 
@@ -24,12 +25,20 @@ export const Feed: React.FC<Props> = ({ type }) => {
       GetMyFeed().then((data) => {
         if (data) {
           setPost(data);
+          // 투표가 종료되었는지를 확인하기 위한 코드
+          const currentTime: Date = new Date();
+          const voteEndAt: Date = new Date(data.voteEndAt);
+          setIsVoteEnded(currentTime > voteEndAt);
         }
       });
     }
     else GetFeed(nickName).then((data) => {
       if (data) {
         setPost(data);
+        // 투표가 종료되었는지를 확인하기 위한 코드
+        const currentTime: Date = new Date();
+        const voteEndAt: Date = new Date(data.voteEndAt);
+        setIsVoteEnded(currentTime > voteEndAt);
       }
     });
   }, []);
@@ -48,7 +57,7 @@ export const Feed: React.FC<Props> = ({ type }) => {
               if (data.voteResult) {
                 return <DonePost key={data.id} {...data} />; // 1차 투표에서 통과하면 바로 done ui 생성
               } else {
-                return <VotingPost key={data.id} {...data} type={type} />;
+                return <VotingPost key={data.id} {...data} type={type} isVoteEnded={isVoteEnded} />;
               }
             }
             if (data.seriesStatus === "SERIES_QUIT") {

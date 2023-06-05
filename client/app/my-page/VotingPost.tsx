@@ -6,7 +6,8 @@ import { Medal } from './Medal'
 import { StyledPost } from "./StyledPost"
 import { PostData } from "./type"
 
-export const VotingPost = ({ type, ...data }: PostData) => {
+export const VotingPost = ({ type, isVoteEnded, ...data }: PostData) => {
+
 
   const router = useRouter();
   const HandleMoveToDetail = (id: number, title: string) => {
@@ -21,7 +22,7 @@ export const VotingPost = ({ type, ...data }: PostData) => {
     <StyledVoting>
       <div className='box'>
         <div className="image" style={{ backgroundImage: `url(${data.image})` }}>
-          {data.voteResult === false ? (
+          {isVoteEnded ? (
             <div
               onClick={type === 'mine' ? () => HandleMoveToMoreUsing(data.id) : null}
               className='voting'>투표완료</div>
