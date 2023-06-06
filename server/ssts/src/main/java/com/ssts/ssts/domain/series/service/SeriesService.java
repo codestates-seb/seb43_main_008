@@ -114,10 +114,17 @@ public class SeriesService {
             }
 
             //최초투표: 마감기간이 지나고 결과가 false
-            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false){
+            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false && seriesList.get(i).getVoteStatus()== Series.VoteStatus.SERIES_SLEEP){
                 seriesList.get(i).setIsEditable(false);
                 seriesList.get(i).setIsActive(false);
                 seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_SLEEP);
+            }
+
+            //강제 종료를 통해 투표가 quit가 됐을  때 sleep으로 바뀌는 것 추가
+            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false && seriesList.get(i).getVoteStatus()== Series.VoteStatus.SERIES_QUIT){
+                seriesList.get(i).setIsEditable(false);
+                seriesList.get(i).setIsActive(false);
+                seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_QUIT);
             }
 
             seriesRepository.save(seriesList.get(i));
@@ -183,10 +190,17 @@ public class SeriesService {
 
             //최초투표: 마감기간이 지나고 결과가 false
             //[마감기한이 지났지만, 재투표의 기회가 있는 경우의 상태 변경] => 활성 상태는 변경하지 않고, 수정이 불가능
-            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false){
+            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false && seriesList.get(i).getVoteStatus()== Series.VoteStatus.SERIES_SLEEP){
                 seriesList.get(i).setIsEditable(false);
                 seriesList.get(i).setIsActive(false);
                 seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_SLEEP);
+            }
+
+            //강제 종료를 통해 투표가 quit가 됐을  때 sleep으로 바뀌는 것 추가
+            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false && seriesList.get(i).getVoteStatus()== Series.VoteStatus.SERIES_QUIT){
+                seriesList.get(i).setIsEditable(false);
+                seriesList.get(i).setIsActive(false);
+                seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_QUIT);
             }
 
             seriesRepository.save(seriesList.get(i));

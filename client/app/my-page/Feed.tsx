@@ -51,7 +51,7 @@ export const Feed: React.FC<Props> = ({ type }) => {
                 return <VotingPost key={data.id} {...data} type={type} />;
               }
             }
-            if (data.seriesStatus === "SERIES_QUIET") {
+            if (data.seriesStatus === "SERIES_QUIT") {
               // quiet: 투표 종료
               return <DonePost key={data.id} {...data} />;
             }

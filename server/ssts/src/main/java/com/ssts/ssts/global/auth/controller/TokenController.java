@@ -56,7 +56,6 @@ public class TokenController {
         tokenService.blackList(access);
 
         response.setStatus(HttpServletResponse.SC_OK);
-        response.sendRedirect(AuthConsts.FE_BASE_URL);
     }
 }
 

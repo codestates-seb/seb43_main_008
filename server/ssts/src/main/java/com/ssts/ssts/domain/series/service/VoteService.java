@@ -41,7 +41,7 @@ public class VoteService {
 
         if(memberId != targetSeries.getMember().getId()){ throw new BusinessLogicException(ExceptionCode.NOT_SERISE_WRITER); }
 
-
+        //데이로그가 0개면 예외 발생
         if(targetSeries.getDaylogCount()==0){throw new BusinessLogicException(ExceptionCode.VOTE_NOT_CREATE_DAYLOG);}
 
         //(voteCount>2) 더이상 투표를 개설할 수 없습니다
@@ -69,11 +69,12 @@ public class VoteService {
         targetSeries.setVoteStatus(Series.VoteStatus.SERIES_SLEEP); //투표중 할당
         targetSeries.setVoteCount(targetSeries.getVoteCount() + 1); //최초투표이든, 아니든 +1 //투표함을 만들 때, voteCount가 증가
 
-        //투표 생성시간 할당
+        //투표 생성시간 할당 //
         targetSeries.setVoteCreatedAt(LocalDateTime.now());
         //투표 마감기간 (2일) 할당
-        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(5));
+        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusMinutes(5));
         //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
+        targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusHours(3));
         //ㄴ> 테스트 마감기간: 15초
 
 
@@ -199,6 +200,11 @@ public class VoteService {
             throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
         }
 
+        //강제 투표 종료 중복 방지 => 프론트가 만들어달라 할 때 해당 로직을 풉니다
+//        if(targetSeries.getVoteStatus()== Series.VoteStatus.SERIES_QUIT){
+//            throw new BusinessLogicException(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE);
+//        }
+
 
         //[리팩토링 진입점: voteCount는 2부터 걸러지기 때문에, 1밖에 안들어옴. 조건에 1이 달릴 이유가 있나?]
         if(targetSeries.getVoteResult()==null){
@@ -219,7 +225,8 @@ public class VoteService {
         }
 
         //걸려지는 경우 (1) 투표를 더 한다고 선택 ( && voteCount==1)
-        if(!isQuit){ //(isQuit==false)
+        // isQuit==false: 졸럽 / true: 재투표 > 최종: 얘는 졸업하는 애가 되어야 함
+        if(isQuit){ //(isQuit==false)
             targetSeries.setIsEditable(true);
             targetSeries.setIsActive(true);
             targetSeries.setVoteStatus(Series.VoteStatus.SERIES_ACTIVE);
@@ -227,6 +234,7 @@ public class VoteService {
         }
 
         //걸러지는 경우 (2) / 최종: 투표를 더 안할게요 voteCount==1&&voteResult==false => 로직이 도는 대상 (isQuit==1)
+        //얘는 졸업 안하는 걸로 바뀌어야 함
         else {
         targetSeries.setIsEditable(false); //타이틀 수정 가능
         targetSeries.setIsActive(false); //활성 상태
@@ -237,7 +245,7 @@ public class VoteService {
     }
 
 
-    //1차 투표 결과
+    //1차 투표 결과 //
     public VoteResponse.VoteAttendResponse getStartVote(Long seriseId){
         Member member = memberService.findMemberByToken();
         long memberId = member.getId();

@@ -13,7 +13,7 @@ export async function GetVoteResult(seriesId: string) {
 
 export async function VoteEnd(seriesId: string) {
   try {
-    // isQuit = false면, 졸업시키키
+    // isQuit = false면, 졸업시키기
     const response = await axiosInstance.patch(
       `/series/votes/graduation/${seriesId}?isQuit=false`
     );
