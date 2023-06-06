@@ -54,7 +54,7 @@ export const Lists: React.FC = () => {
     <StyledLists className="list">
       <Filter filter={filter} setFilter={setFilter} />
       {list.map((data) => (
-        data.seriesStatus !== "SERIES_ACTIVE" ? (
+        data.seriesStatus !== "SERIES_ACTIVE" && data.daylogCount !== 0 ? (
           <div
             onClick={() => moveHandler(data.id, data.title)}
             className="item"
