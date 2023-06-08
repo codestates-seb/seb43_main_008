@@ -35,6 +35,14 @@
 |        [진하늘(LEAD)<br/>(@mewluee)](https://github.com/mewluee)        |        [김대현<br/>(@NewfileDOTpy)](https://github.com/NewfileDOTpy)         |       [안윤아<br/>(@digital-hamster)](https://github.com/digital-hamster)       |
 |               <p align="left">- 회원 도메인 CRUD</br> - 팔로우 도메인 CRUD</br> - OAuth2 로그인</br> - Spring Security + JWT</br> - 보안 </p>               |                 <p align="left">- 시리즈 도메인 CRUD</br> - 코멘트 도메인 CRUD</br> - 데이로그 도메인 CRUD</br> - CD/CI</br> - 이미지 파일 처리</br> - 이미지 파일 처리</p>       |                   <p align="left">- 뱃지 도메인 CRUD</br> - 북마크 도메인 CRUD</br> - 투표 도메인 CRUD</br> - Database Administrator</br> - NginX </p>                   |
 
+## 시스템 아키텍처
+![시스템아키텍쳐](https://github.com/codestates-seb/seb43_main_008/assets/119935602/ef5d1ff8-6c06-44ee-a0f5-947361afff48)
+
+
+## ERD
+<img width="1085" alt="ERD" src="https://github.com/codestates-seb/seb43_main_008/assets/119935602/149d42f7-fa6b-475f-bacf-8adbc707e77d">
+
+
 ## FE 기술 스택
 
 -   Next.js
