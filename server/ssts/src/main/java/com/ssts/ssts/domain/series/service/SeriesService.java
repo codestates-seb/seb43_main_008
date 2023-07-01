@@ -40,22 +40,33 @@ public class SeriesService {
 
     private final SeriesRepository seriesRepository;
     //private final VoteRepository voteRepository;
+    private final MemberRepository memberRepo;
+    private final MemberService memberService;
 
 
 
-    public SeriesResponseDto getSeries(Long id){
+    public SeriesDetailResponseDto getSeries(Long id){
 
+        //임시값
+        Boolean isBookmarkedMember = true;
+
+        memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(id);
 
+        //사용자 Id받기
+        long memberId = SecurityUtil.getMemberId();
+        memberRepo.findById(memberId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        //TODO 테스트 응답: vote 없음
-        return SeriesResponseDto.of(series.getId(),
-                series.getTitle(),
-                series.getDaylogCount(),
-                series.getIsPublic(),
-                series.getIsEditable(),
-                series.getIsActive());
+        //vote: 사용자의 vote 여부를 응답으로 보내기 위함
+        //Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(memberId, id);
 
+        //bookmark: 사용자의 해당 시리즈 북마크 여부
+        //Boolean isBookmarkedMember = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, id);
+
+
+
+        return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
     }
 
 
@@ -471,16 +482,16 @@ public class SeriesService {
 //        );
 //    }
 //
-//    @NotNull
-//    private SeriesDetailResponseDto seriesToSeriesResponseDto(Series series, Boolean isBookmarkedMember) {
-//        //선언부(메서드 시그니처)가 메소드 오버로드에 중심
-//        //메소드의 이름이 같아도, 파라미터와 반환값이 다르면 얘가 알아서 분리해서 적용햅줌
-//        //이걸로 오버로드를 사용해서 여러개의 파라미터를 받는 같은 메소드를 구현 가능
-//
-//        return SeriesDetailResponseDto.of(series.getId(), series.getTitle(), series.getImage(), isBookmarkedMember
-//        );
-//    }
-//
+    @NotNull
+    private SeriesDetailResponseDto seriesToSeriesResponseDto(Series series, Boolean isBookmarkedMember) {
+        //선언부(메서드 시그니처)가 메소드 오버로드에 중심
+        //메소드의 이름이 같아도, 파라미터와 반환값이 다르면 얘가 알아서 분리해서 적용햅줌
+        //이걸로 오버로드를 사용해서 여러개의 파라미터를 받는 같은 메소드를 구현 가능
+
+        return SeriesDetailResponseDto.of(series.getId(), series.getTitle(), series.getImage(), isBookmarkedMember
+        );
+    }
+
 //    public List<SeriesResponseDto> seriesToSeriesListResponseDtos(List<Series> seriesList){
 //        if (seriesList ==null){
 //            return null;
@@ -495,6 +506,6 @@ public class SeriesService {
 //
 //        return list;
 //    }
-//
-//
+
+
 }
