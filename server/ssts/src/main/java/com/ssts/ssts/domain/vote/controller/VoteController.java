@@ -15,18 +15,18 @@ import javax.websocket.server.PathParam;
 @RequestMapping("/series/votes")
 @RequiredArgsConstructor //생성자 주입 해주는 public VoteController(Series Repo ... 이거해줌)
 public class VoteController {
-//    private final VoteService voteService;
+    private final VoteService voteService;
 
 
 
     //투표함 만들기 (voteStatus가 "투표중"이 명시되면, 찬성, 반대의 버튼을 보여줍니다)
-//    @PostMapping("/{series_id}")
-//    public ApiResponse<VoteResponse> postVote(@NotNull @PathVariable("series_id") Long seriesId){
-//
-//        VoteResponse response = (VoteResponse) voteService.createVote(seriesId);
-//
-//        return ApiResponse.create(response);
-//    }
+    @PostMapping("/{series_id}")
+    public ApiResponse<VoteResponse> postVote(@NotNull @PathVariable("series_id") Long seriesId){
+
+        VoteResponse response = (VoteResponse) voteService.createVote(seriesId);
+
+        return ApiResponse.create(response);
+    }
 //
 //    //@PatchMapping("/{series_id}/{votes}")
 //    //투표 하기 (사용자가 투표한 이후의 찬반 표수를 응답값으로 넘기면 좋을 것 같음)

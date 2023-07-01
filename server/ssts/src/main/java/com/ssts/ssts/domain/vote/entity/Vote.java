@@ -2,6 +2,7 @@ package com.ssts.ssts.domain.vote.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.domain.common.BaseTimeEntity;
+import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.series.entity.Series;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,8 +54,8 @@ public class Vote extends BaseTimeEntity{
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "seise_id")
-    private Series serise;
+    @JoinColumn(name = "series_id")
+    private Series series;
 
     @Enumerated(value = EnumType.STRING)
     @Column
@@ -71,6 +72,20 @@ public class Vote extends BaseTimeEntity{
         VoteStatus(String status) {
             this.status = status;
         }
+    }
+
+
+    public static Vote of(Vote.VoteStatus status, LocalDateTime createAt) {
+        Vote vote = new Vote();
+
+        vote.setStatus(status);
+        vote.setVoteCreatedAt(createAt);
+
+        //일단 만든뒤에 할당하려고
+        //vote.setVoteCount(voteCount);
+        //vote.setVoteEndAt(voteEndAt);
+
+        return vote;
     }
 
 }
