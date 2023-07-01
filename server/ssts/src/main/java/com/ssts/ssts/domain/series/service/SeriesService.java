@@ -73,11 +73,25 @@ public class SeriesService {
     //TODO 테스트 응답: vote X
     public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto){
 
-        Series series = Series.of(seriesPostDto.getTitle());
 
-        seriesRepository.save(series);
+
+
+                // 파라미터 체크 완료
+        if(seriesPostDto.getTitle().isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
+        }
+
+        Member authMember = memberService.findMemberByToken();
+        Series series = Series.of(seriesPostDto.getTitle());
+        Member member = memberService.findMemberById(authMember.getId());
+
+        if(authMember.getId()!=member.getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
 
         //Vote vote = voteRepository.findBySeries_id(id);
+        series.addMember(member);
+        seriesRepository.save(series);
 
         //일단 vote 가 없는 설정임 그런거임
         return SeriesResponseDto.of(series.getId(),
@@ -96,12 +110,16 @@ public class SeriesService {
                 series.getIsPublic(),
                 series.getIsEditable(),
                 series.getIsActive());
+
+
+
     }
 
 
     public SeriesResponseDto updateSeries(Long id, SeriesUpdateDto seriesUpdateDto){
 
         Series series = this.findVerifiedSeries(id);
+
 
 
         return SeriesResponseDto.of(series.getId(), //vote로 바꿔야 함
