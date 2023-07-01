@@ -58,24 +58,24 @@ public class SeriesController {
 //        PageResponseDto response = seriesService.getMainSeriesListByNewest(page-1, size);
 //        return ApiResponse.ok(response);
 //    }
-//
-//    @GetMapping("/series/{series-id}")
-//    public ApiResponse getSeries(@Positive @PathVariable("series-id") Long id){
-//
-//        SeriesDetailResponseDto response = seriesService.getSeries(id);
-//
-//        return ApiResponse.ok(response);
-//    }
-//
-//
-//    @PostMapping("/series")
-//    public ApiResponse createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic,
-//                                    @Validated @RequestBody SeriesPostDto seriesPostDto){
-//
-//        SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
-//
-//        return ApiResponse.create(response);
-//    }
+
+    @GetMapping("/series/{series-id}")
+    public ApiResponse getSeries(@Positive @PathVariable("series-id") Long id){
+
+        SeriesDetailResponseDto response = seriesService.getSeries(id);
+
+        return ApiResponse.ok(response);
+    }
+
+
+    @PostMapping("/series")
+    public ApiResponse createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic,
+                                    @Validated @RequestBody SeriesPostDto seriesPostDto){
+
+        SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
+
+        return ApiResponse.create(response);
+    }
 //
 //
 //    @PatchMapping("/series/{series-id}")
