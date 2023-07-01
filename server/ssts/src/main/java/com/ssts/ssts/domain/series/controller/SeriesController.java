@@ -27,73 +27,73 @@ public class SeriesController {
     private final SeriesService seriesService;
 
 
-    @GetMapping("/feed/series/{nick-name}")
-    public ApiResponse getSeriesList(@PathVariable("nick-name") String nickname,
-                                     @Positive @RequestParam(value = "page", defaultValue = "1") int page,
-                                     @Positive @RequestParam(value = "size", defaultValue = "12") int size){
-
-        PageResponseDto response = seriesService.getSeriesList(nickname,page-1, size);
-
-        return ApiResponse.ok(response);
-    }
-
-    @GetMapping("/feed/series")
-    public ApiResponse getMySeriesList(@Positive @RequestParam(value = "page", defaultValue = "1") int page,
-                                     @Positive @RequestParam(value = "size", defaultValue = "12") int size){
-
-        PageResponseDto response = seriesService.getMySeriesList(page-1, size);
-
-        return ApiResponse.ok(response);
-    }
-
-    @GetMapping("/series")
-    public ApiResponse<PageResponseDto> getMainSeriesList(@RequestParam(value = "sort", defaultValue = "newest") String sort,
-                                                          @Positive @RequestParam(value = "page", defaultValue = "1") int page,
-                                                          @Positive @RequestParam(value = "size", defaultValue = "12") int size){
-
-        if("votes".equals(sort)){
-            PageResponseDto response = seriesService.getMainSeriesListByVotes(page-1, size);
-            return ApiResponse.ok(response);
-        }
-        PageResponseDto response = seriesService.getMainSeriesListByNewest(page-1, size);
-        return ApiResponse.ok(response);
-    }
-
-    @GetMapping("/series/{series-id}")
-    public ApiResponse getSeries(@Positive @PathVariable("series-id") Long id){
-
-        SeriesDetailResponseDto response = seriesService.getSeries(id);
-
-        return ApiResponse.ok(response);
-    }
-
-
-    @PostMapping("/series")
-    public ApiResponse createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic,
-                                    @Validated @RequestBody SeriesPostDto seriesPostDto){
-
-        SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
-
-        return ApiResponse.create(response);
-    }
-
-
-    @PatchMapping("/series/{series-id}")
-    public ApiResponse updateSeries(@Positive @PathVariable("series-id") Long seriesId,
-                                    @Validated @RequestBody SeriesUpdateDto seriesUpdateDto){
-
-        SeriesResponseDto response = seriesService.updateSeries(seriesId,seriesUpdateDto);
-
-        return ApiResponse.ok(response);
-    }
-
-
-    @DeleteMapping("/series/{series-id}")
-    public ApiResponse deleteSeries(@Positive @PathVariable("series-id") Long id){
-
-        seriesService.deleteSeries(id);
-
-        return ApiResponse.ok();
-    }
+//    @GetMapping("/feed/series/{nick-name}")
+//    public ApiResponse getSeriesList(@PathVariable("nick-name") String nickname,
+//                                     @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+//                                     @Positive @RequestParam(value = "size", defaultValue = "12") int size){
+//
+//        PageResponseDto response = seriesService.getSeriesList(nickname,page-1, size);
+//
+//        return ApiResponse.ok(response);
+//    }
+//
+//    @GetMapping("/feed/series")
+//    public ApiResponse getMySeriesList(@Positive @RequestParam(value = "page", defaultValue = "1") int page,
+//                                     @Positive @RequestParam(value = "size", defaultValue = "12") int size){
+//
+//        PageResponseDto response = seriesService.getMySeriesList(page-1, size);
+//
+//        return ApiResponse.ok(response);
+//    }
+//
+//    @GetMapping("/series")
+//    public ApiResponse<PageResponseDto> getMainSeriesList(@RequestParam(value = "sort", defaultValue = "newest") String sort,
+//                                                          @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+//                                                          @Positive @RequestParam(value = "size", defaultValue = "12") int size){
+//
+//        if("votes".equals(sort)){
+//            PageResponseDto response = seriesService.getMainSeriesListByVotes(page-1, size);
+//            return ApiResponse.ok(response);
+//        }
+//        PageResponseDto response = seriesService.getMainSeriesListByNewest(page-1, size);
+//        return ApiResponse.ok(response);
+//    }
+//
+//    @GetMapping("/series/{series-id}")
+//    public ApiResponse getSeries(@Positive @PathVariable("series-id") Long id){
+//
+//        SeriesDetailResponseDto response = seriesService.getSeries(id);
+//
+//        return ApiResponse.ok(response);
+//    }
+//
+//
+//    @PostMapping("/series")
+//    public ApiResponse createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic,
+//                                    @Validated @RequestBody SeriesPostDto seriesPostDto){
+//
+//        SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
+//
+//        return ApiResponse.create(response);
+//    }
+//
+//
+//    @PatchMapping("/series/{series-id}")
+//    public ApiResponse updateSeries(@Positive @PathVariable("series-id") Long seriesId,
+//                                    @Validated @RequestBody SeriesUpdateDto seriesUpdateDto){
+//
+//        SeriesResponseDto response = seriesService.updateSeries(seriesId,seriesUpdateDto);
+//
+//        return ApiResponse.ok(response);
+//    }
+//
+//
+//    @DeleteMapping("/series/{series-id}")
+//    public ApiResponse deleteSeries(@Positive @PathVariable("series-id") Long id){
+//
+//        seriesService.deleteSeries(id);
+//
+//        return ApiResponse.ok();
+//    }
 
 }

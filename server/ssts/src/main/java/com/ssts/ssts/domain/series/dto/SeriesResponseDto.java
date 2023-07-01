@@ -3,6 +3,7 @@ package com.ssts.ssts.domain.series.dto;
 
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.series.entity.Series;
+import com.ssts.ssts.domain.vote.entity.Vote;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -38,7 +39,7 @@ public class SeriesResponseDto {
 
     private int revoteDisagree;
 
-    private Series.VoteStatus seriesStatus;
+    private Vote.VoteStatus seriesStatus;
 
     private Boolean isPublic;
 
@@ -66,7 +67,7 @@ public class SeriesResponseDto {
                                        Boolean revoteResult,
                                        int revoteAgree,
                                        int revoteDisagree,
-                                       Series.VoteStatus voteStatus,
+                                       Vote.VoteStatus voteStatus,
                                        Boolean isPublic,
                                        Boolean isEditable,
                                        Boolean isActive,
@@ -107,7 +108,7 @@ public class SeriesResponseDto {
                                        Boolean revoteResult,
                                        int revoteAgree,
                                        int revoteDisagree,
-                                       Series.VoteStatus voteStatus,
+                                       Vote.VoteStatus voteStatus,
                                        Boolean isPublic,
                                        Boolean isEditable,
                                        Boolean isActive,
