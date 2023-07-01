@@ -1,5 +1,4 @@
 package com.ssts.ssts.domain.series.entity;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssts.ssts.domain.comment.Entity.Comment;
 import com.ssts.ssts.domain.common.BaseTimeEntity;
@@ -30,38 +29,6 @@ public class Series extends BaseTimeEntity {
     @ColumnDefault("0")
     @Column
     private int daylogCount;
-
-    @ColumnDefault("0")
-    @Column
-    private int voteCount;
-
-    @Column(name = "vote_result")
-    private Boolean voteResult;
-
-    @Column
-    private int voteAgree;
-
-    @Column
-    private int voteDisagree;
-
-    @ColumnDefault("0")
-    @Column
-    private int totalVote;
-
-    @Column
-    private Boolean revoteResult;
-
-    @Column
-    private int revoteAgree;
-
-    @Column
-    private int revoteDisagree;
-
-
-    @Enumerated(value = EnumType.STRING)
-    @Column
-    private VoteStatus voteStatus = VoteStatus.SERIES_ACTIVE;
-
     @Column
     private Boolean isPublic = false;
 
@@ -88,18 +55,18 @@ public class Series extends BaseTimeEntity {
 
 
     //투표 개설 시간
-    @Column
-    private LocalDateTime voteCreatedAt;
-
-    //투표 마감 시간(임시)
-    @Column
-    private LocalDateTime voteEndAt;
-
-
-
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
-    }
+//    @Column
+//    private LocalDateTime voteCreatedAt;
+//
+//    //투표 마감 시간(임시)
+//    @Column
+//    private LocalDateTime voteEndAt;
+//
+//
+//
+//    public void setVoteCount(int voteCount) {
+//        this.voteCount = voteCount;
+//    }
 
     public void setTitle(String title) {
         this.title = title;
@@ -109,33 +76,33 @@ public class Series extends BaseTimeEntity {
         this.image = image;
     }
 
-    public void setVoteAgree(int voteAgree) {
-        this.voteAgree = voteAgree;
-    }
+//    public void setVoteAgree(int voteAgree) {
+//        this.voteAgree = voteAgree;
+//    }
 
-    public void setTotalVote(int totalVote) {
-        this.totalVote = totalVote;
-    }
+//    public void setTotalVote(int totalVote) {
+//        this.totalVote = totalVote;
+//    }
 
-    public void setVoteDisagree(int voteDisagree) {
-        this.voteDisagree = voteDisagree;
-    }
+//    public void setVoteDisagree(int voteDisagree) {
+//        this.voteDisagree = voteDisagree;
+//    }
 
-    public void setRevoteResult(Boolean revoteResult) {
-        this.revoteResult = revoteResult;
-    }
+//    public void setRevoteResult(Boolean revoteResult) {
+//        this.revoteResult = revoteResult;
+//    }
 
-    public void setRevoteAgree(int revoteAgree) {
-        this.revoteAgree = revoteAgree;
-    }
+//    public void setRevoteAgree(int revoteAgree) {
+//        this.revoteAgree = revoteAgree;
+//    }
 
-    public void setRevoteDisagree(int revoteDisagree) {
-        this.revoteDisagree = revoteDisagree;
-    }
+//    public void setRevoteDisagree(int revoteDisagree) {
+//        this.revoteDisagree = revoteDisagree;
+//    }
 
-    public void setVoteStatus(VoteStatus seriesStatus) {
-        this.voteStatus = seriesStatus;
-    }
+//    public void setVoteStatus(VoteStatus seriesStatus) {
+//        this.voteStatus = seriesStatus;
+//    }
 
     public void setIsPublic(Boolean aPublic) {
         isPublic = aPublic;
@@ -150,9 +117,9 @@ public class Series extends BaseTimeEntity {
         this.daylogCount = daylogCount;
     }
 
-    public void setVoteResult(Boolean voteResult) {
-        this.voteResult = voteResult;
-    }
+//    public void setVoteResult(Boolean voteResult) {
+//        this.voteResult = voteResult;
+//    }
 
     public void setIsActive(Boolean active) {
         isActive = active;
@@ -160,13 +127,13 @@ public class Series extends BaseTimeEntity {
 
 
     //투표 시간 관련 setMethod
-    public void setVoteCreatedAt(LocalDateTime voteCreaateAt){
-        this.voteCreatedAt = voteCreaateAt;
-    }
+//    public void setVoteCreatedAt(LocalDateTime voteCreaateAt){
+//        this.voteCreatedAt = voteCreaateAt;
+//    }
 
-    public void setVoteEndAt(LocalDateTime voteEndAt){
-        this.voteEndAt = voteEndAt;
-    }
+//    public void setVoteEndAt(LocalDateTime voteEndAt){
+//        this.voteEndAt = voteEndAt;
+//    }
 
 
 
@@ -195,16 +162,49 @@ public class Series extends BaseTimeEntity {
             this.member.getSeries().add(this);
         }
     }
-    public enum VoteStatus {
-        SERIES_ACTIVE("투표 미완료"),
-        SERIES_SLEEP("투표 중"),
-        SERIES_QUIT("투표 완료");
-
-        @Getter
-        private String status;
-
-        VoteStatus(String status) {
-            this.status = status;
-        }
-    }
+//    public enum VoteStatus {
+//        SERIES_ACTIVE("투표 미완료"),
+//        SERIES_SLEEP("투표 중"),
+//        SERIES_QUIT("투표 완료");
+//
+//        @Getter
+//        private String status;
+//
+//        VoteStatus(String status) {
+//            this.status = status;
+//        }
+//    }
 }
+
+
+
+//    @ColumnDefault("0")
+//    @Column
+//    private int voteCount;
+//
+//    @Column(name = "vote_result")
+//    private Boolean voteResult;
+//
+//    @Column
+//    private int voteAgree;
+//
+//    @Column
+//    private int voteDisagree;
+//
+//    @ColumnDefault("0")
+//    @Column
+//    private int totalVote;
+//
+//    @Column
+//    private Boolean revoteResult;
+//
+//    @Column
+//    private int revoteAgree;
+//
+//    @Column
+//    private int revoteDisagree;
+//
+//
+//    @Enumerated(value = EnumType.STRING)
+//    @Column
+//    private VoteStatus voteStatus = VoteStatus.SERIES_ACTIVE;

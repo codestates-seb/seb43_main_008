@@ -25,24 +25,24 @@ public class DaylogController {
     private final DaylogService daylogService;
 
 
-    @PostMapping("/{series-id}/daylog")
-    public ApiResponse createSeries(@Positive @PathVariable("series-id") Long seriesId,
-                                    @ModelAttribute DaylogPostDto daylogPostDto,
-                                    @RequestPart(value = "image") MultipartFile image) throws IOException {
+//    @PostMapping("/{series-id}/daylog")
+//    public ApiResponse createSeries(@Positive @PathVariable("series-id") Long seriesId,
+//                                    @ModelAttribute DaylogPostDto daylogPostDto,
+//                                    @RequestPart(value = "image") MultipartFile image) throws IOException {
+//
+//        DaylogResponseDto responseDto = daylogService.saveDaylog(seriesId, daylogPostDto, image);
+//
+//        return ApiResponse.create(responseDto);
+//    }
 
-        DaylogResponseDto responseDto = daylogService.saveDaylog(seriesId, daylogPostDto, image);
 
-        return ApiResponse.create(responseDto);
-    }
-
-
-    @GetMapping("/{series-id}/daylog")
-    public ApiResponse getDaylogList(@Positive @PathVariable("series-id") Long id,
-                                        @Positive @RequestParam(value = "page", defaultValue = "1") int page,
-                                        @Positive @RequestParam(value = "size", defaultValue = "7") int size){
-
-        PageResponseDto response = daylogService.getDaylogList(id, page-1, size);
-
-        return ApiResponse.ok(response);
-    }
+//    @GetMapping("/{series-id}/daylog")
+//    public ApiResponse getDaylogList(@Positive @PathVariable("series-id") Long id,
+//                                        @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+//                                        @Positive @RequestParam(value = "size", defaultValue = "7") int size){
+//
+//        PageResponseDto response = daylogService.getDaylogList(id, page-1, size);
+//
+//        return ApiResponse.ok(response);
+//    }
 }

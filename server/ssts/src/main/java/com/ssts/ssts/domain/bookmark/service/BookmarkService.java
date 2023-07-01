@@ -27,62 +27,62 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookmarkService {
 
-    private final BookmarkRepository bookmarkRepo;
-    private final MemberRepository memberRepo;
-    private final SeriesRepository seriesRepo;
-    private final MemberService memberService;
+//    private final BookmarkRepository bookmarkRepo;
+//    private final MemberRepository memberRepo;
+//    private final SeriesRepository seriesRepo;
+//    private final MemberService memberService;
 
 
 
-    @Transactional
-    public void createBookmark(Long seriseId){
-
-        Series series = seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
-
-        Member member = memberService.findMemberByToken();
-        long memberId = member.getId();
-
-        seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
-
-        //북마크 중복 체크
-        Boolean duplicationCheck = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, seriseId);
-        if (duplicationCheck){ throw new BusinessLogicException(ExceptionCode.BOOKMARK_IS_DUPLICATION); }
-
-        Bookmark bookmark = Bookmark.of(member, series);
-        bookmarkRepo.save(bookmark);
-    }
-
-    @Transactional
-    public List<BookmarkResponse> getListBookmarks(int page, int size){ //series.getId(), series.getTitle(), series.getDaylogCount(), series.getImage()
-        Member member = memberService.findMemberByToken();
-        long memberId = member.getId();
-
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        Page<Bookmark> bookmarksInfo = bookmarkRepo.findAllByMemberId(memberId, pageable);
-
-        List<Bookmark> bookmarks = bookmarksInfo.getContent();
-
-        if(bookmarks.isEmpty()){throw new BusinessLogicException(ExceptionCode.BOOKMARKS_NOT_FOUND);}
-
-        List<BookmarkResponse> responses = bookmarks.stream()
-                .map(bookmark ->
-                        BookmarkResponse.of(
-                                bookmark.getSeries().getId(),
-                                bookmark.getSeries().getTitle(),
-                                bookmark.getSeries().getDaylogCount(),
-                                bookmark.getSeries().getImage()))
-                .collect(Collectors.toList());
-        return responses;
-    }
-
-    @Transactional
-    public void deleteBookmark(Long seriseId){
-
-        seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
-
-        Member member = memberService.findMemberByToken();
-        long memberId = member.getId();
-
-        bookmarkRepo.deleteByMember_IdAndSeries_Id(memberId, seriseId);
-    }
+//    @Transactional
+//    public void createBookmark(Long seriseId){
+//
+//        Series series = seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+//
+//        Member member = memberService.findMemberByToken();
+//        long memberId = member.getId();
+//
+//        seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+//
+//        //북마크 중복 체크
+//        Boolean duplicationCheck = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, seriseId);
+//        if (duplicationCheck){ throw new BusinessLogicException(ExceptionCode.BOOKMARK_IS_DUPLICATION); }
+//
+//        Bookmark bookmark = Bookmark.of(member, series);
+//        bookmarkRepo.save(bookmark);
+//    }
+//
+//    @Transactional
+//    public List<BookmarkResponse> getListBookmarks(int page, int size){ //series.getId(), series.getTitle(), series.getDaylogCount(), series.getImage()
+//        Member member = memberService.findMemberByToken();
+//        long memberId = member.getId();
+//
+//        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").descending());
+//        Page<Bookmark> bookmarksInfo = bookmarkRepo.findAllByMemberId(memberId, pageable);
+//
+//        List<Bookmark> bookmarks = bookmarksInfo.getContent();
+//
+//        if(bookmarks.isEmpty()){throw new BusinessLogicException(ExceptionCode.BOOKMARKS_NOT_FOUND);}
+//
+//        List<BookmarkResponse> responses = bookmarks.stream()
+//                .map(bookmark ->
+//                        BookmarkResponse.of(
+//                                bookmark.getSeries().getId(),
+//                                bookmark.getSeries().getTitle(),
+//                                bookmark.getSeries().getDaylogCount(),
+//                                bookmark.getSeries().getImage()))
+//                .collect(Collectors.toList());
+//        return responses;
+//    }
+//
+//    @Transactional
+//    public void deleteBookmark(Long seriseId){
+//
+//        seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+//
+//        Member member = memberService.findMemberByToken();
+//        long memberId = member.getId();
+//
+//        bookmarkRepo.deleteByMember_IdAndSeries_Id(memberId, seriseId);
+//    }
 }
