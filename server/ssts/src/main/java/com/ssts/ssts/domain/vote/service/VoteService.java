@@ -8,6 +8,8 @@ import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
+import com.ssts.ssts.domain.vote.entity.Vote;
+import com.ssts.ssts.domain.vote.repository.VoteRepository;
 import com.ssts.ssts.domain.vote.response.VoteResponse;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
@@ -21,14 +23,182 @@ import java.util.Optional;
 //시간 계산 import
 import java.time.*;
 
+//VoteDefaultResponse == FirstVoteResponse
+
 @Service
 @RequiredArgsConstructor
 public class VoteService {
-//    private final SeriesRepository seriesRepo;
-//    private final MemberVoteRepository voteMemberRepo;
-//    private final MemberRepository memberRepo;
-//    private final MemberService memberService;
+    private final SeriesRepository seriesRepo;
+    private final MemberVoteRepository voteMemberRepo;
+    private final MemberRepository memberRepo;
+    private final MemberService memberService;
+    private final VoteRepository voteRepo;
 
+//투표 생성: refactor
+    @Transactional
+    public Object createVote(Long seriesId) {
+
+        //투표함 예외
+        //시리즈를 작성한 본인이 아니라면 예외 (완)
+        //더 이상 투표 불가 (voteCount==2) (완)
+        //마감기간이 지나지 않았으면 투표를 생성할 수 없음 예외 (완)
+        //최초투표의 결과가 조회되지 않았어요 > @@투표하기 만든 이후에 다시 검증
+        //데이로그 안 만들었으면 터지는 에러
+
+        Series targetSeries = seriesRepo.findById(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS)); //투표를 생성할 Series Entity 찾기
+
+        //series에서 vote 찾아오기
+        //Vote targetVote = voteRepo.findBySeries_Id(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
+        //TODO 투표함을 만드는 건데 예외가 터지면 안되는 거구나 ...
+        //아니 오히려 새로운 투표를 만드는건데?
+
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
+
+        //TODO 시리즈를 만든 작성자가 아닌 자가 투표 생성시 예외 왜 이거 안되는거지?
+        if(memberId != targetSeries.getMember().getId()){ throw new BusinessLogicException(ExceptionCode.NOT_SERISE_WRITER); }
+
+
+
+        Long voteCount= voteRepo.countBySeries(targetSeries);
+        int userVoteCount = voteCount.intValue();
+
+        //TODO 더이상 투표를 개설할 수 없습니다.
+        if(userVoteCount>=2){
+            throw new BusinessLogicException(ExceptionCode.CAN_NOT_MAKE_VOTE);
+        }
+
+        //TODO 최초투표가 존재할 경우, 재투표 생성 전 예외
+        if(userVoteCount ==1){
+            revoteException(targetSeries.getId());
+        }
+
+       //TODO 현재 목표는 voteEntity에 데이터를 저장하고, series의 값을 바꿔주는 것임 => voteEntity 객체를 생성해서 저장해주는 일을 해야지 ㅇㅇㅇ!!!
+        //투표에 따른 상태값 변경 //of를 쓴 게 아닌데 일단은 냅 두기 / 리팩토링 대상
+        targetSeries.setIsPublic(true); //시리즈 공개
+        targetSeries.setIsEditable(false); //타이틀 수정 불가
+        targetSeries.setIsActive(true); //활성 상태
+
+
+
+        Vote targetVote = Vote.of(Vote.VoteStatus.SERIES_SLEEP, LocalDateTime.now());
+        targetVote.setSeries(targetSeries); // 시리즈와 연결
+        //targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusMinutes(5)); //투표 마감기간, //객체가 생성되어야 그 뒤의 것들을 할 수 있으니까
+        targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusSeconds(7));
+        //ㄴ> 여기까지는 최초투표, 재투표 공통 시리즈, 투표 상태
+
+
+        //if(userVoteCount >=2){} //다른 컬럼이라 +1, +2 이런걸 못함
+        if(userVoteCount ==0){
+            targetVote.setVoteCount(1);
+        }
+        else{ //(userVoteCount ==1)의 상황, 앞에서 이미 다 걸럿음
+            targetVote.setVoteCount(2);
+        }
+        //targetVote.setVoteCount(targetVote.getVoteCount() + 1); //최초투표이든, 아니든 +1 //투표함을 만들 때, voteCount가 증가
+
+        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
+        //ㄴ> 테스트 마감기간: 15초
+
+
+
+
+
+        seriesRepo.save(targetSeries);
+        voteRepo.save(targetVote);
+        return voteResponse(seriesId, targetVote);
+    }
+
+        //내부 로직: 투표 횟수별 검증 메소드 (투표 전체 정보)
+    public VoteResponse voteResponse(Long seriesId, Vote targetVote) {
+            return VoteResponse.VoteDefaultResponse.of(
+                    seriesId,
+                    targetVote.getId(),
+                    targetVote.getVoteCount(),
+                    targetVote.getVoteResult(),
+                    targetVote.getAgree(),
+                    targetVote.getDisagree(),
+                    targetVote.getStatus(),
+                    targetVote.getVoteCreatedAt(),
+                    targetVote.getVoteEndAt()
+            );
+
+
+    }
+
+
+        //로직: 마감기한 지났는지의 여부
+    private Boolean isVotedNotEntAt(Vote targetVote){ //마감기한 안지남: true
+        LocalDateTime currentTime = LocalDateTime.now();
+        return currentTime.isBefore(targetVote.getVoteEndAt());
+    }
+
+    //voteResult 계산기
+    public Boolean voteResultCal(int agree, int disAgree) {
+        if (agree > disAgree) {
+            return true;
+        } else if (agree == disAgree) {
+            return true; //하늘님: 동점이면 난 버릴 거 같아요 ! }
+            //
+        }
+        return false;
+    }
+
+    public void revoteException(Long seriesId){
+        //TO완료DO (1) 해당 voteId 가져오기
+        Vote firstVote = voteRepo.findBySeries_Id(seriesId).orElseThrow((()->new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND)));
+
+
+        //TO완료DO (2) 마감기간이 지나지 않았으면 투표를 생성할 수 없음 예외
+        if(isVotedNotEntAt(firstVote)){
+            throw new BusinessLogicException(ExceptionCode.DEADLINE_FALL_SHORT);
+        }
+
+        //TODO (3) 최초투표의 결과가 조회되지 않았어요 > @@투표하기 만든 이후에 다시 검증
+        if(firstVote.getVoteCount()==1 && firstVote.getVoteResult() == null){
+        throw new BusinessLogicException(ExceptionCode.VOTE_RESULT_NOT_UPDATE);
+
+        //TODO (4) 데이로그 안 만들었으면 터지는 에러
+
+        //TODO (X) 재투표시에 memberVote 초기화: 필요 없음
+
+    }
+
+
+    //내부 로직: 투표 횟수별 검증 메소드 (투표 개별 정보) TODO isVotedMember를 응답으로 주기위해 만든 코드
+//    public VoteResponse voteCountAddResponse(Long seriesId, Vote targetVote, Boolean isVotedMember) {
+//        //이제 voteCount++ 된 상태이기 때문에 여기서부터 최초투표인지 재투표인지 알 수 있음
+//
+//        if (targetVote.getVoteCount() == 1) {
+//            return VoteResponse.FirstVoteAddResponse.of(
+//                    seriesId,
+//                    targetSeries.getVoteCount(),
+//                    targetSeries.getVoteResult(),
+//                    targetSeries.getVoteAgree(),
+//                    targetSeries.getVoteDisagree(),
+//                    targetSeries.getVoteStatus(),
+//                    targetSeries.getVoteCreatedAt(),
+//                    targetSeries.getVoteEndAt(),
+//                    isVotedMember
+//            );
+//
+//        } else if (targetSeries.getVoteCount() == 2) {
+//            return VoteResponse.RevoteAddResponse.of(
+//                    seriesId,
+//                    targetSeries.getVoteCount(),
+//                    targetSeries.getRevoteResult(),
+//                    targetSeries.getRevoteAgree(),
+//                    targetSeries.getRevoteDisagree(),
+//                    targetSeries.getVoteStatus(),
+//                    targetSeries.getVoteCreatedAt(),
+//                    targetSeries.getVoteEndAt(),
+//                    isVotedMember
+//            );
+//        }else { throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND); }
+//    }
+
+
+//TODo 투표생성 - 하는중
 //    //투표 생성
 //    @Transactional
 //    public Object createVote(Long seriesId) {
@@ -347,6 +517,7 @@ public class VoteService {
 //    }
 //
 //
+    //TODO 완료
 //    //내부 로직: 투표 횟수별 검증 메소드 (투표 개별 정보)
 //    public VoteResponse voteCountAddResponse(Long seriesId, Series targetSeries, Boolean isVotedMember) {
 //        //이제 voteCount++ 된 상태이기 때문에 여기서부터 최초투표인지 재투표인지 알 수 있음
@@ -380,4 +551,4 @@ public class VoteService {
 //    }
 
 
-}
+}}

@@ -1,6 +1,7 @@
 package com.ssts.ssts.domain.member.entity;
 
 import com.ssts.ssts.domain.series.entity.Series;
+import com.ssts.ssts.domain.vote.entity.Vote;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +30,8 @@ public class MemberVote {
     private int isAgree;
 
     @ManyToOne
-    @JoinColumn(name="series_id")
-    private Series series;
+    @JoinColumn(name="vote_id")
+    private Vote vote;
 
 //    @Column
 //    private Long seriesId;
@@ -42,10 +43,10 @@ public class MemberVote {
 
     //상대 Entity에 ManyToOne을 쓴다 >> 거기서 새 테이블을 생성한다, 따로 Entity를 만들 필요 없ㅇ므
 
-    public static MemberVote of(Member member, Series series, int isAgree){
+    public static MemberVote of(Member member, Vote vote, int isAgree){
         MemberVote memberVote = new MemberVote();
         memberVote.setMember(member);
-        memberVote.setSeries(series);
+        memberVote.setVote(vote);
         memberVote.setIsAgree(isAgree);
         return memberVote;
     }
