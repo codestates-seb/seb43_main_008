@@ -11,11 +11,11 @@ public interface MemberVoteRepository extends JpaRepository<MemberVote, Long> {
 
     //    //seriesId를 받으면 voteMember에 저장된 memberid를 전부 지우기
     //1. series Id를 통해 memberVote의 id 찾기
-    List<MemberVote> findBySeries_Id(Long seriesId);
+    List<MemberVote> findByVote_Id(Long voteId);
 
-    void deleteAllBySeries_Id(Long seriesId);
+    void deleteAllByVote_Id(Long voteId);
 
-    Boolean existsByMember_IdAndSeries_Id(Long memberId, Long seriesId);
+    Boolean existsByMember_IdAndVote_Id(Long memberId, Long voteId);
 
     //VoteEndTime이 현재 시간 이전이면 true, 그렇지 않으면 fasle
     //Boolean existsByVoteEndAtBefore(Date date);
