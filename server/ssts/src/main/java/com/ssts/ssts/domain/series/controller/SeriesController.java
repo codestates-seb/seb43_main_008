@@ -68,14 +68,14 @@ public class SeriesController {
 //    }
 //
 //
-//    @PostMapping("/series")
-//    public ApiResponse createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic,
-//                                    @Validated @RequestBody SeriesPostDto seriesPostDto){
-//
-//        SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
-//
-//        return ApiResponse.create(response);
-//    }
+    @PostMapping("/series")
+    public ApiResponse createSeries(@RequestParam(value = "public", defaultValue = "false") String isPublic,
+                                    @Validated @RequestBody SeriesPostDto seriesPostDto){
+
+        SeriesResponseDto response = seriesService.saveSeries(isPublic, seriesPostDto);
+
+        return ApiResponse.create(response);
+    }
 //
 //
 //    @PatchMapping("/series/{series-id}")

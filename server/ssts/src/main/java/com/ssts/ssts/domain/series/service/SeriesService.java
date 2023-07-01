@@ -38,6 +38,102 @@ import java.util.*;
 @Slf4j
 public class SeriesService {
 
+    private final SeriesRepository seriesRepository;
+    //private final VoteRepository voteRepository;
+
+
+
+    public SeriesResponseDto getSeries(Long id){
+
+        Series series = this.findVerifiedSeries(id);
+
+
+        //TODO 테스트 응답: vote 없음
+        return SeriesResponseDto.of(series.getId(),
+                series.getTitle(),
+                series.getDaylogCount(),
+                series.getIsPublic(),
+                series.getIsEditable(),
+                series.getIsActive());
+
+    }
+
+
+    //TODO 테스트 응답: vote X
+    public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto){
+
+        Series series = Series.of(seriesPostDto.getTitle());
+
+        seriesRepository.save(series);
+
+        //Vote vote = voteRepository.findBySeries_id(id);
+
+        //일단 vote 가 없는 설정임 그런거임
+        return SeriesResponseDto.of(series.getId(),
+                series.getTitle(),
+                series.getDaylogCount(),
+                //series.getCreatedAt(),
+                //series.getModifiedAt(),
+                //series.getVoteCount(),
+                //series.getVoteResult(),
+                //series.getVoteAgree(),
+                //series.getVoteDisagree(),
+                //series.getRevoteResult(),
+                //series.getRevoteAgree(),
+                //series.getRevoteDisagree(),
+                //series.getSeriesStatus(),
+                series.getIsPublic(),
+                series.getIsEditable(),
+                series.getIsActive());
+    }
+
+
+    public SeriesResponseDto updateSeries(Long id, SeriesUpdateDto seriesUpdateDto){
+
+        Series series = this.findVerifiedSeries(id);
+
+
+        return SeriesResponseDto.of(series.getId(), //vote로 바꿔야 함
+                series.getTitle(),
+                series.getDaylogCount(),
+                //series.getCreatedAt(),
+                //series.getModifiedAt(),
+                //series.getVoteCount(),
+                //series.getVoteResult(),
+                //series.getVoteAgree(),
+                //series.getVoteDisagree(),
+                //series.getRevoteResult(),
+                //series.getRevoteAgree(),
+                //series.getRevoteDisagree(),
+                //series.getSeriesStatus(),
+                series.getIsPublic(),
+                series.getIsEditable(),
+                series.getIsActive());
+
+    }
+
+    public void deleteSeries(Long id){
+
+        Series series = this.findVerifiedSeries(id);
+        seriesRepository.delete(series);
+    }
+
+
+
+
+
+    public Series findVerifiedSeries(Long questionId){
+        Optional<Series> optionalQuestion = seriesRepository.findById(questionId);
+
+        Series findSeries =
+                optionalQuestion.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+
+        return findSeries;
+
+    }
+
+
 //    private final SeriesRepository seriesRepository;
 //    private final MemberService memberService;
 //    private final UpdateUtils<Series> updateUtils;
