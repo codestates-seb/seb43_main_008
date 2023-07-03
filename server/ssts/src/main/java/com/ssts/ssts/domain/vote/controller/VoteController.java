@@ -58,21 +58,21 @@ public class VoteController {
     }
 //
 //
-//    //1차 투표 결과 확인
-//    @GetMapping("/graduation/{series_id}")
-//    public ApiResponse<VoteResponse.VoteAttendResponse> getStartVote(@NotNull @PathVariable("series_id") Long seriesId){
-//
-//        //VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
-//        VoteResponse.VoteAttendResponse response = (VoteResponse.VoteAttendResponse) voteService.getStartVote(seriesId);
-//
-//        return ApiResponse.ok(response);
-//    }
-//
-//    //시리즈 투표 개별조회
-//    @GetMapping("{series_id}")
-//    public ApiResponse getVoteInfo(@NotNull @PathVariable("series_id") Long seriesId){
-//        VoteResponse response = (VoteResponse) voteService.getVoteInfo(seriesId);
-//        return ApiResponse.ok(response);
-//    }
+    //1차 투표 결과 확인
+    @GetMapping("/graduation/{vote_id}")
+    public ApiResponse<VoteResponse.VoteAttendResponse> getStartVote(@NotNull @PathVariable("vote_id") Long voteId){
+
+        //VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
+        VoteResponse.VoteAttendResponse response = (VoteResponse.VoteAttendResponse) voteService.getStartVote(voteId);
+
+        return ApiResponse.ok(response);
+    }
+
+    //시리즈 투표 개별조회
+    @GetMapping("{vote_id}")
+    public ApiResponse getVoteInfo(@NotNull @PathVariable("vote_id") Long voteId){
+        VoteResponse response = (VoteResponse) voteService.getVoteInfo(voteId);
+        return ApiResponse.ok(response);
+    }
 
 }
