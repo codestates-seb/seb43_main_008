@@ -4,6 +4,7 @@ import com.ssts.ssts.domain.comment.Entity.Comment;
 import com.ssts.ssts.domain.common.BaseTimeEntity;
 import com.ssts.ssts.domain.daylog.entity.Daylog;
 import com.ssts.ssts.domain.member.entity.Member;
+import com.ssts.ssts.domain.vote.entity.Vote;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -52,6 +53,11 @@ public class Series extends BaseTimeEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "series", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    //vote 관계 맵핑 추가
+    @JsonIgnore
+    @OneToMany(mappedBy = "series", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Vote> votes = new ArrayList<>();
 
 
     //투표 개설 시간
@@ -162,6 +168,14 @@ public class Series extends BaseTimeEntity {
             this.member.getSeries().add(this);
         }
     }
+
+    //Vote 객체 추가 메서드
+    public void addVote(Vote vote) {
+        votes.add(vote);
+        vote.setSeries(this);
+    }
+
+
 //    public enum VoteStatus {
 //        SERIES_ACTIVE("투표 미완료"),
 //        SERIES_SLEEP("투표 중"),
