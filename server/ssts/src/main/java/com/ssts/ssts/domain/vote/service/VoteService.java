@@ -83,8 +83,8 @@ public class VoteService {
 
         Vote targetVote = Vote.of(Vote.VoteStatus.SERIES_SLEEP, LocalDateTime.now());
         targetVote.setSeries(targetSeries); // 시리즈와 연결
-        targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusMinutes(5)); //투표 마감기간, //객체가 생성되어야 그 뒤의 것들을 할 수 있으니까
-        //targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusSeconds(7));
+        //targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusMinutes(5)); //투표 마감기간, //객체가 생성되어야 그 뒤의 것들을 할 수 있으니까
+        targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusSeconds(7));
         //ㄴ> 여기까지는 최초투표, 재투표 공통 시리즈, 투표 상태
 
 
@@ -124,10 +124,8 @@ public class VoteService {
         //이미 종료된 투표입니다
         //if(!isVotedNotEntAt(targetVote)){ throw new BusinessLogicException(ExceptionCode.VOTE_ALREADY_FINISH); }
 
-        //TODO 시리즈가 존재하지 않습니다. @@@@여기 디버깅 터짐@@@@@ 일단 보류
-//        Long targetSeriesId = voteRepo.findSeries_IdById(voteId); //TODO 디버깅 여기터짐
-//        Boolean isSeries = voteRepo.existsBySeries_IdAndId(targetSeriesId, voteId);
-//        if(!isSeries){ throw new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS); }
+        //TODO 시리즈가 존재하지 않습니다. @@@@voteId를 통해 series 찾기
+        seriesRepo.findByVotes_Id(voteId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
         int voteCount = targetVote.getVoteCount(); //응답값 만들려고 존재
         if(voteCount == 0){throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND);}
@@ -160,6 +158,76 @@ public class VoteService {
         voteRepo.save(targetVote);
 
 
+        return voteResponse(targetVote.getId(), targetVote);
+    }
+
+
+    //TODO 투표 종료하기
+    @Transactional //[모든 예외를 거치고 남은 걸려져서 들어오는 값이 종료하기의 조건이 되도록]
+    //public Object quitVote(Long seriesId,  Long memberId, Boolean isQuit){
+    public VoteResponse quitVote(Long voteId, Boolean isQuit){ //TODO 토큰 적용시에 풀기
+
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
+
+        Vote targetVote = voteRepo.findById(voteId).orElseThrow(()->new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
+        Series targetSeries = seriesRepo.findByVotes_Id(voteId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+        Long seriesId = targetSeries.getId();
+
+        //예외: 투표를 개설한 본인이 아닙니다 TODO 이건 vote -> series -> member 로 접근할 수 있도록 수정해야 함
+        //vote에서 series를 가져오는데 여기에는 member_id가 있음, 즉 series가 vote를 품고 있기 때문에 targetSeries에서 memberId만 조회해도 해당 예외는 알아서 검증되는 것임
+        if(targetSeries.getMember().getId() != memberId){
+            //투표를 개설한 본인이 아닙니다
+            throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
+        }
+
+
+        //예외: 투표를 개설하지 않았습니다
+        if (targetVote.getVoteCount()==0) {
+            throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND);
+        }
+        //예외: 투표의 총 횟수를 다 씀 (voteCount==2 여기서 거른다)
+        if(targetVote.getVoteCount()!=1){
+            //투표 종료에 대한 권한이 없습니다
+            throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
+        }
+
+
+        //[리팩토링 진입점: voteCount는 2부터 걸러지기 때문에, 1밖에 안들어옴. 조건에 1이 달릴 이유가 있나?]
+        if(targetVote.getVoteResult()==null){
+            //투표 결과가 존재하지 않습니다
+            throw new BusinessLogicException(ExceptionCode.VOTE_RESULT_IS_NOT_EXSIST);
+        }
+
+
+        //예외: 최초투표를 진행함, 최초투표에서 찬성 결과가 나옴 (voteCount==1 && voteResult==true)
+        if(targetVote.getVoteResult()){
+            //이 투표는 이미 졸업했어요!
+            throw new BusinessLogicException(ExceptionCode.THIS_VOTE_RESULT_IS_TRUE);
+        }
+
+        //예외: 최초투표를 진행했는데, 마감기한이 지나지 않은 상태 (voteCount==1 && 마감기간이 지나지 않은 경우)
+        if(isVotedNotEntAt(targetVote)){
+            throw new BusinessLogicException(ExceptionCode.DEADLINE_FALL_SHORT);
+        }
+
+        //걸려지는 경우 (1) 투표를 더 한다고 선택 ( && voteCount==1)
+        if(!isQuit){ //(isQuit==false)
+            targetSeries.setIsEditable(true);
+            targetSeries.setIsActive(true);
+            targetVote.setStatus(Vote.VoteStatus.SERIES_ACTIVE);
+            seriesRepo.save(targetSeries);
+            voteRepo.save(targetVote);
+        }
+
+        //걸러지는 경우 (2) / 최종: 투표를 더 안할게요 voteCount==1&&voteResult==false => 로직이 도는 대상 (isQuit==1)
+        else {
+        targetSeries.setIsEditable(false); //타이틀 수정 가능
+        targetSeries.setIsActive(false); //활성 상태
+        targetVote.setStatus(Vote.VoteStatus.SERIES_QUIT); //투표에 할당
+        seriesRepo.save(targetSeries);
+        voteRepo.save(targetVote);
+        }
         return voteResponse(targetVote.getId(), targetVote);
     }
 

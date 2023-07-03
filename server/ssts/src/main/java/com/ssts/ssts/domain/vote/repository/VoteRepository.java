@@ -20,6 +20,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     //long countBySeriesIdQuery(@Param("series_id") Long seriesId);
 
 //    Long findSeries_IdById(Long voteId);
-//    Boolean existsBySeries_IdAndId(Long seriesId, Long voteId);
+    Boolean existsBySeries_IdAndId(Long seriesId, Long voteId);
     long countBySeries(Series series);
 }

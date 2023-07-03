@@ -27,4 +27,6 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 //    List<Series> findAllByMemberId(long memberId);
     //TODO 아 장난하냐 아랫놈 때문에 서버 터져서 계속 난리칠 생각했네
     //Optional<Series> findByVote_Id(Long voteId);
+
+    Optional<Series> findByVotes_Id(Long voteId);
 }

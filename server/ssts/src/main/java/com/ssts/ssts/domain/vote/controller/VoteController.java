@@ -47,16 +47,15 @@ public class VoteController {
 //
 //
 //    //투표 종료
-//    //@PatchMapping("/quit/{series_id}/{member_id}")
-//    @PatchMapping("/graduation/{series_id}")
-//    //public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathVariable("member_id") Long memberId, @PathParam("isQuit") Boolean isQuit){ //프론트가 boolean으로 보내야
-//    public ApiResponse<VoteResponse> QuitVoteControl(@NotNull @PathVariable("series_id") Long seriesId, @PathParam("isQuit") Boolean isQuit){
-//
-//        //VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
-//        VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, isQuit);
-//
-//        return ApiResponse.ok(response);
-//    }
+    @PatchMapping("/graduation/{vote_id}")
+    //public ResponseEntity QuitVoteControl(@PathVariable("series_id") Long seriesId, @PathVariable("member_id") Long memberId, @PathParam("isQuit") Boolean isQuit){ //프론트가 boolean으로 보내야
+    public ApiResponse<VoteResponse> QuitVoteControl(@NotNull @PathVariable("vote_id") Long voteId, @PathParam("isQuit") Boolean isQuit){
+
+        //VoteResponse response = (VoteResponse) voteService.quitVote(seriesId, memberId, isQuit);
+        VoteResponse response = (VoteResponse) voteService.quitVote(voteId, isQuit);
+
+        return ApiResponse.ok(response);
+    }
 //
 //
 //    //1차 투표 결과 확인
