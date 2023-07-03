@@ -5,10 +5,12 @@ import com.ssts.ssts.domain.vote.entity.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 
 import java.util.Optional;
 
+@Repository
 public interface VoteRepository extends JpaRepository<Vote, Long> {
     Optional<Vote> findBySeries_Id(Long seriesId);
     //long countBySeriesId(Long seriesId);
@@ -17,5 +19,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     //@Query("SELECT COUNT(v) FROM Vote v WHERE v.seriesId = :seriesId")
     //long countBySeriesIdQuery(@Param("series_id") Long seriesId);
 
+//    Long findSeries_IdById(Long voteId);
+//    Boolean existsBySeries_IdAndId(Long seriesId, Long voteId);
     long countBySeries(Series series);
 }

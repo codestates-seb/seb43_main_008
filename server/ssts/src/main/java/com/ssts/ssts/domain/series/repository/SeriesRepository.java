@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -24,4 +25,6 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 //
 //    /* 멤버 서비스에서 멤버 아이디에 해당하는 시리즈 목록 출력 목적 */
 //    List<Series> findAllByMemberId(long memberId);
+    //TODO 아 장난하냐 아랫놈 때문에 서버 터져서 계속 난리칠 생각했네
+    //Optional<Series> findByVote_Id(Long voteId);
 }

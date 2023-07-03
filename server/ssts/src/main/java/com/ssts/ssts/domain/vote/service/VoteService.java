@@ -61,15 +61,15 @@ public class VoteService {
 
 
         Long voteCount= voteRepo.countBySeries(targetSeries);
-        int userVoteCount = voteCount.intValue();
+        int seriesVoteCount = voteCount.intValue();
 
         //TODO 더이상 투표를 개설할 수 없습니다.
-        if(userVoteCount>=2){
+        if(seriesVoteCount>=2){
             throw new BusinessLogicException(ExceptionCode.CAN_NOT_MAKE_VOTE);
         }
 
-        //TODO 최초투표가 존재할 경우, 재투표 생성 전 예외
-        if(userVoteCount ==1){
+        //TODO 최초투표가 존재할 경우, 재투표 생성 전 예외들
+        if(seriesVoteCount ==1){
             revoteException(targetSeries.getId());
         }
 
@@ -83,31 +83,86 @@ public class VoteService {
 
         Vote targetVote = Vote.of(Vote.VoteStatus.SERIES_SLEEP, LocalDateTime.now());
         targetVote.setSeries(targetSeries); // 시리즈와 연결
-        //targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusMinutes(5)); //투표 마감기간, //객체가 생성되어야 그 뒤의 것들을 할 수 있으니까
-        targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusSeconds(7));
+        targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusMinutes(5)); //투표 마감기간, //객체가 생성되어야 그 뒤의 것들을 할 수 있으니까
+        //targetVote.setVoteEndAt(targetVote.getVoteCreatedAt().plusSeconds(7));
         //ㄴ> 여기까지는 최초투표, 재투표 공통 시리즈, 투표 상태
 
 
         //if(userVoteCount >=2){} //다른 컬럼이라 +1, +2 이런걸 못함
-        if(userVoteCount ==0){
+        if(seriesVoteCount ==0){
             targetVote.setVoteCount(1);
         }
         else{ //(userVoteCount ==1)의 상황, 앞에서 이미 다 걸럿음
             targetVote.setVoteCount(2);
         }
-        //targetVote.setVoteCount(targetVote.getVoteCount() + 1); //최초투표이든, 아니든 +1 //투표함을 만들 때, voteCount가 증가
-
-        //targetSeries.setVoteEndAt(targetSeries.getVoteCreatedAt().plusSeconds(15));
-        //ㄴ> 테스트 마감기간: 15초
-
-
-
-
 
         seriesRepo.save(targetSeries);
         voteRepo.save(targetVote);
-        return voteResponse(seriesId, targetVote);
+        return voteResponse(targetSeries.getId(), targetVote);
     }
+
+
+
+    //TODO 투표하기
+    @Transactional
+    public VoteResponse attendVote(Long voteId, int isAgree){ //TODO 토큰 테스트시에 주석 풀기
+
+
+        //Vote targetVote = voteRepo.findBySeries_Id(seriesId).orElseThrow(()->new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
+        Vote targetVote = voteRepo.findById(voteId).orElseThrow(()->new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
+
+
+        if(isAgree < 0 || isAgree > 1){throw new BusinessLogicException(ExceptionCode.CAN_NOT_VOTE_VALUE);}
+
+        Member member = memberService.findMemberByToken();
+        long memberId = member.getId();
+
+        //동일 시리즈에 중복 투표 예외
+        Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndVote_Id(memberId, voteId); //true => false
+        if (isVotedMember) { throw new BusinessLogicException(ExceptionCode.MEMBER_ALREADY_VOTE); }
+
+        //이미 종료된 투표입니다
+        //if(!isVotedNotEntAt(targetVote)){ throw new BusinessLogicException(ExceptionCode.VOTE_ALREADY_FINISH); }
+
+        //TODO 시리즈가 존재하지 않습니다. @@@@여기 디버깅 터짐@@@@@ 일단 보류
+//        Long targetSeriesId = voteRepo.findSeries_IdById(voteId); //TODO 디버깅 여기터짐
+//        Boolean isSeries = voteRepo.existsBySeries_IdAndId(targetSeriesId, voteId);
+//        if(!isSeries){ throw new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS); }
+
+        int voteCount = targetVote.getVoteCount(); //응답값 만들려고 존재
+        if(voteCount == 0){throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND);}
+
+        //사용자가 존재하지 않습니다
+        Member voteMember = memberRepo.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+
+        //투표하기 로직
+        //경우1: 최초 투표일 경우
+            if (isAgree == 1) {//본래 있는 db의 컬럼을 바꿔줌 -> 위에서 isAgree 값을 거르고 들어옴
+                targetVote.setAgree(targetVote.getAgree() + 1);
+                targetVote.setVotePapers(targetVote.getVotePapers()+1);
+            } else {//if (isAgree == 0) {
+                targetVote.setDisagree(targetVote.getDisagree() + 1);
+                targetVote.setVotePapers(targetVote.getVotePapers() + 1);
+            }
+
+
+
+
+        //TODO 투표의 결과를 보기 위해서 임시로 사용 -> 프론트 협업시 지워야 함 !!!!!
+                Boolean voteResult = voteResultCal(targetVote.getAgree(), targetVote.getDisagree());
+                targetVote.setVoteResult(voteResult);
+
+
+
+        //save mapping table + db save
+        voteMemberRepo.save(MemberVote.of(voteMember, targetVote, isAgree));
+        voteRepo.save(targetVote);
+
+
+        return voteResponse(targetVote.getId(), targetVote);
+    }
+
 
         //내부 로직: 투표 횟수별 검증 메소드 (투표 전체 정보)
     public VoteResponse voteResponse(Long seriesId, Vote targetVote) {
@@ -198,7 +253,7 @@ public class VoteService {
 //    }
 
 
-//TODo 투표생성 - 하는중
+//TODo 투표생성 - 완료
 //    //투표 생성
 //    @Transactional
 //    public Object createVote(Long seriesId) {
