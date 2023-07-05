@@ -49,9 +49,6 @@ public class Vote extends BaseTimeEntity{
     @Column
     private int votePapers; //투표지 개수
 
-    @Column
-    private Boolean result;
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "series_id")

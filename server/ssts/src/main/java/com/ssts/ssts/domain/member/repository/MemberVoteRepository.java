@@ -2,6 +2,7 @@ package com.ssts.ssts.domain.member.repository;
 
 import com.ssts.ssts.domain.member.entity.MemberVote;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
