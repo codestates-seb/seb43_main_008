@@ -163,7 +163,7 @@ public class VoteService {
     }
 
 
-    //TODO 투표 종료하기
+    //TODO 투표 종료하기 (false: 재투표 받을게요) / (true: 졸업시킬게요!)
     @Transactional //[모든 예외를 거치고 남은 걸려져서 들어오는 값이 종료하기의 조건이 되도록]
     //public Object quitVote(Long seriesId,  Long memberId, Boolean isQuit){
     public VoteResponse quitVote(Long voteId, Boolean isQuit){ //TODO 토큰 적용시에 풀기
@@ -250,8 +250,13 @@ public class VoteService {
             throw new BusinessLogicException(ExceptionCode.NOT_HAVE_VOTE_AUTHORITY);
         }
 
+        if(targetVote.getVoteCount()==1 && targetVote.getVoteResult()){ //이미 최대 투표를 했어요!
+            //투표 종료에 대한 권한이 없습니다
+            throw new BusinessLogicException(ExceptionCode.VOTE_ALREADY_GRADUATE);
+        } //이 예외가 존재하는 이유는 해당 get을 통해 졸업을 할지말지 또 api를 호출하기 때문 !!!
+
         //예외: 투표의 총 횟수를 다 씀 (voteCount==2 여기서 거른다) //TODO 재투표를 다시 할 시리즈가 아니라고 ㅋㅋㅋ
-        if(targetVote.getVoteCount()!=1){
+        if(targetVote.getVoteCount()!=1){ //이미 최대 투표를 했어요!
             //투표 종료에 대한 권한이 없습니다
             throw new BusinessLogicException(ExceptionCode.VOTE_ALL_GRADUATE);
         } //이 예외가 존재하는 이유는 해당 get을 통해 졸업을 할지말지 또 api를 호출하기 때문 !!!
