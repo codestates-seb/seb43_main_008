@@ -24,34 +24,34 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkController {
 
-//    private final BookmarkService bookmarkService;
-//    private final MemberRepository memberRepo;
-//    private final SeriesRepository seriesRepo;
-//
-//    @PostMapping("/{serise_id}")
-//    public ApiResponse postBookmark(@PathVariable("serise_id") Long seriesId){
-//
-//        Long memberId = SecurityUtil.getMemberId();
-//        memberRepo.findById(memberId).
-//                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//
-//        bookmarkService.createBookmark(seriesId);
-//        return ApiResponse.create();
-//    }
-//
-//    @GetMapping
-//    public ApiResponse<List<BookmarkResponse>> getBookmarks(@RequestParam(value = "page", defaultValue = "1") int page,
-//                                       @RequestParam(value = "size", defaultValue = "12") int size){
-//        List<BookmarkResponse> response = bookmarkService.getListBookmarks(page-1, size);
-//        return ApiResponse.ok(response);
-//    }
-//
-//    @DeleteMapping("/{serise_id}")
-//    public ApiResponse deleteBookmark(@PathVariable("serise_id") Long seriseId){
-//
-//        bookmarkService.deleteBookmark(seriseId);
-//
-//        return ApiResponse.ok();
-//    }
+    private final BookmarkService bookmarkService;
+    private final MemberRepository memberRepo;
+    private final SeriesRepository seriesRepo;
+
+    @PostMapping("/{serise_id}")
+    public ApiResponse postBookmark(@PathVariable("serise_id") Long seriesId){
+
+        Long memberId = SecurityUtil.getMemberId();
+        memberRepo.findById(memberId).
+                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        bookmarkService.createBookmark(seriesId);
+        return ApiResponse.create();
+    }
+
+    @GetMapping
+    public ApiResponse<List<BookmarkResponse>> getBookmarks(@RequestParam(value = "page", defaultValue = "1") int page,
+                                       @RequestParam(value = "size", defaultValue = "12") int size){
+        List<BookmarkResponse> response = bookmarkService.getListBookmarks(page-1, size);
+        return ApiResponse.ok(response);
+    }
+
+    @DeleteMapping("/{serise_id}")
+    public ApiResponse deleteBookmark(@PathVariable("serise_id") Long seriseId){
+
+        bookmarkService.deleteBookmark(seriseId);
+
+        return ApiResponse.ok();
+    }
 
 }

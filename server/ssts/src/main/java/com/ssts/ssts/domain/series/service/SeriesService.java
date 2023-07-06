@@ -42,13 +42,12 @@ public class SeriesService {
     //private final VoteRepository voteRepository;
     private final MemberRepository memberRepo;
     private final MemberService memberService;
+    private final BookmarkRepository bookmarkRepo;
+    //private final MemberVoteRepository voteMemberRepo;
 
 
 
     public SeriesDetailResponseDto getSeries(Long id){
-
-        //임시값
-        Boolean isBookmarkedMember = true;
 
         memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(id);
@@ -62,7 +61,7 @@ public class SeriesService {
         //Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(memberId, id);
 
         //bookmark: 사용자의 해당 시리즈 북마크 여부
-        //Boolean isBookmarkedMember = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, id);
+        Boolean isBookmarkedMember = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, id);
 
 
 

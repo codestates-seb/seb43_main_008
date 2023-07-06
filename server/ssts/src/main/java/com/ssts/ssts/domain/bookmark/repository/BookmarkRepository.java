@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-//    Page<Bookmark> findAllByMemberId(Long memberId, Pageable pageable);
-//    void deleteByMember_IdAndSeries_Id(Long memberId, Long seriseId);
-//    Boolean existsByMember_IdAndSeries_Id(Long memberId, Long seriseId);
+    Page<Bookmark> findAllByMemberId(Long memberId, Pageable pageable);
+    void deleteByMember_IdAndSeries_Id(Long memberId, Long seriseId);
+    Boolean existsByMember_IdAndSeries_Id(Long memberId, Long seriseId);
 }
