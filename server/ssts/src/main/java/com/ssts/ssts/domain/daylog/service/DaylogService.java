@@ -46,118 +46,118 @@ public class DaylogService {
 
 
 
-//    @Transactional
-//    public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto){
-//        if (daylogPostDto.getContent().isEmpty()){
-//            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
-//        }
-//
-//        memberService.findMemberByToken();
-//
-//        Daylog daylog = Daylog.of(daylogPostDto.getContent());
-//        Series series = seriesService.findVerifiedSeries(seriesId);
-//
-//        series.setDaylogCount(series.getDaylogCount()+1);
-//        daylog.addSeries(series);
-//        daylogRepository.save(daylog);
-//
-//
-//        return this.DaylogToDaylogResponseDto(daylog);
-//    }
-//
-//    @Transactional
-//    public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto,MultipartFile image) throws IOException {
-//        if (daylogPostDto.getContent().isEmpty()){
-//            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
-//        }
-//
-//        Member member = memberService.findMemberByToken();
-//        Daylog daylog = Daylog.of(daylogPostDto.getContent());
-//        Series series = seriesService.findVerifiedSeries(seriesId);
-//
-//        if (member.getId() != series.getMember().getId()){
-//            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
-//        }
-//
-//        if(!image.isEmpty()){
-//            String saveFileName = s3ImageUploader.upload(image,"daylog");
-//            daylog.setContentImg(saveFileName);
-//            series.setImage(saveFileName);
-//        }else {
-//            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
-//        }
-//        series.setDaylogCount(series.getDaylogCount()+1);
-//        daylog.setDaylogNumber(series.getDaylogCount());
-//
-//        daylog.addSeries(series);
-//        daylog.addMember(member);
-//
-//        daylogRepository.save(daylog);
-//
-//        return this.DaylogToDaylogResponseDto(daylog);
-//    }
-//
-//
-//
-//
-//
-//    public PageResponseDto getDaylogList(Long seriesId, int page, int size) {
-//
-//        Member member = memberService.findMemberByToken();
-//        Page<Daylog> daylogsInfo = daylogRepository.findBySeries_id(seriesId,
-//                PageRequest.of(page, size, Sort.by("id").descending()));
-//
-//        List<Daylog> daylogList = daylogsInfo.getContent();
-//
-//        List<DaylogResponseDto> list = this.seriesToSeriesListResponseDtos(daylogList);
-//        List<DaylogResponseDto> responseDtos = this.isMineDaylog(list, member);
-//        log.info("responseDtos={}", responseDtos);
-//        return new PageResponseDto<>(responseDtos, daylogsInfo);
-//        }
-//
-//
-//    @NotNull
-//    private DaylogResponseDto DaylogToDaylogResponseDto(Daylog daylog){
-//
-//        return DaylogResponseDto.of(daylog.getId(),
-//                daylog.getContent(),
-//                daylog.getImage(),
-//                daylog.getDaylogNumber(),
-//                daylog.getCreatedAt(),
-//                daylog.getSeries(),
-//                daylog.getMember());
-//
-//
-//    }
-//
-//
-//
-//    private List<DaylogResponseDto> seriesToSeriesListResponseDtos(List<Daylog> daylogList){
-//        if (daylogList ==null){
-//            return null;
-//        }
-//        List<DaylogResponseDto> list = new ArrayList<>(daylogList.size());
-//        Iterator iterator = daylogList.iterator();
-//
-//        while (iterator.hasNext()){
-//            Daylog daylog = (Daylog) iterator.next();
-//            list.add(this.DaylogToDaylogResponseDto(daylog));
-//        }
-//
-//        return list;
-//        //클래스 추가 , 책임 이전
-//    }
-//
-//    private List<DaylogResponseDto> isMineDaylog(List<DaylogResponseDto> daylogResponseDtosList, Member member){
-//
-//        for(DaylogResponseDto daylogResponseDto : daylogResponseDtosList){
-//            if(daylogResponseDto.getMember().getId() == member.getId()){
-//                daylogResponseDto.setMine(true);
-//            }
-//        }
-//
-//        return daylogResponseDtosList;
-//    }
+    @Transactional
+    public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto){
+        if (daylogPostDto.getContent().isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+        }
+
+        memberService.findMemberByToken();
+
+        Daylog daylog = Daylog.of(daylogPostDto.getContent());
+        Series series = seriesService.findVerifiedSeries(seriesId);
+
+        series.setDaylogCount(series.getDaylogCount()+1);
+        daylog.addSeries(series);
+        daylogRepository.save(daylog);
+
+
+        return this.DaylogToDaylogResponseDto(daylog);
+    }
+
+    @Transactional
+    public DaylogResponseDto saveDaylog(Long seriesId, DaylogPostDto daylogPostDto,MultipartFile image) throws IOException {
+        if (daylogPostDto.getContent().isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+        }
+
+        Member member = memberService.findMemberByToken();
+        Daylog daylog = Daylog.of(daylogPostDto.getContent());
+        Series series = seriesService.findVerifiedSeries(seriesId);
+
+        if (member.getId() != series.getMember().getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
+
+        if(!image.isEmpty()){
+            String saveFileName = s3ImageUploader.upload(image,"daylog");
+            daylog.setContentImg(saveFileName);
+            series.setImage(saveFileName);
+        }else {
+            throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+        }
+        series.setDaylogCount(series.getDaylogCount()+1);
+        daylog.setDaylogNumber(series.getDaylogCount());
+
+        daylog.addSeries(series);
+        daylog.addMember(member);
+
+        daylogRepository.save(daylog);
+
+        return this.DaylogToDaylogResponseDto(daylog);
+    }
+
+
+
+
+
+    public PageResponseDto getDaylogList(Long seriesId, int page, int size) {
+
+        Member member = memberService.findMemberByToken();
+        Page<Daylog> daylogsInfo = daylogRepository.findBySeries_id(seriesId,
+                PageRequest.of(page, size, Sort.by("id").descending()));
+
+        List<Daylog> daylogList = daylogsInfo.getContent();
+
+        List<DaylogResponseDto> list = this.seriesToSeriesListResponseDtos(daylogList);
+        List<DaylogResponseDto> responseDtos = this.isMineDaylog(list, member);
+        log.info("responseDtos={}", responseDtos);
+        return new PageResponseDto<>(responseDtos, daylogsInfo);
+        }
+
+
+    @NotNull
+    private DaylogResponseDto DaylogToDaylogResponseDto(Daylog daylog){
+
+        return DaylogResponseDto.of(daylog.getId(),
+                daylog.getContent(),
+                daylog.getImage(),
+                daylog.getDaylogNumber(),
+                daylog.getCreatedAt(),
+                daylog.getSeries(),
+                daylog.getMember());
+
+
+    }
+
+
+
+    private List<DaylogResponseDto> seriesToSeriesListResponseDtos(List<Daylog> daylogList){
+        if (daylogList ==null){
+            return null;
+        }
+        List<DaylogResponseDto> list = new ArrayList<>(daylogList.size());
+        Iterator iterator = daylogList.iterator();
+
+        while (iterator.hasNext()){
+            Daylog daylog = (Daylog) iterator.next();
+            list.add(this.DaylogToDaylogResponseDto(daylog));
+        }
+
+        return list;
+        //클래스 추가 , 책임 이전
+    }
+
+    private List<DaylogResponseDto> isMineDaylog(List<DaylogResponseDto> daylogResponseDtosList, Member member){
+
+        for(DaylogResponseDto daylogResponseDto : daylogResponseDtosList){
+            if(daylogResponseDto.getMember().getId() == member.getId()){
+                daylogResponseDto.setMine(true);
+            }
+        }
+
+        return daylogResponseDtosList;
+    }
 
     }
 
