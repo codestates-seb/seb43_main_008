@@ -20,7 +20,8 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 
     Page<Series> findAllByIsPublicAndVoteCreatedAtIsNotNull(Boolean isPublic, Pageable pageable);
 
-    Page<Series> findAllByIsPublicAndVoteStatusAndTotalVoteNot(Boolean isPublic, Vote.VoteStatus voteStatus, int limit, Pageable pageable);
+    //TODO 조인 쿼리문 만들기.
+    Page<Series> findAllByIsPublicAndStatusAndTotalVoteNot(Boolean isPublic, Vote.VoteStatus status, int limit, Pageable pageable);
 
 //
 //    /* 멤버 서비스에서 멤버 아이디에 해당하는 시리즈 목록 출력 목적 */

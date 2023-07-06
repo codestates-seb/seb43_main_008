@@ -7,6 +7,7 @@ import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.domain.series.constant.SeriesConstants;
 import com.ssts.ssts.domain.series.dto.SeriesDetailResponseDto;
+import com.ssts.ssts.domain.vote.entity.Vote;
 import com.ssts.ssts.domain.vote.service.VoteService;
 import com.ssts.ssts.global.utils.MultipleResponseDto.PageResponseDto;
 import com.ssts.ssts.domain.member.repository.MemberVoteRepository;
@@ -42,6 +43,7 @@ public class SeriesService {
     //private final VoteRepository voteRepository;
     private final MemberRepository memberRepo;
     private final MemberService memberService;
+    private final VoteService voteService;
     private final BookmarkRepository bookmarkRepo;
     private final MemberVoteRepository voteMemberRepo;
 
@@ -50,9 +52,7 @@ public class SeriesService {
     private final S3Uploader s3Uploader;
 
 
-
-
-    public SeriesDetailResponseDto getSeries(Long id){
+    public SeriesDetailResponseDto getSeries(Long id) {
 
         memberService.findMemberByToken();
         Series series = this.findVerifiedSeries(id);
@@ -69,16 +69,15 @@ public class SeriesService {
         Boolean isBookmarkedMember = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, id);
 
 
-
         return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
     }
 
 
     //TODO: saveSeries 복구 수준: 리팩토링 전 코드와 똑같게 (이미지까지) / 생성시 자동 이미지 적재(S3)
     @Transactional
-    public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto){
+    public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto) {
         // 파라미터 체크 완료
-        if(seriesPostDto.getTitle().isEmpty()){
+        if (seriesPostDto.getTitle().isEmpty()) {
             throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
         }
 
@@ -86,15 +85,15 @@ public class SeriesService {
         Series series = Series.of(seriesPostDto.getTitle());
         Member member = memberService.findMemberById(authMember.getId());
 
-        if(authMember.getId()!=member.getId()){
+        if (authMember.getId() != member.getId()) {
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
-        if("true".equals(isPublic)){
+        if ("true".equals(isPublic)) {
             series.setIsPublic(true);
-        }else if("false".equals(isPublic)){
+        } else if ("false".equals(isPublic)) {
             series.setIsPublic(false);
-        }else {
+        } else {
             throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
         }
 
@@ -107,33 +106,33 @@ public class SeriesService {
 
 
     @Transactional
-    public SeriesResponseDto updateSeries(Long seriesId, SeriesUpdateDto seriesUpdateDto){
+    public SeriesResponseDto updateSeries(Long seriesId, SeriesUpdateDto seriesUpdateDto) {
 
         Member member = memberService.findMemberByToken();
         Series descSeries = findVerifiedSeries(seriesId);
         Series series = Series.of(seriesUpdateDto.getTitle(), seriesUpdateDto.getIsPublic());
 
-        if(descSeries.getIsEditable().equals(false)){
+        if (descSeries.getIsEditable().equals(false)) {
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
-        if(descSeries.getMember().getId() != member.getId()){ // 스트링값 equal로비교
+        if (descSeries.getMember().getId() != member.getId()) { // 스트링값 equal로비교
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
-        Series updateSeries = updateUtils.copyNonNullProperties(series,descSeries);
+        Series updateSeries = updateUtils.copyNonNullProperties(series, descSeries);
         seriesRepository.save(updateSeries);
 
         return this.seriesToSeriesResponseDto(updateSeries);
 
     }
 
-    public void deleteSeries(Long id){
+    public void deleteSeries(Long id) {
 
         Series series = this.findVerifiedSeries(id);
         seriesRepository.delete(series);
     }
 
-    public Series findVerifiedSeries(Long questionId){
+    public Series findVerifiedSeries(Long questionId) {
         Optional<Series> optionalQuestion = seriesRepository.findById(questionId);
 
         Series findSeries =
@@ -141,188 +140,188 @@ public class SeriesService {
                         new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
         return findSeries;
     }
-//
-//    public PageResponseDto getSeriesList(String nickname, int page, int size){
-//        // 파라미터 체크
-//        if(nickname.isEmpty()) throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
-//
-//        Page<Series> seriesInfo;
-//        Member authMember = memberService.findMemberByToken();
-//        long memberId = memberService.findMemberByNickName(nickname).getId();
-//
-//        if(authMember.getId() == memberId) {
-//            seriesInfo = seriesRepository.findByMember_id(memberId, PageRequest.of(page, size,
-//                    Sort.by("id").descending()));
-//
-//        }else if(authMember.getId() != memberId){
-//            seriesInfo = seriesRepository.findByMember_idAndIsPublicTrue(memberId, PageRequest.of(page, size,
-//                    Sort.by("id").descending()));
-//        }else{
-//            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
-//        }
-//
-//
-//        List<Series> seriesList = seriesInfo.getContent();
-//
-//        //voteLogic
-//        LocalDateTime currentTime = LocalDateTime.now();
-//
-//        //마감기간이 지나고 재투표를 진행한 시리즈를 전부 뽑아서 값을 바꿔준거임
-//        for (int i = 0; i < seriesList.size(); i++) {
-//            //우선 seriesList전체가 돌고 계산된 값이 들어간 뒤에, if 문으로 해당 값을 바꾸어주어야 함
-//            //값을 바꿔주는 게 우선임, 그 뒤에 로직을 돌려서 해당 상태값을 바꿔주어야 선행되는 검사를 진행할 수 있음
-//
-//            int current_voteCount=seriesList.get(i).getVotes().get(0).getVoteCount();
-//
-//            if (current_voteCount == 2 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())) { //재투표 때의 결과값을 먼저 바꿔줌
-//                seriesList.get(i).setRevoteResult(
-//                        voteService.voteResultCal(seriesList.get(i).getRevoteAgree(), seriesList.get(i).getRevoteDisagree())
-//                );
-//            }
-//
-//            else if (current_voteCount == 1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())) {
-//                seriesList.get(i).setVoteResult(
-//                        voteService.voteResultCal(seriesList.get(i).getVoteAgree(), seriesList.get(i).getVoteDisagree())
-//                );
-//            }
-//            seriesRepository.save(seriesList.get(i));
-//        }
-//
-//
-//
-//        //상태값 변경
-//        for (int i = 0; i < seriesList.size(); i++) {
-//
-//            int current_voteCount=seriesList.get(i).getVotes().get(0).getVoteCount();
-//
-//            if(current_voteCount==2 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())){ //마감기간이 지남 + 투표 2회 이용 (재투표)
-//                seriesList.get(i).setIsEditable(false);
-//                seriesList.get(i).setIsActive(false);
-//                seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_QUIT);
-//            }
-//
-//            //최초투표: 마감기간이 지나고 결과가 true
-//            else if(current_voteCount==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==true){
-//                seriesList.get(i).setVoteResult(
-//                        voteService.voteResultCal(seriesList.get(i).getVoteAgree(), seriesList.get(i).getVoteDisagree())
-//                );
-//
-//
-//            }
-//
-//            //최초투표: 마감기간이 지나고 결과가 false
-//            else if(current_voteCount==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false){
-//                seriesList.get(i).setIsEditable(false);
-//                seriesList.get(i).setIsActive(false);
-//                seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_SLEEP);
-//            }
-//
-//            seriesRepository.save(seriesList.get(i));
-//        }
-//
-//        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
-//
-//        return new PageResponseDto(list, seriesInfo);
-//    }
-//
+
+    public PageResponseDto getSeriesList(String nickname, int page, int size) {
+        // 파라미터 체크
+        if (nickname.isEmpty()) throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
+
+        Page<Series> seriesInfo;
+        Member authMember = memberService.findMemberByToken();
+        long memberId = memberService.findMemberByNickName(nickname).getId();
+
+        if (authMember.getId() == memberId) {
+            seriesInfo = seriesRepository.findByMember_id(memberId, PageRequest.of(page, size,
+                    Sort.by("id").descending()));
+
+        } else if (authMember.getId() != memberId) {
+            seriesInfo = seriesRepository.findByMember_idAndIsPublicTrue(memberId, PageRequest.of(page, size,
+                    Sort.by("id").descending()));
+        } else {
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
+
+        List<Series> seriesList = seriesInfo.getContent();
+        LocalDateTime currentTime = LocalDateTime.now();
+        voteSettings(seriesList, currentTime);
+
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+
+        return new PageResponseDto(list, seriesInfo);
+    }
+
 //    @Transactional
-//    public PageResponseDto getMySeriesList(int page, int size) {
-//
-//
-//
-//        Page<Series> seriesInfo;
-//        Member authMember = memberService.findMemberByToken();
-//
-//        seriesInfo = seriesRepository.findByMember_id(authMember.getId(), PageRequest.of(page, size,
-//                Sort.by("id").descending()));
-//
-//
-//        List<Series> seriesList = seriesInfo.getContent();
-//
-//        //voteLogic
-//        LocalDateTime currentTime = LocalDateTime.now();
-//
-//        //마감기간이 지나고 재투표를 진행한 시리즈를 전부 뽑아서 값을 바꿔준거임
-//        for (int i = 0; i < seriesList.size(); i++) {
-//            //우선 seriesList전체가 돌고 계산된 값이 들어간 뒤에, if 문으로 해당 값을 바꾸어주어야 함
-//            //값을 바꿔주는 게 우선임, 그 뒤에 로직을 돌려서 해당 상태값을 바꿔주어야 선행되는 검사를 진행할 수 있음
-//
-//            if (seriesList.get(i).getVoteCount() == 2 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())) { //재투표 때의 결과값을 먼저 바꿔줌
-//                seriesList.get(i).setRevoteResult(
-//                        voteService.voteResultCal(seriesList.get(i).getRevoteAgree(), seriesList.get(i).getRevoteDisagree())
-//                );
-//            }
-//
-//            else if (seriesList.get(i).getVoteCount() == 1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())) {
-//                seriesList.get(i).setVoteResult(
-//                        voteService.voteResultCal(seriesList.get(i).getVoteAgree(), seriesList.get(i).getVoteDisagree())
-//                );
-//            }
-//            seriesRepository.save(seriesList.get(i));
-//        }
-//
-//
-//
-//        //상태값 변경
-//        for (int i = 0; i < seriesList.size(); i++) {
-//            if(seriesList.get(i).getVoteCount()==2 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())){ //마감기간이 지남 + 투표 2회 이용 (재투표)
-//                seriesList.get(i).setIsEditable(false);
-//                seriesList.get(i).setIsActive(false);
-//                seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_QUIT);
-//            }
-//
-//            //최초투표: 마감기간이 지나고 결과가 true => 이 경우에 별거 건들지 않음
-//            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==true){
-//                seriesList.get(i).setVoteResult(
-//                        voteService.voteResultCal(seriesList.get(i).getVoteAgree(), seriesList.get(i).getVoteDisagree())
-//                );
-//            }
-//
-//            //최초투표: 마감기간이 지나고 결과가 false
-//            //[마감기한이 지났지만, 재투표의 기회가 있는 경우의 상태 변경] => 활성 상태는 변경하지 않고, 수정이 불가능
-//            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false){
-//                seriesList.get(i).setIsEditable(false);
-//                seriesList.get(i).setIsActive(false);
-//                seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_SLEEP);
-//            }
-//
-//            seriesRepository.save(seriesList.get(i));
-//        }
-//
-//        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
-//
-//        return new PageResponseDto(list, seriesInfo);
-//    }
-//
-//    public PageResponseDto getMainSeriesListByNewest(int page, int size){
-//
-//        long beforeTime = System.currentTimeMillis(); //코드 실행 전에 시간 받아오기
-//
-//
-//
-//        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteCreatedAtIsNotNull(true, PageRequest.of(page, size,
-//                Sort.by("voteCreatedAt").descending()));
-//
-//        List<Series> seriesList = seriesInfo.getContent();
-//        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
-//
-//        long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
-//        long secDiffTime = (afterTime - beforeTime)/1000; //두 시간에 차 계산
-//        System.out.println("시간차이(m) : "+secDiffTime);
-//
-//        return new PageResponseDto(list, seriesInfo);
-//    }
-//
-//    public PageResponseDto getMainSeriesListByVotes(int page, int size){
-//
-//        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteStatusAndTotalVoteNot(true, Series.VoteStatus.SERIES_SLEEP,0, PageRequest.of(page, size,
-//                Sort.by("totalVote").descending()));
-//
-//        List<Series> seriesList = seriesInfo.getContent();
-//        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
-//
-//        return new PageResponseDto(list, seriesInfo);
-//    }
+    public PageResponseDto getMySeriesList(int page, int size) {
+
+        Page<Series> seriesInfo;
+        Member authMember = memberService.findMemberByToken();
+
+        seriesInfo = seriesRepository.findByMember_id(authMember.getId(), PageRequest.of(page, size,
+                Sort.by("id").descending()));
+
+        List<Series> seriesList = seriesInfo.getContent();
+        LocalDateTime currentTime = LocalDateTime.now();
+        voteSettings(seriesList, currentTime);
+
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+
+        return new PageResponseDto(list, seriesInfo);
+    }
+
+    private void voteSettings(List<Series> seriesList, LocalDateTime currentTime) {
+        //마감기간이 지나고 재투표를 진행한 시리즈를 전부 뽑아서 값을 바꿔준거임
+        for (int i = 0; i < seriesList.size(); i++) {
+            //우선 seriesList전체가 돌고 계산된 값이 들어간 뒤에, if 문으로 해당 값을 바꾸어주어야 함
+            //값을 바꿔주는 게 우선임, 그 뒤에 로직을 돌려서 해당 상태값을 바꿔주어야 선행되는 검사를 진행할 수 있음
+            int totalVoteCount = seriesList.get(i).getVotes().size();
+            if (totalVoteCount == 2) {
+
+                Vote vote;
+                Vote revote;
+
+                if (seriesList.get(i).getVotes().get(0).getVoteCount() == 2) {
+                    revote = seriesList.get(i).getVotes().get(0);
+                    vote = seriesList.get(i).getVotes().get(1);
+                } else {
+                    revote = seriesList.get(i).getVotes().get(1);
+                    vote = seriesList.get(i).getVotes().get(0);
+                }
+
+                if (currentTime.isAfter(revote.getVoteEndAt())) { //재투표 때의 결과값을 먼저 바꿔줌
+                    revote.setVoteResult(
+                            voteService.voteResultCal(revote.getAgree(), revote.getDisagree())
+                    );
+                }
+
+                if (currentTime.isAfter(vote.getVoteEndAt())) {
+                    vote.setVoteResult(
+                            voteService.voteResultCal(vote.getAgree(), vote.getDisagree())
+                    );
+                }
+
+
+            } else if (totalVoteCount == 1) {
+
+                Vote vote = seriesList.get(i).getVotes().get(0);
+
+                if (currentTime.isAfter(vote.getVoteEndAt())) {
+                    vote.setVoteResult(
+                            voteService.voteResultCal(vote.getAgree(), vote.getDisagree())
+                    );
+                }
+
+            }
+
+            seriesRepository.save(seriesList.get(i));
+        }
+
+        //상태값 변경
+        for (int i = 0; i < seriesList.size(); i++) {
+
+            int totalVoteCount = seriesList.get(i).getVotes().size();
+
+            if (totalVoteCount == 2) {
+
+                Vote vote;
+                Vote revote;
+
+                if (seriesList.get(i).getVotes().get(0).getVoteCount() == 2) {
+                    revote = seriesList.get(i).getVotes().get(0);
+                    vote = seriesList.get(i).getVotes().get(1);
+                } else {
+                    revote = seriesList.get(i).getVotes().get(1);
+                    vote = seriesList.get(i).getVotes().get(0);
+                }
+
+                if (currentTime.isAfter(revote.getVoteEndAt())) { //마감기간이 지남 + 투표 2회 이용 (재투표)
+                    seriesList.get(i).setIsEditable(false);
+                    seriesList.get(i).setIsActive(false);
+                    revote.setStatus(Vote.VoteStatus.SERIES_QUIT);
+                }
+
+                //최초투표: 마감기간이 지나고 결과가 true
+                if (currentTime.isAfter(vote.getVoteEndAt()) && vote.getVoteResult() == true) {
+                    vote.setVoteResult(
+                            voteService.voteResultCal(vote.getAgree(), vote.getDisagree())
+                    );
+                }
+
+                //최초투표: 마감기간이 지나고 결과가 false
+                if (currentTime.isAfter(vote.getVoteEndAt()) && vote.getVoteResult() == false) {
+                    seriesList.get(i).setIsEditable(false);
+                    seriesList.get(i).setIsActive(false);
+                    vote.setStatus(Vote.VoteStatus.SERIES_SLEEP);
+                }
+            }else if(totalVoteCount==1){
+
+                Vote vote = seriesList.get(i).getVotes().get(0);
+
+                //최초투표: 마감기간이 지나고 결과가 true
+                if (currentTime.isAfter(vote.getVoteEndAt()) && vote.getVoteResult() == true) {
+                    vote.setVoteResult(
+                            voteService.voteResultCal(vote.getAgree(), vote.getDisagree())
+                    );
+                }
+
+                //최초투표: 마감기간이 지나고 결과가 false
+                else if (currentTime.isAfter(vote.getVoteEndAt()) && vote.getVoteResult() == false) {
+                    seriesList.get(i).setIsEditable(false);
+                    seriesList.get(i).setIsActive(false);
+                    vote.setStatus(Vote.VoteStatus.SERIES_SLEEP);
+                }
+
+            }
+            seriesRepository.save(seriesList.get(i));
+        }
+    }
+
+
+    public PageResponseDto getMainSeriesListByNewest(int page, int size){
+
+        long beforeTime = System.currentTimeMillis(); //코드 실행 전에 시간 받아오기
+
+        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteCreatedAtIsNotNull(true, PageRequest.of(page, size,
+                Sort.by("voteCreatedAt").descending()));
+
+        List<Series> seriesList = seriesInfo.getContent();
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+
+        long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
+        long secDiffTime = (afterTime - beforeTime)/1000; //두 시간에 차 계산
+        System.out.println("시간차이(m) : "+secDiffTime);
+
+        return new PageResponseDto(list, seriesInfo);
+    }
+
+    public PageResponseDto getMainSeriesListByVotes(int page, int size){
+
+        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndStatusAndTotalVoteNot(true, Series.VoteStatus.SERIES_SLEEP,0, PageRequest.of(page, size,
+                Sort.by("totalVote").descending()));
+
+        List<Series> seriesList = seriesInfo.getContent();
+        List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
+
+        return new PageResponseDto(list, seriesInfo);
+    }
 //
 //    public SeriesDetailResponseDto getSeries(Long id){
 //        memberService.findMemberByToken();
@@ -435,14 +434,14 @@ public class SeriesService {
         );
     }
 
-    public List<SeriesResponseDto> seriesToSeriesListResponseDtos(List<Series> seriesList){
-        if (seriesList ==null){
+    public List<SeriesResponseDto> seriesToSeriesListResponseDtos(List<Series> seriesList) {
+        if (seriesList == null) {
             return null;
         }
         List<SeriesResponseDto> list = new ArrayList<>(seriesList.size());
         Iterator iterator = seriesList.iterator();
 
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Series series = (Series) iterator.next();
             list.add(this.seriesToSeriesResponseDto(series));
         }
