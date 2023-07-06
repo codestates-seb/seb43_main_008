@@ -62,23 +62,11 @@ public class SeriesResponseDto {
                                        int daylogCount,
                                        LocalDateTime createdAt,
                                        LocalDateTime modifiedAt,
-                                       int voteCount,
 
-//                                       Boolean voteResult,
-//                                       int voteAgree, int voteDisagree,
-//                                       Boolean revoteResult,
-//                                       int revoteAgree,
-//                                       int revoteDisagree,
-
-                                       Boolean result,
-                                       int agree,
-                                       int disagree,
-
-                                       Vote.VoteStatus voteStatus,
+                                       //Vote.VoteStatus voteStatus, TODO 얘는 투표 하나마다 계산해서 들어가는 어쩌구가 필요할지도
                                        Boolean isPublic,
                                        Boolean isEditable,
-                                       Boolean isActive,
-                                       int totalVote) {
+                                       Boolean isActive) {
         SeriesResponseDto seriesResponseDto = new SeriesResponseDto();
 
         seriesResponseDto.setId(id);
@@ -87,21 +75,11 @@ public class SeriesResponseDto {
         seriesResponseDto.setDaylogCount(daylogCount);
         seriesResponseDto.setCreatedAt(createdAt);
         seriesResponseDto.setModifiedAt(modifiedAt);
-        seriesResponseDto.setVoteCount(voteCount);
-
-        seriesResponseDto.setSeriesStatus(voteStatus);
+        //seriesResponseDto.setSeriesStatus(voteStatus);
         seriesResponseDto.setIsPublic(isPublic);
         seriesResponseDto.setIsEditable(isEditable);
         seriesResponseDto.setIsActive(isActive);
-        seriesResponseDto.setTotalVote(totalVote);
 
-
-//        seriesResponseDto.setVoteResult(voteResult);
-//        seriesResponseDto.setVoteAgree(voteAgree);
-//        seriesResponseDto.setVoteDisagree(voteDisagree);
-//        seriesResponseDto.setRevoteResult(revoteResult);
-//        seriesResponseDto.setRevoteAgree(revoteAgree);
-//        seriesResponseDto.setRevoteDisagree(revoteDisagree);
         return seriesResponseDto;
     }
 
@@ -111,19 +89,7 @@ public class SeriesResponseDto {
                                        int daylogCount,
                                        LocalDateTime createdAt,
                                        LocalDateTime modifiedAt,
-                                       int voteCount,
-
-//                                       Boolean voteResult,
-//                                       int voteAgree, int voteDisagree,
-//                                       Boolean revoteResult,
-//                                       int revoteAgree,
-//                                       int revoteDisagree,
-
-                                       Boolean result,
-                                       int agree,
-                                       int disagree,
-
-                                       Vote.VoteStatus voteStatus,
+                                       //Vote.VoteStatus voteStatus,
                                        Boolean isPublic,
                                        Boolean isEditable,
                                        Boolean isActive,
@@ -137,22 +103,12 @@ public class SeriesResponseDto {
         seriesResponseDto.setDaylogCount(daylogCount);
         seriesResponseDto.setCreatedAt(createdAt);
         seriesResponseDto.setModifiedAt(modifiedAt);
-        seriesResponseDto.setVoteCount(voteCount);
-        seriesResponseDto.setSeriesStatus(voteStatus);
+        //seriesResponseDto.setSeriesStatus(voteStatus);
         seriesResponseDto.setIsPublic(isPublic);
         seriesResponseDto.setIsEditable(isEditable);
         seriesResponseDto.setIsActive(isActive);
         seriesResponseDto.setIsVotedMember(isVotedMember);
         seriesResponseDto.setIsBookmarkedMember(isBookmarkedMember);
-
-
-//        seriesResponseDto.setVoteResult(voteResult);
-//        seriesResponseDto.setVoteAgree(voteAgree);
-//        seriesResponseDto.setVoteDisagree(voteDisagree);
-//        seriesResponseDto.setVoteResult(revoteResult);
-//        seriesResponseDto.setRevoteAgree(revoteAgree);
-//        seriesResponseDto.setRevoteDisagree(revoteDisagree);
-
         return seriesResponseDto;
     }
 

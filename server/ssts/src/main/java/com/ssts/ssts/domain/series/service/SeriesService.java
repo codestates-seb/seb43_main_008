@@ -43,7 +43,12 @@ public class SeriesService {
     private final MemberRepository memberRepo;
     private final MemberService memberService;
     private final BookmarkRepository bookmarkRepo;
-    //private final MemberVoteRepository voteMemberRepo;
+    private final MemberVoteRepository voteMemberRepo;
+
+
+    private final UpdateUtils<Series> updateUtils;
+    private final S3Uploader s3Uploader;
+
 
 
 
@@ -69,12 +74,8 @@ public class SeriesService {
     }
 
 
-    //TODO 테스트 응답: vote X
+    //TODO: saveSeries 복구 수준: 리팩토링 전 코드와 똑같게 (이미지까지) / 생성시 자동 이미지 적재(S3)
     public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto){
-
-
-
-
                 // 파라미터 체크 완료
         if(seriesPostDto.getTitle().isEmpty()){
             throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
@@ -88,57 +89,68 @@ public class SeriesService {
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
-        //Vote vote = voteRepository.findBySeries_id(id);
+        if("true".equals(isPublic)){
+            series.setIsPublic(true);
+        }else if("false".equals(isPublic)){
+            series.setIsPublic(false);
+        }else {
+            throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
+        }
+
+
+
+        series.setImage(s3Uploader.getS3(SeriesConstants.BUCKET_NAME.getSeriesConstant(), SeriesConstants.FILE_DiRECTORY.getSeriesConstant()));
         series.addMember(member);
         seriesRepository.save(series);
 
         //일단 vote 가 없는 설정임 그런거임
-        return SeriesResponseDto.of(series.getId(),
-                series.getTitle(),
-                series.getDaylogCount(),
-                //series.getCreatedAt(),
-                //series.getModifiedAt(),
-                //series.getVoteCount(),
-                //series.getVoteResult(),
-                //series.getVoteAgree(),
-                //series.getVoteDisagree(),
-                //series.getRevoteResult(),
-                //series.getRevoteAgree(),
-                //series.getRevoteDisagree(),
-                //series.getSeriesStatus(),
-                series.getIsPublic(),
-                series.getIsEditable(),
-                series.getIsActive());
+//        return SeriesResponseDto.of(series.getId(),
+//                series.getTitle(),
+//                series.getDaylogCount(),
+//                //series.getCreatedAt(),
+//                //series.getModifiedAt(),
+//                //series.getVoteCount(),
+//                //series.getVoteResult(),
+//                //series.getVoteAgree(),
+//                //series.getVoteDisagree(),
+//                //series.getRevoteResult(),
+//                //series.getRevoteAgree(),
+//                //series.getRevoteDisagree(),
+//                //series.getSeriesStatus(),
+//                series.getIsPublic(),
+//                series.getIsEditable(),
+//                series.getIsActive());
 
-
-
-    }
-
-
-    public SeriesResponseDto updateSeries(Long id, SeriesUpdateDto seriesUpdateDto){
-
-        Series series = this.findVerifiedSeries(id);
-
-
-
-        return SeriesResponseDto.of(series.getId(), //vote로 바꿔야 함
-                series.getTitle(),
-                series.getDaylogCount(),
-                //series.getCreatedAt(),
-                //series.getModifiedAt(),
-                //series.getVoteCount(),
-                //series.getVoteResult(),
-                //series.getVoteAgree(),
-                //series.getVoteDisagree(),
-                //series.getRevoteResult(),
-                //series.getRevoteAgree(),
-                //series.getRevoteDisagree(),
-                //series.getSeriesStatus(),
-                series.getIsPublic(),
-                series.getIsEditable(),
-                series.getIsActive());
+        return this.seriesToSeriesResponseDto(series); //TODO 홀로 기본코드 적용해서 남아있음
 
     }
+
+
+
+//    public SeriesResponseDto updateSeries(Long id, SeriesUpdateDto seriesUpdateDto){
+//
+//        Series series = this.findVerifiedSeries(id);
+//
+//
+//
+//        return SeriesResponseDto.of(series.getId(),
+//                series.getTitle(),
+//                series.getDaylogCount(),
+//                //series.getCreatedAt(),
+//                //series.getModifiedAt(),
+//                //series.getVoteCount(),
+//                //series.getVoteResult(),
+//                //series.getVoteAgree(),
+//                //series.getVoteDisagree(),
+//                //series.getRevoteResult(),
+//                //series.getRevoteAgree(),
+//                //series.getRevoteDisagree(),
+//                //series.getSeriesStatus(),
+//                series.getIsPublic(),
+//                series.getIsEditable(),
+//                series.getIsActive());
+//
+//    }
 
     public void deleteSeries(Long id){
 
@@ -444,61 +456,46 @@ public class SeriesService {
 //        return findSeries;
 //    }
 //
-//    @NotNull
-//    private SeriesResponseDto seriesToSeriesResponseDto(Series series) {
-//
-//
-//        return SeriesResponseDto.of(series.getId(),
-//                series.getTitle(),
-//                series.getImage(),
-//                series.getDaylogCount(),
-//                series.getCreatedAt(),
-//                series.getModifiedAt(),
-//                series.getVoteCount(),
-//                series.getVoteResult(),
-//                series.getVoteAgree(),
-//                series.getVoteDisagree(),
-//                series.getRevoteResult(),
-//                series.getRevoteAgree(),
-//                series.getRevoteDisagree(),
-//                series.getVoteStatus(),
-//                series.getIsPublic(),
-//                series.getIsEditable(),
-//                series.getIsActive(),
-//                series.getTotalVote());
-//    }
-//
-//
-//    //getSerise
-//    @NotNull
-//    private SeriesResponseDto seriesToSeriesResponseDto(Series series, Boolean isVotedMember, Boolean isBookmarkedMember) {
-//        //선언부(메서드 시그니처)가 메소드 오버로드에 중심
-//        //메소드의 이름이 같아도, 파라미터와 반환값이 다르면 얘가 알아서 분리해서 적용햅줌
-//        //이걸로 오버로드를 사용해서 여러개의 파라미터를 받는 같은 메소드를 구현 가능
-//
-//
-//        return SeriesResponseDto.of(series.getId(),
-//                series.getTitle(),
-//                series.getImage(),
-//                series.getDaylogCount(),
-//                series.getCreatedAt(),
-//                series.getModifiedAt(),
-//                series.getVoteCount(),
-//                series.getVoteResult(),
-//                series.getVoteAgree(),
-//                series.getVoteDisagree(),
-//                series.getRevoteResult(),
-//                series.getRevoteAgree(),
-//                series.getRevoteDisagree(),
-//                series.getVoteStatus(),
-//                series.getIsPublic(),
-//                series.getIsEditable(),
-//                series.getIsActive(),
-//                isVotedMember,
-//                isBookmarkedMember
-//        );
-//    }
-//
+    @NotNull
+    private SeriesResponseDto seriesToSeriesResponseDto(Series series) {
+
+
+        return SeriesResponseDto.of(series.getId(),
+                series.getTitle(),
+                series.getImage(),
+                series.getDaylogCount(),
+                series.getCreatedAt(),
+                series.getModifiedAt(),
+                //series.getVoteStatus(),
+                series.getIsPublic(),
+                series.getIsEditable(),
+                series.getIsActive());
+    }
+
+
+    //getSerise
+    @NotNull
+    private SeriesResponseDto seriesToSeriesResponseDto(Series series, Boolean isVotedMember, Boolean isBookmarkedMember) {
+        //선언부(메서드 시그니처)가 메소드 오버로드에 중심
+        //메소드의 이름이 같아도, 파라미터와 반환값이 다르면 얘가 알아서 분리해서 적용햅줌
+        //이걸로 오버로드를 사용해서 여러개의 파라미터를 받는 같은 메소드를 구현 가능
+
+
+        return SeriesResponseDto.of(series.getId(),
+                series.getTitle(),
+                series.getImage(),
+                series.getDaylogCount(),
+                series.getCreatedAt(),
+                series.getModifiedAt(),
+                //series.getVoteStatus(),
+                series.getIsPublic(),
+                series.getIsEditable(),
+                series.getIsActive(),
+                isVotedMember,
+                isBookmarkedMember
+        );
+    }
+
     @NotNull
     private SeriesDetailResponseDto seriesToSeriesResponseDto(Series series, Boolean isBookmarkedMember) {
         //선언부(메서드 시그니처)가 메소드 오버로드에 중심
@@ -509,20 +506,20 @@ public class SeriesService {
         );
     }
 
-//    public List<SeriesResponseDto> seriesToSeriesListResponseDtos(List<Series> seriesList){
-//        if (seriesList ==null){
-//            return null;
-//        }
-//        List<SeriesResponseDto> list = new ArrayList<>(seriesList.size());
-//        Iterator iterator = seriesList.iterator();
-//
-//        while (iterator.hasNext()){
-//            Series series = (Series) iterator.next();
-//            list.add(this.seriesToSeriesResponseDto(series));
-//        }
-//
-//        return list;
-//    }
+    public List<SeriesResponseDto> seriesToSeriesListResponseDtos(List<Series> seriesList){
+        if (seriesList ==null){
+            return null;
+        }
+        List<SeriesResponseDto> list = new ArrayList<>(seriesList.size());
+        Iterator iterator = seriesList.iterator();
+
+        while (iterator.hasNext()){
+            Series series = (Series) iterator.next();
+            list.add(this.seriesToSeriesResponseDto(series));
+        }
+
+        return list;
+    }
 
 
 }
