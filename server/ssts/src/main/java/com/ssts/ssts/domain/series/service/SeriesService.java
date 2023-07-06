@@ -72,7 +72,6 @@ public class SeriesService {
         return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
     }
 
-
     //TODO: saveSeries 복구 수준: 리팩토링 전 코드와 똑같게 (이미지까지) / 생성시 자동 이미지 적재(S3)
     @Transactional
     public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto) {
@@ -326,68 +325,7 @@ public class SeriesService {
 
         return new PageResponseDto(list, seriesInfo);
     }
-//
-//    public SeriesDetailResponseDto getSeries(Long id){
-//        memberService.findMemberByToken();
-//        Series series = this.findVerifiedSeries(id);
-//
-//        //사용자 Id받기
-//        long memberId = SecurityUtil.getMemberId();
-//        memberRepo.findById(memberId).
-//                orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//
-//        //vote: 사용자의 vote 여부를 응답으로 보내기 위함
-//        //Boolean isVotedMember = voteMemberRepo.existsByMember_IdAndSeries_Id(memberId, id);
-//
-//        //bookmark: 사용자의 해당 시리즈 북마크 여부
-//        Boolean isBookmarkedMember = bookmarkRepo.existsByMember_IdAndSeries_Id(memberId, id);
-//
-//        return this.seriesToSeriesResponseDto(series, isBookmarkedMember);
-//    }
-//
-//
-//
-//    @Transactional
-//    public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto){
-//        // 파라미터 체크 완료
-//        if(seriesPostDto.getTitle().isEmpty()){
-//            throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
-//        }
-//
-//        Member authMember = memberService.findMemberByToken();
-//        Series series = Series.of(seriesPostDto.getTitle());
-//        Member member = memberService.findMemberById(authMember.getId());
-//
-//        if(authMember.getId()!=member.getId()){
-//            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
-//        }
-//
-//        if("true".equals(isPublic)){
-//            series.setIsPublic(true);
-//        }else if("false".equals(isPublic)){
-//            series.setIsPublic(false);
-//        }else {
-//            throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
-//        }
-//
-//        series.setImage(s3Uploader.getS3(SeriesConstants.BUCKET_NAME.getSeriesConstant(), SeriesConstants.FILE_DiRECTORY.getSeriesConstant())); // 상수 선언
-//        series.addMember(member);
-//        seriesRepository.save(series);
-//
-//        return this.seriesToSeriesResponseDto(series);
-//    }
-//
-//
-//    public Series findVerifiedSeries(Long seriesId){
-//        Optional<Series> optionalSeries = seriesRepository.findById(seriesId);
-//
-//        Series findSeries =
-//                optionalSeries.orElseThrow(() ->
-//                        new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
-//
-//        return findSeries;
-//    }
-//
+
     @NotNull
     private SeriesResponseDto seriesToSeriesResponseDto(Series series) {
 
