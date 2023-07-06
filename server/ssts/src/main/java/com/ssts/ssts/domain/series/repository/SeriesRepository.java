@@ -6,6 +6,7 @@ import com.ssts.ssts.domain.vote.entity.Vote;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,10 +19,12 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 
     Page<Series> findByMember_idAndIsPublicTrue(Long memberId, Pageable pageable);
 
+    @Query("SELECT s FROM Series s JOIN Vote v ON s = v.series WHERE s.isPublic = :isPublic AND v.createdAt IS NOT NULL")
     Page<Series> findAllByIsPublicAndVoteCreatedAtIsNotNull(Boolean isPublic, Pageable pageable);
 
     //TODO 조인 쿼리문 만들기.
-    Page<Series> findAllByIsPublicAndStatusAndTotalVoteNot(Boolean isPublic, Vote.VoteStatus status, int limit, Pageable pageable);
+    @Query("SELECT s FROM Series s JOIN Vote v ON s=v.series WHERE s.isPublic = :isPublic AND v.status = :status AND v.votePapers <> :limit")
+    Page<Series> findAllByIsPublicAndStatusAndVotePapersNot(Boolean isPublic, Vote.VoteStatus status, int limit, Pageable pageable);
 
 //
 //    /* 멤버 서비스에서 멤버 아이디에 해당하는 시리즈 목록 출력 목적 */

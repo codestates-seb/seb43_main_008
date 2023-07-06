@@ -299,8 +299,9 @@ public class SeriesService {
 
         long beforeTime = System.currentTimeMillis(); //코드 실행 전에 시간 받아오기
 
-        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteCreatedAtIsNotNull(true, PageRequest.of(page, size,
-                Sort.by("voteCreatedAt").descending()));
+        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndVoteCreatedAtIsNotNull(
+                true,
+                PageRequest.of(page, size, Sort.by("voteCreatedAt").descending()));
 
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
@@ -314,8 +315,11 @@ public class SeriesService {
 
     public PageResponseDto getMainSeriesListByVotes(int page, int size){
 
-        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndStatusAndTotalVoteNot(true, Series.VoteStatus.SERIES_SLEEP,0, PageRequest.of(page, size,
-                Sort.by("totalVote").descending()));
+        Page<Series> seriesInfo = seriesRepository.findAllByIsPublicAndStatusAndVotePapersNot(
+                true,
+                Vote.VoteStatus.SERIES_SLEEP,
+                0,
+                PageRequest.of(page, size, Sort.by("v.votePapers").descending()));
 
         List<Series> seriesList = seriesInfo.getContent();
         List<SeriesResponseDto> list = this.seriesToSeriesListResponseDtos(seriesList);
