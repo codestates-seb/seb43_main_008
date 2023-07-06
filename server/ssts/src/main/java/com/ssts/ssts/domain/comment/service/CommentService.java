@@ -32,113 +32,113 @@ import java.util.Optional;
 @Slf4j
 public class CommentService {
 
-//    private final CommentRepository commentRepository;
-//    private final SeriesService seriesService;
-//    private final MemberService memberService;
-//    private final UpdateUtils<Comment> updateUtils;
+    private final CommentRepository commentRepository;
+    private final SeriesService seriesService;
+    private final MemberService memberService;
+    private final UpdateUtils<Comment> updateUtils;
 
-//    public PageResponseDto getCommentList(Long seriesId, int page, int size){
-//        seriesService.findVerifiedSeries(seriesId);
-//        Member findMember = memberService.findMemberByToken();
-//
-//        Page<Comment> commentInfo = commentRepository.findBySeries_id(seriesId, PageRequest.of(page, size,
-//                Sort.by("id").descending()));
-//
-//        List<Comment> comments = commentInfo.getContent();
-//        List<CommentResponseDto> list = this.commentListToResponseDtoList(comments);
-//        List<CommentResponseDto> responseDtos = this.isMineComment(list);
-//
-//        return new PageResponseDto<>(responseDtos,commentInfo);
-//    }
-//
-//    @Transactional
-//    public CommentResponseDto saveComment(Long seriesId, CommentPostDto commentPostDto){
-//        seriesService.findVerifiedSeries(seriesId);
-//        if(commentPostDto.getComment().isEmpty()){
-//            throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
-//        }
-//        Comment comment = Comment.of(commentPostDto.getComment());
-//        Series findSeries = seriesService.findVerifiedSeries(seriesId);
-//        Member findMember = memberService.findMemberByToken();
-//
-//        comment.addSeries(findSeries);
-//        comment.addMember(findMember);
-//
-//
-//        commentRepository.save(comment);
-//
-//        return this.commentToResponseDto(comment);
-//    }
-//
-//    @Transactional
-//    public CommentResponseDto updateComment(Long seriesId, Long commentId, CommentUpdateDto commentUpdateDto){
-//        seriesService.findVerifiedSeries(seriesId);
-//        Comment descComment = this.findVerifiedComment(commentId);
-//        Comment comment = Comment.of(commentUpdateDto.getComment());
-//
-//        if(memberService.findMemberByToken().getId() !=  descComment.getMember().getId()){
-//            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
-//        }
-//        log.info("실행됌");
-//        Comment updateComment = updateUtils.copyNonNullProperties(comment, descComment);
-//        commentRepository.save(updateComment);
-//
-//        return this.commentToResponseDto(updateComment);
-//    }
-//
-//    @Transactional
-//    public void deleteComment(Long commentId){
-//        Comment comment = this.findVerifiedComment(commentId);
-//        if(memberService.findMemberByToken().getId() !=  comment.getMember().getId()){
-//            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
-//        }
-//
-//        commentRepository.delete(comment);
-//
-//    }
-//
-//
-//
-//    private CommentResponseDto commentToResponseDto(Comment comment){
-//
-//        return CommentResponseDto.of(comment);
-//    }
-//
-//    private List<CommentResponseDto> commentListToResponseDtoList(List<Comment> commentList){
-//        if(commentList == null){
-//            return null;
-//        }
-//        List<CommentResponseDto> list = new ArrayList<>(commentList.size());
-//        Iterator iterator = commentList.iterator();
-//
-//        while (iterator.hasNext()){
-//            Comment comment = (Comment) iterator.next();
-//            list.add(this.commentToResponseDto(comment));
-//        }
-//
-//        return list;
-//    }
-//
-//    private List<CommentResponseDto> isMineComment(List<CommentResponseDto> commentResponseDtoList){
-//
-//        for(CommentResponseDto commentResponseDto : commentResponseDtoList){
-//            if(commentResponseDto.getMember().getId() == memberService.findMemberByToken().getId()){
-//                commentResponseDto.setMine(true);
-//            }
-//        }
-//
-//        return commentResponseDtoList;
-//    }
-//
-//    public Comment findVerifiedComment(Long commentId){
-//        Optional<Comment> optionalComment = commentRepository.findById(commentId);
-//
-//        Comment findComment =
-//                optionalComment.orElseThrow(() ->
-//                        new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
-//
-//        return findComment;
-//
-//    }
+    public PageResponseDto getCommentList(Long seriesId, int page, int size){
+        seriesService.findVerifiedSeries(seriesId);
+        Member findMember = memberService.findMemberByToken();
+
+        Page<Comment> commentInfo = commentRepository.findBySeries_id(seriesId, PageRequest.of(page, size,
+                Sort.by("id").descending()));
+
+        List<Comment> comments = commentInfo.getContent();
+        List<CommentResponseDto> list = this.commentListToResponseDtoList(comments);
+        List<CommentResponseDto> responseDtos = this.isMineComment(list);
+
+        return new PageResponseDto<>(responseDtos,commentInfo);
+    }
+
+    @Transactional
+    public CommentResponseDto saveComment(Long seriesId, CommentPostDto commentPostDto){
+        seriesService.findVerifiedSeries(seriesId);
+        if(commentPostDto.getComment().isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
+        }
+        Comment comment = Comment.of(commentPostDto.getComment());
+        Series findSeries = seriesService.findVerifiedSeries(seriesId);
+        Member findMember = memberService.findMemberByToken();
+
+        comment.addSeries(findSeries);
+        comment.addMember(findMember);
+
+
+        commentRepository.save(comment);
+
+        return this.commentToResponseDto(comment);
+    }
+
+    @Transactional
+    public CommentResponseDto updateComment(Long seriesId, Long commentId, CommentUpdateDto commentUpdateDto){
+        seriesService.findVerifiedSeries(seriesId);
+        Comment descComment = this.findVerifiedComment(commentId);
+        Comment comment = Comment.of(commentUpdateDto.getComment());
+
+        if(memberService.findMemberByToken().getId() !=  descComment.getMember().getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
+        log.info("실행됌");
+        Comment updateComment = updateUtils.copyNonNullProperties(comment, descComment);
+        commentRepository.save(updateComment);
+
+        return this.commentToResponseDto(updateComment);
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId){
+        Comment comment = this.findVerifiedComment(commentId);
+        if(memberService.findMemberByToken().getId() !=  comment.getMember().getId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
+
+        commentRepository.delete(comment);
+
+    }
+
+
+
+    private CommentResponseDto commentToResponseDto(Comment comment){
+
+        return CommentResponseDto.of(comment);
+    }
+
+    private List<CommentResponseDto> commentListToResponseDtoList(List<Comment> commentList){
+        if(commentList == null){
+            return null;
+        }
+        List<CommentResponseDto> list = new ArrayList<>(commentList.size());
+        Iterator iterator = commentList.iterator();
+
+        while (iterator.hasNext()){
+            Comment comment = (Comment) iterator.next();
+            list.add(this.commentToResponseDto(comment));
+        }
+
+        return list;
+    }
+
+    private List<CommentResponseDto> isMineComment(List<CommentResponseDto> commentResponseDtoList){
+
+        for(CommentResponseDto commentResponseDto : commentResponseDtoList){
+            if(commentResponseDto.getMember().getId() == memberService.findMemberByToken().getId()){
+                commentResponseDto.setMine(true);
+            }
+        }
+
+        return commentResponseDtoList;
+    }
+
+    public Comment findVerifiedComment(Long commentId){
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+
+        Comment findComment =
+                optionalComment.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
+
+        return findComment;
+
+    }
 
 }

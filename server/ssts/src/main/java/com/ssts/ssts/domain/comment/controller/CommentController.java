@@ -26,43 +26,43 @@ import javax.validation.constraints.Positive;
 @Validated
 public class CommentController {
 
-//    private final CommentService commentService;
+    private final CommentService commentService;
 
-//    @GetMapping("/{series-id}")
-//    public ApiResponse getCommentList(@Positive @PathVariable("series-id") Long seriesId,
-//                                      @Positive @RequestParam(value = "page", defaultValue = "1") int page,
-//                                      @Positive @RequestParam(value = "size", defaultValue = "12") int size){
-//
-//
-//        PageResponseDto response = commentService.getCommentList(seriesId,page-1, size);
-//
-//        return ApiResponse.ok(response);
-//    }
-//
-//    @PostMapping("/{series-id}")
-//    public ApiResponse createComment(@Positive @PathVariable("series-id") Long seriesId, @RequestBody CommentPostDto commentPostDto){
-//
-//        CommentResponseDto response = commentService.saveComment(seriesId, commentPostDto);
-//
-//        return ApiResponse.create(response);
-//    }
-//
-//    @PatchMapping("/{series-id}/{comment-id}")
-//    public ApiResponse updateComment(@Positive @PathVariable("series-id") Long seriesId,
-//                                     @Positive @PathVariable("comment-id") Long commentId,
-//                                     @RequestBody CommentUpdateDto commentUpdateDto){
-//
-//        CommentResponseDto response = commentService.updateComment(seriesId, commentId, commentUpdateDto);
-//
-//        return ApiResponse.ok(response);
-//    }
-//
-//    @DeleteMapping("/{series-id}/{comment-id}")
-//    public ApiResponse deleteComment(@Positive @PathVariable("series-id") Long seriesId,
-//                                     @Positive @PathVariable("comment-id") Long commentId){
-//
-//        commentService.deleteComment(commentId);
-//
-//        return ApiResponse.ok();
-//    }
+    @GetMapping("/{series-id}")
+    public ApiResponse getCommentList(@Positive @PathVariable("series-id") Long seriesId,
+                                      @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                      @Positive @RequestParam(value = "size", defaultValue = "12") int size){
+
+
+        PageResponseDto response = commentService.getCommentList(seriesId,page-1, size);
+
+        return ApiResponse.ok(response);
+    }
+
+    @PostMapping("/{series-id}")
+    public ApiResponse createComment(@Positive @PathVariable("series-id") Long seriesId, @RequestBody CommentPostDto commentPostDto){
+
+        CommentResponseDto response = commentService.saveComment(seriesId, commentPostDto);
+
+        return ApiResponse.create(response);
+    }
+
+    @PatchMapping("/{series-id}/{comment-id}")
+    public ApiResponse updateComment(@Positive @PathVariable("series-id") Long seriesId,
+                                     @Positive @PathVariable("comment-id") Long commentId,
+                                     @RequestBody CommentUpdateDto commentUpdateDto){
+
+        CommentResponseDto response = commentService.updateComment(seriesId, commentId, commentUpdateDto);
+
+        return ApiResponse.ok(response);
+    }
+
+    @DeleteMapping("/{series-id}/{comment-id}")
+    public ApiResponse deleteComment(@Positive @PathVariable("series-id") Long seriesId,
+                                     @Positive @PathVariable("comment-id") Long commentId){
+
+        commentService.deleteComment(commentId);
+
+        return ApiResponse.ok();
+    }
 }
