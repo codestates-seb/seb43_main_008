@@ -75,8 +75,9 @@ public class SeriesService {
 
 
     //TODO: saveSeries 복구 수준: 리팩토링 전 코드와 똑같게 (이미지까지) / 생성시 자동 이미지 적재(S3)
+    @Transactional
     public SeriesResponseDto saveSeries(String isPublic, SeriesPostDto seriesPostDto){
-                // 파라미터 체크 완료
+        // 파라미터 체크 완료
         if(seriesPostDto.getTitle().isEmpty()){
             throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
         }
@@ -97,60 +98,34 @@ public class SeriesService {
             throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
         }
 
-
-
-        series.setImage(s3Uploader.getS3(SeriesConstants.BUCKET_NAME.getSeriesConstant(), SeriesConstants.FILE_DiRECTORY.getSeriesConstant()));
+        series.setImage(s3Uploader.getS3(SeriesConstants.BUCKET_NAME.getSeriesConstant(), SeriesConstants.FILE_DiRECTORY.getSeriesConstant())); // 상수 선언
         series.addMember(member);
         seriesRepository.save(series);
 
-        //일단 vote 가 없는 설정임 그런거임
-//        return SeriesResponseDto.of(series.getId(),
-//                series.getTitle(),
-//                series.getDaylogCount(),
-//                //series.getCreatedAt(),
-//                //series.getModifiedAt(),
-//                //series.getVoteCount(),
-//                //series.getVoteResult(),
-//                //series.getVoteAgree(),
-//                //series.getVoteDisagree(),
-//                //series.getRevoteResult(),
-//                //series.getRevoteAgree(),
-//                //series.getRevoteDisagree(),
-//                //series.getSeriesStatus(),
-//                series.getIsPublic(),
-//                series.getIsEditable(),
-//                series.getIsActive());
-
-        return this.seriesToSeriesResponseDto(series); //TODO 홀로 기본코드 적용해서 남아있음
-
+        return this.seriesToSeriesResponseDto(series);
     }
 
 
+    @Transactional
+    public SeriesResponseDto updateSeries(Long seriesId, SeriesUpdateDto seriesUpdateDto){
 
-//    public SeriesResponseDto updateSeries(Long id, SeriesUpdateDto seriesUpdateDto){
-//
-//        Series series = this.findVerifiedSeries(id);
-//
-//
-//
-//        return SeriesResponseDto.of(series.getId(),
-//                series.getTitle(),
-//                series.getDaylogCount(),
-//                //series.getCreatedAt(),
-//                //series.getModifiedAt(),
-//                //series.getVoteCount(),
-//                //series.getVoteResult(),
-//                //series.getVoteAgree(),
-//                //series.getVoteDisagree(),
-//                //series.getRevoteResult(),
-//                //series.getRevoteAgree(),
-//                //series.getRevoteDisagree(),
-//                //series.getSeriesStatus(),
-//                series.getIsPublic(),
-//                series.getIsEditable(),
-//                series.getIsActive());
-//
-//    }
+        Member member = memberService.findMemberByToken();
+        Series descSeries = findVerifiedSeries(seriesId);
+        Series series = Series.of(seriesUpdateDto.getTitle(), seriesUpdateDto.getIsPublic());
+
+        if(descSeries.getIsEditable().equals(false)){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
+        if(descSeries.getMember().getId() != member.getId()){ // 스트링값 equal로비교
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+        }
+
+        Series updateSeries = updateUtils.copyNonNullProperties(series,descSeries);
+        seriesRepository.save(updateSeries);
+
+        return this.seriesToSeriesResponseDto(updateSeries);
+
+    }
 
     public void deleteSeries(Long id){
 
@@ -158,32 +133,15 @@ public class SeriesService {
         seriesRepository.delete(series);
     }
 
-
-
-
-
     public Series findVerifiedSeries(Long questionId){
         Optional<Series> optionalQuestion = seriesRepository.findById(questionId);
 
         Series findSeries =
                 optionalQuestion.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
-
         return findSeries;
-
     }
-
-
-//    private final SeriesRepository seriesRepository;
-//    private final MemberService memberService;
-//    private final UpdateUtils<Series> updateUtils;
-//    private final S3Uploader s3Uploader;
-//    //vote
-//    private final MemberVoteRepository voteMemberRepo;
-//    private final MemberRepository memberRepo;
-//    private final BookmarkRepository bookmarkRepo;
-//    private final VoteService voteService;
-
+//
 //    public PageResponseDto getSeriesList(String nickname, int page, int size){
 //        // 파라미터 체크
 //        if(nickname.isEmpty()) throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
@@ -214,13 +172,15 @@ public class SeriesService {
 //            //우선 seriesList전체가 돌고 계산된 값이 들어간 뒤에, if 문으로 해당 값을 바꾸어주어야 함
 //            //값을 바꿔주는 게 우선임, 그 뒤에 로직을 돌려서 해당 상태값을 바꿔주어야 선행되는 검사를 진행할 수 있음
 //
-//            if (seriesList.get(i).getVoteCount() == 2 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())) { //재투표 때의 결과값을 먼저 바꿔줌
+//            int current_voteCount=seriesList.get(i).getVotes().get(0).getVoteCount();
+//
+//            if (current_voteCount == 2 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())) { //재투표 때의 결과값을 먼저 바꿔줌
 //                seriesList.get(i).setRevoteResult(
 //                        voteService.voteResultCal(seriesList.get(i).getRevoteAgree(), seriesList.get(i).getRevoteDisagree())
 //                );
 //            }
 //
-//            else if (seriesList.get(i).getVoteCount() == 1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())) {
+//            else if (current_voteCount == 1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())) {
 //                seriesList.get(i).setVoteResult(
 //                        voteService.voteResultCal(seriesList.get(i).getVoteAgree(), seriesList.get(i).getVoteDisagree())
 //                );
@@ -232,14 +192,17 @@ public class SeriesService {
 //
 //        //상태값 변경
 //        for (int i = 0; i < seriesList.size(); i++) {
-//            if(seriesList.get(i).getVoteCount()==2 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())){ //마감기간이 지남 + 투표 2회 이용 (재투표)
+//
+//            int current_voteCount=seriesList.get(i).getVotes().get(0).getVoteCount();
+//
+//            if(current_voteCount==2 && currentTime.isAfter(seriesList.get(i).getVoteEndAt())){ //마감기간이 지남 + 투표 2회 이용 (재투표)
 //                seriesList.get(i).setIsEditable(false);
 //                seriesList.get(i).setIsActive(false);
 //                seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_QUIT);
 //            }
 //
 //            //최초투표: 마감기간이 지나고 결과가 true
-//            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==true){
+//            else if(current_voteCount==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==true){
 //                seriesList.get(i).setVoteResult(
 //                        voteService.voteResultCal(seriesList.get(i).getVoteAgree(), seriesList.get(i).getVoteDisagree())
 //                );
@@ -248,7 +211,7 @@ public class SeriesService {
 //            }
 //
 //            //최초투표: 마감기간이 지나고 결과가 false
-//            else if(seriesList.get(i).getVoteCount()==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false){
+//            else if(current_voteCount==1 && currentTime.isAfter(seriesList.get(i).getVoteEndAt()) && seriesList.get(i).getVoteResult()==false){
 //                seriesList.get(i).setIsEditable(false);
 //                seriesList.get(i).setIsActive(false);
 //                seriesList.get(i).setVoteStatus(Series.VoteStatus.SERIES_SLEEP);
@@ -410,40 +373,6 @@ public class SeriesService {
 //
 //        return this.seriesToSeriesResponseDto(series);
 //    }
-//
-//    @Transactional
-//    public SeriesResponseDto updateSeries(Long seriesId, SeriesUpdateDto seriesUpdateDto){
-//        // 파라미터 체크 완료
-//
-//
-//        Member member = memberService.findMemberByToken();
-//        Series descSeries = this.findVerifiedSeries(seriesId);
-//        Series series = Series.of(seriesUpdateDto.getTitle(), seriesUpdateDto.getIsPublic());
-//
-//        if(descSeries.getIsEditable().equals(false)){
-//            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
-//        }
-//        if(descSeries.getMember().getId() != member.getId()){ // 스트링값 equal로비교
-//            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
-//        }
-//
-//        Series updateSeries = updateUtils.copyNonNullProperties(series,descSeries);
-//        seriesRepository.save(updateSeries);
-//
-//        return this.seriesToSeriesResponseDto(updateSeries);
-//    }
-//
-//    @Transactional
-//    public void deleteSeries(Long seriesId){
-//        Member member = memberService.findMemberByToken();
-//        Series series = this.findVerifiedSeries(seriesId);
-//        if(series.getMember().getId()!=member.getId()){
-//            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
-//        }
-//        seriesRepository.delete(series);
-//    }
-//
-//
 //
 //
 //    public Series findVerifiedSeries(Long seriesId){

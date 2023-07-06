@@ -41,21 +41,6 @@ public class SeriesResponseDto {
     private int disagree;
     private Boolean result;
 
-
-
-    //이제 안 씀
-
-//    private Boolean voteResult;
-//    private int voteAgree;
-//    private int voteDisagree;
-//    private Boolean revoteResult;
-//    private int revoteAgree;
-//    private int revoteDisagree;
-
-
-
-
-
     public static SeriesResponseDto of(Long id, //얘가 아마 기본 response
                                        String title,
                                        String image,
