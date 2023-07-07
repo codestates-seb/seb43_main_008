@@ -149,8 +149,8 @@ public class VoteService {
 
 
         //TODO 투표의 결과를 보기 위해서 임시로 사용 -> 프론트 협업시 지워야 함 !!!!!
-                Boolean voteResult = voteResultCal(targetVote.getAgree(), targetVote.getDisagree());
-                targetVote.setVoteResult(voteResult);
+//                Boolean voteResult = voteResultCal(targetVote.getAgree(), targetVote.getDisagree());
+//                targetVote.setVoteResult(voteResult);
 
 
 
