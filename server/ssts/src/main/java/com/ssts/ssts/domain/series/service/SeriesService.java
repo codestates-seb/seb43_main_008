@@ -63,7 +63,7 @@ public class SeriesService {
 
     public SeriesDetailResponseDto getSeries(Long id) {
 
-        memberService.findMemberByToken();
+        memberService.getMemberByToken();
         Series series = this.findVerifiedSeries(id);
 
         //사용자 Id받기
@@ -89,13 +89,13 @@ public class SeriesService {
             throw new BusinessLogicException(ExceptionCode.INPUT_IS_NOT_ALLOWED);
         }
 
-        Member authMember = memberService.findMemberByToken();
+        Member authMember = memberService.getMemberByToken();
         Series series = Series.of(seriesPostDto.getTitle());
-        Member member = memberService.findMemberById(authMember.getId());
-
-        if (authMember.getId() != member.getId()) {
-            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
-        }
+        //Member member = memberService.findMemberById(authMember.getId());
+//
+//        if (authMember.getId() != member.getId()) {
+//            throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
+//        }
 
         if ("true".equals(isPublic)) {
             series.setIsPublic(true);
@@ -106,7 +106,7 @@ public class SeriesService {
         }
 
         series.setImage(s3Uploader.getS3(SeriesConstants.BUCKET_NAME.getSeriesConstant(), SeriesConstants.FILE_DiRECTORY.getSeriesConstant())); // 상수 선언
-        series.addMember(member);
+        series.addMember(authMember);
         seriesRepository.save(series);
 
         return this.seriesToSeriesResponseDto(series);
@@ -116,7 +116,7 @@ public class SeriesService {
     @Transactional
     public SeriesResponseDto updateSeries(Long seriesId, SeriesUpdateDto seriesUpdateDto) {
 
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         Series descSeries = findVerifiedSeries(seriesId);
         Series series = Series.of(seriesUpdateDto.getTitle(), seriesUpdateDto.getIsPublic());
 
@@ -154,7 +154,7 @@ public class SeriesService {
         if (nickname.isEmpty()) throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
 
         Page<Series> seriesInfo;
-        Member authMember = memberService.findMemberByToken();
+        Member authMember = memberService.getMemberByToken();
         long memberId = memberService.findMemberByNickName(nickname).getId();
 
         if (authMember.getId() == memberId) {
@@ -181,7 +181,7 @@ public class SeriesService {
     public PageResponseDto getMySeriesList(int page, int size) {
 
         Page<Series> seriesInfo;
-        Member authMember = memberService.findMemberByToken();
+        Member authMember = memberService.getMemberByToken();
 
         seriesInfo = seriesRepository.findByMember_id(authMember.getId(), PageRequest.of(page, size,
                 Sort.by("id").descending()));

@@ -2,7 +2,6 @@ package com.ssts.ssts.global.auth.service;
 
 import com.ssts.ssts.global.auth.dto.*;
 import com.ssts.ssts.global.auth.jwt.JwtCreator;
-import com.ssts.ssts.global.auth.jwt.JwtTokenizer;
 import com.ssts.ssts.global.auth.utils.CustomAuthorityUtils;
 import com.ssts.ssts.domain.member.entity.Member;
 import com.ssts.ssts.domain.member.service.MemberService;
@@ -58,7 +57,7 @@ public class OAuthService {
 
     public AuthenticationTokenResponse login() {
 
-        Member member=memberService.findMemberByToken();
+        Member member=memberService.getMemberByToken();
 
         log.debug("하늘/oauth service : login"+
                 "\nid="+member.getId()+
@@ -71,13 +70,14 @@ public class OAuthService {
 
     public AuthenticationTokenResponse signup(String phone, String nickName){
 
-        String socialType=SecurityUtil.getSocialType();
-        Member member=memberService.signUpMember(phone, nickName, socialType);
+        String socialStr=SecurityUtil.getSocialType();
+        String email=SecurityUtil.getMemberEmail();
+        Member member=memberService.saveMember(email, phone, nickName, SocialType.stringToSocialType(socialStr));
 
         log.info("하늘/oauth service : signup"+
                 "\nid="+member.getId()+
                 "\nemail="+member.getEmail()+
-                "\nsocialType="+socialType+
+                "\nsocialType="+socialStr+
                 "\n[저장 전]authority="+SecurityUtil.getAuthorities().get(0)+
                 "\n[저장 후]roles="+member.getRoles().get(0));
 
@@ -99,7 +99,7 @@ public class OAuthService {
 
     public AccessTokenResponse resourceAccessTokenResponse(String email, SocialType socialType) {
 
-        Optional<Member> member= memberService.findMemberByEmailAndSocialType(email, socialType);
+        Optional<Member> member= memberService.findOptionalMemberByEmailAndSocialType(email, socialType);
         List<String> authorityList;
         Long id = null;
 

@@ -39,7 +39,7 @@ public class FollowService {
 
         Member following=memberService.findMemberByNickName(nickName); //상대방
         //이 과정에서 유효한 멤버 닉네임인지 확인하게 된다.
-        Member follower=memberService.findMemberByToken(); //본인
+        Member follower=memberService.getMemberByToken(); //본인
 
         log.info("하늘/follow service: following"+
                 "\nfollower="+follower.getId()+
@@ -68,7 +68,7 @@ public class FollowService {
         memberService.findMemberByNickName(nickName);
 
         Member unfollowing = memberService.findMemberByNickName(nickName); //상대방
-        Member follower = memberService.findMemberByToken(); //본인
+        Member follower = memberService.getMemberByToken(); //본인
 
         log.info("하늘/follow service: unfollowing"+
                 "\nfollower="+follower.getId()+
@@ -92,7 +92,7 @@ public class FollowService {
 
     public PageResponseDto followingList(int page, int size){
 
-        Member follower=memberService.findMemberByToken(); //본인
+        Member follower=memberService.getMemberByToken(); //본인
 
         log.info("하늘/follow service: followingList"+
                 "\nfollower="+follower.getId());
@@ -114,7 +114,7 @@ public class FollowService {
 
     public PageResponseDto followerList(int page, int size){
 
-        Member follower=memberService.findMemberByToken(); //본인
+        Member follower=memberService.getMemberByToken(); //본인
 
         log.info("하늘/follow service: followerList"+
                 "\nfollower="+follower.getId());

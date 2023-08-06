@@ -7,7 +7,6 @@ public enum MemberStatus {
     DORMANCY("휴면",1),
     WITHDRAW("탈퇴",2);
 
-
     @Getter
     private String strStatus;
     @Getter
@@ -17,7 +16,4 @@ public enum MemberStatus {
         this.strStatus = strStatus;
         this.numStatus = numStatus;
     }
-
-
-
 }

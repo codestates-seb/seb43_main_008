@@ -11,7 +11,6 @@ import com.ssts.ssts.domain.member.repository.MemberRepository;
 import com.ssts.ssts.domain.member.service.MemberService;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
-import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -53,7 +52,7 @@ public class BadgeService {
     public void saveBadgeMember(Long badgeId){
 
        //사용자 검증
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         Badge badge = badgeRepo.findById(badgeId).
@@ -91,7 +90,7 @@ public class BadgeService {
     //뱃지 상세조회
     public BadgeResponse findBadge(Long badgeId){
 
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         Badge badge = badgeRepo.findById(badgeId).
@@ -104,7 +103,7 @@ public class BadgeService {
     }
 
     public List<BadgeResponse> findAllBadge(){ // 이거 전체 뱃지가 나와야 하는데 안나옴
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         List<Badge> badges = badgeRepo.findAll();

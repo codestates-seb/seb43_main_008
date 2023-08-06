@@ -11,14 +11,12 @@ import com.ssts.ssts.domain.series.entity.Series;
 import com.ssts.ssts.domain.series.repository.SeriesRepository;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
-import com.ssts.ssts.global.utils.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +37,7 @@ public class BookmarkService {
 
         Series series = seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
@@ -54,7 +52,7 @@ public class BookmarkService {
 
     @Transactional
     public List<BookmarkResponse> getListBookmarks(int page, int size){ //series.getId(), series.getTitle(), series.getDaylogCount(), series.getImage()
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").descending());
@@ -80,7 +78,7 @@ public class BookmarkService {
 
         seriesRepo.findById(seriseId).orElseThrow(()->new BusinessLogicException(ExceptionCode.SERIES_NOT_EXISTS));
 
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         bookmarkRepo.deleteByMember_IdAndSeries_Id(memberId, seriseId);

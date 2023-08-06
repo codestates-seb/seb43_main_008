@@ -2,18 +2,15 @@ package com.ssts.ssts.global.auth.controller;
 
 import com.ssts.ssts.domain.badges.service.BadgeService;
 import com.ssts.ssts.domain.member.dto.MemberSignUpAddInfoDto;
-import com.ssts.ssts.global.auth.dto.AccessTokenResponse;
 import com.ssts.ssts.global.auth.dto.AuthenticationTokenResponse;
 import com.ssts.ssts.global.auth.dto.LoginResponse;
 import com.ssts.ssts.global.auth.service.OAuthService;
 import com.ssts.ssts.global.auth.service.TokenService;
-import com.ssts.ssts.global.auth.utils.AuthConsts;
 import com.ssts.ssts.global.utils.MultipleResponseDto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 

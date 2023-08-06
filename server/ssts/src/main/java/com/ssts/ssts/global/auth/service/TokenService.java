@@ -67,7 +67,7 @@ public class TokenService {
         if(!validationToken("RT:"+email)) //리프레시 토큰이 없으면 거절하기
             throw new BusinessLogicException(ExceptionCode.JWT_NOT_VALID);
 
-        Optional<Member> member = memberService.findMemberByEmail(email);
+        Optional<Member> member = memberService.findOptionalMemberByEmail(email);
         if (member.isPresent()) {
             return oauthService.authorizationTokenResponse(member.get());
         }else{

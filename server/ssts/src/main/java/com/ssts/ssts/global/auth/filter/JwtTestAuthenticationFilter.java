@@ -47,7 +47,7 @@ public class JwtTestAuthenticationFilter extends UsernamePasswordAuthenticationF
 
         // ServletInputStream -> TestLoginDto(역직렬화)
         log.info("하늘 security : 입력 email="+testLoginDto.getEmail());
-        Optional<Member> member = memberService.findMemberByEmail(testLoginDto.getEmail());
+        Optional<Member> member = memberService.findOptionalMemberByEmail(testLoginDto.getEmail());
 
         if(member.isPresent()){
             //회원일 경우

@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.net.BindException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -52,7 +51,7 @@ public class DaylogService {
             throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
         }
 
-        memberService.findMemberByToken();
+        memberService.getMemberByToken();
 
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
         Series series = seriesService.findVerifiedSeries(seriesId);
@@ -71,7 +70,7 @@ public class DaylogService {
             throw new BusinessLogicException(ExceptionCode.INPUT_NULL);
         }
 
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         Daylog daylog = Daylog.of(daylogPostDto.getContent());
         Series series = seriesService.findVerifiedSeries(seriesId);
 
@@ -103,7 +102,7 @@ public class DaylogService {
 
     public PageResponseDto getDaylogList(Long seriesId, int page, int size) {
 
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         Page<Daylog> daylogsInfo = daylogRepository.findBySeries_id(seriesId,
                 PageRequest.of(page, size, Sort.by("id").descending()));
 

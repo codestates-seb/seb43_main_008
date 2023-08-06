@@ -14,11 +14,8 @@ import com.ssts.ssts.domain.vote.response.VoteResponse;
 import com.ssts.ssts.global.exception.BusinessLogicException;
 import com.ssts.ssts.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 //시간 계산 import
 import java.time.*;
@@ -52,7 +49,7 @@ public class VoteService {
         //TODO 투표함을 만드는 건데 예외가 터지면 안되는 거구나 ...
         //아니 오히려 새로운 투표를 만드는건데?
 
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         //TODO 시리즈를 만든 작성자가 아닌 자가 투표 생성시 예외 왜 이거 안되는거지?
@@ -115,7 +112,7 @@ public class VoteService {
 
         if(isAgree < 0 || isAgree > 1){throw new BusinessLogicException(ExceptionCode.CAN_NOT_VOTE_VALUE);}
 
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         //동일 시리즈에 중복 투표 예외
@@ -168,7 +165,7 @@ public class VoteService {
     //public Object quitVote(Long seriesId,  Long memberId, Boolean isQuit){
     public VoteResponse quitVote(Long voteId, Boolean isQuit){ //TODO 토큰 적용시에 풀기
 
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         Vote targetVote = voteRepo.findById(voteId).orElseThrow(()->new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
@@ -236,7 +233,7 @@ public class VoteService {
 
     //1차 투표 결과
     public VoteResponse.VoteAttendResponse getStartVote(Long voteId){
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
 
@@ -283,7 +280,7 @@ public class VoteService {
 
     //투표 개별조회
     public VoteResponse getVoteInfo(Long voteId){
-        Member member = memberService.findMemberByToken();
+        Member member = memberService.getMemberByToken();
         long memberId = member.getId();
 
         Vote targetVote = voteRepo.findById(voteId).orElseThrow(()->new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));

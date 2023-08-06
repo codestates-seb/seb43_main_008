@@ -39,7 +39,7 @@ public class CommentService {
 
     public PageResponseDto getCommentList(Long seriesId, int page, int size){
         seriesService.findVerifiedSeries(seriesId);
-        Member findMember = memberService.findMemberByToken();
+        Member findMember = memberService.getMemberByToken();
 
         Page<Comment> commentInfo = commentRepository.findBySeries_id(seriesId, PageRequest.of(page, size,
                 Sort.by("id").descending()));
@@ -59,7 +59,7 @@ public class CommentService {
         }
         Comment comment = Comment.of(commentPostDto.getComment());
         Series findSeries = seriesService.findVerifiedSeries(seriesId);
-        Member findMember = memberService.findMemberByToken();
+        Member findMember = memberService.getMemberByToken();
 
         comment.addSeries(findSeries);
         comment.addMember(findMember);
@@ -76,7 +76,7 @@ public class CommentService {
         Comment descComment = this.findVerifiedComment(commentId);
         Comment comment = Comment.of(commentUpdateDto.getComment());
 
-        if(memberService.findMemberByToken().getId() !=  descComment.getMember().getId()){
+        if(memberService.getMemberByToken().getId() !=  descComment.getMember().getId()){
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
         log.info("실행됌");
@@ -89,7 +89,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId){
         Comment comment = this.findVerifiedComment(commentId);
-        if(memberService.findMemberByToken().getId() !=  comment.getMember().getId()){
+        if(memberService.getMemberByToken().getId() !=  comment.getMember().getId()){
             throw new BusinessLogicException(ExceptionCode.NOT_ALLOWED_PERMISSION);
         }
 
@@ -122,7 +122,7 @@ public class CommentService {
     private List<CommentResponseDto> isMineComment(List<CommentResponseDto> commentResponseDtoList){
 
         for(CommentResponseDto commentResponseDto : commentResponseDtoList){
-            if(commentResponseDto.getMember().getId() == memberService.findMemberByToken().getId()){
+            if(commentResponseDto.getMember().getId() == memberService.getMemberByToken().getId()){
                 commentResponseDto.setMine(true);
             }
         }

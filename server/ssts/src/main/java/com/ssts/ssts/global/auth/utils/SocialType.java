@@ -1,18 +1,24 @@
 package com.ssts.ssts.global.auth.utils;
 
-public enum SocialType {
-    KAKAO, NAVER, GOOGLE, TEST_SSTS;
+import lombok.Getter;
 
-    public static SocialType stringToSocialType(String strType){
-        switch (strType){
-            case "google":
-                return GOOGLE;
-            case "kakao":
-                return KAKAO;
-            case "naver":
-                return NAVER;
-            default:
-                return TEST_SSTS;
+//FIXME enum수정하기 switch문 안쓰기
+public enum SocialType {
+    KAKAO("kakao"),
+    NAVER("naver"),
+    GOOGLE("google"),
+    TEST_SSTS("test_ssts");
+
+    @Getter
+    String str;
+
+    SocialType(String testSsts) {
+    }
+
+    public static SocialType stringToSocialType(String str) {
+        for(SocialType type:SocialType.values()){
+            if(str.equals(type.getStr())) return type;
         }
+        return TEST_SSTS;
     }
 }

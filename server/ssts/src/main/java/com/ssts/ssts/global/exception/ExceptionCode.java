@@ -18,6 +18,7 @@ public enum ExceptionCode {
     EMAIL_DUPLICATE(RtnHttpStatus.Validation, 2001, "이메일이 중복이예요."),
     PHONENUMBER_DUPLICATE(RtnHttpStatus.Validation,2002, "휴대폰 번호가 중복이예요."),
     NICKNAME_DUPLICATE(RtnHttpStatus.Validation,2008, "닉네임이 중복이예요."),
+    NICKNAME_NOT_AVAILABLE(RtnHttpStatus.Validation,2009, "닉네임엔 공백과 특수문자가 없어야 해요."),
 
     //Auth 에러
     AUTH_NO_CREDENTIALS(RtnHttpStatus.Auth,2007,"해당 사용자의 정보가 없어요."),
